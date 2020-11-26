@@ -1,1 +1,1 @@
-# PLAID-layout-GUI
+Plaid layout GUI web application.
