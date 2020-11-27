@@ -1,12 +1,17 @@
-FROM python:3.8.3
+FROM ubuntu
 
-WORKDIR /usr/src/app
+ENV TZ=Europe/Stockholm
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt-get update -y && \
+    apt-get install -y python3-pip && \
+    apt-get install -y minizinc
 
-COPY . /usr/src/app
+WORKDIR /src
+COPY . /src
 
 EXPOSE 5000
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 
-CMD ["python", "./app.py"]
+CMD ["python3", "./app.py"]

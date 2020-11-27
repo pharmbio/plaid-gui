@@ -1,11 +1,29 @@
 import os
+import minizinc
 from flask import Flask, jsonify
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return "testing testing"
+    ## minizinc test taken from minizinc-python github
+    model = minizinc.Model()
+    model.add_string("""
+        var -100..100: x;
+        int: a; int: b; int: c;
+        constraint a*(x*x) + b*x = c;
+        solve satisfy;
+    """)
+    gecode = minizinc.Solver.lookup("gecode")
+    inst = minizinc.Instance(gecode, model)
+    inst["a"] = 1
+    inst["b"] = 4
+    inst["c"] = 0
+    result = inst.solve(all_solutions=True)
+    res  = ""
+    for i in range(len(result)):
+        res += " x = {}".format(result[i, "x"])
+    return res
 
 @app.route('/api')
 def api_call():

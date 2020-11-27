@@ -5,8 +5,10 @@ To start up the development servers run:
 
 docker-composer up -d --build
 
-docker-composer up
-
-After killing the server you may bring down the container by running:
+You may stop the servers running in the containers as such:
 
 docker-compose stop
+
+You may also remove the containers as such:
+
+docker-compose down
