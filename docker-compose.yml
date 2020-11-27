@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  # react
+  reactplaid:
+    container_name: reactplaid
+    build:
+      context: './client'
+      dockerfile: Dockerfile
+    volumes:
+      - './client:/app'
+      - '/app/node_modules/'
+    ports:
+      - 3000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    #depends_on:
+     #- flaskapi
+  
+  # flask api
+
