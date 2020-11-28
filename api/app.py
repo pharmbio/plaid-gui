@@ -1,35 +1,30 @@
 import os
+import csv
+import minizinc_model
 import minizinc
 import utils
 from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-@app.route('/')
+
+@app.route("/")
 def index():
-    ## minizinc test taken from minizinc-python github
-    model = minizinc.Model()
-    model.add_string("""
-        var -100..100: x;
-        int: a; int: b; int: c;
-        constraint a*(x*x) + b*x = c;
-        solve satisfy;
-    """)
-    gecode = minizinc.Solver.lookup("gecode")
-    inst = minizinc.Instance(gecode, model)
-    inst["a"] = 1
-    inst["b"] = 4
-    inst["c"] = 0
-    result = inst.solve(all_solutions=True)
-    res  = ""
-    for i in range(len(result)):
-        res += " x = {}".format(result[i, "x"])
-    return res
+    return "hello world!"
 
-@app.route('/api')
+
+@app.route("/api")
 def api_call():
-    return jsonify({'status': 'is flask api working??'})
+    return jsonify({"status": "is flask api working??"})
 
+
+@app.route("/plaid")
+def try_plaid():
+    mz = minizinc_model.MinizincModel("./plate_design/plate-design.mzn", "gecode")
+    mz.populate_instance(dzn_file_path="./plate_design/dzn_examples/pl-example06.dzn")
+    result = mz.solve_instance()
+    print(result)
+    return result.solution["_output_item"]
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=os.getenv('PORT'))
+    app.run(host="0.0.0.0", port=os.getenv("PORT"))
