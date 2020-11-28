@@ -1,7 +1,5 @@
 import minizinc
 import re
-import pandas as pd
-import json
 class MinizincModel:
     """
     Creates a MiniZinc model that can run a valid minizinc program.
@@ -47,17 +45,5 @@ class MinizincModel:
             return result
         else:
             raise Exception("Instance is not populated with data!")
-        import pandas as pd
-
-
-    def create_csv(self, results):
-        header = results[0]
-        df = pd.DataFrame(results[1:])
-        df.to_csv('results.csv', index=False, header=[header])
-    
-    def create_json(self, results):
-        header = results[0]
-    
-        dicts = [{results[i%len(results)] : results[i][0] for i in range(len(results))}]
     
     
