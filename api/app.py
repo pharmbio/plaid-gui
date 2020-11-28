@@ -1,5 +1,6 @@
 import os
 import minizinc
+import utils
 from flask import Flask, jsonify
 
 app = Flask(__name__)
