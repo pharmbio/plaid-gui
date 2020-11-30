@@ -1,7 +1,6 @@
 import os
-import minizinc_model
+import models.minizinc_model
 from flask import Flask, jsonify, request
-import pandas as pd
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
