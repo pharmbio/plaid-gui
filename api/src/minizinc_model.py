@@ -1,5 +1,8 @@
 import minizinc
 import re
+import pandas as pd
+from flask import Flask, jsonify
+
 class MinizincModel:
     """
     Creates a MiniZinc model that can run a valid minizinc program.
@@ -45,5 +48,18 @@ class MinizincModel:
             return result
         else:
             raise Exception("Instance is not populated with data!")
+    
+    def output_to_csv(self, results):
+        header = results[0]
+        df = pd.DataFrame(results[1:])
+        df.to_csv('results.csv', index=False, header=[header])
+
+    def output_to_json(self, result):
+        d_list = []
+        header = result[0].split(",")
+        for row in result[1:]:
+            pieces = row.split(",")
+            d_list.append(dict(zip(header,pieces)))
+        return jsonify(d_list)
     
     
