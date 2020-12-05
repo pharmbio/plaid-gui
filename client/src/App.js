@@ -1,4 +1,5 @@
-//import Homepage from "./components/Homepage";
+import Homepage from "./components/Homepage"
+import PlaidForm from "./components/PlaidForm/PlaidForm"
 import Navbar from "./components/Navbar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
