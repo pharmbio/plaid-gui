@@ -24,7 +24,7 @@ const CompoundForm = ({ handleInputChange }) => {
         <label>
             Replicates
                   <input
-                type="number" name='combinationConcentrationNames' onChange={handleInputChange}
+                type="number" name='replicates' onChange={handleInputChange}
             />
         </label>
     </>

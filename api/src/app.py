@@ -12,7 +12,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 def test_plaid():
 
     if request.method  == 'GET':
-        print("hiiii", file=sys.stdout)
         return 'Hello!'
     if request.method == 'POST':
         data = request.get_json()
