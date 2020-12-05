@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import ExperimentForm from "./ExperimentForm/ExperimentForm"
-import CombinationForm from "./CombinationForm/CombinationForm"
-import CompoundForm from "./CompoundForm/CompoundForm"
-import ControlForm from "./ControlForm/ControlForm"
-import ConstraintForm from "./ConstraintForm/ConstraintForm"
+import ExperimentForm from "./ExperimentForm"
+import CombinationForm from "./CombinationForm"
+import CompoundForm from "./CompoundForm"
+import ControlForm from "./ControlForm"
+import ConstraintForm from "./ConstraintForm"
 const axios = require('axios')
 
 async function postForm(formData, event) {
