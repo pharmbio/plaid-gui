@@ -2,13 +2,11 @@ import React, { useState } from "react";
 const axios = require('axios')
 
 async function handshake() {
-    console.log("Data sent")
     await axios.get('http://localhost:5000/plaid').then(function (response) {
-    console.log(response);
     }).catch(function (error) {
     console.log(error);
-    }).then(function(){
-    console.log("success");
+    }).then(function(response){
+        console.log(response);
     });
 }
 

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
-const ExperimentForm = ({formState, handleInputChange }) => {
+const ExperimentForm = ({handleInputChange }) => {
     return (<>
         <label>
             Plate rows: 
@@ -13,13 +13,13 @@ const ExperimentForm = ({formState, handleInputChange }) => {
         <label>
             Vertical:
               <input
-                name="isGoing" name='vertical' type="checkbox" onChange={handleInputChange}
+                name='vertical' type="checkbox" onChange={handleInputChange}
             />
         </label>
         <label> 
             Horizontal:
               <input
-                name="isGoing" name='horizontal' type="checkbox" onChange={handleInputChange}
+                name='horizontal' type="checkbox" onChange={handleInputChange}
             />
         </label>
     </>
