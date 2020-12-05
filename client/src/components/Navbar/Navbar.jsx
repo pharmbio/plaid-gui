@@ -2,39 +2,44 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const SideBar = styled.nav`
+const StyledSideBar = styled.nav`
   background-color: #584b4f;
   height: 100vh;
 `;
-const LinkItem = styled.li`
+const StyledLinkItem = styled.li`
   list-style: none;
 `;
-const NavLink = styled(Link)`
+const StyledNavLink = styled(Link)`
   color: #efeae1;
   text-decoration: none;
 `;
 
+const StyledList = styled.ul`
+  display: flex;
+  flex-direction: column;
+`;
+
 const Navbar = () => {
   return (
-    <SideBar>
-      <ul>
-        <LinkItem>
-          <NavLink to="/">Home</NavLink>
-        </LinkItem>
-        <LinkItem>
-          <NavLink to="/instructions">Instructions</NavLink>
-        </LinkItem>
-        <LinkItem>
-          <NavLink to="/tool">Tool</NavLink>
-        </LinkItem>
-        <LinkItem>
-          <NavLink to="/publications">Publications</NavLink>
-        </LinkItem>
-        <LinkItem>
-          <NavLink to="/contact">Contact</NavLink>
-        </LinkItem>
-      </ul>
-    </SideBar>
+    <StyledSideBar>
+      <StyledList>
+        <StyledLinkItem>
+          <StyledNavLink to="/">Home</StyledNavLink>
+        </StyledLinkItem>
+        <StyledLinkItem>
+          <StyledNavLink to="/instructions">Instructions</StyledNavLink>
+        </StyledLinkItem>
+        <StyledLinkItem>
+          <StyledNavLink to="/tool">Tool</StyledNavLink>
+        </StyledLinkItem>
+        <StyledLinkItem>
+          <StyledNavLink to="/publications">Publications</StyledNavLink>
+        </StyledLinkItem>
+        <StyledLinkItem>
+          <StyledNavLink to="/contact">Contact</StyledNavLink>
+        </StyledLinkItem>
+      </StyledList>
+    </StyledSideBar>
   );
 };
 

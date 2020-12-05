@@ -18,7 +18,7 @@ html {
 }
 `;
 
-const GridWrapper = styled.div`
+const StyledGridWrapper = styled.div`
   display: grid;
   grid-template-columns: 22vh minmax(75vh, auto);
 `;
@@ -26,7 +26,7 @@ const GridWrapper = styled.div`
 const App = () => {
   return (
     <div className="App">
-      <GridWrapper>
+      <StyledGridWrapper>
         <GlobalStyle />
         <Router>
           <Navbar />
@@ -48,7 +48,7 @@ const App = () => {
             </Route>
           </Switch>
         </Router>
-      </GridWrapper>
+      </StyledGridWrapper>
     </div>
   );
 };
