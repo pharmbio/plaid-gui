@@ -15,8 +15,12 @@ const StyledNavLink = styled(Link)`
 `;
 
 const StyledList = styled.ul`
+  padding-top:10vh;
+  padding-left: 5vh;
+  height: inherit;
   display: flex;
   flex-direction: column;
+  align-items: start;
 `;
 
 const Navbar = () => {

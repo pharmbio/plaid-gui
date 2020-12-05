@@ -1,5 +1,5 @@
-import Homepage from "./components/Homepage"
-import PlaidForm from "./components/PlaidForm/PlaidForm"
+import Homepage from "./components/Homepage";
+import PlaidForm from "./components/PlaidForm/PlaidForm";
 import Navbar from "./components/Navbar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
@@ -27,8 +27,8 @@ const StyledGridWrapper = styled.div`
 const App = () => {
   return (
     <div className="App">
+      <GlobalStyle />
       <StyledGridWrapper>
-        <GlobalStyle />
         <Router>
           <Navbar />
           <Switch>
@@ -36,7 +36,7 @@ const App = () => {
               <h1>This is the instructions page!</h1>
             </Route>
             <Route path="/tool">
-              <h1>This is the tool page!</h1>
+              <PlaidForm />
             </Route>
             <Route path="/publications">
               <h1>This is the publications page!</h1>
