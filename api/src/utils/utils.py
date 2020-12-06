@@ -1,12 +1,12 @@
 import pandas as pd
 from flask import jsonify
 
-def output_to_csv(self, results):
+def output_to_csv(results):
     header = results[0]
     df = pd.DataFrame(results[1:])
     df.to_csv('results.csv', index=False, header=[header])
 
-def output_to_json(self, result):
+def output_to_json(result):
     d_list = []
     header = result[0].split(",")
     for row in result[1:]:
