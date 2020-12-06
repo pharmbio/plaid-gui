@@ -1,8 +1,7 @@
 import minizinc
 import re
-import pandas as pd
-import utils.utils
-from flask import Flask, jsonify
+import os
+
 
 class MinizincModel:
     """
