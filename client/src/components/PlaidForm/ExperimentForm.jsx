@@ -1,6 +1,6 @@
 import React from "react";
 
-const ExperimentForm = ({handleInputChange }) => {
+const ExperimentForm = ({handleInputChange}) => {
     return (<>
         <label>
             Plate rows: 

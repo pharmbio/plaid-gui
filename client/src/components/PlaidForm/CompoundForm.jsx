@@ -1,5 +1,5 @@
 import React from 'react'
-const CompoundForm = ({ handleInputChange }) => {
+const CompoundForm = ({ handleInputChange, handleArrayChange }) => {
     return (<>
         <label>
             Compounds:

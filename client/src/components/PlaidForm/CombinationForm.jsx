@@ -1,5 +1,5 @@
 import React from 'react'
-const CombinationForm = ({ handleInputChange }) => {
+const CombinationForm = ({ handleInputChange, handleArrayChange }) => {
     return (<>
         <label>
             Combinations:
