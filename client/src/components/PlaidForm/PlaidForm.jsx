@@ -23,6 +23,20 @@ async function postForm(formData, event) {
     });
 }
 
+
+// each case should be the handleInputChange or handleArrayChange
+//pass a dispatcher to each function component that dispatches an action to thise reducer
+function reducer(state, action) {
+  switch (action.type) {
+    case 'arrayInput':
+      return {count: state.count + 1};
+    case 'standardInput':
+      return {count: state.count - 1};
+    default:
+      throw new Error();
+  }
+}
+
 const PlaidForm = () => {
   const [formState, setFormState] = useState({
     rows: 8,
@@ -90,7 +104,7 @@ const PlaidForm = () => {
       <ConstraintForm handleInputChange={handleInputChange} />
       <ExperimentForm handleInputChange={handleInputChange} />
       <CombinationForm handleInputChange={handleInputChange} />
-      <CompoundForm handleInputChange={handleInputChange, handleArrayChange} />
+      <CompoundForm handleInputChange={handleInputChange} handleArrayChange={handleArrayChange} />
       <ControlForm handleInputChange={handleInputChange} />
       <button type="button" onClick={() => postForm(formState)}></button>
     </form>

@@ -1,5 +1,5 @@
 import React from 'react'
-const ControlForm = ({ handleInputChange,handleArrayChange }) => {
+const ControlForm = ({ handleInputChange, handleArrayChange }) => {
     return (<>
         <label>
             Number of controls:

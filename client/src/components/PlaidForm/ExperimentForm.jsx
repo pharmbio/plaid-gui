@@ -13,13 +13,13 @@ const ExperimentForm = ({handleInputChange}) => {
         <label>
             Vertical:
               <input
-                name='vertical' type="checkbox" onChange={handleInputChange}
+                name='verticalCellLines' type="checkbox" onChange={handleInputChange}
             />
         </label>
         <label> 
             Horizontal:
               <input
-                name='horizontal' type="checkbox" onChange={handleInputChange}
+                name='horizontalCellLines' type="checkbox" onChange={handleInputChange}
             />
         </label>
     </>
