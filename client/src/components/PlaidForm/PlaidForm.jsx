@@ -75,7 +75,6 @@ const PlaidForm = () => {
     controlConcentrationNames: [], // List
   })
   const handleArrayChange = (event) => {
-    console.log("HERE")
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -89,7 +88,6 @@ const PlaidForm = () => {
   };
   const handleInputChange = (event) => {
     console.log(formState);
-    console.log(event.target.checked);
     const target = event.target;
     const value =
       event.target.type === "checkbox" ? target.checked : target.value;
@@ -103,9 +101,9 @@ const PlaidForm = () => {
     <form>
       <ConstraintForm handleInputChange={handleInputChange} />
       <ExperimentForm handleInputChange={handleInputChange} />
-      <CombinationForm handleInputChange={handleInputChange} />
+      <CombinationForm handleInputChange={handleInputChange} handleArrayChange={handleArrayChange} />
       <CompoundForm handleInputChange={handleInputChange} handleArrayChange={handleArrayChange} />
-      <ControlForm handleInputChange={handleInputChange} />
+      <ControlForm handleInputChange={handleInputChange} handleArrayChange={handleArrayChange}/>
       <button type="button" onClick={() => postForm(formState)}></button>
     </form>
   );
