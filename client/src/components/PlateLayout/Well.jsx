@@ -23,7 +23,7 @@ const Well = (Props) => {
     <StyledEmptyWell row={Props.row} col={Props.col} color={Props.color} />
   ) : (
     <StyledWell row={Props.row} col={Props.col} color={Props.color}>
-      {Props.data.CONCuM}
+{/*       {Props.data.CONCuM} */}
     </StyledWell>
   );
 };

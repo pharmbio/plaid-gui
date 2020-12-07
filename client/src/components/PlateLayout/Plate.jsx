@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import Well from "./Well.jsx";
-import randomColor from "./../../functions/randomColor.js";
-import adjustColor from "./../../functions/adjustColor.js";
 
 const StyledPlate = styled.div`
   grid-area: 2/2 / ${(props) => props.rows} / ${(props) => props.cols};
@@ -66,26 +64,6 @@ const positionsOfEmptyWells = (empty, rows, cols) => {
   return emptyWells;
 };
 
-// lower level is darker.
-const DARKEN_LVL = 150;
-const EMPTY_WELL_COLOR = "d3d3d3";
-
-const assignColorToCompound = (o, pairs, alreadyChosen) => {
-  if (pairs.has(o.cmpdname)) {
-    return [pairs, alreadyChosen];
-  } else {
-    let color = randomColor(DARKEN_LVL);
-    /* if color is already picked.. */
-    while (alreadyChosen.includes(color)) {
-      color = randomColor();
-    }
-    color = adjustColor(color, 60);
-    alreadyChosen.push();
-    pairs.set(o.cmpdname, color);
-    return [pairs, alreadyChosen];
-  }
-};
-
 /* 
     CONCuM
     cmpdname
@@ -95,25 +73,13 @@ const assignColorToCompound = (o, pairs, alreadyChosen) => {
 */
 
 const Plate = (Props) => {
-  let compoundToColorMap = new Map();
-  let chosenColors = [EMPTY_WELL_COLOR];
-
-  Props.data.forEach((o) => {
-    //console.log(o);
-    [compoundToColorMap, chosenColors] = assignColorToCompound(
-      o,
-      compoundToColorMap,
-      chosenColors
-    );
-  });
-
   let emptyWells = positionsOfEmptyWells(
     Props.emptyEdges,
     Props.rows,
     Props.cols
   );
   return (
-    <StyledPlate rows={Props.rows} cols={Props.cols} wellRad={55} gap={2.5}>
+    <StyledPlate rows={Props.rows} cols={Props.cols} wellRad={45} gap={2.5}>
       {emptyWells.map((pos) => {
         return (
           <Well
@@ -121,7 +87,7 @@ const Plate = (Props) => {
             row={pos[0]}
             col={pos[1]}
             key={Props.alphabet[pos[0] - 1] + pos[1]}
-            color={EMPTY_WELL_COLOR} //grey
+            color={Props.emptyWellColor} //grey
           />
         );
       })}
@@ -134,9 +100,9 @@ const Plate = (Props) => {
             empty={false}
             row={row}
             col={col}
-            key={o.well}
+            key={o.plateID + o.well}
             data={o}
-            color={compoundToColorMap.get(o.cmpdname)}
+            color={Props.compoundToColorMap.get(o.cmpdname)}
           />
         );
       })}

@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import output_data from "./output_from_ex1.json";
 import Plate from "./Plate.jsx";
+import randomColor from "./../../functions/randomColor.js";
+import adjustColor from "./../../functions/adjustColor.js";
+import ColorLegend from "./ColorLegend.jsx";
 
 // should come together with output from API into PROPS..
 const ROWS = 8;
@@ -38,10 +41,33 @@ const ALPHABET = [
   "Z",
 ];
 
-const StyledResultLayoutContainer = styled.div``;
+// lower level is darker.
+const DARKEN_LVL = 150;
+const EMPTY_WELL_COLOR = "d3d3d3";
+
+const assignColorToCompound = (o, pairs, alreadyChosen) => {
+  if (pairs.has(o.cmpdname)) {
+    return [pairs, alreadyChosen];
+  } else {
+    let color = randomColor(DARKEN_LVL);
+    /* if color is already picked.. */
+    while (alreadyChosen.includes(color)) {
+      color = randomColor();
+    }
+    color = adjustColor(color, 80); // make color lighter
+    alreadyChosen.push();
+    pairs.set(o.cmpdname, color);
+    return [pairs, alreadyChosen];
+  }
+};
+const StyledResultLayoutContainer = styled.div`
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+`;
 
 const StyledPlateWrapper = styled.div`
-  margin: auto;
   display: grid;
   grid-template-columns: repeat(
     ${(props) => props.cols + 2},
@@ -53,25 +79,24 @@ const StyledPlateWrapper = styled.div`
   );
   column-gap: ${(props) => props.gap}px;
   row-gap: ${(props) => props.gap}px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 `;
 
 const StyledColumnIdentifier = styled.div`
-  justify-self:center;
+  justify-self: center;
   align-self: center;
   grid-row: ${(props) => props.row};
   grid-column: ${(props) => props.col};
 `;
 const StyledRowIdentifier = styled.div`
-  justify-self:center;
+  justify-self: center;
   align-self: center;
   grid-row: ${(props) => props.row}; /* row position */
   grid-column: ${(props) => props.col};
 `;
 
-
 /* Props should hold all values as data, rows, cols etc..*/
 const PlateLayout = () => {
+  /* rowList, colList used to map over in the return as to render each component */
   let rowList = [];
   let colList = [];
 
@@ -82,30 +107,54 @@ const PlateLayout = () => {
     colList.push(i);
   }
 
+  let compoundToColorMap = new Map();
+  let chosenColors = [EMPTY_WELL_COLOR];
+
+  DATA.forEach((o) => {
+    [compoundToColorMap, chosenColors] = assignColorToCompound(
+      o,
+      compoundToColorMap,
+      chosenColors
+    );
+  });
+
   return (
-    <StyledPlateWrapper rows={ROWS} cols={COLS} wellRad={55} gap={2.5}>
-      {rowList.map((i) => {
-        return React.createElement(
-          StyledRowIdentifier,
-          { key: ALPHABET[i], row: i + 2, col: 1 },
-          ALPHABET[i]
-        );
-      })}
-      {colList.map((i) => {
-        return React.createElement(
-          StyledColumnIdentifier,
-          { key: i + 1, row: 1, col: i + 2 },
-          i + 1
-        );
-      })}
-      <Plate
+    <StyledResultLayoutContainer>
+      <StyledPlateWrapper rows={ROWS} cols={COLS} wellRad={45} gap={2.5}>
+        {rowList.map((i) => {
+          return React.createElement(
+            StyledRowIdentifier,
+            { key: ALPHABET[i], row: i + 2, col: 1 },
+            ALPHABET[i]
+          );
+        })}
+        {colList.map((i) => {
+          return React.createElement(
+            StyledColumnIdentifier,
+            { key: i + 1, row: 1, col: i + 2 },
+            i + 1
+          );
+        })}
+        <Plate
+          rows={ROWS}
+          cols={COLS}
+          emptyEdges={SIZE_EMPTY_EDGES}
+          data={DATA}
+          alphabet={ALPHABET}
+          emptyWellColor={EMPTY_WELL_COLOR}
+          compoundToColorMap={compoundToColorMap}
+        />
+      </StyledPlateWrapper>
+      <ColorLegend
+        wellRad={45}
+        gap={2.5}
         rows={ROWS}
         cols={COLS}
         emptyEdges={SIZE_EMPTY_EDGES}
-        data={DATA}
-        alphabet={ALPHABET}
+        emptyWellColor={EMPTY_WELL_COLOR}
+        compoundToColorMap={compoundToColorMap}
       />
-    </StyledPlateWrapper>
+    </StyledResultLayoutContainer>
   );
 };
 
