@@ -1,5 +1,5 @@
 import React from 'react'
-const ControlForm = ({ handleInputChange }) => {
+const ControlForm = ({ handleInputChange, handleArrayChange }) => {
     return (<>
         <label>
             Number of controls:
@@ -8,7 +8,7 @@ const ControlForm = ({ handleInputChange }) => {
         <label>
             Control names:
                   <input
-                type="text" name='controlNames' onChange={handleInputChange}
+                type="text" name='controlNames' onChange={handleArrayChange}
             />
         </label>
         <label>
@@ -18,13 +18,13 @@ const ControlForm = ({ handleInputChange }) => {
         <label>
             Control concentration names:
                   <input
-                type="text" name='controlConcentrationNames' onChange={handleInputChange}
+                type="text" name='controlConcentrationNames' onChange={handleArrayChange}
             />
         </label>
         <label>
             Control replicates:
                   <input
-                type="text" name='controlReplicates' onChange={handleInputChange}
+                type="text" name='controlReplicates' onChange={handleArrayChange}
             />
         </label>
         <label>

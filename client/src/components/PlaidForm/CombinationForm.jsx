@@ -1,5 +1,5 @@
 import React from 'react'
-const CombinationForm = ({ handleInputChange }) => {
+const CombinationForm = ({ handleInputChange, handleArrayChange }) => {
     return (<>
         <label>
             Combinations:
@@ -7,7 +7,7 @@ const CombinationForm = ({ handleInputChange }) => {
         </label>
         <label>
             Combination names:
-                  <input type="text" name='combinationNames' onChange={handleInputChange} />
+                  <input type="text" name='combinationNames' onChange={handleArrayChange} />
         </label>
         <label>
             Combination concentrations:
@@ -18,7 +18,7 @@ const CombinationForm = ({ handleInputChange }) => {
         <label>
             Combination concentration names:
                   <input
-                type="text" name='combinationConcentrationNames'  onChange={handleInputChange}
+                type="text" name='combinationConcentrationNames'  onChange={handleArrayChange}
             />
         </label>
     </>

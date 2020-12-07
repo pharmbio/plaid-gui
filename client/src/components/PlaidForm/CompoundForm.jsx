@@ -1,5 +1,5 @@
 import React from 'react'
-const CompoundForm = ({ handleInputChange }) => {
+const CompoundForm = ({ handleInputChange, handleArrayChange }) => {
     return (<>
         <label>
             Compounds:
@@ -7,7 +7,7 @@ const CompoundForm = ({ handleInputChange }) => {
         </label>
         <label>
             Compound names:
-                  <input type="text" name='compoundNames' onChange={handleInputChange} />
+                  <input type="text" name='compoundNames' onChange={handleArrayChange} />
         </label>
         <label>
             Compound concentrations:
@@ -18,7 +18,7 @@ const CompoundForm = ({ handleInputChange }) => {
         <label>
             Compound concentration names:
                   <input
-                type="text" name='compoundConcentrationNames' onChange={handleInputChange}
+                type="text" name='compoundConcentrationNames' onChange={handleArrayChange}
             />
         </label>
         <label>

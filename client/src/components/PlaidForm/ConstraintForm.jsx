@@ -1,6 +1,6 @@
 import React from "react";
 
-const ConstraintForm = ({ handleInputChange }) => {
+const ConstraintForm = ({ handleInputChange}) => {
     return (<>
         <label>
             Allow empty wells:
