@@ -65,7 +65,7 @@ const StyledColumnIdentifier = styled.div`
 const StyledRowIdentifier = styled.div`
   justify-self:center;
   align-self: center;
-  grid-row: ${(props) => props.row};
+  grid-row: ${(props) => props.row}; /* row position */
   grid-column: ${(props) => props.col};
 `;
 

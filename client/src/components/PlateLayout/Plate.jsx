@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Well from "./Well.jsx";
 
 const StyledPlate = styled.div`
   grid-area: 2/2 / ${(props) => props.rows} / ${(props) => props.cols};
@@ -17,19 +18,6 @@ const StyledPlate = styled.div`
   column-gap: ${(props) => props.gap}px;
   row-gap: ${(props) => props.gap}px;
   border: solid 1px;
-`;
-
-const StyledWell = styled.div`
-  border-radius: 50%;
-  background-color: lightcoral;
-  grid-row: ${(props) => props.row};
-  grid-column: ${(props) => props.col};
-`;
-const StyledEmptyWell = styled.div`
-  border-radius: 50%;
-  background-color: lightgray;
-  grid-row: ${(props) => props.row};
-  grid-column: ${(props) => props.col};
 `;
 
 /* Feels really hacky... TODO: find a better way */
@@ -76,32 +64,44 @@ const positionsOfEmptyWells = (empty, rows, cols) => {
   return emptyWells;
 };
 
+const randomColor = () => Math.floor(Math.random() * 16777215).toString(16);
+
 /*   let amountOfEmptyWells =
     COLS * SIZE_EMPTY_EDGES * 2 +
     ROWS * SIZE_EMPTY_EDGES * 2 -
     4 * SIZE_EMPTY_EDGES; */
 
 const Plate = (Props) => {
-
-    let emptyWells = positionsOfEmptyWells(Props.emptyEdges, Props.rows, Props.cols);
+  let emptyWells = positionsOfEmptyWells(
+    Props.emptyEdges,
+    Props.rows,
+    Props.cols
+  );
   return (
     <StyledPlate rows={Props.rows} cols={Props.cols} wellRad={40} gap={2.5}>
       {emptyWells.map((pos) => {
-        return React.createElement(StyledEmptyWell, {
-          key: Props.alphabet[pos[0] - 1] + pos[1],
-          row: pos[0],
-          col: pos[1],
-        });
+        return (
+          <Well
+            empty={true}
+            row={pos[0]}
+            col={pos[1]}
+            key={Props.alphabet[pos[0] - 1] + pos[1]}
+            color={randomColor()}
+          />
+        );
       })}
       {Props.data.map((o) => {
         let row = Props.alphabet.indexOf(o.well[0]) + 1;
         let col = parseInt(o.well.slice(1, o.well.length));
-        console.log(row, col);
-        return React.createElement(StyledWell, {
-          key: o.well,
-          row: row,
-          col: col,
-        });
+        return (
+          <Well
+            empty={false}
+            row={row}
+            col={col}
+            key={o.well}
+            color={randomColor()}
+          />
+        );
       })}
     </StyledPlate>
   );
