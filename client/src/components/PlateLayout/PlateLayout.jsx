@@ -10,7 +10,6 @@ import ColorLegend from "./ColorLegend.jsx";
 const ROWS = 8;
 const COLS = 12;
 const SIZE_EMPTY_EDGES = 1;
-const DATA = output_data.slice(0, 60); // plate 1
 
 const ALPHABET = [
   "A",
@@ -60,8 +59,16 @@ const assignColorToCompound = (o, pairs, alreadyChosen) => {
     return [pairs, alreadyChosen];
   }
 };
+
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: scroll;
+`;
 const StyledResultLayoutContainer = styled.div`
   margin: auto;
+  margin-top: 5rem;
   display: flex;
   flex-direction: row;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -107,54 +114,71 @@ const PlateLayout = () => {
     colList.push(i);
   }
 
-  let compoundToColorMap = new Map();
-  let chosenColors = [EMPTY_WELL_COLOR];
+  const EMPTY_WELLS =
+    COLS * SIZE_EMPTY_EDGES * 2 +
+    ROWS * SIZE_EMPTY_EDGES * 2 -
+    4 * SIZE_EMPTY_EDGES;
 
-  DATA.forEach((o) => {
-    [compoundToColorMap, chosenColors] = assignColorToCompound(
-      o,
-      compoundToColorMap,
-      chosenColors
+  let platesCorrespondingData = [];
+
+  for (let i = 0; i < output_data.length; i += ROWS * COLS - EMPTY_WELLS) {
+    platesCorrespondingData.push(
+      output_data.slice(i, i + ROWS * COLS - EMPTY_WELLS)
     );
-  });
+  }
 
   return (
-    <StyledResultLayoutContainer>
-      <StyledPlateWrapper rows={ROWS} cols={COLS} wellRad={45} gap={2.5}>
-        {rowList.map((i) => {
-          return React.createElement(
-            StyledRowIdentifier,
-            { key: ALPHABET[i], row: i + 2, col: 1 },
-            ALPHABET[i]
+    <StyledContainer>
+      {platesCorrespondingData.map((data) => {
+        let compoundToColorMap = new Map();
+        let chosenColors = [EMPTY_WELL_COLOR];
+        data.forEach((o) => {
+          [compoundToColorMap, chosenColors] = assignColorToCompound(
+            o,
+            compoundToColorMap,
+            chosenColors
           );
-        })}
-        {colList.map((i) => {
-          return React.createElement(
-            StyledColumnIdentifier,
-            { key: i + 1, row: 1, col: i + 2 },
-            i + 1
-          );
-        })}
-        <Plate
-          rows={ROWS}
-          cols={COLS}
-          emptyEdges={SIZE_EMPTY_EDGES}
-          data={DATA}
-          alphabet={ALPHABET}
-          emptyWellColor={EMPTY_WELL_COLOR}
-          compoundToColorMap={compoundToColorMap}
-        />
-      </StyledPlateWrapper>
-      <ColorLegend
-        wellRad={45}
-        gap={2.5}
-        rows={ROWS}
-        cols={COLS}
-        emptyEdges={SIZE_EMPTY_EDGES}
-        emptyWellColor={EMPTY_WELL_COLOR}
-        compoundToColorMap={compoundToColorMap}
-      />
-    </StyledResultLayoutContainer>
+        });
+        return (
+          <StyledResultLayoutContainer>
+            <StyledPlateWrapper rows={ROWS} cols={COLS} wellRad={45} gap={2.5}>
+              {rowList.map((i) => {
+                return React.createElement(
+                  StyledRowIdentifier,
+                  { key: ALPHABET[i], row: i + 2, col: 1 },
+                  ALPHABET[i]
+                );
+              })}
+              {colList.map((i) => {
+                return React.createElement(
+                  StyledColumnIdentifier,
+                  { key: i + 1, row: 1, col: i + 2 },
+                  i + 1
+                );
+              })}
+              <Plate
+                rows={ROWS}
+                cols={COLS}
+                emptyEdges={SIZE_EMPTY_EDGES}
+                data={data}
+                alphabet={ALPHABET}
+                emptyWellColor={EMPTY_WELL_COLOR}
+                compoundToColorMap={compoundToColorMap}
+              />
+            </StyledPlateWrapper>
+            <ColorLegend
+              wellRad={45}
+              gap={2.5}
+              rows={ROWS}
+              cols={COLS}
+              emptyEdges={SIZE_EMPTY_EDGES}
+              emptyWellColor={EMPTY_WELL_COLOR}
+              compoundToColorMap={compoundToColorMap}
+            />
+          </StyledResultLayoutContainer>
+        );
+      })}
+    </StyledContainer>
   );
 };
 
