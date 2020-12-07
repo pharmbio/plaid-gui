@@ -1,6 +1,6 @@
 import PlaidForm from "./components/PlaidForm";
 import Navbar from "./components/Navbar";
-import PlateLayout from "./components/PlateLayout"
+import PlateLayout from "./components/PlateLayout";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
 
@@ -16,6 +16,7 @@ const GlobalStyle = createGlobalStyle`
 html {
   box-sizing: border-box;
   background-color: #EFEAE1;
+  color:#584b4f;
 }
 `;
 
@@ -45,7 +46,7 @@ const App = () => {
               <h1>This is the contact page!</h1>
             </Route>
             <Route path="/">
-              <PlateLayout/>
+              <PlateLayout />
             </Route>
           </Switch>
         </Router>

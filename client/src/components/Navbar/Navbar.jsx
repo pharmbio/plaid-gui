@@ -12,10 +12,11 @@ const StyledLinkItem = styled.li`
 const StyledNavLink = styled(Link)`
   color: #efeae1;
   text-decoration: none;
+  font-size: 1.5rem;
 `;
 
 const StyledList = styled.ul`
-  padding-top:10vh;
+  padding-top: 10vh;
   padding-left: 5vh;
   height: inherit;
   display: flex;
