@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import Well from "./Well.jsx";
+import randomColor from "./../../functions/randomColor.js";
+import adjustColor from "./../../functions/adjustColor.js";
 
 const StyledPlate = styled.div`
   grid-area: 2/2 / ${(props) => props.rows} / ${(props) => props.cols};
@@ -64,28 +66,24 @@ const positionsOfEmptyWells = (empty, rows, cols) => {
   return emptyWells;
 };
 
-const randomColor = () => Math.floor(Math.random() * 16777215).toString(16);
+// lower level is darker.
+const DARKEN_LVL = 100;
 
 const assignColorToCompound = (compName, pairs, alreadyChosen) => {
   if (pairs.has(compName)) {
     return [pairs, alreadyChosen];
   } else {
-    let color = randomColor();
+    let color = randomColor(DARKEN_LVL);
+    color = adjustColor(color, 20);
     /* if color is already picked.. */
     while (alreadyChosen.includes(color)) {
       color = randomColor();
     }
     pairs.set(compName, color);
-    console.log(pairs);
     alreadyChosen.push(color);
     return [pairs, alreadyChosen];
   }
 };
-
-/*   let amountOfEmptyWells =
-    COLS * SIZE_EMPTY_EDGES * 2 +
-    ROWS * SIZE_EMPTY_EDGES * 2 -
-    4 * SIZE_EMPTY_EDGES; */
 
 /* 
     CONCuM
@@ -97,7 +95,7 @@ const assignColorToCompound = (compName, pairs, alreadyChosen) => {
 
 const Plate = (Props) => {
   let compoundToColorMap = new Map();
-  let chosenColors = [];
+  let chosenColors = ["D3D3D3"];
 
   Props.data.forEach((o) => {
     [compoundToColorMap, chosenColors] = assignColorToCompound(
@@ -106,6 +104,8 @@ const Plate = (Props) => {
       chosenColors
     );
   });
+
+  console.log(chosenColors);
 
   let emptyWells = positionsOfEmptyWells(
     Props.emptyEdges,
@@ -128,6 +128,7 @@ const Plate = (Props) => {
       {Props.data.map((o) => {
         let row = Props.alphabet.indexOf(o.well[0]) + 1;
         let col = parseInt(o.well.slice(1, o.well.length));
+
         return (
           <Well
             empty={false}
