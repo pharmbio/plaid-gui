@@ -83,7 +83,7 @@ const PlateLayout = () => {
   }
 
   return (
-    <StyledPlateWrapper rows={ROWS} cols={COLS} wellRad={40} gap={2.5}>
+    <StyledPlateWrapper rows={ROWS} cols={COLS} wellRad={55} gap={2.5}>
       {rowList.map((i) => {
         return React.createElement(
           StyledRowIdentifier,

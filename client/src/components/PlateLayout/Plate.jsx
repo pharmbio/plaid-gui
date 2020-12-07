@@ -67,20 +67,21 @@ const positionsOfEmptyWells = (empty, rows, cols) => {
 };
 
 // lower level is darker.
-const DARKEN_LVL = 100;
+const DARKEN_LVL = 150;
+const EMPTY_WELL_COLOR = "d3d3d3";
 
-const assignColorToCompound = (compName, pairs, alreadyChosen) => {
-  if (pairs.has(compName)) {
+const assignColorToCompound = (o, pairs, alreadyChosen) => {
+  if (pairs.has(o.cmpdname)) {
     return [pairs, alreadyChosen];
   } else {
     let color = randomColor(DARKEN_LVL);
-    color = adjustColor(color, 20);
     /* if color is already picked.. */
     while (alreadyChosen.includes(color)) {
       color = randomColor();
     }
-    pairs.set(compName, color);
-    alreadyChosen.push(color);
+    color = adjustColor(color, 60);
+    alreadyChosen.push();
+    pairs.set(o.cmpdname, color);
     return [pairs, alreadyChosen];
   }
 };
@@ -95,17 +96,16 @@ const assignColorToCompound = (compName, pairs, alreadyChosen) => {
 
 const Plate = (Props) => {
   let compoundToColorMap = new Map();
-  let chosenColors = ["D3D3D3"];
+  let chosenColors = [EMPTY_WELL_COLOR];
 
   Props.data.forEach((o) => {
+    //console.log(o);
     [compoundToColorMap, chosenColors] = assignColorToCompound(
-      o.cmpdname,
+      o,
       compoundToColorMap,
       chosenColors
     );
   });
-
-  console.log(chosenColors);
 
   let emptyWells = positionsOfEmptyWells(
     Props.emptyEdges,
@@ -113,7 +113,7 @@ const Plate = (Props) => {
     Props.cols
   );
   return (
-    <StyledPlate rows={Props.rows} cols={Props.cols} wellRad={40} gap={2.5}>
+    <StyledPlate rows={Props.rows} cols={Props.cols} wellRad={55} gap={2.5}>
       {emptyWells.map((pos) => {
         return (
           <Well
@@ -121,7 +121,7 @@ const Plate = (Props) => {
             row={pos[0]}
             col={pos[1]}
             key={Props.alphabet[pos[0] - 1] + pos[1]}
-            color={"D3D3D3"} //grey
+            color={EMPTY_WELL_COLOR} //grey
           />
         );
       })}
@@ -135,6 +135,7 @@ const Plate = (Props) => {
             row={row}
             col={col}
             key={o.well}
+            data={o}
             color={compoundToColorMap.get(o.cmpdname)}
           />
         );

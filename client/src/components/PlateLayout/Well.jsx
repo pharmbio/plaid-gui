@@ -7,6 +7,8 @@ const StyledWell = styled.div`
   grid-row: ${(props) => props.row};
   grid-column: ${(props) => props.col};
   background-color: #${(props) => props.color};
+  color:black;
+
 `;
 const StyledEmptyWell = styled.div`
   border-radius: 50%;
@@ -20,7 +22,9 @@ const Well = (Props) => {
   return Props.empty ? (
     <StyledEmptyWell row={Props.row} col={Props.col} color={Props.color} />
   ) : (
-    <StyledWell row={Props.row} col={Props.col} color={Props.color} />
+    <StyledWell row={Props.row} col={Props.col} color={Props.color}>
+      {Props.data.CONCuM}
+    </StyledWell>
   );
 };
 
