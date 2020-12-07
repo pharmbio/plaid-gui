@@ -23,20 +23,6 @@ async function postForm(formData, event) {
     });
 }
 
-
-// each case should be the handleInputChange or handleArrayChange
-//pass a dispatcher to each function component that dispatches an action to thise reducer
-function reducer(state, action) {
-  switch (action.type) {
-    case 'arrayInput':
-      return {count: state.count + 1};
-    case 'standardInput':
-      return {count: state.count - 1};
-    default:
-      throw new Error();
-  }
-}
-
 const PlaidForm = () => {
   const [formState, setFormState] = useState({
     rows: 8,
@@ -46,51 +32,52 @@ const PlaidForm = () => {
     allowEmptyWells: false,
     sizeEmptyEdge: 1,
     compounds: 10,
-    // compoundNames: 
-    //   "comp1,comp2,comp3,comp4,comp5,comp6,comp7,comp8,comp9,comp10", // List
+    compoundConcentrationNames: [], // List
+    compoundNames: [], // List
     compoundConcentrations: 8,
-    //compoundConcentrationNames: "0.3,1,3,5,10,15,30,100", // List
-    // compound_concentration_indicators: "1,2,3,4,5,6,7,8", // TODO: ask andreina about this one
     replicates: 2,
     combinations: 0,
     combinationConcentrations: 0,
-    // combinationNames: "", // List
-    // combinationConcentrationNames: "", // List
-    numControls: 4,
-    controlConcentrations: 1,
-    // controlReplicates: "32,16,16,16", // List
-    // controlNames: "pos,neg,blank,dmso", // List
-    // controlConcentrationNames: "cont-conc1", // List
-    blanks: 0,
-    blanksNames: "",
-  });
-
-  const [arrayState, setArrayState] = useState({
-    compoundConcentrationNames: [], // List
-    compoundNames: [], // List
     combinationNames: [], // List
     combinationConcentrationNames: [], // List
+    numControls: 4,
+    controlConcentrations: 1,
     controlReplicates: [], // List
     controlNames: [], // List
     controlConcentrationNames: [], // List
-  })
+    blanks: 0,
+    blanksNames: "",
+  });
   const handleArrayChange = (event) => {
+    console.log("Hi")
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    const newArr = [...arrayState[name]];
+    const newArr = [...formState[name]];
     newArr[name] = value.split(',')
     console.log(newArr)
-     setArrayState(
-      { ...arrayState, [name]: newArr }
-    ); 
-    console.log(arrayState)
+    setFormState(
+      { ...formState, [name]: newArr }
+    );
+    console.log(formState)
   };
   const handleInputChange = (event) => {
     console.log(formState);
     const target = event.target;
-    const value =
-      event.target.type === "checkbox" ? target.checked : target.value;
+    const type = target.type;
+    let value;
+    switch (type) {
+      case "checkbox":{
+        value = target.checked;
+        break;
+      }
+      case "number":{
+        value = parseInt(target.value)
+        break;
+      }
+      default:
+        value = target.value
+    }
     const name = target.name;
     setFormState({
       ...formState,
@@ -103,7 +90,7 @@ const PlaidForm = () => {
       <ExperimentForm handleInputChange={handleInputChange} />
       <CombinationForm handleInputChange={handleInputChange} handleArrayChange={handleArrayChange} />
       <CompoundForm handleInputChange={handleInputChange} handleArrayChange={handleArrayChange} />
-      <ControlForm handleInputChange={handleInputChange} handleArrayChange={handleArrayChange}/>
+      <ControlForm handleInputChange={handleInputChange} handleArrayChange={handleArrayChange} />
       <button type="button" onClick={() => postForm(formState)}></button>
     </form>
   );
