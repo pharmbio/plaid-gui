@@ -28,7 +28,7 @@ def test_plaid():
         print(data, file=sys.stderr)
     #return data
     mz = MinizincModel("./src/plate-design.mzn", "gecode")
-    mz.populate_instance(dzn_file_path="/src/plate_design/dzn_examples/pl-example01.dzn")
+    mz.populate_instance(args_json=data)
     result = mz.solve_instance()
     j_res = output_to_json(result)
     return j_res

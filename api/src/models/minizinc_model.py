@@ -26,7 +26,8 @@ class MinizincModel:
         dzn_str: str | None
         args_json: json file with arguments | None
         """
-        if self.instance is None:
+
+        """         if self.instance is None:
             raise Exception("Instance is not initialized!")
         elif dzn_file_path is not None:
             self.instance.add_file(dzn_file_path)
@@ -35,7 +36,11 @@ class MinizincModel:
         elif args_json is not None:
             "TODO need to parse the json.."
         else:
-            raise Exception("No data provided!")
+            raise Exception("No data provided!") """
+        inst = self.instance
+        for key,val in args_json.items():
+            inst[key] = val
+
         self.populated = True
 
     def solve_instance(self):
@@ -44,8 +49,8 @@ class MinizincModel:
         """
         if self.populated:
             result = self.instance.solve()
-            result = re.split("[\n]", str(result).strip('[\n]'))
+            result = re.split("[\n]", str(result).strip("[\n]"))
             return result
         else:
             raise Exception("Instance is not populated with data!")
-    
+
