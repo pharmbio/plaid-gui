@@ -17,7 +17,6 @@ const StyledEmptyWell = styled.div`
 `;
 
 const Well = (Props) => {
-  console.log(Props.color);
   return Props.empty ? (
     <StyledEmptyWell row={Props.row} col={Props.col} color={Props.color} />
   ) : (

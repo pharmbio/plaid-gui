@@ -66,12 +66,47 @@ const positionsOfEmptyWells = (empty, rows, cols) => {
 
 const randomColor = () => Math.floor(Math.random() * 16777215).toString(16);
 
+const assignColorToCompound = (compName, pairs, alreadyChosen) => {
+  if (pairs.has(compName)) {
+    return [pairs, alreadyChosen];
+  } else {
+    let color = randomColor();
+    /* if color is already picked.. */
+    while (alreadyChosen.includes(color)) {
+      color = randomColor();
+    }
+    pairs.set(compName, color);
+    console.log(pairs);
+    alreadyChosen.push(color);
+    return [pairs, alreadyChosen];
+  }
+};
+
 /*   let amountOfEmptyWells =
     COLS * SIZE_EMPTY_EDGES * 2 +
     ROWS * SIZE_EMPTY_EDGES * 2 -
     4 * SIZE_EMPTY_EDGES; */
 
+/* 
+    CONCuM
+    cmpdname
+    cmpdnum
+    plateID
+    well
+*/
+
 const Plate = (Props) => {
+  let compoundToColorMap = new Map();
+  let chosenColors = [];
+
+  Props.data.forEach((o) => {
+    [compoundToColorMap, chosenColors] = assignColorToCompound(
+      o.cmpdname,
+      compoundToColorMap,
+      chosenColors
+    );
+  });
+
   let emptyWells = positionsOfEmptyWells(
     Props.emptyEdges,
     Props.rows,
@@ -86,7 +121,7 @@ const Plate = (Props) => {
             row={pos[0]}
             col={pos[1]}
             key={Props.alphabet[pos[0] - 1] + pos[1]}
-            color={randomColor()}
+            color={"D3D3D3"} //grey
           />
         );
       })}
@@ -99,7 +134,7 @@ const Plate = (Props) => {
             row={row}
             col={col}
             key={o.well}
-            color={randomColor()}
+            color={compoundToColorMap.get(o.cmpdname)}
           />
         );
       })}

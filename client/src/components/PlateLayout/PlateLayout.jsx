@@ -69,17 +69,6 @@ const StyledRowIdentifier = styled.div`
   grid-column: ${(props) => props.col};
 `;
 
-/* 
-    CONCuM
-    cmpdname
-    cmpdnum
-    plateID
-    well
-*/
-
-/* DATA.forEach((o) => {
-  console.log(o);
-}); */
 
 /* Props should hold all values as data, rows, cols etc..*/
 const PlateLayout = () => {
@@ -98,7 +87,7 @@ const PlateLayout = () => {
       {rowList.map((i) => {
         return React.createElement(
           StyledRowIdentifier,
-          { key: ALPHABET[0], row: i + 2, col: 1 },
+          { key: ALPHABET[i], row: i + 2, col: 1 },
           ALPHABET[i]
         );
       })}
