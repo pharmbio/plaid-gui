@@ -63,7 +63,7 @@ const PlaidForm = () => {
     combination_concentration_names: [], // List
     num_controls: 4,
     control_concentrations: 1,
-    control_replicates: [], //[32, 16, 16, 16], // List
+    control_replicates: [32, 16, 16, 16], // List
     control_names: ["pos", "neg", "blank", "dmso"], // List
     control_concentration_names: ["cont-conc1"], // List
     blanks: 0,
@@ -74,20 +74,18 @@ const PlaidForm = () => {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    const newArr = [...formState[name]];
-    newArr[name] = value.split(",");
-
+    let delim = value.split(",");
+    console.log(delim)
     if (name in deviations) {
       switch (deviations[name]) {
         case 'integer':
-          console.log(newArr)
-          newArr[name].forEach((x, index) => {
-            newArr[name][index] = parseInt(x)
+          delim.forEach((x, index) => {
+            delim[index] = parseInt(x)
           })
           break;
       }
     }
-    setFormState({ ...formState, [name]: newArr });
+    setFormState({ ...formState, [name]: delim });
     console.log(formState);
 
   };
