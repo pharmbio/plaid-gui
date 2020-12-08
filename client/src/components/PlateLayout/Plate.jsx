@@ -72,27 +72,27 @@ const positionsOfEmptyWells = (empty, rows, cols) => {
     well
 */
 
-const Plate = (Props) => {
+const Plate = (props) => {
   let emptyWells = positionsOfEmptyWells(
-    Props.emptyEdges,
-    Props.rows,
-    Props.cols
+    props.emptyEdges,
+    props.rows,
+    props.cols
   );
   return (
-    <StyledPlate rows={Props.rows} cols={Props.cols} wellRad={45} gap={2.5}>
+    <StyledPlate rows={props.rows} cols={props.cols} wellRad={45} gap={2.5}>
       {emptyWells.map((pos) => {
         return (
           <Well
             empty={true}
             row={pos[0]}
             col={pos[1]}
-            key={Props.alphabet[pos[0] - 1] + pos[1]}
-            color={Props.emptyWellColor} //grey
+            key={props.alphabet[pos[0] - 1] + pos[1]}
+            color={props.emptyWellColor} //grey
           />
         );
       })}
-      {Props.data.map((o) => {
-        let row = Props.alphabet.indexOf(o.well[0]) + 1;
+      {props.data.map((o) => {
+        let row = props.alphabet.indexOf(o.well[0]) + 1;
         let col = parseInt(o.well.slice(1, o.well.length));
 
         return (
@@ -102,7 +102,7 @@ const Plate = (Props) => {
             col={col}
             key={o.plateID + o.well}
             data={o}
-            color={Props.compoundToColorMap.get(o.cmpdname)}
+            color={props.compoundToColorMap.get(o.cmpdname)}
           />
         );
       })}

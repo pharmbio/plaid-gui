@@ -6,7 +6,12 @@ inspired by: https://gist.github.com/knowbody/578b35164b69e867ed4913423f6bed30
 */
 const StyledSpinner = styled.svg`
   animation: rotate 1s linear infinite;
-  margin: auto;
+  position: absolute;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   width: ${(props) => props.size}px;
 
   & .path {

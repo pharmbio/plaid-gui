@@ -5,7 +5,6 @@ const StyledLegendWrapper = styled.div`
   margin: auto;
   display: grid;
   grid-template-columns: repeat(3, auto);
-
   padding: 5px;
   margin-right: 45px; /* same as wellRad */
 `;
@@ -30,11 +29,11 @@ const StyledLabel = styled.div`
   margin: 2.5px;
 `;
 
-const ColorLegend = (Props) => {
+const ColorLegend = (props) => {
   let alreadyAdded = new Set();
   return (
     <StyledLegendWrapper>
-      {Props.data.map((o) => {
+      {props.data.map((o) => {
         if (alreadyAdded.has(o.cmpdname)) {
           return undefined;
         } else {
@@ -42,17 +41,17 @@ const ColorLegend = (Props) => {
           return (
             <StyledLegendItem key={o.cmpdname + o.plateID}>
               <StyledColorBox
-                color={Props.compoundToColorMap.get(o.cmpdname)}
+                color={props.compoundToColorMap.get(o.cmpdname)}
               />
               <StyledLabel>{o.cmpdname}</StyledLabel>
             </StyledLegendItem>
           );
         }
       })}
-      {Props.emptyEdges > 0 ? (
+      {props.emptyEdges > 0 ? (
         <StyledLegendItem key={"empty-legend"}>
           {/* fix unique key .. */}
-          <StyledColorBox color={Props.emptyWellColor} />
+          <StyledColorBox color={props.emptyWellColor} />
           <StyledLabel>{"empty"}</StyledLabel>
         </StyledLegendItem>
       ) : undefined}

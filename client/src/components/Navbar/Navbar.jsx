@@ -5,6 +5,7 @@ import styled from "styled-components";
 const StyledSideBar = styled.nav`
   background-color: #323439;
   height: 100vh;
+  width: 22vh;
 `;
 const StyledLinkItem = styled.li`
   list-style: none;
@@ -24,8 +25,8 @@ const StyledNavLink = styled(NavLink).attrs({ activeClassName })`
 `;
 
 const StyledList = styled.ul`
-  padding-top: 10vh;
-  padding-left: 5vh;
+  padding-top: 4rem;
+  padding-left: 2rem;
   height: inherit;
   display: flex;
   flex-direction: column;
