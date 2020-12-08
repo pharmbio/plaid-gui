@@ -127,11 +127,12 @@ const PlateLayout = () => {
     );
   }
 
+  let compoundToColorMap = new Map();
+  let chosenColors = [EMPTY_WELL_COLOR];
+
   return (
     <StyledContainer>
       {platesCorrespondingData.map((data) => {
-        let compoundToColorMap = new Map();
-        let chosenColors = [EMPTY_WELL_COLOR];
         data.forEach((o) => {
           [compoundToColorMap, chosenColors] = assignColorToCompound(
             o,
@@ -173,6 +174,7 @@ const PlateLayout = () => {
               cols={COLS}
               emptyEdges={SIZE_EMPTY_EDGES}
               emptyWellColor={EMPTY_WELL_COLOR}
+              data={data}
               compoundToColorMap={compoundToColorMap}
             />
           </StyledResultLayoutContainer>

@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
 }
 html {
   box-sizing: border-box;
-  background-color: #F6F6F6;
+  background-color: #f6f6f6;
   color:#5a5b5f;
   font-family: 'Roboto', sans-serif;
 }

@@ -11,13 +11,12 @@ const StyledLinkItem = styled.li`
 `;
 
 const activeClassName = "nav-item-active";
-
 const StyledNavLink = styled(NavLink).attrs({ activeClassName })`
   color: #c3c3c3;
   text-decoration: none;
   font-size: 22px;
   font-family: "Lato", sans-serif;
-  font-weight: 200;
+  font-weight: 300;
 
   &.${activeClassName} {
     color: #fafafa;
