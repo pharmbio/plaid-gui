@@ -3,16 +3,20 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledSideBar = styled.nav`
-  background-color: #584b4f;
+  background-color: #323439;
   height: 100vh;
 `;
 const StyledLinkItem = styled.li`
   list-style: none;
 `;
 const StyledNavLink = styled(Link)`
-  color: #efeae1;
+  color: #c3c3c3;
   text-decoration: none;
-  font-size: 1.5rem;
+  font-size: 22px;
+  line-height: 40px;
+  font-family: 'Lato', sans-serif;
+  font-weight:300;
+
 `;
 
 const StyledList = styled.ul`

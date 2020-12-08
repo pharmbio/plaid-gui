@@ -16,7 +16,8 @@ const GlobalStyle = createGlobalStyle`
 html {
   box-sizing: border-box;
   background-color: #F6F6F6;
-  color:#584b4f;
+  color:#5a5b5f;
+  font-family: 'Roboto', sans-serif;
 }
 `;
 
