@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
 }
 html {
   box-sizing: border-box;
-  background-color: #EFEAE1;
+  background-color: #F6F6F6;
   color:#584b4f;
 }
 `;
