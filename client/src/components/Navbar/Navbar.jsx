@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledSideBar = styled.nav`
@@ -9,14 +9,19 @@ const StyledSideBar = styled.nav`
 const StyledLinkItem = styled.li`
   list-style: none;
 `;
-const StyledNavLink = styled(Link)`
+
+const activeClassName = "nav-item-active";
+
+const StyledNavLink = styled(NavLink).attrs({ activeClassName })`
   color: #c3c3c3;
   text-decoration: none;
   font-size: 22px;
-  line-height: 40px;
-  font-family: 'Lato', sans-serif;
-  font-weight:300;
+  font-family: "Lato", sans-serif;
+  font-weight: 200;
 
+  &.${activeClassName} {
+    color: #fafafa;
+  }
 `;
 
 const StyledList = styled.ul`
@@ -33,7 +38,9 @@ const Navbar = () => {
     <StyledSideBar>
       <StyledList>
         <StyledLinkItem>
-          <StyledNavLink to="/">Home</StyledNavLink>
+          <StyledNavLink to="/" exact={true}>
+            Home
+          </StyledNavLink>
         </StyledLinkItem>
         <StyledLinkItem>
           <StyledNavLink to="/instructions">Instructions</StyledNavLink>
