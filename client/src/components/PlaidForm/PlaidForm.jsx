@@ -5,6 +5,7 @@ import CompoundForm from "./CompoundForm";
 import ControlForm from "./ControlForm";
 import ConstraintForm from "./ConstraintForm";
 import Loader from "./../Loader";
+import { Formik, Form, FormikConfig, FormikValues } from 'formik'
 const axios = require("axios");
 
 async function postForm(formData, setLoading, event) {
@@ -92,7 +93,7 @@ const PlaidForm = () => {
     setFormState({ ...formState, [name]: delim });
     console.log(formState);
   };
-  
+
   const handleInputChange = (event) => {
     console.log(formState);
     const target = event.target;
@@ -123,31 +124,57 @@ const PlaidForm = () => {
       {loading ? (
         <Loader />
       ) : (
-        <form>
-          <ConstraintForm handleInputChange={handleInputChange} />
-          <ExperimentForm handleInputChange={handleInputChange} />
-          <CombinationForm
-            handleInputChange={handleInputChange}
-            handleArrayChange={handleArrayChange}
-          />
-          <CompoundForm
-            handleInputChange={handleInputChange}
-            handleArrayChange={handleArrayChange}
-          />
-          <ControlForm
-            handleInputChange={handleInputChange}
-            handleArrayChange={handleArrayChange}
-          />
-          <button
-            type="button"
-            onClick={() => {
-              postForm(formState, setLoading);
-            }}
-          ></button>
-        </form>
-      )}
+          <Stepper
+            initialValues={formState}
+          >
+            <div>
+              <ExperimentForm handleInputChange={handleInputChange} />
+              <ConstraintForm handleInputChange={handleInputChange} />
+            </div>
+            <div>
+              <CompoundForm
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+              />
+            </div>
+            <div>
+              <CombinationForm
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+              />
+            </div>
+            <div>
+              <ControlForm
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                postForm(formState, setLoading);
+              }}
+            ></button>
+          </Stepper>
+        )}
     </>
   );
 };
+
+/* Does not know children ahead of time. children prop passes children elements
+   directly into their output.
+   Anything inside <Stepper> gets passed into Stepped component as a children prop.
+
+ */
+export const Stepper = ({ children, ...props }) => {
+  const childrenArray = React.Children.toArray(children);
+  const [step, setStep] = useState(0);
+  //Child to display on current step. 0 would be immediate child.
+  const currentChild = childrenArray[step]
+  return (
+    <Formik {...props}>
+      <Form>{currentChild}</Form>
+    </Formik>)
+}
 
 export default PlaidForm;
