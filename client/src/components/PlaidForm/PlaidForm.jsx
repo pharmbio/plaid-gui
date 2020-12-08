@@ -7,7 +7,7 @@ import ConstraintForm from "./ConstraintForm";
 import Loader from "./../Loader";
 const axios = require("axios");
 
-async function postForm(formData, setLoading, event) {
+async function postForm(formData, setLoading, setData, event) {
   console.log("Data sent");
   let axiosConfig = {
     headers: {
@@ -20,6 +20,12 @@ async function postForm(formData, setLoading, event) {
       .post("http://localhost:5000/", formData, axiosConfig)
       .then((response) => {
         console.log(response.data);
+        setData({
+          rows: formData.num_rows,
+          cols: formData.num_cols,
+          sizeEmptyEdge: formData.size_empty_edge,
+          result: response.data,
+        });
       });
     setLoading(false); //setLoading(true); //data received, remove loader
   } catch (e) {
@@ -27,7 +33,7 @@ async function postForm(formData, setLoading, event) {
   }
 }
 
-const PlaidForm = () => {
+const PlaidForm = (props) => {
   const [formState, setFormState] = useState({
     num_rows: 8,
     num_cols: 12,
@@ -74,18 +80,18 @@ const PlaidForm = () => {
     blanks_name: "",
   });
   const handleArrayChange = (event) => {
-    const deviations = { 'control_replicates': 'integer' }
+    const deviations = { control_replicates: "integer" };
     const target = event.target;
     const value = target.value;
     const name = target.name;
     let delim = value.split(",");
-    console.log(delim)
+    console.log(delim);
     if (name in deviations) {
       switch (deviations[name]) {
-        case 'integer':
+        case "integer":
           delim.forEach((x, index) => {
-            delim[index] = parseInt(x)
-          })
+            delim[index] = parseInt(x);
+          });
           break;
       }
     }
@@ -141,7 +147,7 @@ const PlaidForm = () => {
           <button
             type="button"
             onClick={() => {
-              postForm(formState, setLoading);
+              postForm(formState, setLoading, props.setData);
             }}
           ></button>
         </form>
