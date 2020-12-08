@@ -4,22 +4,22 @@ const ExperimentForm = ({handleInputChange}) => {
     return (<>
         <label>
             Plate rows: 
-              <input type="number" name='rows' onChange={handleInputChange} />
+              <input type="number" name='num_rows' onChange={handleInputChange} />
         </label>
         <label>
             Plate columns:
-              <input type="number" name='columns' onChange={handleInputChange} />
+              <input type="number" name='num_cols' onChange={handleInputChange} />
         </label>
         <label>
             Vertical:
               <input
-                name='verticalCellLines' type="checkbox" onChange={handleInputChange}
+                name='vertical_cell_lines' type="checkbox" onChange={handleInputChange}
             />
         </label>
         <label> 
             Horizontal:
               <input
-                name='horizontalCellLines' type="checkbox" onChange={handleInputChange}
+                name='horizontal_cell_lines' type="checkbox" onChange={handleInputChange}
             />
         </label>
     </>

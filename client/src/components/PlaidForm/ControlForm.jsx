@@ -3,28 +3,28 @@ const ControlForm = ({ handleInputChange, handleArrayChange }) => {
     return (<>
         <label>
             Number of controls:
-                  <input type="number" name='numControls' onChange={handleInputChange} />
+                  <input type="number" name='num_controls' onChange={handleInputChange} />
         </label>
         <label>
             Control names:
                   <input
-                type="text" name='controlNames' onChange={handleArrayChange}
+                type="text" name='control_names' onChange={handleArrayChange}
             />
         </label>
         <label>
             Control concentrations:
-                  <input type="number" name='controlConcentrations' onChange={handleInputChange} />
+                  <input type="number" name='control_concentrations' onChange={handleInputChange} />
         </label>
         <label>
             Control concentration names:
                   <input
-                type="text" name='controlConcentrationNames' onChange={handleArrayChange}
+                type="text" name='control_concentration_names' onChange={handleArrayChange}
             />
         </label>
         <label>
             Control replicates:
                   <input
-                type="text" name='controlReplicates' onChange={handleArrayChange}
+                type="text" name='control_replicates' onChange={handleArrayChange}
             />
         </label>
         <label>
@@ -36,7 +36,7 @@ const ControlForm = ({ handleInputChange, handleArrayChange }) => {
         <label>
             Blanks names:
                   <input
-                type="text" name='blanksNames' onChange={handleInputChange}
+                type="text" name='blanks_names' onChange={handleInputChange}
             />
         </label>
     </>

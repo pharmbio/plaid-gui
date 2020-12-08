@@ -7,18 +7,18 @@ const CompoundForm = ({ handleInputChange, handleArrayChange }) => {
         </label>
         <label>
             Compound names:
-                  <input type="text" name='compoundNames' onChange={handleArrayChange} />
+                  <input type="text" name='compound_names' onChange={handleArrayChange} />
         </label>
         <label>
             Compound concentrations:
                   <input
-                type="number" name='compoundConcentrations' onChange={handleInputChange}
+                type="number" name='compound_concentrations' onChange={handleInputChange}
             />
         </label>
         <label>
             Compound concentration names:
                   <input
-                type="text" name='compoundConcentrationNames' onChange={handleArrayChange}
+                type="text" name='compound_concentration_names' onChange={handleArrayChange}
             />
         </label>
         <label>
