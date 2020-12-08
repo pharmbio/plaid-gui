@@ -91,8 +91,8 @@ const PlaidForm = () => {
     }
     setFormState({ ...formState, [name]: delim });
     console.log(formState);
-
   };
+  
   const handleInputChange = (event) => {
     console.log(formState);
     const target = event.target;
