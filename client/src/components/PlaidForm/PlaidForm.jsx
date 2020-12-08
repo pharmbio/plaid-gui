@@ -4,23 +4,27 @@ import CombinationForm from "./CombinationForm";
 import CompoundForm from "./CompoundForm";
 import ControlForm from "./ControlForm";
 import ConstraintForm from "./ConstraintForm";
+import Loader from "./../Loader";
 const axios = require("axios");
 
-async function postForm(formData, event) {
+async function postForm(formData, setLoading, event) {
   console.log("Data sent");
   let axiosConfig = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-  await axios
-    .post("http://localhost:5000/", formData, axiosConfig)
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  try {
+    setLoading(true);
+    await axios
+      .post("http://localhost:5000/", formData, axiosConfig)
+      .then((response) => {
+        console.log(response.data);
+      });
+    setLoading(false); //setLoading(true); //data received, remove loader
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 const PlaidForm = () => {
@@ -42,7 +46,7 @@ const PlaidForm = () => {
       "30",
       "100",
     ], // List
-    compound_concentration_indicators: [ "", "", "", "", "", "", "", ""],
+    compound_concentration_indicators: ["", "", "", "", "", "", "", ""],
     compound_names: [
       "comp1",
       "comp2",
@@ -103,24 +107,37 @@ const PlaidForm = () => {
       [name]: value,
     });
   };
+
+  const [loading, setLoading] = useState(false);
   return (
-    <form>
-      <ConstraintForm handleInputChange={handleInputChange} />
-      <ExperimentForm handleInputChange={handleInputChange} />
-      <CombinationForm
-        handleInputChange={handleInputChange}
-        handleArrayChange={handleArrayChange}
-      />
-      <CompoundForm
-        handleInputChange={handleInputChange}
-        handleArrayChange={handleArrayChange}
-      />
-      <ControlForm
-        handleInputChange={handleInputChange}
-        handleArrayChange={handleArrayChange}
-      />
-      <button type="button" onClick={() => postForm(formState)}></button>
-    </form>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <form>
+          <ConstraintForm handleInputChange={handleInputChange} />
+          <ExperimentForm handleInputChange={handleInputChange} />
+          <CombinationForm
+            handleInputChange={handleInputChange}
+            handleArrayChange={handleArrayChange}
+          />
+          <CompoundForm
+            handleInputChange={handleInputChange}
+            handleArrayChange={handleArrayChange}
+          />
+          <ControlForm
+            handleInputChange={handleInputChange}
+            handleArrayChange={handleArrayChange}
+          />
+          <button
+            type="button"
+            onClick={() => {
+              postForm(formState, setLoading);
+            }}
+          ></button>
+        </form>
+      )}
+    </>
   );
 };
 
