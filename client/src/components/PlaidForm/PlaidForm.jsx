@@ -42,7 +42,7 @@ const PlaidForm = () => {
       "30",
       "100",
     ], // List
-    compound_concentration_indicators: [ "", "", "", "", "", "", "", ""],
+    compound_concentration_indicators: ["", "", "", "", "", "", "", ""],
     compound_names: [
       "comp1",
       "comp2",
@@ -70,15 +70,24 @@ const PlaidForm = () => {
     blanks_name: "",
   });
   const handleArrayChange = (event) => {
-    console.log("Hi");
+    const deviations = { 'control_replicates': 'integer' }
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    const newArr = [...formState[name]];
-    newArr[name] = value.split(",");
-    console.log(newArr);
-    setFormState({ ...formState, [name]: newArr });
+    let delim = value.split(",");
+    console.log(delim)
+    if (name in deviations) {
+      switch (deviations[name]) {
+        case 'integer':
+          delim.forEach((x, index) => {
+            delim[index] = parseInt(x)
+          })
+          break;
+      }
+    }
+    setFormState({ ...formState, [name]: delim });
     console.log(formState);
+
   };
   const handleInputChange = (event) => {
     console.log(formState);

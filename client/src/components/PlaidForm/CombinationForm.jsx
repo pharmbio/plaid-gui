@@ -7,18 +7,18 @@ const CombinationForm = ({ handleInputChange, handleArrayChange }) => {
         </label>
         <label>
             Combination names:
-                  <input type="text" name='combinationNames' onChange={handleArrayChange} />
+                  <input type="text" name='combination_names' onChange={handleArrayChange} />
         </label>
         <label>
             Combination concentrations:
                   <input
-                type="number" name='combinationConcentrations' onChange={handleInputChange}
+                type="number" name='combination_concentrations' onChange={handleInputChange}
             />
         </label>
         <label>
             Combination concentration names:
                   <input
-                type="text" name='combinationConcentrationNames'  onChange={handleArrayChange}
+                type="text" name='combination_concentration_names'  onChange={handleArrayChange}
             />
         </label>
     </>
