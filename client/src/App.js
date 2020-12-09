@@ -1,6 +1,5 @@
-import PlaidForm from "./components/PlaidForm";
 import Navbar from "./components/Navbar";
-import PlateLayout from "./components/PlateLayout";
+import Instructions from "./components/Instructions";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
 import Tool from "./components/Tool";
@@ -35,7 +34,7 @@ const App = () => {
           <Navbar />
           <Switch>
             <Route path="/instructions">
-              <h1>This is the instructions page!</h1>
+              <Instructions />
             </Route>
             <Route path="/tool">
               <Tool />
