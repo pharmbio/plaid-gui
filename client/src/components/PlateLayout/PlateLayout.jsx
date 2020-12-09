@@ -132,9 +132,9 @@ const PlateLayout = (props) => {
 
   return (
     <StyledContainer>
-      {plates.map((data) => {
+      {plates.map((data, index) => {
         return (
-          <StyledResultLayoutContainer>
+          <StyledResultLayoutContainer key={index}>
             <StyledPlateWrapper
               rows={props.rows}
               cols={props.cols}
@@ -144,14 +144,16 @@ const PlateLayout = (props) => {
               {rowList.map((i) => {
                 return React.createElement(
                   StyledRowIdentifier,
-                  { key: ALPHABET[i], row: i + 2, col: 1 },
+                  /* will there ever be the case where data[0] is undefined? */
+                  { key: ALPHABET[i] + data[0].plateID, row: i + 2, col: 1 },
                   ALPHABET[i]
                 );
               })}
               {colList.map((i) => {
                 return React.createElement(
                   StyledColumnIdentifier,
-                  { key: i + 1, row: 1, col: i + 2 },
+                  /* will there ever be the case where data[0] is undefined? */
+                  { key: i + 1 + data[0].plateID, row: 1, col: i + 2 },
                   i + 1
                 );
               })}
