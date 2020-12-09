@@ -36,7 +36,7 @@ const ALPHABET = [
 
 // lower level is darker.
 const DARKEN_LVL = 150;
-const EMPTY_WELL_COLOR = "d3d3d3";
+const EMPTY_WELL_COLOR = "e9e9e9";
 
 const assignColorToCompound = (o, pairs, alreadyChosen) => {
   if (pairs.has(o.cmpdname)) {
@@ -47,7 +47,7 @@ const assignColorToCompound = (o, pairs, alreadyChosen) => {
     while (alreadyChosen.includes(color)) {
       color = randomColor();
     }
-    color = adjustColor(color, 80); // make color lighter
+    color = adjustColor(color, 60); // make color lighter
     alreadyChosen.push();
     pairs.set(o.cmpdname, color);
   }

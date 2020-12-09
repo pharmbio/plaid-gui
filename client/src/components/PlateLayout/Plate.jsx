@@ -72,7 +72,23 @@ const positionsOfEmptyWells = (empty, rows, cols) => {
     well
 */
 
+const reducer = (name, action) => {
+  switch (action) {
+    case "select":
+      return name;
+    case "deselect":
+      return "";
+    default:
+      throw new Error("Unexpected action");
+  }
+};
+
 const Plate = (props) => {
+  const [selectedCompound, dispatch] = React.useReducer(
+    reducer,
+    "plate_1comp8"
+  );
+
   let emptyWells = positionsOfEmptyWells(
     props.emptyEdges,
     props.rows,
@@ -94,10 +110,12 @@ const Plate = (props) => {
       {props.data.map((o) => {
         let row = props.alphabet.indexOf(o.well[0]) + 1;
         let col = parseInt(o.well.slice(1, o.well.length));
-
+        console.log(selectedCompound);
+        console.log(o.plateID + o.cmpdname);
         return (
           <Well
             empty={false}
+            selected={selectedCompound}
             row={row}
             col={col}
             key={o.plateID + o.well}
