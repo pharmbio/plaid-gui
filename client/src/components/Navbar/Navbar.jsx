@@ -21,6 +21,7 @@ const StyledNavLink = styled(NavLink).attrs({ activeClassName })`
 
   &.${activeClassName} {
     color: #fafafa;
+    font-weight:400;
   }
 `;
 
