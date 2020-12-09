@@ -40,7 +40,7 @@ const EMPTY_WELL_COLOR = "d3d3d3";
 
 const assignColorToCompound = (o, pairs, alreadyChosen) => {
   if (pairs.has(o.cmpdname)) {
-    return [pairs, alreadyChosen];
+    return;
   } else {
     let color = randomColor(DARKEN_LVL);
     /* if color is already picked.. */
@@ -50,7 +50,6 @@ const assignColorToCompound = (o, pairs, alreadyChosen) => {
     color = adjustColor(color, 80); // make color lighter
     alreadyChosen.push();
     pairs.set(o.cmpdname, color);
-    return [pairs, alreadyChosen];
   }
 };
 
@@ -113,31 +112,27 @@ const PlateLayout = (props) => {
     props.rows * props.sizeEmptyEdge * 2 -
     4 * props.sizeEmptyEdge;
 
-  let platesCorrespondingData = [];
+  let plates = [];
 
   for (
     let i = 0;
     i < props.data.length;
     i += props.rows * props.cols - emptyWells
   ) {
-    platesCorrespondingData.push(
-      props.data.slice(i, i + props.rows * props.cols - emptyWells)
-    );
+    plates.push(props.data.slice(i, i + props.rows * props.cols - emptyWells));
   }
 
   let compoundToColorMap = new Map();
   let chosenColors = [EMPTY_WELL_COLOR];
+  for (let plate of plates) {
+    plate.map((o) => {
+      assignColorToCompound(o, compoundToColorMap, chosenColors);
+    });
+  }
 
   return (
     <StyledContainer>
-      {platesCorrespondingData.map((data) => {
-        data.forEach((o) => {
-          [compoundToColorMap, chosenColors] = assignColorToCompound(
-            o,
-            compoundToColorMap,
-            chosenColors
-          );
-        });
+      {plates.map((data) => {
         return (
           <StyledResultLayoutContainer>
             <StyledPlateWrapper

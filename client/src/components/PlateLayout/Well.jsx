@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 const StyledWell = styled.div`
   border-radius: 50%;
-  background-color: lightcoral;
   grid-row: ${(props) => props.row};
   grid-column: ${(props) => props.col};
   background-color: #${(props) => props.color};
