@@ -5,7 +5,6 @@ import styled from "styled-components";
 const StyledSideBar = styled.nav`
   background-color: #323439;
   height: 100vh;
-  width: 22vh;
 `;
 const StyledLinkItem = styled.li`
   list-style: none;

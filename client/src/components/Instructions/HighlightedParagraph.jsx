@@ -2,8 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledHighlightedWrapper = styled.section`
-  background-color: rgba(255, 229, 100, 0.3);
-  border-left-color: #ffe564;
+  background-color: ${(props) => {
+    return props.type === "Normal"
+      ? "rgba(255, 229, 100, 0.3)"
+      : "rgba(255,63, 63,0.3)";
+  }};
+  border-left-color: ${(props) => {
+    return props.type === "Normal" ? "#ffe564" : "#ff3535";
+  }};
   border-left-width: 9px;
   border-left-style: solid;
   padding: 20px 45px 20px 26px;
@@ -19,7 +25,7 @@ const StyledTitle = styled.h4`
 
 const HighlightedParagraph = (props) => {
   return (
-    <StyledHighlightedWrapper>
+    <StyledHighlightedWrapper type={props.type}>
       <StyledTitle>{props.title}</StyledTitle>
       {props.children}
     </StyledHighlightedWrapper>
