@@ -4,9 +4,14 @@ import CombinationForm from "./CombinationForm";
 import CompoundForm from "./CompoundForm";
 import ControlForm from "./ControlForm";
 import ConstraintForm from "./ConstraintForm";
+import HorizontalStepper from "./HorizontalStepper";
 import Loader from "./../Loader";
 import { Formik, Form, FormikConfig, FormikValues } from 'formik'
+import styled from "styled-components";
+
 const axios = require("axios");
+
+
 
 async function postForm(formData, setLoading, event) {
   console.log("Data sent");
@@ -127,54 +132,78 @@ const PlaidForm = () => {
           <Stepper
             initialValues={formState}
           >
-            <div>
+            <Step label = 'Experiment Setup'>
               <ExperimentForm handleInputChange={handleInputChange} />
               <ConstraintForm handleInputChange={handleInputChange} />
-            </div>
-            <div>
+            </Step>
+            <Step label = 'Compound Setup'>
               <CompoundForm
                 handleInputChange={handleInputChange}
                 handleArrayChange={handleArrayChange}
               />
-            </div>
-            <div>
+            </Step>
+            <Step label = 'Combinations'>
               <CombinationForm
                 handleInputChange={handleInputChange}
                 handleArrayChange={handleArrayChange}
               />
-            </div>
-            <div>
+            </Step>
+            <Step label = 'Experiment Validation'>
               <ControlForm
                 handleInputChange={handleInputChange}
                 handleArrayChange={handleArrayChange}
               />
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                postForm(formState, setLoading);
-              }}
-            ></button>
+              <button
+                type="button"
+                onClick={() => {
+                  postForm(formState, setLoading);
+                }}
+              ></button>
+            </Step>
+
           </Stepper>
         )}
     </>
   );
 };
 
-/* Does not know children ahead of time. children prop passes children elements
-   directly into their output.
-   Anything inside <Stepper> gets passed into Stepped component as a children prop.
+export const Step = ({ children, ...props }) => {
+  const labe = '';
+  return <>{children}</>
+}
 
+/* Passing children prop AND then an object with the remaining props
+   Anything inside <Stepper> gets passed into Stepped component as a children prop.
  */
+
 export const Stepper = ({ children, ...props }) => {
   const childrenArray = React.Children.toArray(children);
   const [step, setStep] = useState(0);
   //Child to display on current step. 0 would be immediate child.
   const currentChild = childrenArray[step]
+
+  function isLast() {
+    return step === childrenArray.length - 1;
+  }
+
   return (
-    <Formik {...props}>
-      <Form>{currentChild}</Form>
+    <Formik {...props} onSubmit={async (values, helpers) => {
+      //on the last step
+      if (isLast()) {
+        await props.onSubmit(values, helpers)
+      }
+      else {
+        setStep(step + 1);
+      }
+    }}>
+      <Form>
+        <HorizontalStepper currentStep={step} steps={childrenArray}></HorizontalStepper>
+        {currentChild}
+        {step > 0 ? <button type='button' onClick={() => setStep(step - 1)}>Previous</button> : null}
+        <button type='submit'>{isLast() ? 'Submit' : 'Next'}</button>
+      </Form>
     </Formik>)
 }
+
 
 export default PlaidForm;
