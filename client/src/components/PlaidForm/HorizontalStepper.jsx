@@ -23,19 +23,22 @@ const HoriztonalStepperProgress = styled.li`
 
 const HoriztonalStepperProgressIcon = styled.div`
   position: relative; 
-  height: 20px;
-  width: 20px;
-  background-color: ${(props) => props.current ? '#23A' : '#888'};
+  height: 30px;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  padding-top: 5px; 
+  background-color: ${(props) => props.current ? '#5096FF' : '#E0E0E0'};
   border-radius: 100%;
   transition: all .3s ease-out;
   &:after {
     content: '';
     position: absolute;
-    background-color: ${(props) => props.finished ? '#23A' : '#888'};
+    background-color: ${(props) => props.finished ? '#5096FF' : '#E0E0E0'};
     height: 2px;
     width: 140px;
-    top: 9px;
-    left: 20px;
+    top: 15px;
+    left: 30px;
     display: ${(props) => props.isLast ? 'none' : 'inline-block'}
   }
 `;

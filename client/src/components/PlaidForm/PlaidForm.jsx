@@ -5,19 +5,54 @@ import CompoundForm from "./CompoundForm";
 import ControlForm from "./ControlForm";
 import ConstraintForm from "./ConstraintForm";
 import HorizontalStepper from "./HorizontalStepper";
+import Step from "./Step"
 import Loader from "./../Loader";
-import { Formik, Form, FormikConfig, FormikValues } from 'formik'
+import { Formik, Form } from 'formik'
 import styled from "styled-components";
 
+const StyledForm = styled(Form)`
+  display: flex ;
+  justify-content: center;  
+  width: 90%;
+  height: 90%;
+  margin: auto;
+  border: solid;
+  border-width: 1px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+`;
+
+const StyledInputContainer = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  margin: auto;
+  height: 90%;
+`;
+const StyledStep = styled(Step)`
+  height: 500px;
+  width: 500px;
+  margin: 1000px;
+  background-color: blue;
+`;
+
+const StyledNextButton = styled.button`
+background: #0069eb;
+color: #fff;
+border: none;
+border-radius: 0px;
+font-size: 16px;
+padding: 15px 30px;
+text-decoration: none;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+margin-top: 10px;
+`;
+
+
 const axios = require("axios");
-
-<<<<<<< HEAD
-
-
-async function postForm(formData, setLoading, event) {
-=======
 async function postForm(formData, setLoading, setData, event) {
->>>>>>> develop
   console.log("Data sent");
   let axiosConfig = {
     headers: {
@@ -44,6 +79,8 @@ async function postForm(formData, setLoading, setData, event) {
 }
 
 const PlaidForm = (props) => {
+
+
   const [formState, setFormState] = useState({
     num_rows: 8,
     num_cols: 12,
@@ -116,6 +153,10 @@ const PlaidForm = (props) => {
     let value;
     switch (type) {
       case "checkbox": {
+        //TODO: Checkboxes must either act like radio boxes or be radio boxes.
+        if (target.name === 'vertical_cell_lines') {
+          setFormState({ ...formState, ['horizontal_cell_lines']: false })
+        }
         value = target.checked;
         break;
       }
@@ -142,23 +183,23 @@ const PlaidForm = (props) => {
           <Stepper
             initialValues={formState}
           >
-            <Step label = 'Experiment Setup'>
+            <StyledStep label='Experiment Setup'>
               <ExperimentForm handleInputChange={handleInputChange} />
               <ConstraintForm handleInputChange={handleInputChange} />
-            </Step>
-            <Step label = 'Compound Setup'>
+            </StyledStep>
+            <Step label='Compound Setup'>
               <CompoundForm
                 handleInputChange={handleInputChange}
                 handleArrayChange={handleArrayChange}
               />
             </Step>
-            <Step label = 'Combinations'>
+            <Step label='Combinations'>
               <CombinationForm
                 handleInputChange={handleInputChange}
                 handleArrayChange={handleArrayChange}
               />
             </Step>
-            <Step label = 'Experiment Validation'>
+            <Step label='Experiment Validation'>
               <ControlForm
                 handleInputChange={handleInputChange}
                 handleArrayChange={handleArrayChange}
@@ -177,10 +218,6 @@ const PlaidForm = (props) => {
   );
 };
 
-export const Step = ({ children, ...props }) => {
-  const labe = '';
-  return <>{children}</>
-}
 
 /* Passing children prop AND then an object with the remaining props
    Anything inside <Stepper> gets passed into Stepped component as a children prop.
@@ -197,7 +234,7 @@ export const Stepper = ({ children, ...props }) => {
   }
 
   return (
-    <Formik {...props} onSubmit={async (values, helpers) => {
+    <Formik {...props} onSubmit={async (values, helpers,event) => {
       //on the last step
       if (isLast()) {
         await props.onSubmit(values, helpers)
@@ -206,14 +243,18 @@ export const Stepper = ({ children, ...props }) => {
         setStep(step + 1);
       }
     }}>
-      <Form>
+
+      <StyledForm>
         <HorizontalStepper currentStep={step} steps={childrenArray}></HorizontalStepper>
-        {currentChild}
-        {step > 0 ? <button type='button' onClick={() => setStep(step - 1)}>Previous</button> : null}
-        <button type='submit'>{isLast() ? 'Submit' : 'Next'}</button>
-      </Form>
+        <StyledInputContainer>
+          {currentChild}
+          {step > 0 ? <button type='button' onClick={() => setStep(step - 1)}>Previous</button> : null}
+          <StyledNextButton type='submit'>{isLast() ? 'Submit' : 'Next'}</StyledNextButton>
+        </StyledInputContainer>
+      </StyledForm>
     </Formik>)
 }
+
 
 
 export default PlaidForm;
