@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 const StyledWell = styled.div`
   border-radius: 50%;
-  background-color: lightcoral;
   grid-row: ${(props) => props.row};
   grid-column: ${(props) => props.col};
   background-color: #${(props) => props.color};
@@ -18,11 +17,11 @@ const StyledEmptyWell = styled.div`
   background-color: #${(props) => props.color};
 `;
 
-const Well = (Props) => {
-  return Props.empty ? (
-    <StyledEmptyWell row={Props.row} col={Props.col} color={Props.color} />
+const Well = (props) => {
+  return props.empty ? (
+    <StyledEmptyWell row={props.row} col={props.col} color={props.color} />
   ) : (
-    <StyledWell row={Props.row} col={Props.col} color={Props.color}>
+    <StyledWell row={props.row} col={props.col} color={props.color}>
 {/*       {Props.data.CONCuM} */}
     </StyledWell>
   );

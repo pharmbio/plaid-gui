@@ -1,15 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import output_data from "./output_from_ex1.json";
 import Plate from "./Plate.jsx";
 import randomColor from "./../../functions/randomColor.js";
 import adjustColor from "./../../functions/adjustColor.js";
 import ColorLegend from "./ColorLegend.jsx";
-
-// should come together with output from API into PROPS..
-const ROWS = 8;
-const COLS = 12;
-const SIZE_EMPTY_EDGES = 1;
 
 const ALPHABET = [
   "A",
@@ -46,7 +40,7 @@ const EMPTY_WELL_COLOR = "d3d3d3";
 
 const assignColorToCompound = (o, pairs, alreadyChosen) => {
   if (pairs.has(o.cmpdname)) {
-    return [pairs, alreadyChosen];
+    return;
   } else {
     let color = randomColor(DARKEN_LVL);
     /* if color is already picked.. */
@@ -56,7 +50,6 @@ const assignColorToCompound = (o, pairs, alreadyChosen) => {
     color = adjustColor(color, 80); // make color lighter
     alreadyChosen.push();
     pairs.set(o.cmpdname, color);
-    return [pairs, alreadyChosen];
   }
 };
 
@@ -103,46 +96,52 @@ const StyledRowIdentifier = styled.div`
 `;
 
 /* Props should hold all values as data, rows, cols etc..*/
-const PlateLayout = () => {
+const PlateLayout = (props) => {
   /* rowList, colList used to map over in the return as to render each component */
   let rowList = [];
   let colList = [];
 
-  for (let i = 0; i < ROWS; i++) {
+  for (let i = 0; i < props.rows; i++) {
     rowList.push(i);
   }
-  for (let i = 0; i < COLS; i++) {
+  for (let i = 0; i < props.cols; i++) {
     colList.push(i);
   }
 
-  const EMPTY_WELLS =
-    COLS * SIZE_EMPTY_EDGES * 2 +
-    ROWS * SIZE_EMPTY_EDGES * 2 -
-    4 * SIZE_EMPTY_EDGES;
+  const emptyWells =
+    props.cols * props.sizeEmptyEdge * 2 +
+    props.rows * props.sizeEmptyEdge * 2 -
+    4 * props.sizeEmptyEdge;
 
-  let platesCorrespondingData = [];
+  let plates = [];
 
-  for (let i = 0; i < output_data.length; i += ROWS * COLS - EMPTY_WELLS) {
-    platesCorrespondingData.push(
-      output_data.slice(i, i + ROWS * COLS - EMPTY_WELLS)
-    );
+  for (
+    let i = 0;
+    i < props.data.length;
+    i += props.rows * props.cols - emptyWells
+  ) {
+    plates.push(props.data.slice(i, i + props.rows * props.cols - emptyWells));
+  }
+
+  let compoundToColorMap = new Map();
+  let chosenColors = [EMPTY_WELL_COLOR];
+  for (let plate of plates) {
+    plate.map((o) => {
+      assignColorToCompound(o, compoundToColorMap, chosenColors);
+    });
   }
 
   return (
     <StyledContainer>
-      {platesCorrespondingData.map((data) => {
-        let compoundToColorMap = new Map();
-        let chosenColors = [EMPTY_WELL_COLOR];
-        data.forEach((o) => {
-          [compoundToColorMap, chosenColors] = assignColorToCompound(
-            o,
-            compoundToColorMap,
-            chosenColors
-          );
-        });
+      {plates.map((data) => {
         return (
           <StyledResultLayoutContainer>
-            <StyledPlateWrapper rows={ROWS} cols={COLS} wellRad={45} gap={2.5}>
+            <StyledPlateWrapper
+              rows={props.rows}
+              cols={props.cols}
+              wellRad={45}
+              gap={2.5}
+            >
               {rowList.map((i) => {
                 return React.createElement(
                   StyledRowIdentifier,
@@ -158,9 +157,9 @@ const PlateLayout = () => {
                 );
               })}
               <Plate
-                rows={ROWS}
-                cols={COLS}
-                emptyEdges={SIZE_EMPTY_EDGES}
+                rows={props.rows}
+                cols={props.cols}
+                emptyEdges={props.sizeEmptyEdge}
                 data={data}
                 alphabet={ALPHABET}
                 emptyWellColor={EMPTY_WELL_COLOR}
@@ -170,10 +169,11 @@ const PlateLayout = () => {
             <ColorLegend
               wellRad={45}
               gap={2.5}
-              rows={ROWS}
-              cols={COLS}
-              emptyEdges={SIZE_EMPTY_EDGES}
+              rows={props.rows}
+              cols={props.cols}
+              emptyEdges={props.sizeEmptyEdge}
               emptyWellColor={EMPTY_WELL_COLOR}
+              data={data}
               compoundToColorMap={compoundToColorMap}
             />
           </StyledResultLayoutContainer>

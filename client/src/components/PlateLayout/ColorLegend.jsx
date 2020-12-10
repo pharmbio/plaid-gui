@@ -5,7 +5,6 @@ const StyledLegendWrapper = styled.div`
   margin: auto;
   display: grid;
   grid-template-columns: repeat(3, auto);
-  border: solid 1px;
   padding: 5px;
   margin-right: 45px; /* same as wellRad */
 `;
@@ -22,6 +21,7 @@ const StyledColorBox = styled.div`
   justify-self: center;
   width: 15px;
   height: 15px;
+  border-radius: 50%;
   background-color: #${(props) => props.color};
 `;
 
@@ -29,21 +29,32 @@ const StyledLabel = styled.div`
   margin: 2.5px;
 `;
 
-const ColorLegend = (Props) => {
-  let compoundColorPairs = Array.from(Props.compoundToColorMap);
-  if (Props.emptyEdges > 0) {
-    compoundColorPairs.push(["empty", Props.emptyWellColor]);
-  }
+const ColorLegend = (props) => {
+  let alreadyAdded = new Set();
   return (
     <StyledLegendWrapper>
-      {compoundColorPairs.map((pair) => {
-        return (
-          <StyledLegendItem>
-            <StyledColorBox color={pair[1]} />
-            <StyledLabel>{pair[0]}</StyledLabel>
-          </StyledLegendItem>
-        );
+      {props.data.map((o) => {
+        if (alreadyAdded.has(o.cmpdname)) {
+          return undefined;
+        } else {
+          alreadyAdded.add(o.cmpdname);
+          return (
+            <StyledLegendItem key={o.cmpdname + o.plateID}>
+              <StyledColorBox
+                color={props.compoundToColorMap.get(o.cmpdname)}
+              />
+              <StyledLabel>{o.cmpdname}</StyledLabel>
+            </StyledLegendItem>
+          );
+        }
       })}
+      {props.emptyEdges > 0 ? (
+        <StyledLegendItem key={"empty-legend"}>
+          {/* fix unique key .. */}
+          <StyledColorBox color={props.emptyWellColor} />
+          <StyledLabel>{"empty"}</StyledLabel>
+        </StyledLegendItem>
+      ) : undefined}
     </StyledLegendWrapper>
   );
 };
