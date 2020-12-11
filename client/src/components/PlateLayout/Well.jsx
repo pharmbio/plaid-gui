@@ -17,13 +17,27 @@ const StyledEmptyWell = styled.div`
   grid-column: ${(props) => props.col};
   background-color: #${(props) => props.color};
 `;
+
+const StyledLabel = styled.div`
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+  background-color: #f6f6f6;
+  margin:auto;
+  text-align:center;
+  width:35px; /* same as well radius */
+  height:35px; /* same as well radius */
+  opacity:0.65;
+`;
 const Well = (props) => {
   var color = props.color;
+  var showConc = false;
   if (!props.empty) {
     var lighten = false;
     if (props.selected === props.data.plateID + props.data.cmpdname) {
       // make color dark to pop out more from the other lightened nodes
-      color = adjustColor(props.color, -60);
+      color = adjustColor(props.color, -20);
+      showConc = true;
     }
 
     if (
@@ -37,12 +51,9 @@ const Well = (props) => {
   return props.empty ? (
     <StyledEmptyWell row={props.row} col={props.col} color={color} />
   ) : (
-    <StyledWell
-      row={props.row}
-      col={props.col}
-      color={color}
-      lighten={lighten}
-    ></StyledWell>
+    <StyledWell row={props.row} col={props.col} color={color} lighten={lighten}>
+      {showConc ? <StyledLabel>{props.data.CONCuM}</StyledLabel> : undefined}
+    </StyledWell>
   );
 };
 

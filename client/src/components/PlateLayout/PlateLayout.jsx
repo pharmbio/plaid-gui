@@ -62,6 +62,15 @@ const StyledPlateContainer = styled.div`
 /*   */
 /* Props should hold all values as data, rows, cols etc..*/
 const PlateLayout = (props) => {
+    /* rowList, colList used to map over in the return as to render each component */
+    let rowList = [];
+    let colList = [];
+    for (let i = 0; i < props.rows; i++) {
+      rowList.push(i);
+    }
+    for (let i = 0; i < props.cols; i++) {
+      colList.push(i);
+    }
   const emptyWells =
     props.cols * props.sizeEmptyEdge * 2 +
     props.rows * props.sizeEmptyEdge * 2 -
@@ -90,6 +99,8 @@ const PlateLayout = (props) => {
       {plates.map((data, index) => {
         return (
           <Plate
+            rowList = {rowList}
+            colList = {colList} 
             rows={props.rows}
             cols={props.cols}
             emptyEdges={props.sizeEmptyEdge}

@@ -119,15 +119,6 @@ const reducer = (_, action) => {
 };
 
 const Plate = (props) => {
-  /* rowList, colList used to map over in the return as to render each component */
-  let rowList = [];
-  let colList = [];
-  for (let i = 0; i < props.rows; i++) {
-    rowList.push(i);
-  }
-  for (let i = 0; i < props.cols; i++) {
-    colList.push(i);
-  }
 
   const [selectedCompound, dispatch] = React.useReducer(reducer, "");
   const handleSelectedCompound = (selected) => {
@@ -148,10 +139,10 @@ const Plate = (props) => {
       <StyledPlateWrapper
         rows={props.rows}
         cols={props.cols}
-        wellRad={45}
+        wellRad={35}
         gap={2.5}
       >
-        {rowList.map((i) => {
+        {props.rowList.map((i) => {
           return React.createElement(
             StyledRowIdentifier,
             /* will there ever be the case where data[0] is undefined? */
@@ -163,7 +154,7 @@ const Plate = (props) => {
             props.alphabet[i]
           );
         })}
-        {colList.map((i) => {
+        {props.colList.map((i) => {
           return React.createElement(
             StyledColumnIdentifier,
             /* will there ever be the case where data[0] is undefined? */
@@ -171,7 +162,7 @@ const Plate = (props) => {
             i + 1
           );
         })}
-        <StyledPlate rows={props.rows} cols={props.cols} wellRad={45} gap={2.5}>
+        <StyledPlate rows={props.rows} cols={props.cols} wellRad={35} gap={2.5}>
           {emptyWells.map((pos) => {
             return (
               <Well
