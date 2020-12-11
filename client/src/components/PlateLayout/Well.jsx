@@ -20,14 +20,17 @@ const StyledEmptyWell = styled.div`
 
 const StyledLabel = styled.div`
   display: flex;
-  justify-content: center; /* align horizontal */
-  align-items: center; /* align vertical */
-  background-color: #f6f6f6;
-  margin:auto;
-  text-align:center;
-  width:35px; /* same as well radius */
-  height:35px; /* same as well radius */
-  opacity:0.65;
+  justify-content: center;
+  align-items: center;
+  /* background-color: #f6f6f6; */
+  font-size: 12px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  margin: auto;
+  text-align: center;
+  width: ${(props) => props.wellRad}px;
+  height: ${(props) => props.wellRad}px;
+  /* opacity:0.65; */
 `;
 const Well = (props) => {
   var color = props.color;
@@ -36,7 +39,7 @@ const Well = (props) => {
     var lighten = false;
     if (props.selected === props.data.plateID + props.data.cmpdname) {
       // make color dark to pop out more from the other lightened nodes
-      color = adjustColor(props.color, -20);
+      /* color = adjustColor(props.color, -20); */
       showConc = true;
     }
 
@@ -52,7 +55,7 @@ const Well = (props) => {
     <StyledEmptyWell row={props.row} col={props.col} color={color} />
   ) : (
     <StyledWell row={props.row} col={props.col} color={color} lighten={lighten}>
-      {showConc ? <StyledLabel>{props.data.CONCuM}</StyledLabel> : undefined}
+      <StyledLabel wellRad={props.wellRad}>{props.data.CONCuM}</StyledLabel>
     </StyledWell>
   );
 };

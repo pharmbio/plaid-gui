@@ -27,6 +27,8 @@ const StyledColorBox = styled.div`
 `;
 
 const StyledLabel = styled.div`
+  font-family: "Lato", sans-serif;
+  font-size: 0.9em;
   margin: 2.5px;
 `;
 
