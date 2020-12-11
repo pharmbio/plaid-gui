@@ -22,7 +22,7 @@ html {
 
 const StyledGridWrapper = styled.div`
   display: grid;
-  grid-template-columns: 22vh minmax(75vh, auto);
+  grid-template-columns: 12rem minmax(50rem, 100%); /*TODO: better way? */
 `;
 
 const App = () => {

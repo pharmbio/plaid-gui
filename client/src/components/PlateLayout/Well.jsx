@@ -21,11 +21,9 @@ const Well = (props) => {
   var color = props.color;
   if (!props.empty) {
     var lighten = false;
-    console.log(props.data.plateID + props.data.cmpdname);
     if (props.selected === props.data.plateID + props.data.cmpdname) {
-      // make color dark to pop out more
-
-      color = adjustColor(props.color, -70);
+      // make color dark to pop out more from the other lightened nodes
+      color = adjustColor(props.color, -60);
     }
 
     if (

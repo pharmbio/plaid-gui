@@ -9,7 +9,6 @@ const StyledToolWrapper = styled.div`
 `;
 const Tool = () => {
   const [data, setData] = useState(undefined);
-
   return (
     <StyledToolWrapper>
       {data !== undefined ? (
