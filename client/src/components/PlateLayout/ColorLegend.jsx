@@ -53,7 +53,7 @@ const ColorLegend = (props) => {
               onClick={handleClick}
             >
               <StyledColorBox
-                color={props.compoundToColorMap.get(o.cmpdname)}
+                color={props.compoundToColorMap.get(o.cmpdnum)}
               />
               <StyledLabel>{o.cmpdname}</StyledLabel>
             </StyledLegendItem>

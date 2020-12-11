@@ -136,6 +136,8 @@ const Plate = (props) => {
     props.rows,
     props.cols
   );
+
+  console.log(props.compoundToColorMap)
   return (
     <StyledResultLayoutContainer>
       <StyledPlateWrapper
@@ -188,7 +190,7 @@ const Plate = (props) => {
                 col={col}
                 key={o.plateID + o.well}
                 data={o}
-                color={props.compoundToColorMap.get(o.cmpdname)}
+                color={props.compoundToColorMap.get(o.cmpdnum )}
               />
             );
           })}
