@@ -199,13 +199,10 @@ const Plate = (props) => {
         </StyledPlate>
       </StyledPlateWrapper>
       <ColorLegend
-        wellRad={WELL_RAD}
-        gap={2.5}
-        rows={props.rows}
-        cols={props.cols}
         emptyEdges={props.emptyEdges}
         emptyWellColor={props.emptyWellColor}
         data={props.data}
+        compoundMap={props.compoundMap}
         compoundToColorMap={props.compoundToColorMap}
         handleSelectedCompound={handleSelectedCompound}
       />

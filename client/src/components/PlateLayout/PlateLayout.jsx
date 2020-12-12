@@ -183,6 +183,7 @@ const PlateLayout = (props) => {
             data={data}
             alphabet={ALPHABET}
             emptyWellColor={EMPTY_WELL_COLOR}
+            compoundMap={listOfCompoundMaps[index]}
             compoundToColorMap={listOfCompoundToColorMaps[index]}
           />
         );
