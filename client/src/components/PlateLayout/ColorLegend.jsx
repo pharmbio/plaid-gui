@@ -23,7 +23,7 @@ const StyledColorBox = styled.div`
   width: 15px;
   height: 15px;
   border-radius: 50%;
-  background-color: #${(props) => props.color};
+  background-color: ${(props) => props.color};
 `;
 
 const StyledLabel = styled.div`
@@ -38,7 +38,6 @@ const ColorLegend = (props) => {
     props.handleSelectedCompound(e.currentTarget.id);
   };
   let alreadyAdded = new Set();
-  console.log(props.emptyEdges);
   return (
     <StyledLegendWrapper>
       {props.data.map((o) => {

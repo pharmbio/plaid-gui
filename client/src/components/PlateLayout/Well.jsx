@@ -6,7 +6,7 @@ const StyledWell = styled.div`
   border-radius: 50%;
   grid-row: ${(props) => props.row};
   grid-column: ${(props) => props.col};
-  background-color: #${(props) => props.color};
+  background-color: ${(props) => props.color};
   color: black;
   opacity: ${(props) => (props.lighten ? 0.2 : 1)};
 `;
@@ -15,7 +15,7 @@ const StyledEmptyWell = styled.div`
   background-color: lightgray;
   grid-row: ${(props) => props.row};
   grid-column: ${(props) => props.col};
-  background-color: #${(props) => props.color};
+  background-color: ${(props) => props.color};
 `;
 
 const StyledLabel = styled.div`

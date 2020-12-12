@@ -10,28 +10,33 @@ const M = 1;
 const H = 2;
 
 const compare = (a, b) => {
+  //console.log(a, b);
   if (concentrations.includes(a.CONCuM) && concentrations.includes(b.CONCuM)) {
     a = concentrations.findIndex(a.CONCuM);
     b = concentrations.findIndex(b.CONCuM);
     if (a < b) {
+      //console.log("a < b 1");
       return 1;
     }
     if (a > b) {
+      //console.log("a > b 1");
       return -1;
     }
     return 0;
   } else {
-    if (isNaN(a) && !isNaN(b)) {
+    if (isNaN(a.CONCuM) && !isNaN(b.CONCuM)) {
       return 1;
     }
-    if (!isNaN(a) && isNaN(b)) {
+    if (!isNaN(a.CONCuM) && isNaN(b.CONCuM)) {
       return -1;
     }
-    if (!isNaN(a) && !isNaN(b)) {
+    if (!isNaN(a.CONCuM) && !isNaN(b.CONCuM)) {
       if (parseFloat(a.CONCuM) < parseFloat(b.CONCuM)) {
+        //console.log("a < b 2");
         return 1;
       }
       if (parseFloat(a.CONCuM) < parseFloat(b.CONCuM)) {
+        //console.log("a > b 2");
         return -1;
       }
       return 0;
@@ -39,9 +44,11 @@ const compare = (a, b) => {
     /*     a = isNaN(a.CONCuM) ? a.CONCuM : parseFloat(a.CONCuM);
     b = isNaN(b.CONCuM) ? b.CONCuM : parseFloat(b.CONCuM); */
     if (a.CONCuM < b.CONCuM) {
+      //console.log("a < b 3");
       return 1;
     }
     if (a.CONCuM > b.CONCuM) {
+      //console.log("a > b 3");
       return -1;
     }
     return 0;
@@ -77,38 +84,37 @@ const ALPHABET = [
   "Z",
 ];
 
+function generateHslHues(amount) {
+  let colors = [];
+  let huedelta = Math.trunc(360 / amount);
+
+  for (let i = 0; i < amount; i++) {
+    let hue = i * huedelta;
+    colors.push(hue);
+    /* colors.push(`hsl(${hue},${saturation}%,${lightness}%,)`); */
+  }
+  return colors;
+}
+
 // lower level is darker.
-const DARKEN_LVL = 220;
+const DARKEN_LVL = 140;
 const EMPTY_WELL_COLOR = "e9e9e9";
 
-const assignColorToCompound = (
-  o,
-  compoundToColorMap,
-  alreadyChosen,
-  compoundCount
-) => {
-  if (compoundToColorMap.has(o.cmpdnum)) {
-    /* We have already assigned color to that particular compound and its concentration */
-    return;
-  } else {
-    let color;
-    let val = compoundCount.get(o.cmpdname);
-    console.log(val)
-    if (val !== undefined) {
-      compoundCount.set(o.cmpdname, [val[0], val[1] + 1]);
-      color = adjustColor(val[0], 10 * (val[1] + 1));
-      console.log(color)
-      alreadyChosen.push(color);
-      compoundToColorMap.set(o.cmpdnum, color);
+const assignColorToCompound = (concs, hue, compoundToColorMap) => {
+  let i = 0;
+  for (let o of concs) {
+    /* concs are sorted */
+    if (compoundToColorMap.has(o.cmpdnum)) {
+      /* We have already assigned color to that particular compound and its concentration */
+      continue;
     } else {
-      color = randomColor(DARKEN_LVL);
-      /* if color is already picked.. */
-      while (alreadyChosen.includes(color)) {
-        color = randomColor(DARKEN_LVL);
-      }
-      compoundCount.set(o.cmpdname, [color, 1]);
-      alreadyChosen.push(color);
-      compoundToColorMap.set(o.cmpdnum, color);
+      compoundToColorMap.set(
+        o.cmpdnum,
+        i === 0
+          ? `hsla(${hue},${100}%,${48}%,0.9)`
+          : `hsla(${hue},${70 - i * 3}%,${50 + i * 4}%,1)`
+      );
+      i++;
     }
   }
 };
@@ -152,22 +158,35 @@ const PlateLayout = (props) => {
     plates.push(props.data.slice(i, i + props.rows * props.cols - emptyWells));
   }
 
-  let compoundToColorMap = new Map();
-  let chosenColors = [EMPTY_WELL_COLOR];
+  let l = [];
   for (let plate of plates) {
-    plate.sort(compare);
-    let compoundCount = new Map();
-    plate.map((o) => {
-      
-      return assignColorToCompound(
-        o,
-        compoundToColorMap,
-        chosenColors,
-        compoundCount
-      );
-    });
+    let plateMap = new Map();
+    for (let o of plate) {
+      let val = plateMap.get(o.cmpdname);
+      if (val !== undefined) {
+        plateMap.set(o.cmpdname, [...val, o]);
+      } else {
+        plateMap.set(o.cmpdname, [o]);
+      }
+    }
+
+    for (let [cmp, vals] of plateMap) {
+      /* sort descending order */
+      vals.sort(compare);
+      plateMap.set(cmp, vals);
+    }
+    l.push(plateMap);
   }
 
+  let compoundToColorMap = new Map();
+  for (let pm of l) {
+    let colors = generateHslHues(pm.size);
+    let i = 0;
+    for (let [name, concs] of pm) {
+      assignColorToCompound(concs, colors[i], compoundToColorMap);
+      i++;
+    }
+  }
   return (
     <StyledPlateContainer>
       {plates.map((data, index) => {

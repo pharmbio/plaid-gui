@@ -23,6 +23,8 @@ const StyledHeading1 = styled.h1`
   line-height: 65px;
   font-weight: 700;
   margin: 10px;
+  background-color: #18d176;
+  filter: brightness(150%);
 `;
 
 const StyledHeading2 = styled.h2`
