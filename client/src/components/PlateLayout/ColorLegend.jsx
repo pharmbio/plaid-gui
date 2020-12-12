@@ -38,6 +38,8 @@ const ColorLegend = (props) => {
     props.handleSelectedCompound(e.currentTarget.id);
   };
   let alreadyAdded = new Set();
+  console.log(props.emptyEdges);
+  console.log(props.emptyWellColor);
   return (
     <StyledLegendWrapper>
       {props.data.map((o) => {
@@ -51,9 +53,7 @@ const ColorLegend = (props) => {
               id={o.plateID + o.cmpdname}
               onClick={handleClick}
             >
-              <StyledColorBox
-                color={props.compoundToColorMap.get(o.cmpdnum)}
-              />
+              <StyledColorBox color={props.compoundToColorMap.get(o.cmpdnum)} />
               <StyledLabel>{o.cmpdname}</StyledLabel>
             </StyledLegendItem>
           );

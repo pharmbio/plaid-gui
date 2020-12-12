@@ -1,19 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 import Plate from "./Plate.jsx";
-import randomColor from "./../../functions/randomColor.js";
-import adjustColor from "./../../functions/adjustColor.js";
+import generateHslHues from "./../../functions/generateHslHues.js";
 
-const concentrations = ["L", "M", "H"];
-const L = 0;
-const M = 1;
-const H = 2;
+const concentrationsLabels = ["L", "M", "H"];
 
 const compare = (a, b) => {
   //console.log(a, b);
-  if (concentrations.includes(a.CONCuM) && concentrations.includes(b.CONCuM)) {
-    a = concentrations.findIndex(a.CONCuM);
-    b = concentrations.findIndex(b.CONCuM);
+  if (
+    concentrationsLabels.includes(a.CONCuM) &&
+    concentrationsLabels.includes(b.CONCuM)
+  ) {
+    a = concentrationsLabels.findIndex(a.CONCuM);
+    b = concentrationsLabels.findIndex(b.CONCuM);
     if (a < b) {
       //console.log("a < b 1");
       return 1;
@@ -84,21 +83,7 @@ const ALPHABET = [
   "Z",
 ];
 
-function generateHslHues(amount) {
-  let colors = [];
-  let huedelta = Math.trunc(360 / amount);
-
-  for (let i = 0; i < amount; i++) {
-    let hue = i * huedelta;
-    colors.push(hue);
-    /* colors.push(`hsl(${hue},${saturation}%,${lightness}%,)`); */
-  }
-  return colors;
-}
-
-// lower level is darker.
-const DARKEN_LVL = 140;
-const EMPTY_WELL_COLOR = "e9e9e9";
+const EMPTY_WELL_COLOR = "#e9e9e9";
 
 const assignColorToCompound = (concs, hue, compoundToColorMap) => {
   let i = 0;
@@ -111,8 +96,9 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
       compoundToColorMap.set(
         o.cmpdnum,
         i === 0
-          ? `hsla(${hue},${100}%,${48}%,0.9)`
-          : `hsla(${hue},${70 - i * 3}%,${50 + i * 4}%,1)`
+          ? /*  */
+            `hsla(${hue},${95}%,${41}%,0.74)`
+          : `hsla(${hue},${100}%,${57 + i * 4}%,0.90)`
       );
       i++;
     }
@@ -125,16 +111,10 @@ const StyledPlateContainer = styled.div`
   height: 100vh;
   overflow-y: scroll;
 `;
-/* 
-    CONCuM
-    cmpdname
-    cmpdnum
-    plateID
-    well
-*/
+
 const PlateLayout = (props) => {
   /* rowList, colList used to map over in the return as to render each component */
-  /* SHOULD BE ABLE TO loop in REACT COMP WITHOUT HAVING TO DO THIS TRICK.... */
+  /* There is no way to use a loop in JSX hence this "hack"*/
   let rowList = [];
   let colList = [];
   for (let i = 0; i < props.rows; i++) {
@@ -158,34 +138,36 @@ const PlateLayout = (props) => {
     plates.push(props.data.slice(i, i + props.rows * props.cols - emptyWells));
   }
 
-  let l = [];
+  let listOfCompoundMaps = [];
   for (let plate of plates) {
-    let plateMap = new Map();
+    let compoundMap = new Map();
     for (let o of plate) {
-      let val = plateMap.get(o.cmpdname);
+      let val = compoundMap.get(o.cmpdname);
       if (val !== undefined) {
-        plateMap.set(o.cmpdname, [...val, o]);
+        compoundMap.set(o.cmpdname, [...val, o]);
       } else {
-        plateMap.set(o.cmpdname, [o]);
+        compoundMap.set(o.cmpdname, [o]);
       }
     }
 
-    for (let [cmp, vals] of plateMap) {
+    for (let [cmp, vals] of compoundMap) {
       /* sort descending order */
       vals.sort(compare);
-      plateMap.set(cmp, vals);
+      compoundMap.set(cmp, vals);
     }
-    l.push(plateMap);
+    listOfCompoundMaps.push(compoundMap);
   }
 
-  let compoundToColorMap = new Map();
-  for (let pm of l) {
-    let colors = generateHslHues(pm.size);
+  let listOfCompoundToColorMaps = [];
+  for (let compoundMap of listOfCompoundMaps) {
+    let compoundToColorMap = new Map();
+    let colors = generateHslHues(compoundMap.size);
     let i = 0;
-    for (let [name, concs] of pm) {
-      assignColorToCompound(concs, colors[i], compoundToColorMap);
+    for (let entry of compoundMap) {
+      assignColorToCompound(entry[1], colors[i], compoundToColorMap);
       i++;
     }
+    listOfCompoundToColorMaps.push(compoundToColorMap);
   }
   return (
     <StyledPlateContainer>
@@ -201,7 +183,7 @@ const PlateLayout = (props) => {
             data={data}
             alphabet={ALPHABET}
             emptyWellColor={EMPTY_WELL_COLOR}
-            compoundToColorMap={compoundToColorMap}
+            compoundToColorMap={listOfCompoundToColorMaps[index]}
           />
         );
       })}
