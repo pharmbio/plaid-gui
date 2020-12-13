@@ -6,8 +6,7 @@ const StyledWell = styled.div`
   border-radius: 50%;
   grid-row: ${(props) => props.row};
   grid-column: ${(props) => props.col};
-  background-color: #${(props) => props.color};
-  color: black;
+  background-color: ${(props) => props.color};
   opacity: ${(props) => (props.lighten ? 0.2 : 1)};
 `;
 const StyledEmptyWell = styled.div`
@@ -15,7 +14,7 @@ const StyledEmptyWell = styled.div`
   background-color: lightgray;
   grid-row: ${(props) => props.row};
   grid-column: ${(props) => props.col};
-  background-color: #${(props) => props.color};
+  background-color: ${(props) => props.color};
 `;
 
 const StyledLabel = styled.div`
@@ -25,7 +24,8 @@ const StyledLabel = styled.div`
   /* background-color: #f6f6f6; */
   font-size: 12px;
   font-family: "Roboto", sans-serif;
-  font-weight: 300;
+  font-weight: bold;
+  color: #000;
   margin: auto;
   text-align: center;
   width: ${(props) => props.wellRad}px;

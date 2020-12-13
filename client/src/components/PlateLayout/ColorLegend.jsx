@@ -3,33 +3,56 @@ import styled from "styled-components";
 
 const StyledLegendWrapper = styled.div`
   margin: auto;
-  display: grid;
-  grid-template-columns: repeat(3, auto);
+  display: flex;
+  flex-direction: column;
   padding: 5px;
-  margin-right: 45px; /* same as wellRad */
+  margin-right: 40px;
+`;
+
+const StyledConcAndColorBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledConc = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-family: "Lato", sans-serif;
+  font-size: 12px;
+  margin-top: 2.5px;
+  margin-bottom: 2.5px;
+  width: 140px;
 `;
 
 const StyledLegendItem = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  padding: 2.5px;
   cursor: pointer;
 `;
 
+const StyledColorBoxWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  border: solid 1px;
+  border-left: none;
+  width: 140px;
+  height: 30px;
+  margin:2.5px;
+`;
 const StyledColorBox = styled.div`
-  align-self: center;
-  justify-self: center;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background-color: #${(props) => props.color};
+  flex-grow: 2;
+  border-left: solid 1px;
+  background-color: ${(props) => props.color};
 `;
 
 const StyledLabel = styled.div`
+  align-self: center;
+  justify-self: center;
   font-family: "Lato", sans-serif;
-  font-size: 0.9em;
-  margin: 2.5px;
+  font-size: 12px;
+  margin-left: 2.5px;
 `;
 
 const ColorLegend = (props) => {
@@ -37,35 +60,36 @@ const ColorLegend = (props) => {
     e.preventDefault();
     props.handleSelectedCompound(e.currentTarget.id);
   };
-  let alreadyAdded = new Set();
-  console.log(props.emptyEdges);
+  let compoundMapEntries = Array.from(props.compoundMap.entries());
+
   return (
     <StyledLegendWrapper>
-      {props.data.map((o) => {
-        if (alreadyAdded.has(o.cmpdname)) {
-          return undefined;
-        } else {
-          alreadyAdded.add(o.cmpdname);
-          return (
-            <StyledLegendItem
-              key={o.plateID + o.cmpdname}
-              id={o.plateID + o.cmpdname}
-              onClick={handleClick}
-            >
-              <StyledColorBox
-                color={props.compoundToColorMap.get(o.cmpdname)}
-              />
-              <StyledLabel>{o.cmpdname}</StyledLabel>
+      {compoundMapEntries.map(([key, val], index) => {
+        return (
+          <StyledConcAndColorBox key={index + key + val[0].plateID}>
+            <StyledLegendItem id={val[0].plateID + key} onClick={handleClick}>
+              <StyledColorBoxWrapper>
+                {val.map((o, i) => {
+                  return (
+                    <StyledColorBox
+                      color={props.compoundToColorMap.get(o.cmpdnum)}
+                    ></StyledColorBox>
+                  );
+                })}
+              </StyledColorBoxWrapper>
+              <StyledLabel>{key}</StyledLabel>
             </StyledLegendItem>
-          );
-        }
+{/*             <StyledConc>
+              <p>{val[0].CONCuM}</p>
+              <p>
+                {val[val.length - 1].CONCuM === val[0].CONCuM
+                  ? undefined
+                  : val[val.length - 1].CONCuM}
+              </p>
+            </StyledConc> */}
+          </StyledConcAndColorBox>
+        );
       })}
-      {props.emptyEdges > 0 ? (
-        <StyledLegendItem key={"empty-legend"}>
-          <StyledColorBox color={props.emptyWellColor} />
-          <StyledLabel>{"empty"}</StyledLabel>
-        </StyledLegendItem>
-      ) : undefined}
     </StyledLegendWrapper>
   );
 };

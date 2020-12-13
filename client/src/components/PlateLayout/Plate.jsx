@@ -119,7 +119,6 @@ const reducer = (_, action) => {
 };
 
 const Plate = (props) => {
-
   const WELL_RAD = 40;
 
   const [selectedCompound, dispatch] = React.useReducer(reducer, "");
@@ -164,7 +163,12 @@ const Plate = (props) => {
             i + 1
           );
         })}
-        <StyledPlate rows={props.rows} cols={props.cols} wellRad={WELL_RAD} gap={2.5}>
+        <StyledPlate
+          rows={props.rows}
+          cols={props.cols}
+          wellRad={WELL_RAD}
+          gap={2.5}
+        >
           {emptyWells.map((pos) => {
             return (
               <Well
@@ -188,20 +192,17 @@ const Plate = (props) => {
                 col={col}
                 key={o.plateID + o.well}
                 data={o}
-                color={props.compoundToColorMap.get(o.cmpdname)}
+                color={props.compoundToColorMap.get(o.cmpdnum)}
               />
             );
           })}
         </StyledPlate>
       </StyledPlateWrapper>
       <ColorLegend
-        wellRad={WELL_RAD}
-        gap={2.5}
-        rows={props.rows}
-        cols={props.cols}
         emptyEdges={props.emptyEdges}
         emptyWellColor={props.emptyWellColor}
         data={props.data}
+        compoundMap={props.compoundMap}
         compoundToColorMap={props.compoundToColorMap}
         handleSelectedCompound={handleSelectedCompound}
       />
