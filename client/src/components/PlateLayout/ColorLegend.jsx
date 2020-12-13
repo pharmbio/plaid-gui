@@ -39,7 +39,7 @@ const StyledColorBoxWrapper = styled.div`
   border-left: none;
   width: 140px;
   height: 30px;
-  margin:2.5px;
+  margin: 2.5px;
 `;
 const StyledColorBox = styled.div`
   flex-grow: 2;
@@ -79,14 +79,14 @@ const ColorLegend = (props) => {
               </StyledColorBoxWrapper>
               <StyledLabel>{key}</StyledLabel>
             </StyledLegendItem>
-{/*             <StyledConc>
+            <StyledConc>
               <p>{val[0].CONCuM}</p>
               <p>
                 {val[val.length - 1].CONCuM === val[0].CONCuM
                   ? undefined
                   : val[val.length - 1].CONCuM}
               </p>
-            </StyledConc> */}
+            </StyledConc>
           </StyledConcAndColorBox>
         );
       })}

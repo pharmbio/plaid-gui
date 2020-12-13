@@ -35,45 +35,26 @@ async function postForm(formData, setLoading, setData, event) {
 
 const PlaidForm = (props) => {
   const [formState, setFormState] = useState({
-    num_rows: 8,
-    num_cols: 12,
+    num_rows: 16,
+    num_cols: 48,
     vertical_cell_lines: 1,
-    horizontal_cell_lines: 1,
+    horizontal_cell_lines: 2,
     allow_empty_wells: false,
     size_empty_edge: 1,
-    compounds: 10,
-    compound_concentration_names: [
-      "0.3",
-      "1",
-      "3",
-      "5",
-      "10",
-      "15",
-      "30",
-      "100",
-    ], // List
-    compound_concentration_indicators: ["", "", "", "", "", "", "", ""],
-    compound_names: [
-      "comp1",
-      "comp2",
-      "comp3",
-      "comp4",
-      "comp5",
-      "comp6",
-      "comp7",
-      "comp8",
-      "comp9",
-      "comp10",
-    ], // List
-    compound_concentrations: 8,
-    replicates: 2,
-    combinations: 0,
-    combination_concentrations: 0,
-    combination_names: [], // List
-    combination_concentration_names: [], // List
+
+    compounds: 7,
+    compound_concentration_names: ["L", "M", "H"], // List
+    compound_concentration_indicators: ["", "", ""],
+    compound_names: ["BPA", "BADGE", "PFOA", "4-MBC", "DBP", "DEHP", "TCEP"], // List
+    compound_concentrations: 3,
+    replicates: 5,
+    combinations: 1,
+    combination_concentrations: 1,
+    combination_names: ["BPA+H"], // List
+    combination_concentration_names: ["comb-conc1"], // List
     num_controls: 4,
     control_concentrations: 1,
-    control_replicates: [32, 16, 16, 16], // List
+    control_replicates: [44, 44, 44, 34], // List
     control_names: ["pos", "neg", "blank", "dmso"], // List
     control_concentration_names: ["cont-conc1"], // List
     blanks: 0,
@@ -98,7 +79,7 @@ const PlaidForm = (props) => {
     setFormState({ ...formState, [name]: delim });
     console.log(formState);
   };
-  
+
   const handleInputChange = (event) => {
     console.log(formState);
     const target = event.target;

@@ -11,8 +11,10 @@ const compare = (a, b) => {
     concentrationsLabels.includes(a.CONCuM) &&
     concentrationsLabels.includes(b.CONCuM)
   ) {
-    a = concentrationsLabels.findIndex(a.CONCuM);
-    b = concentrationsLabels.findIndex(b.CONCuM);
+    let a_conc = a.CONCuM;
+    let b_conc = b.CONCuM;
+    a = concentrationsLabels.findIndex((elem) => a_conc === elem);
+    b = concentrationsLabels.findIndex((elem) => b_conc === elem);
     if (a < b) {
       //console.log("a < b 1");
       return 1;
@@ -98,11 +100,18 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
         i === 0
           ? /*  */
             `hsla(${hue},${95}%,${41}%,0.74)`
-          : `hsla(${hue},${100}%,${57 + i * 4}%,0.90)`
+          : `hsla(${hue},${100}%,${
+              57 +
+              i *
+                (concentrationsLabels.includes(o.CONCuM) && o.CONCuM === "L"
+                  ? 10
+                  : 4)
+            }%,0.90)`
       );
       i++;
     }
   }
+  console.log(concs, compoundToColorMap);
 };
 
 const StyledPlateContainer = styled.div`
