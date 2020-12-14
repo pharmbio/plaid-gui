@@ -24,20 +24,12 @@ const StyledForm = styled(Form)`
 
 const StyledInputContainer = styled.div`
   position: absolute;
-  display: flex;
+  display: grid;
+  justify-content: flex-start;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   width: 90%;
-  margin: auto;
-  height: 90%;
 `;
-const StyledStep = styled(Step)`
-  height: 500px;
-  width: 500px;
-  margin: 1000px;
-  background-color: blue;
-`;
-
 const StyledNextButton = styled.button`
 background: #0069eb;
 color: #fff;
@@ -48,6 +40,7 @@ padding: 15px 30px;
 text-decoration: none;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 margin-top: 10px;
+margin-left: 850px;
 `;
 
 
@@ -147,26 +140,34 @@ const PlaidForm = (props) => {
   };
 
   const handleInputChange = (event) => {
-    console.log(formState);
     const target = event.target;
     const type = target.type;
     let value;
+    console.log(JSON.parse(event.target.value))
     switch (type) {
-      case "checkbox": {
-        //TODO: Checkboxes must either act like radio boxes or be radio boxes.
+      case 'checkbox': {
         if (target.name === 'vertical_cell_lines') {
           setFormState({ ...formState, ['horizontal_cell_lines']: false })
         }
         value = target.checked;
         break;
       }
-      case "number": {
+      case 'number': {
         value = parseInt(target.value);
         break;
+      }
+      case 'select-one': {
+        value = JSON.parse(target.value)
+        setFormState({
+          ...formState, ['num_rows']: value.num_rows, ['num_cols']: value.num_cols
+
+        })
+        return;
       }
       default:
         value = target.value;
     }
+    console.log('hi');
     const name = target.name;
     setFormState({
       ...formState,
@@ -183,10 +184,10 @@ const PlaidForm = (props) => {
           <Stepper
             initialValues={formState}
           >
-            <StyledStep label='Experiment Setup'>
-              <ExperimentForm handleInputChange={handleInputChange} />
-              <ConstraintForm handleInputChange={handleInputChange} />
-            </StyledStep>
+              <Step label='Experiment Setup'>
+                <ExperimentForm handleInputChange={handleInputChange} />
+                <ConstraintForm handleInputChange={handleInputChange} />
+              </Step>
             <Step label='Compound Setup'>
               <CompoundForm
                 handleInputChange={handleInputChange}
@@ -234,7 +235,7 @@ export const Stepper = ({ children, ...props }) => {
   }
 
   return (
-    <Formik {...props} onSubmit={async (values, helpers,event) => {
+    <Formik {...props} onSubmit={async (values, helpers, event) => {
       //on the last step
       if (isLast()) {
         await props.onSubmit(values, helpers)
