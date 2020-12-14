@@ -42,7 +42,18 @@ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 margin-top: 10px;
 margin-left: 850px;
 `;
-
+const StyledPrevButton = styled.button`
+background: #CCCCCC;
+color: #fff;
+border: none;
+border-radius: 0px;
+font-size: 16px;
+padding: 15px 30px;
+text-decoration: none;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+margin-top: 10px;
+margin-left: 850px;
+`;
 
 const axios = require("axios");
 async function postForm(formData, setLoading, setData, event) {
@@ -249,7 +260,7 @@ export const Stepper = ({ children, ...props }) => {
         <HorizontalStepper currentStep={step} steps={childrenArray}></HorizontalStepper>
         <StyledInputContainer>
           {currentChild}
-          {step > 0 ? <button type='button' onClick={() => setStep(step - 1)}>Previous</button> : null}
+          {step > 0 ? <StyledPrevButton type='button' onClick={() => setStep(step - 1)}>Previous</StyledPrevButton> : null}
           <StyledNextButton type='submit'>{isLast() ? 'Submit' : 'Next'}</StyledNextButton>
         </StyledInputContainer>
       </StyledForm>
