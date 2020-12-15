@@ -61,11 +61,10 @@ const StyledSizeLabel = styled.label`
 `;
 
 
-const ExperimentForm = ({ handleInputChange }) => {
+const ExperimentForm = ({handleInputChange }) => {
 
   const [customState, setCustomState] = useState(false)
   const [selectState, setSelectState] = useState({ value: '{num_row: 6, num_col: 8} ' })
-
   const displaySize = (event) => {
     setSelectState({ value: event.target.value })
     if (event.target.value === 'custom') {

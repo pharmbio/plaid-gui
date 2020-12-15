@@ -9,7 +9,9 @@ import Step from "./Step"
 import Loader from "./../Loader";
 import { Formik, Form } from 'formik'
 import styled from "styled-components";
+import * as Yup from "yup";
 
+/* TODO: Refactor to handle onChange with Formik!! */
 const StyledForm = styled(Form)`
   display: flex ;
   justify-content: center;  
@@ -127,6 +129,8 @@ const PlaidForm = (props) => {
             delim[index] = parseInt(x);
           });
           break;
+        default:
+          break;
       }
     }
     setFormState({ ...formState, [name]: delim });
@@ -168,6 +172,9 @@ const PlaidForm = (props) => {
   };
 
   const [loading, setLoading] = useState(false);
+
+
+
   return (
     <>
       {loading ? (
@@ -216,13 +223,21 @@ export const Stepper = ({ children, ...props }) => {
   const [step, setStep] = useState(0);
   //Child to display on current step. 0 would be immediate child.
   const currentChild = childrenArray[step]
-
+  console.log(props.initialValues.num_cols)
   function isLast() {
     return step === childrenArray.length - 1;
   }
+  const validationSchema = [
+    Yup.object({num_cols: Yup.number().positive().required().min(6,'no')}),
+    Yup.object({num_rows: Yup.number().positive().integer()})]
+  
+  const currentValidation = validationSchema[step]
 
   return (
-    <Formik {...props}>
+    <Formik {...props} initialValues={props.initialValues}
+      validationSchema={currentValidation}
+      isInitialValid={ ({ initialValues: props.initialValues }) => schema.isValidSync(values) }
+      >
       <StyledForm>
         <HorizontalStepper currentStep={step} steps={childrenArray}></HorizontalStepper>
         <StyledInputContainer>
