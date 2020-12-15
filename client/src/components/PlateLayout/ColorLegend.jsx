@@ -90,6 +90,7 @@ const ColorLegend = (props) => {
           </StyledConcAndColorBox>
         );
       })}
+      {props.children} 
     </StyledLegendWrapper>
   );
 };

@@ -5,8 +5,14 @@ import generateHslHues from "./../../functions/generateHslHues.js";
 
 const concentrationsLabels = ["L", "M", "H"];
 
+/* 
+  Compares a and b and returns value depending on the CONCuM property of a and b
+  @param: a an object representing one row of the output from minizinc 
+  @param: b an object representing one row of the output from minizinc 
+  @example: let a = {cmpdname:cm1, CONCuM:100,...} and b = {cmpdname:cm2, CONCuM:1,...}
+            then compare(a,b) will return -1
+*/
 const compare = (a, b) => {
-  //console.log(a, b);
   if (
     concentrationsLabels.includes(a.CONCuM) &&
     concentrationsLabels.includes(b.CONCuM)
@@ -16,11 +22,9 @@ const compare = (a, b) => {
     a = concentrationsLabels.findIndex((elem) => a_conc === elem);
     b = concentrationsLabels.findIndex((elem) => b_conc === elem);
     if (a < b) {
-      //console.log("a < b 1");
       return 1;
     }
     if (a > b) {
-      //console.log("a > b 1");
       return -1;
     }
     return 0;
@@ -33,23 +37,17 @@ const compare = (a, b) => {
     }
     if (!isNaN(a.CONCuM) && !isNaN(b.CONCuM)) {
       if (parseFloat(a.CONCuM) < parseFloat(b.CONCuM)) {
-        //console.log("a < b 2");
         return 1;
       }
-      if (parseFloat(a.CONCuM) < parseFloat(b.CONCuM)) {
-        //console.log("a > b 2");
+      if (parseFloat(a.CONCuM) > parseFloat(b.CONCuM)) {
         return -1;
       }
       return 0;
     }
-    /*     a = isNaN(a.CONCuM) ? a.CONCuM : parseFloat(a.CONCuM);
-    b = isNaN(b.CONCuM) ? b.CONCuM : parseFloat(b.CONCuM); */
     if (a.CONCuM < b.CONCuM) {
-      //console.log("a < b 3");
       return 1;
     }
     if (a.CONCuM > b.CONCuM) {
-      //console.log("a > b 3");
       return -1;
     }
     return 0;
@@ -87,10 +85,13 @@ const ALPHABET = [
 
 const EMPTY_WELL_COLOR = "#e9e9e9";
 
+/* 
+  Assign hsla colors to compound well depending on concentration
+*/
 const assignColorToCompound = (concs, hue, compoundToColorMap) => {
   let i = 0;
   for (let o of concs) {
-    /* concs are sorted */
+    /* concs are sorted high to low */
     if (compoundToColorMap.has(o.cmpdnum)) {
       /* We have already assigned color to that particular compound and its concentration */
       continue;
@@ -98,7 +99,7 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
       compoundToColorMap.set(
         o.cmpdnum,
         i === 0
-          ? /*  */
+          ? /*  tweak colors here if needed */
             `hsla(${hue},${95}%,${41}%,0.74)`
           : `hsla(${hue},${100}%,${
               57 +
@@ -111,7 +112,6 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
       i++;
     }
   }
-  console.log(concs, compoundToColorMap);
 };
 
 const StyledPlateContainer = styled.div`
@@ -123,7 +123,7 @@ const StyledPlateContainer = styled.div`
 
 const PlateLayout = (props) => {
   /* rowList, colList used to map over in the return as to render each component */
-  /* There is no way to use a loop in JSX hence this "hack"*/
+  /* There is no way to use a loop in JSX hence this "hack" */
   let rowList = [];
   let colList = [];
   for (let i = 0; i < props.rows; i++) {
@@ -139,6 +139,7 @@ const PlateLayout = (props) => {
 
   let plates = [];
 
+  /* separate all data by corresponding plate */
   for (
     let i = 0;
     i < props.data.length;
@@ -148,8 +149,10 @@ const PlateLayout = (props) => {
   }
 
   let listOfCompoundMaps = [];
+
   for (let plate of plates) {
     let compoundMap = new Map();
+    /* map each compound name to all its corresponding concentrations */
     for (let o of plate) {
       let val = compoundMap.get(o.cmpdname);
       if (val !== undefined) {
@@ -159,8 +162,8 @@ const PlateLayout = (props) => {
       }
     }
 
+    /* sort each compound from high to low concentration */
     for (let [cmp, vals] of compoundMap) {
-      /* sort descending order */
       vals.sort(compare);
       compoundMap.set(cmp, vals);
     }
@@ -168,6 +171,7 @@ const PlateLayout = (props) => {
   }
 
   let listOfCompoundToColorMaps = [];
+  /* Assign color for each compound */
   for (let compoundMap of listOfCompoundMaps) {
     let compoundToColorMap = new Map();
     let colors = generateHslHues(compoundMap.size);

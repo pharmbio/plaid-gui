@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Well from "./Well.jsx";
 import ColorLegend from "./ColorLegend.jsx";
+import Switch from "./Switch.jsx";
 
 const StyledPlate = styled.div`
   grid-area: 2/2 / ${(props) => props.rows} / ${(props) => props.cols};
@@ -52,7 +53,7 @@ const StyledColumnIdentifier = styled.div`
 const StyledRowIdentifier = styled.div`
   justify-self: center;
   align-self: center;
-  grid-row: ${(props) => props.row}; /* row position */
+  grid-row: ${(props) => props.row};
   grid-column: ${(props) => props.col};
 `;
 
@@ -64,7 +65,6 @@ const positionsOfEmptyWells = (empty, rows, cols) => {
     for (let j = 0; j < cols; j++) {
       let row = i + 1;
       let col = j + 1;
-      //console.log(row, col);
       emptyWells.push([row, col]);
     }
   }
@@ -73,7 +73,6 @@ const positionsOfEmptyWells = (empty, rows, cols) => {
     for (let j = 0; j < empty; j++) {
       let row = i + 1;
       let col = j + 1;
-      //console.log(row, col);
       emptyWells.push([row, col]);
     }
   }
@@ -83,7 +82,6 @@ const positionsOfEmptyWells = (empty, rows, cols) => {
     for (let j = cols; j > cols - empty; j--) {
       let row = i + 1;
       let col = j;
-      //console.log(row, col);
       emptyWells.push([row, col]);
     }
   }
@@ -93,7 +91,6 @@ const positionsOfEmptyWells = (empty, rows, cols) => {
     for (let j = 0; j < cols; j++) {
       let row = i;
       let col = j + 1;
-      //console.log(row, col);
       emptyWells.push([row, col]);
     }
   }
@@ -107,26 +104,24 @@ const positionsOfEmptyWells = (empty, rows, cols) => {
     plateID
     well
 */
-const reducer = (_, action) => {
-  switch (action.type) {
-    case "SELECT":
-      return action.payload;
-    case "DESELECT":
-      return "";
-    default:
-      throw new Error("Unexpected action");
-  }
-};
-
 const Plate = (props) => {
   const WELL_RAD = 40;
 
-  const [selectedCompound, dispatch] = React.useReducer(reducer, "");
+  const [selectedCompound, setSelectedCompound] = React.useState("");
   const handleSelectedCompound = (selected) => {
     if (selected === selectedCompound) {
-      dispatch({ type: "DESELECT" });
+      setSelectedCompound("");
     } else {
-      dispatch({ type: "SELECT", payload: selected });
+      setSelectedCompound(selected);
+    }
+  };
+
+  const [display, setDisplay] = React.useState("none");
+  const handleDisplay = (selected) => {
+    if (selected === display) {
+      setDisplay("none");
+    } else {
+      setDisplay(selected);
     }
   };
 
@@ -188,6 +183,7 @@ const Plate = (props) => {
                 empty={false}
                 selected={selectedCompound}
                 wellRad={WELL_RAD}
+                display={display}
                 row={row}
                 col={col}
                 key={o.plateID + o.well}
@@ -205,7 +201,9 @@ const Plate = (props) => {
         compoundMap={props.compoundMap}
         compoundToColorMap={props.compoundToColorMap}
         handleSelectedCompound={handleSelectedCompound}
-      />
+      >
+        <Switch handleDisplay={handleDisplay} />
+      </ColorLegend>
     </StyledResultLayoutContainer>
   );
 };

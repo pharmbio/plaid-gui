@@ -20,6 +20,7 @@ async function postForm(formData, setLoading, setData, event) {
       .post("http://localhost:5000/", formData, axiosConfig)
       .then((response) => {
         console.log(response.data);
+        setLoading(false); //data received, remove loader
         setData({
           rows: formData.num_rows,
           cols: formData.num_cols,
@@ -27,7 +28,6 @@ async function postForm(formData, setLoading, setData, event) {
           result: response.data,
         });
       });
-    setLoading(false); //setLoading(true); //data received, remove loader
   } catch (e) {
     console.log(e);
   }
