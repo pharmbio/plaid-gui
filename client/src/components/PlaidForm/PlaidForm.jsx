@@ -236,7 +236,6 @@ export const Stepper = ({ children, ...props }) => {
   return (
     <Formik {...props} initialValues={props.initialValues}
       validationSchema={currentValidation}
-      isInitialValid={ ({ initialValues: props.initialValues }) => schema.isValidSync(values) }
       >
       <StyledForm>
         <HorizontalStepper currentStep={step} steps={childrenArray}></HorizontalStepper>
