@@ -71,7 +71,7 @@ const ColorLegend = (props) => {
               <StyledColorBoxWrapper>
                 {val.map((o, i) => {
                   return (
-                    <StyledColorBox
+                    <StyledColorBox key={i + o.cmpdnum}
                       color={props.compoundToColorMap.get(o.cmpdnum)}
                     ></StyledColorBox>
                   );
