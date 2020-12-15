@@ -43,7 +43,7 @@ const StyledColorBoxWrapper = styled.div`
 `;
 const StyledColorBox = styled.div`
   flex-grow: 2;
-  border-left: solid 1px;
+/*   border-left: solid 1px; */
   background-color: ${(props) => props.color};
 `;
 

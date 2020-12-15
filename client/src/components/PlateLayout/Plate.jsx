@@ -57,46 +57,6 @@ const StyledRowIdentifier = styled.div`
   grid-column: ${(props) => props.col};
 `;
 
-/* Feels really hacky... TODO: find a better way */
-const positionsOfEmptyWells = (empty, rows, cols) => {
-  let emptyWells = [];
-  // rows from top
-  for (let i = 0; i < empty; i++) {
-    for (let j = 0; j < cols; j++) {
-      let row = i + 1;
-      let col = j + 1;
-      emptyWells.push([row, col]);
-    }
-  }
-  // rows between from left
-  for (let i = empty; i < rows - empty; i++) {
-    for (let j = 0; j < empty; j++) {
-      let row = i + 1;
-      let col = j + 1;
-      emptyWells.push([row, col]);
-    }
-  }
-
-  // rows between from right
-  for (let i = empty; i < rows - empty; i++) {
-    for (let j = cols; j > cols - empty; j--) {
-      let row = i + 1;
-      let col = j;
-      emptyWells.push([row, col]);
-    }
-  }
-
-  // rows from bottom
-  for (let i = rows; i > rows - empty; i--) {
-    for (let j = 0; j < cols; j++) {
-      let row = i;
-      let col = j + 1;
-      emptyWells.push([row, col]);
-    }
-  }
-  return emptyWells;
-};
-
 /* 
     CONCuM
     cmpdname
@@ -125,11 +85,16 @@ const Plate = (props) => {
     }
   };
 
-  let emptyWells = positionsOfEmptyWells(
-    props.emptyEdges,
-    props.rows,
-    props.cols
-  );
+  let emptyWells = [];
+
+  for (let i = 1; i <= props.rows; i++) {
+    for (let j = 1; j <= props.cols; j++) {
+      emptyWells.push([i,j]);
+      
+    }
+  }
+
+
   return (
     <StyledResultLayoutContainer>
       <StyledPlateWrapper
@@ -165,12 +130,13 @@ const Plate = (props) => {
           gap={2.5}
         >
           {emptyWells.map((pos) => {
+            // Fill whole plate with empty wells first
             return (
               <Well
                 empty={true}
                 row={pos[0]}
                 col={pos[1]}
-                key={props.alphabet[pos[0] - 1] + pos[1]}
+                key={props.alphabet[pos[0]-1] + pos[1]}
                 color={props.emptyWellColor} //grey
               />
             );
