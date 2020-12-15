@@ -1,19 +1,25 @@
 import React from "react";
 import styled from "styled-components";
 
-const StyledWell = styled.div`
+const StyledWell = styled.div.attrs((props) =>
+  props.empty
+    ? {
+        style: {
+          gridRow: props.row,
+          gridColumn: props.col,
+          backgroundColor: props.color,
+        },
+      }
+    : {
+        style: {
+          gridRow: props.row,
+          gridColumn: props.col,
+          backgroundColor: props.color,
+          opacity: props.lighten ? 0.2 : 1,
+        },
+      }
+)`
   border-radius: 50%;
-  grid-row: ${(props) => props.row};
-  grid-column: ${(props) => props.col};
-  background-color: ${(props) => props.color};
-  opacity: ${(props) => (props.lighten ? 0.2 : 1)};
-`;
-const StyledEmptyWell = styled.div`
-  border-radius: 50%;
-  background-color: lightgray;
-  grid-row: ${(props) => props.row};
-  grid-column: ${(props) => props.col};
-  background-color: ${(props) => props.color};
 `;
 
 const StyledLabel = styled.div`
@@ -41,46 +47,25 @@ const Well = (props) => {
     }
   }
 
-  if (props.empty) {
-    return <StyledEmptyWell row={props.row} col={props.col} color={color} />;
-  }
-
-  if (props.display === "none") {
-    return (
-      <StyledWell
-        row={props.row}
-        col={props.col}
-        color={color}
-        lighten={lighten}
-      >
-        <StyledLabel wellRad={props.wellRad}></StyledLabel>
-      </StyledWell>
-    );
-  }
-  if (props.display === "compound") {
-    return (
-      <StyledWell
-        row={props.row}
-        col={props.col}
-        color={color}
-        lighten={lighten}
-      >
-        <StyledLabel wellRad={props.wellRad}>{props.data.cmpdname}</StyledLabel>
-      </StyledWell>
-    );
-  }
-  if (props.display === "concentration") {
-    return (
-      <StyledWell
-        row={props.row}
-        col={props.col}
-        color={color}
-        lighten={lighten}
-      >
-        <StyledLabel wellRad={props.wellRad}>{props.data.CONCuM}</StyledLabel>
-      </StyledWell>
-    );
-  }
+  return props.empty ? (
+    <StyledWell
+      empty={props.empty}
+      row={props.row}
+      col={props.col}
+      color={color}
+      lighten={lighten}
+    />
+  ) : (
+    <StyledWell
+      empty={props.empty}
+      row={props.row}
+      col={props.col}
+      color={color}
+      lighten={lighten}
+    >
+      {props.display !== "none" ? <StyledLabel wellRad={props.wellRad}>{props.display === "compound" ? props.data.cmpdname : props.data.CONCuM}</StyledLabel>: ""}
+    </StyledWell>
+  );
 };
 
 export default Well;
