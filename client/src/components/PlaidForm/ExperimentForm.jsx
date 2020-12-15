@@ -21,7 +21,6 @@ const StyledInput = styled.input`
   width: 30%;
   height: 5%;
   margin-left: 500px;
-  -moz-appearance: textfield;
 `;
 
 const StyledCheckboxLabel = styled.label`
@@ -32,11 +31,11 @@ const StyledCheckboxLabel = styled.label`
 `;
 const StyledCheckbox = styled.input`
   margin-left: 500px;
-  width: 15%;
+  width: 20%;
 `;
 const StyledHorizontal = styled.input`
 margin-left: 500px;
-  width: 15%;
+  width: 20%;
 `;
 
 const StyledHorizontalLabel = styled.label`

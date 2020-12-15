@@ -39,11 +39,10 @@ font-size: 16px;
 padding: 15px 30px;
 text-decoration: none;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-margin-top: 10px;
-margin-left: 850px;
+margin-left: 10px;
 `;
 const StyledPrevButton = styled.button`
-background: #CCCCCC;
+background: #a6a6a6;
 color: #fff;
 border: none;
 border-radius: 0px;
@@ -52,11 +51,15 @@ padding: 15px 30px;
 text-decoration: none;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 margin-top: 10px;
-margin-left: 850px;
+`;
+const StyledButtonContainer = styled.span`
+  display: inline;
+  margin-top:20px;
+  margin-left: 500px;
 `;
 
 const axios = require("axios");
-async function postForm(formData, setLoading, setData, event) {
+async function postForm(formData, setLoading, setData) {
   console.log("Data sent");
   let axiosConfig = {
     headers: {
@@ -171,7 +174,6 @@ const PlaidForm = (props) => {
         value = JSON.parse(target.value)
         setFormState({
           ...formState, ['num_rows']: value.num_rows, ['num_cols']: value.num_cols
-
         })
         return;
       }
@@ -194,11 +196,13 @@ const PlaidForm = (props) => {
       ) : (
           <Stepper
             initialValues={formState}
+            setLoading={setLoading}
+            postForm={postForm}
           >
-              <Step label='Experiment Setup'>
-                <ExperimentForm handleInputChange={handleInputChange} />
-                <ConstraintForm handleInputChange={handleInputChange} />
-              </Step>
+            <Step label='Experiment Setup'>
+              <ExperimentForm handleInputChange={handleInputChange} />
+              <ConstraintForm handleInputChange={handleInputChange} />
+            </Step>
             <Step label='Compound Setup'>
               <CompoundForm
                 handleInputChange={handleInputChange}
@@ -219,11 +223,11 @@ const PlaidForm = (props) => {
               <button
                 type="button"
                 onClick={() => {
+                  console.log(loading)
                   postForm(formState, setLoading);
                 }}
               ></button>
             </Step>
-
           </Stepper>
         )}
     </>
@@ -247,24 +251,25 @@ export const Stepper = ({ children, ...props }) => {
 
   return (
     <Formik {...props} onSubmit={async (values, helpers, event) => {
-      //on the last step
       if (isLast()) {
-        await props.onSubmit(values, helpers)
+        //postForm(props.formState, props.setLoading);
+        console.log('hi')
       }
       else {
         setStep(step + 1);
       }
     }}>
-
       <StyledForm>
         <HorizontalStepper currentStep={step} steps={childrenArray}></HorizontalStepper>
         <StyledInputContainer>
           {currentChild}
-          {step > 0 ? <StyledPrevButton type='button' onClick={() => setStep(step - 1)}>Previous</StyledPrevButton> : null}
-          <StyledNextButton type='submit'>{isLast() ? 'Submit' : 'Next'}</StyledNextButton>
+          <StyledButtonContainer>
+            {step > 0 ? <StyledPrevButton type='button' onClick={() => setStep(step - 1)}>Previous</StyledPrevButton> : null}
+            <StyledNextButton type='button' onClick={isLast() ? () => props.postForm(props.formState,props.setLoading) : () => setStep(step + 1)}>{isLast() ? 'Submit' : 'Next'}</StyledNextButton>
+          </StyledButtonContainer>
         </StyledInputContainer>
       </StyledForm>
-    </Formik>)
+    </Formik >)
 }
 
 
