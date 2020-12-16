@@ -21,7 +21,6 @@ const StyledForm = styled(Form)`
   border: solid;
   border-width: 1px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-
 `;
 
 const StyledInputContainer = styled.div`
@@ -33,26 +32,26 @@ const StyledInputContainer = styled.div`
   width: 90%;
 `;
 const StyledNextButton = styled.button`
-background: #0069eb;
-color: #fff;
-border: none;
-border-radius: 0px;
-font-size: 16px;
-padding: 15px 30px;
-text-decoration: none;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-margin-left: 10px;
+  background: #0069eb;
+  color: #fff;
+  border: none;
+  border-radius: 0px;
+  font-size: 16px;
+  padding: 15px 30px;
+  text-decoration: none;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin-left: 10px;
 `;
 const StyledPrevButton = styled.button`
-background: #a6a6a6;
-color: #fff;
-border: none;
-border-radius: 0px;
-font-size: 16px;
-padding: 15px 30px;
-text-decoration: none;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-margin-top: 10px;
+  background: #a6a6a6;
+  color: #fff;
+  border: none;
+  border-radius: 0px;
+  font-size: 16px;
+  padding: 15px 30px;
+  text-decoration: none;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin-top: 10px;
 `;
 const StyledButtonContainer = styled.span`
   display: inline;
@@ -87,9 +86,11 @@ async function postForm(formData, setLoading, setData) {
   }
 }
 
+
 const PlaidForm = (props) => {
-
-
+  const [loading, setLoading] = useState(false);
+  const [validFormState, setValidFormState] = useState(true);
+  const [errorState, setErrorState] = useState({})
   const [formState, setFormState] = useState({
     num_rows: 0,
     num_cols: 0,
@@ -115,13 +116,13 @@ const PlaidForm = (props) => {
     blanks: 0,
     blanks_name: "",
   });
+
   const handleArrayChange = (event) => {
     const deviations = { control_replicates: "integer" };
     const target = event.target;
     const value = target.value;
     const name = target.name;
     let delim = value.split(",");
-    console.log(delim);
     if (name in deviations) {
       switch (deviations[name]) {
         case "integer":
@@ -136,7 +137,6 @@ const PlaidForm = (props) => {
     setFormState({ ...formState, [name]: delim });
     console.log(formState);
   };
-
   const handleInputChange = (event) => {
     const target = event.target;
     const type = target.type;
@@ -168,13 +168,8 @@ const PlaidForm = (props) => {
       ...formState,
       [name]: value,
     });
-    console.log(formState)
   };
-
-  const [loading, setLoading] = useState(false);
-
-
-
+  console.log(formState)
   return (
     <>
       {loading ? (
@@ -186,7 +181,7 @@ const PlaidForm = (props) => {
             postForm={postForm}
           >
             <Step label='Experiment Setup'>
-              <ExperimentForm handleInputChange={handleInputChange} />
+              <ExperimentForm handleInputChange={handleInputChange} errorState={errorState} state={formState}/>
               <ConstraintForm handleInputChange={handleInputChange} />
             </Step>
             <Step label='Compound Setup'>
@@ -228,15 +223,15 @@ export const Stepper = ({ children, ...props }) => {
     return step === childrenArray.length - 1;
   }
   const validationSchema = [
-    Yup.object({num_cols: Yup.number().positive().required().min(6,'no')}),
-    Yup.object({num_rows: Yup.number().positive().integer()})]
-  
+    Yup.object({ num_cols: Yup.number().positive().required().min(6, 'no') }),
+    Yup.object({ num_rows: Yup.number().positive().integer() })]
+
   const currentValidation = validationSchema[step]
 
   return (
     <Formik {...props} initialValues={props.initialValues}
       validationSchema={currentValidation}
-      >
+    >
       <StyledForm>
         <HorizontalStepper currentStep={step} steps={childrenArray}></HorizontalStepper>
         <StyledInputContainer>
@@ -249,7 +244,5 @@ export const Stepper = ({ children, ...props }) => {
       </StyledForm>
     </Formik >)
 }
-
-
 
 export default PlaidForm;

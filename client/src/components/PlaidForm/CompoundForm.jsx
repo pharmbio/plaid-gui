@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from "styled-components";
 
 const StyledCompoundsContainer = styled.div`
@@ -13,6 +13,7 @@ const StyledCompoundsLabel = styled.label`
 `;
 const StyledCompounds = styled.input`
     margin-left:500px; 
+    max-width: 20%;
     width: 20%;
 `;
 const StyledCompoundsNames = styled.input`
@@ -21,6 +22,7 @@ const StyledCompoundsNames = styled.input`
 `;
 
 const StyledCompoundsNamesLabel = styled.label`
+    margin-top: 15px;   
     margin-left:500px;
 `;
 const StyledCompoundsConc = styled.input`
@@ -46,13 +48,76 @@ const StyledCompoundsRepl = styled.input`
     margin-left:500px;
     width: 20%;
 `;
-
+const StyledErrorMessage = styled.div`
+  margin-left:500px;
+  color: red;
+`;
 
 const CompoundForm = ({ handleInputChange, handleArrayChange }) => {
+
+    const [validFormState, setValidFormState] = useState(false);
+    const [errorMsg, setErrorMsg] = useState({})
+    /* This state manages if a specific state is invalid or not */
+    const [errorState, setErrorState] = useState({
+        compounds: true,
+        size_empty_edge: true,
+        compound_names: true,
+        compound_concentrations: true,
+        compound_concentration_names: true,
+        replicates: true,
+    })
+    /* This state manages the current values of each input. Needed to track cross-validation.
+     Once validation is moved should be enough to check json obj in plaidform. */
+    const [valueState, setValueState] = useState({
+        compounds: 0,
+        compound_names: [],
+        compound_concentrations: [],
+        compound_concentration_names: [],
+        replicates: [],
+    })
+
+    function handleValidation(event) {
+        const value = event.target.value;
+        const names = event.target.name;
+        const formFields = { [names]: value }
+        const errors = errorMsg;
+        let formIsValid = true;
+        /* Reset error state to run validation again */
+        setErrorState({ ...errorState, [names]: false });
+        if (formFields['compounds'] <= 0) {
+            formIsValid = false;
+            setErrorState({ ...errorState, [names]: true });
+            errors['compounds'] = 'Compounds must be atleast 1';
+        }
+        if (formFields['compound_names'] <= 0) {
+            formIsValid = false;
+            setErrorState({ ...errorState, [names]: true });
+            errors['compounds'] = 'Compounds must be atleast 1';
+        }
+        /* loop through errorStates -> if they're all false all forms are filled! */
+        setValidFormState(formIsValid);
+        setErrorMsg({ ...errorMsg, errors: errors })
+
+        return formIsValid;
+    }
+
+    function inputHandler(event) {
+        if (!handleValidation(event)) {
+            console.log(!handleValidation)
+        }
+        else {
+            setValueState({...valueState, [event.target.name]: event.target.value});
+            handleInputChange(event)
+        }
+    }   
+
+
+
     return (<>
         <StyledCompoundsContainer>
             <StyledCompoundsLabel>Compounds: </StyledCompoundsLabel>
-            <StyledCompounds type="number" name='compounds' onChange={handleInputChange} />
+            <StyledCompounds type="number" name='compounds' onChange={inputHandler} />
+            <StyledErrorMessage>{errorState.compounds ? errorMsg.compounds : null}</StyledErrorMessage>
             <StyledCompoundsNamesLabel>Compound names: </StyledCompoundsNamesLabel>
             <StyledCompoundsNames type="text" name='compound_names' onChange={handleArrayChange} />
             <StyledCompoundsConcLabel>Compound concentrations: </StyledCompoundsConcLabel>
