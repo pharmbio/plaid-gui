@@ -1,13 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import Well from "./Well.jsx";
-import ColorLegend from "./ColorLegend.jsx";
+import PlateSidebar from "./PlateSidebar.jsx";
 import Switch from "./Switch.jsx";
 
 /* covers the positioning of the styledPlate and ColorLegend components in row fashion */
 const StyledLayoutContainer = styled.div`
   margin: auto;
-  margin-top: 5rem;
+  margin-top: 2.5rem;
+  margin-bottom:2.5rem;
   display: flex;
   flex-direction: row;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -106,6 +107,7 @@ const EMPTY_WELL_COLOR = "#e9e9e9";
  * @param props.rows the amount of rows specified in the form
  * @param props.cols the amount of cols specified in the form
  * @param props.data all cmpdObjs for the corresponding plate
+ * @param props.plates all plates and their corresponding cmpdObjs
  * @param props.emptyEdges the amount of empty edges in the plate specified in the form
  * @param props.compoundMap the map maping a compound name to all cmpdObjs with the same name (sorted high to low conc)
  * @param props.compoundToColorMap maping cmpdObject.cmpdnum to the corresponding hsla color
@@ -211,13 +213,15 @@ const Plate = (props) => {
           })}
         </StyledPlate>
       </StyledPlateWrapper>
-      <ColorLegend
+      <PlateSidebar
         compoundMap={props.compoundMap}
         compoundToColorMap={props.compoundToColorMap}
         handleSelectedCompound={handleSelectedCompound}
+        plate={props.data}
+        plates={props.plates}
       >
         <Switch handleDisplay={handleDisplay} />
-      </ColorLegend>
+      </PlateSidebar>
     </StyledLayoutContainer>
   );
 };

@@ -7,6 +7,14 @@ import {
   concentrationsLabels,
 } from "./../../functions/compareConcum.js";
 
+/* Styling of the main container of this component */
+const StyledPlateContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: scroll;
+`;
+
 /* 
   Assign hsla colors to compound depending on concentration (conc)
   Each compound has the same base color -> different conc level means different shade
@@ -36,14 +44,6 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
     }
   }
 };
-
-/* Styling of the main container of this component */
-const StyledPlateContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow-y: scroll;
-`;
 
 /**
  * Renders the container that holds the (or all) resulting plates.
@@ -129,6 +129,7 @@ const PlateLayout = (props) => {
             rows={props.rows}
             cols={props.cols}
             data={data}
+            plates={plates}
             emptyEdges={props.sizeEmptyEdge}
             compoundMap={listOfCompoundMaps[index]}
             compoundToColorMap={listOfCompoundToColorMaps[index]}

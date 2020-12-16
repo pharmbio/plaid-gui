@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import DownloadOutputButton from "./DownloadOuputButton.jsx";
 
 /* makes sure that each color legend item is positioned in a column fashion */
 const StyledLegendContainer = styled.div`
@@ -7,7 +8,7 @@ const StyledLegendContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 5px;
-  margin-right: 40px;
+  margin-right: 20px;
 `;
 
 /* covers the positioning of The concentration labels and the colorbox in a column order */
@@ -41,7 +42,7 @@ const StyledColorBox = styled.div`
   display: flex;
   flex-direction: row;
   border: solid 1px;
-  border-left: none;
+  /* border-left: none; */
   width: 140px;
   height: 30px;
   margin: 2.5px;
@@ -49,7 +50,7 @@ const StyledColorBox = styled.div`
 
 /* covers the style of each color item inside the colorbox */
 const StyledColorItem = styled.div`
-  flex-grow: 2;
+  flex-grow: 1;
   /*   border-left: solid 1px; */
   background-color: ${(props) => props.color};
 `;
@@ -64,14 +65,15 @@ const StyledLabel = styled.div`
 `;
 /**
  * Renders the color legend (displaying the different color intensities of a compound), the concentration labels (highest and min)
-   and the switch from switching between what information should be displayed in each well
+   and the switch from switching between what information should be displayed in each well aswell as a download csv file button
  *
  * @param props.compoundMap the map maping a compound name to all cmpdObjects with the same name (sorted high to low conc)
  * @param props.compoundToColorMap maping cmpdObject.cmpdnum to the corresponding hsla color
  * @param props.handleSelectedCompound callback function for handling the clicking of an item in the legend
+ * @param props.plate the plate and its corresponding cmpdObjs
  * @param props.children ... includes the Switch component
  */
-const ColorLegend = (props) => {
+const PlateSidebar = (props) => {
   /**
    * will propagate the targeted id of the element clicked to parent component
    */
@@ -85,6 +87,8 @@ const ColorLegend = (props) => {
 
   return (
     <StyledLegendContainer>
+      {props.children}
+
       {compoundMapEntries.map(([key, val], index) => {
         return (
           <StyledConcAndColorBox key={index + key + val[0].plateID}>
@@ -112,9 +116,9 @@ const ColorLegend = (props) => {
           </StyledConcAndColorBox>
         );
       })}
-      {props.children}
+      <DownloadOutputButton plate={props.plate}/>
     </StyledLegendContainer>
   );
 };
 
-export default ColorLegend;
+export default PlateSidebar;

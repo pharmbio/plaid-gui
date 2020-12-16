@@ -6,7 +6,8 @@ const StyledSwitchWrapper = styled.div`
   display: flex;
   flex-direction: row;
   font-family: "Lato", sans-serif;
-  margin-top: 40px;
+  margin-top:5px;
+  margin-bottom: 20px;
   font-size: 12px;
 `;
 
