@@ -105,8 +105,9 @@ const EMPTY_WELL_COLOR = "#e9e9e9";
  * @param props.colList a list containing an integer for every column
  * @param props.rows the amount of rows specified in the form
  * @param props.cols the amount of cols specified in the form
+ * @param props.data all cmpdObjs for the corresponding plate
  * @param props.emptyEdges the amount of empty edges in the plate specified in the form
- * @param props.compoundMap the map maping a compound name to all cmpdObjects with the same name (sorted high to low conc)
+ * @param props.compoundMap the map maping a compound name to all cmpdObjs with the same name (sorted high to low conc)
  * @param props.compoundToColorMap maping cmpdObject.cmpdnum to the corresponding hsla color
  */
 const Plate = (props) => {

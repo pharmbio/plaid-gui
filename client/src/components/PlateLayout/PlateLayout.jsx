@@ -128,6 +128,7 @@ const PlateLayout = (props) => {
             colList={colList}
             rows={props.rows}
             cols={props.cols}
+            data={data}
             emptyEdges={props.sizeEmptyEdge}
             compoundMap={listOfCompoundMaps[index]}
             compoundToColorMap={listOfCompoundToColorMaps[index]}
