@@ -9,7 +9,7 @@ const StyledToolWrapper = styled.div`
 `;
 
 /**
- * Renders the container that switches between the form, loader and eventually 
+ * Renders the container that switches between the form, loader and eventually
  * the visualization of the resulting output from the minizinc model
  */
 const Tool = () => {
