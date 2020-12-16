@@ -2,91 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import Plate from "./Plate.jsx";
 import generateHslHues from "./../../functions/generateHslHues.js";
-
-const concentrationsLabels = ["L", "M", "H"];
-
-/* 
-  Compares a and b and returns value depending on the CONCuM property of a and b
-  @param: a an object representing one row of the output from minizinc 
-  @param: b an object representing one row of the output from minizinc 
-  @example: let a = {cmpdname:cm1, CONCuM:100,...} and b = {cmpdname:cm2, CONCuM:1,...}
-            then compare(a,b) will return -1
-*/
-const compare = (a, b) => {
-  if (
-    concentrationsLabels.includes(a.CONCuM) &&
-    concentrationsLabels.includes(b.CONCuM)
-  ) {
-    let a_conc = a.CONCuM;
-    let b_conc = b.CONCuM;
-    a = concentrationsLabels.findIndex((elem) => a_conc === elem);
-    b = concentrationsLabels.findIndex((elem) => b_conc === elem);
-    if (a < b) {
-      return 1;
-    }
-    if (a > b) {
-      return -1;
-    }
-    return 0;
-  } else {
-    if (isNaN(a.CONCuM) && !isNaN(b.CONCuM)) {
-      return 1;
-    }
-    if (!isNaN(a.CONCuM) && isNaN(b.CONCuM)) {
-      return -1;
-    }
-    if (!isNaN(a.CONCuM) && !isNaN(b.CONCuM)) {
-      if (parseFloat(a.CONCuM) < parseFloat(b.CONCuM)) {
-        return 1;
-      }
-      if (parseFloat(a.CONCuM) > parseFloat(b.CONCuM)) {
-        return -1;
-      }
-      return 0;
-    }
-    if (a.CONCuM < b.CONCuM) {
-      return 1;
-    }
-    if (a.CONCuM > b.CONCuM) {
-      return -1;
-    }
-    return 0;
-  }
-};
-
-const ALPHABET = [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "J",
-  "K",
-  "L",
-  "M",
-  "N",
-  "O",
-  "P",
-  "Q",
-  "R",
-  "S",
-  "T",
-  "U",
-  "V",
-  "W",
-  "X",
-  "Y",
-  "Z",
-];
-
-const EMPTY_WELL_COLOR = "#e9e9e9";
+import {
+  compareConcum,
+  concentrationsLabels,
+} from "./../../functions/compareConcum.js";
 
 /* 
-  Assign hsla colors to compound well depending on concentration
+  Assign hsla colors to compound depending on concentration (conc)
+  Each compound has the same base color -> different conc level means different shade
 */
 const assignColorToCompound = (concs, hue, compoundToColorMap) => {
   let i = 0;
@@ -114,6 +37,7 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
   }
 };
 
+/* Styling of the main container of this component */
 const StyledPlateContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -121,6 +45,14 @@ const StyledPlateContainer = styled.div`
   overflow-y: scroll;
 `;
 
+/**
+ * Renders the container that holds the (or all) resulting plates.
+ *
+ * @param props.data contains the output from the minizinc model
+ * @param props.rows the amount of rows specified in the form
+ * @param props.cols the amount of cols specified in the form
+ * @param props.sizeEmptyEdge the amount of empty edges in the plate specified in the form
+ */
 const PlateLayout = (props) => {
   /* rowList, colList used to map over in the return as to render each component */
   /* There is no way to use a loop in JSX hence this "hack" */
@@ -132,20 +64,23 @@ const PlateLayout = (props) => {
   for (let i = 0; i < props.cols; i++) {
     colList.push(i);
   }
-  const emptyWells =
+
+  /* emptyWells  */
+  const amountEmptyWells =
     props.cols * props.sizeEmptyEdge * 2 +
     props.rows * props.sizeEmptyEdge * 2 -
     4 * props.sizeEmptyEdge;
 
-  let plates = [];
-
   /* separate all data by corresponding plate */
+  let plates = [];
   for (
     let i = 0;
     i < props.data.length;
-    i += props.rows * props.cols - emptyWells
+    i += props.rows * props.cols - amountEmptyWells
   ) {
-    plates.push(props.data.slice(i, i + props.rows * props.cols - emptyWells));
+    plates.push(
+      props.data.slice(i, i + props.rows * props.cols - amountEmptyWells)
+    );
   }
 
   let listOfCompoundMaps = [];
@@ -164,7 +99,7 @@ const PlateLayout = (props) => {
 
     /* sort each compound from high to low concentration */
     for (let [cmp, vals] of compoundMap) {
-      vals.sort(compare);
+      vals.sort(compareConcum);
       compoundMap.set(cmp, vals);
     }
     listOfCompoundMaps.push(compoundMap);
@@ -182,6 +117,7 @@ const PlateLayout = (props) => {
     }
     listOfCompoundToColorMaps.push(compoundToColorMap);
   }
+
   return (
     <StyledPlateContainer>
       {plates.map((data, index) => {
@@ -193,9 +129,6 @@ const PlateLayout = (props) => {
             rows={props.rows}
             cols={props.cols}
             emptyEdges={props.sizeEmptyEdge}
-            data={data}
-            alphabet={ALPHABET}
-            emptyWellColor={EMPTY_WELL_COLOR}
             compoundMap={listOfCompoundMaps[index]}
             compoundToColorMap={listOfCompoundToColorMaps[index]}
           />

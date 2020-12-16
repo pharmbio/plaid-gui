@@ -4,6 +4,31 @@ import Well from "./Well.jsx";
 import ColorLegend from "./ColorLegend.jsx";
 import Switch from "./Switch.jsx";
 
+/* covers the positioning of the styledPlate and ColorLegend components in row fashion */
+const StyledLayoutContainer = styled.div`
+  margin: auto;
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: row;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+`;
+
+/* covers the styling and positioning of the plate and the row & column labels*/
+const StyledPlateWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(
+    ${(props) => props.cols + 2},
+    ${(props) => props.wellRad}px
+  );
+  grid-template-rows: repeat(
+    ${(props) => props.rows + 2},
+    ${(props) => props.wellRad}px
+  );
+  column-gap: ${(props) => props.gap}px;
+  row-gap: ${(props) => props.gap}px;
+`;
+
+/* covers the styling and positioning of the wells in the plate*/
 const StyledPlate = styled.div`
   grid-area: 2/2 / ${(props) => props.rows} / ${(props) => props.cols};
   display: grid;
@@ -22,34 +47,15 @@ const StyledPlate = styled.div`
   border: solid 1px;
 `;
 
-const StyledResultLayoutContainer = styled.div`
-  margin: auto;
-  margin-top: 5rem;
-  display: flex;
-  flex-direction: row;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-`;
-
-const StyledPlateWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(
-    ${(props) => props.cols + 2},
-    ${(props) => props.wellRad}px
-  );
-  grid-template-rows: repeat(
-    ${(props) => props.rows + 2},
-    ${(props) => props.wellRad}px
-  );
-  column-gap: ${(props) => props.gap}px;
-  row-gap: ${(props) => props.gap}px;
-`;
-
+/* The style and positioning of the column identifier */
 const StyledColumnIdentifier = styled.div`
   justify-self: center;
   align-self: center;
   grid-row: ${(props) => props.row};
   grid-column: ${(props) => props.col};
 `;
+
+/* The style and positioning of the row identifier */
 const StyledRowIdentifier = styled.div`
   justify-self: center;
   align-self: center;
@@ -57,13 +63,52 @@ const StyledRowIdentifier = styled.div`
   grid-column: ${(props) => props.col};
 `;
 
-/* 
-    CONCuM
-    cmpdname
-    cmpdnum
-    plateID
-    well
-*/
+/* used for the row identifier label */
+const ALPHABET = [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L",
+  "M",
+  "N",
+  "O",
+  "P",
+  "Q",
+  "R",
+  "S",
+  "T",
+  "U",
+  "V",
+  "W",
+  "X",
+  "Y",
+  "Z",
+];
+
+const EMPTY_WELL_COLOR = "#e9e9e9";
+
+
+
+
+/**  
+ * Renders the plate (the row/col identifiers) and each corresponding well
+ * 
+ * @param props.rowList a list containing an integer for every row
+ * @param props.colList a list containing an integer for every column
+ * @param props.rows the amount of rows specified in the form
+ * @param props.cols the amount of cols specified in the form
+ * @param props.emptyEdges the amount of empty edges in the plate specified in the form
+ * @param props.compoundMap the map maping a compound name to all cmpdObjects with the same name (sorted high to low conc)
+ * @param props.compoundToColorMap maping cmpdObject.cmpdnum to the corresponding hsla color
+ */
 const Plate = (props) => {
   const WELL_RAD = 40;
 
@@ -89,14 +134,12 @@ const Plate = (props) => {
 
   for (let i = 1; i <= props.rows; i++) {
     for (let j = 1; j <= props.cols; j++) {
-      emptyWells.push([i,j]);
-      
+      emptyWells.push([i, j]);
     }
   }
 
-
   return (
-    <StyledResultLayoutContainer>
+    <StyledLayoutContainer>
       <StyledPlateWrapper
         rows={props.rows}
         cols={props.cols}
@@ -108,11 +151,11 @@ const Plate = (props) => {
             StyledRowIdentifier,
             /* will there ever be the case where data[0] is undefined? */
             {
-              key: props.alphabet[i] + props.data[0].plateID,
+              key: ALPHABET[i] + props.data[0].plateID,
               row: i + 2,
               col: 1,
             },
-            props.alphabet[i]
+            ALPHABET[i]
           );
         })}
         {props.colList.map((i) => {
@@ -136,14 +179,21 @@ const Plate = (props) => {
                 empty={true}
                 row={pos[0]}
                 col={pos[1]}
-                key={props.alphabet[pos[0]-1] + pos[1]}
-                color={props.emptyWellColor} //grey
+                key={ALPHABET[pos[0] - 1] + pos[1]}
+                color={EMPTY_WELL_COLOR} //grey
               />
             );
           })}
-          {props.data.map((o) => {
-            let row = props.alphabet.indexOf(o.well[0]) + 1;
-            let col = parseInt(o.well.slice(1, o.well.length));
+          {props.data.map((cmpdObj) => {
+            /* attrs of cmpdObj:
+                CONCuM
+                cmpdname
+                cmpdnum
+                plateID
+                well
+            */
+            let row = ALPHABET.indexOf(cmpdObj.well[0]) + 1;
+            let col = parseInt(cmpdObj.well.slice(1, cmpdObj.well.length));
             return (
               <Well
                 empty={false}
@@ -152,25 +202,22 @@ const Plate = (props) => {
                 display={display}
                 row={row}
                 col={col}
-                key={o.plateID + o.well}
-                data={o}
-                color={props.compoundToColorMap.get(o.cmpdnum)}
+                key={cmpdObj.plateID + cmpdObj.well}
+                cmpdObj={cmpdObj}
+                color={props.compoundToColorMap.get(cmpdObj.cmpdnum)}
               />
             );
           })}
         </StyledPlate>
       </StyledPlateWrapper>
       <ColorLegend
-        emptyEdges={props.emptyEdges}
-        emptyWellColor={props.emptyWellColor}
-        data={props.data}
         compoundMap={props.compoundMap}
         compoundToColorMap={props.compoundToColorMap}
         handleSelectedCompound={handleSelectedCompound}
       >
         <Switch handleDisplay={handleDisplay} />
       </ColorLegend>
-    </StyledResultLayoutContainer>
+    </StyledLayoutContainer>
   );
 };
 

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+/* covers the positioning and styling of the switches */
 const StyledSwitchWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -9,6 +10,7 @@ const StyledSwitchWrapper = styled.div`
   font-size: 12px;
 `;
 
+/* covers the styling of each switch option */
 const StyledSwitch = styled.div`
   cursor: pointer;
   margin-right: 10px;
@@ -20,12 +22,22 @@ const StyledSwitch = styled.div`
     color: black;`}
 `;
 
+/* covers the positioning of the label of what the switches are for */
 const StyledLabel = styled.span`
   margin-right: 10px;
-  `;
+`;
 
+
+/**
+ * Renders the switches used to change what is labeled
+ * @param props.handleDisplay callback function for handling the clicking of a switch
+ */
 const Switch = (props) => {
   const [active, setActive] = React.useState("none");
+
+  /**
+   * will propagate the targeted id of the element clicked to parent component
+   */
   const handleClick = (e) => {
     e.preventDefault();
     let activated = e.currentTarget.id === active ? "none" : e.currentTarget.id;

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+/* covers the styling and positioning of the well */
 const StyledWell = styled.div.attrs((props) =>
   props.empty
     ? {
@@ -22,6 +23,7 @@ const StyledWell = styled.div.attrs((props) =>
   border-radius: 50%;
 `;
 
+/* covers the styling and positioning of the label (concum/cmpdname) of a well */
 const StyledLabel = styled.div`
   display: flex;
   justify-content: center;
@@ -35,27 +37,39 @@ const StyledLabel = styled.div`
   width: ${(props) => props.wellRad}px;
   height: ${(props) => props.wellRad}px;
 `;
+
+
+/**
+ * Will render the component of one well from plate.
+ * 
+ * @param props.empty true if well is empty otherwise false
+ * @param props.selected name of selected compound, <empty_string> if none is selected
+ * @param props.wellRad radius of well
+ * @param props.display "none" if no label should be displayed, otherwise "compound" / "concentration"
+ * @param props.row the row positioning of well
+ * @param props.col the col positioning of well
+ * @param cmpdObj the compound object 
+ *        attrs of cmpdObj:
+                CONCuM
+                cmpdname
+                cmpdnum
+                plateID
+                well
+ * @param color the hsla color (hex if props.empty == true)
+ */
 const Well = (props) => {
   var color = props.color;
   if (!props.empty) {
     var lighten = false;
     if (
       props.selected !== "" &&
-      props.selected !== props.data.plateID + props.data.cmpdname
+      props.selected !== props.cmpdObj.plateID + props.cmpdObj.cmpdname
     ) {
       lighten = true;
     }
   }
 
-  return props.empty ? (
-    <StyledWell
-      empty={props.empty}
-      row={props.row}
-      col={props.col}
-      color={color}
-      lighten={lighten}
-    />
-  ) : (
+  return (
     <StyledWell
       empty={props.empty}
       row={props.row}
@@ -63,7 +77,15 @@ const Well = (props) => {
       color={color}
       lighten={lighten}
     >
-      {props.display !== "none" ? <StyledLabel wellRad={props.wellRad}>{props.display === "compound" ? props.data.cmpdname : props.data.CONCuM}</StyledLabel>: ""}
+      {!props.empty && props.display !== "none" ? (
+        <StyledLabel wellRad={props.wellRad}>
+          {props.display === "compound"
+            ? props.cmpdObj.cmpdname
+            : props.cmpdObj.CONCuM}
+        </StyledLabel>
+      ) : (
+        ""
+      )}
     </StyledWell>
   );
 };
