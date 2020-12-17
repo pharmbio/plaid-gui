@@ -56,6 +56,7 @@ const StyledErrorMessage = styled.div`
 const CompoundForm = ({ handleInputChange, handleArrayChange }) => {
 
     const [validFormState, setValidFormState] = useState(false);
+    const [enableCompName, setEnableCompName] = useState(false);
     const [errorMsg, setErrorMsg] = useState({})
     /* This state manages if a specific state is invalid or not */
     const [errorState, setErrorState] = useState({
@@ -89,10 +90,18 @@ const CompoundForm = ({ handleInputChange, handleArrayChange }) => {
             setErrorState({ ...errorState, [names]: true });
             errors['compounds'] = 'Compounds must be atleast 1';
         }
-        if (formFields['compound_names'] <= 0) {
-            formIsValid = false;
-            setErrorState({ ...errorState, [names]: true });
-            errors['compounds'] = 'Compounds must be atleast 1';
+        if ('compound_names' in formFields) {
+            console.log(value)
+            const trim = value.replace(/(^,)|(,$)/g, "")
+            console.log(trim)
+            let delim = trim.split(",");
+            console.log(delim)
+            if (delim.length != valueState['compounds']) {
+                formIsValid = false;
+                setErrorState({ ...errorState, [names]: true });
+                errors['compound_names'] = 'Number of names must match number of compounds';
+            }
+
         }
         /* loop through errorStates -> if they're all false all forms are filled! */
         setValidFormState(formIsValid);
@@ -106,10 +115,16 @@ const CompoundForm = ({ handleInputChange, handleArrayChange }) => {
             console.log(!handleValidation)
         }
         else {
-            setValueState({...valueState, [event.target.name]: event.target.value});
-            handleInputChange(event)
+            setValueState({ ...valueState, [event.target.name]: event.target.value });
+
+            if (event.target.name === 'compound_names') {
+                handleArrayChange(event)
+            } else {
+                handleInputChange(event)
+
+            }
         }
-    }   
+    }
 
 
 
@@ -119,7 +134,9 @@ const CompoundForm = ({ handleInputChange, handleArrayChange }) => {
             <StyledCompounds type="number" name='compounds' onChange={inputHandler} />
             <StyledErrorMessage>{errorState.compounds ? errorMsg.compounds : null}</StyledErrorMessage>
             <StyledCompoundsNamesLabel>Compound names: </StyledCompoundsNamesLabel>
-            <StyledCompoundsNames type="text" name='compound_names' onChange={handleArrayChange} />
+            <StyledCompoundsNames type="text" name='compound_names' onChange={inputHandler} disabled={errorState.compounds ? true : false} />
+            <StyledErrorMessage>{errorState.compound_names ? errorMsg.compound_names : null}</StyledErrorMessage>
+
             <StyledCompoundsConcLabel>Compound concentrations: </StyledCompoundsConcLabel>
             <StyledCompoundsConc
                 type="number" name='compound_concentrations' onChange={handleInputChange}

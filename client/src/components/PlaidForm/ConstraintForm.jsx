@@ -56,9 +56,6 @@ const ConstraintForm = ({ handleInputChange }) => {
       setErrorState({ ...errorState, [names]: true });
       errors['size_empty_edge'] = 'Invalid size of empty edges';
     }
-
-
-
     setValidFormState(formIsValid);
     setErrorMsg({ ...errorMsg, errors: errors })
 

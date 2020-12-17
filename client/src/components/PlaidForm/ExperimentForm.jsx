@@ -88,30 +88,39 @@ const ExperimentForm = ({ handleInputChange}) => {
     const names = event.target.name;
     const formFields = { [names]: value };
     const errors = errorMsg;
-    let formIsValid = false;
-    
+    /* This stops the onChange from updating the object */
+    let formIsValid = true;
+    console.log(formFields)
     /* Reset error state to run validation again */
     setErrorState({ ...errorState, [names]: false });
     
     if (formFields['num_rows'] <= 0) {
       setErrorState({ ...errorState, [names]: true });
+      formIsValid = false;
       errors['num_rows'] = 'Rows must a number and not zero';
     }
     if (formFields['num_cols'] <= 0) {
       setErrorState({ ...errorState, [names]: true });
+      formIsValid = false;
+
       errors['num_cols'] = 'Columns must be a number and not zero';
     }
     if (formFields['vertical_cell_lines'] <= 0) {
       setErrorState({ ...errorState, [names]: true });
+      formIsValid = false;
+
       errors['vertical_cell_lines'] = 'Cell line must be a number and not empty';
     }
     if (formFields['horizontal_cell_lines'] <= 0) {
       setErrorState({ ...errorState, [names]: true });
+      formIsValid = false;
+
       errors['horizontal_cell_lines'] = 'Cell line must be a number and not empty';
     }
-      /* Used to check if all inputs are valid - currently not in use */
+      /* Used to check if all inputs are valid - currently not in use as it has to be placed elsewhere.
+         It will be used to disabled next buttons in the future*/
 
-    console.log(errorState)
+  /*   console.log(errorState)
     for (var key in errorState){
       if(errorState[key] == true){
         formIsValid = false;
@@ -120,7 +129,7 @@ const ExperimentForm = ({ handleInputChange}) => {
       else{
         formIsValid = true;
       }
-    }
+    } */
 
     setValidFormState(formIsValid);
     setErrorMsg({ ...errorMsg, errors: errors })

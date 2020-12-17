@@ -10,8 +10,14 @@ import Loader from "./../Loader";
 import { Formik, Form } from 'formik'
 import styled from "styled-components";
 import * as Yup from "yup";
+/* TODO: Refactor to handle onChange with Formik!!
+        Find a way to reset onChange value to default when resetting (e.g erasing all input)!
+        Find a way to reset stored value to default when an error is triggered for that specific field
+        Find a way to disable next button if there is an error. (Must lift out validation from children to top level component)
+        Dependencies are now stored using an errorState array where each obj key is either true or false if it is in error state or not. Better way?
 
-/* TODO: Refactor to handle onChange with Formik!! */
+*/
+
 const StyledForm = styled(Form)`
   display: flex ;
   justify-content: center;  
@@ -122,7 +128,8 @@ const PlaidForm = (props) => {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    let delim = value.split(",");
+    const trim = value.replace(/(^,)|(,$)/g, "");
+    const delim = trim.split(",");
     if (name in deviations) {
       switch (deviations[name]) {
         case "integer":
