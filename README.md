@@ -1,5 +1,10 @@
 Plaid layout GUI web application.
 
+
+OBS! Path in app.py is changed >> docker will not properly run. Run the servers locally using yarn and python :).. 
+
+Until this is fixed, the bottom commands are not functional.
+
 --Development--
 To start up the development servers run:
 
