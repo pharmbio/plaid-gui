@@ -145,6 +145,10 @@ const CompoundForm = ({ handleInputChange, handleArrayChange }) => {
             <StyledCompoundsConcName
                 type="text" name='compound_concentration_names' onChange={handleArrayChange}
             />
+            <StyledCompoundsConcNameLabel>Compound concentration indicators:</StyledCompoundsConcNameLabel>
+            <StyledCompoundsConc
+                type="number" name='compound_concentrations_indicators' onChange={handleArrayChange}
+            />
             <StyledCompoundsReplLabel>Replicates  </StyledCompoundsReplLabel>
             <StyledCompoundsRepl
                 type="number" name='replicates' onChange={handleInputChange}
