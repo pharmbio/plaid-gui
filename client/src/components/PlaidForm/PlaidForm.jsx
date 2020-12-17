@@ -84,6 +84,7 @@ async function postForm(formData, setLoading, setData) {
       .post("http://localhost:5000/", formData, axiosConfig)
       .then((response) => {
         console.log(response.data);
+        setLoading(false); //data received, remove loader
         setData({
           rows: formData.num_rows,
           cols: formData.num_cols,
@@ -91,7 +92,6 @@ async function postForm(formData, setLoading, setData) {
           result: response.data,
         });
       });
-    setLoading(false); //setLoading(true); //data received, remove loader
   } catch (e) {
     console.log(e);
   }
@@ -149,6 +149,7 @@ const PlaidForm = (props) => {
     setFormState({ ...formState, [name]: delim });
     console.log(formState);
   };
+
   const handleInputChange = (event) => {
     const target = event.target;
     const type = target.type;

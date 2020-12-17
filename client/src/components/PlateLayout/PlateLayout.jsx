@@ -1,106 +1,63 @@
 import React from "react";
 import styled from "styled-components";
 import Plate from "./Plate.jsx";
-import randomColor from "./../../functions/randomColor.js";
-import adjustColor from "./../../functions/adjustColor.js";
-import ColorLegend from "./ColorLegend.jsx";
+import generateHslHues from "./../../functions/generateHslHues.js";
+import {
+  compareConcum,
+  concentrationsLabels,
+} from "./../../functions/compareConcum.js";
 
-const ALPHABET = [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "J",
-  "K",
-  "L",
-  "M",
-  "N",
-  "O",
-  "P",
-  "Q",
-  "R",
-  "S",
-  "T",
-  "U",
-  "V",
-  "W",
-  "X",
-  "Y",
-  "Z",
-];
-
-// lower level is darker.
-const DARKEN_LVL = 150;
-const EMPTY_WELL_COLOR = "d3d3d3";
-
-const assignColorToCompound = (o, pairs, alreadyChosen) => {
-  if (pairs.has(o.cmpdname)) {
-    return;
-  } else {
-    let color = randomColor(DARKEN_LVL);
-    /* if color is already picked.. */
-    while (alreadyChosen.includes(color)) {
-      color = randomColor();
-    }
-    color = adjustColor(color, 80); // make color lighter
-    alreadyChosen.push();
-    pairs.set(o.cmpdname, color);
-  }
-};
-
-const StyledContainer = styled.div`
+/* Styling of the main container of this component */
+const StyledPlateContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow-y: scroll;
 `;
 
-const StyledResultLayoutContainer = styled.div`
-  margin: auto;
-  margin-top: 5rem;
-  display: flex;
-  flex-direction: row;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-`;
+/* 
+  Assign hsla colors to compound depending on concentration (conc)
+  Each compound has the same base color -> different conc level means different shade
+*/
+const assignColorToCompound = (concs, hue, compoundToColorMap) => {
+  let i = 0;
+  for (let o of concs) {
+    /* concs are sorted high to low */
+    if (compoundToColorMap.has(o.cmpdnum)) {
+      /* We have already assigned color to that particular compound and its concentration */
+      continue;
+    } else {
+      compoundToColorMap.set(
+        o.cmpdnum,
+        i === 0
+          ? /*  tweak colors here if needed */
+            `hsla(${hue},${95}%,${41}%,0.74)`
+          : `hsla(${hue},${100}%,${
+              57 +
+              i *
+                (concentrationsLabels.includes(o.CONCuM) && o.CONCuM === "L"
+                  ? 10
+                  : 4)
+            }%,0.90)`
+      );
+      i++;
+    }
+  }
+};
 
-const StyledPlateWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(
-    ${(props) => props.cols + 2},
-    ${(props) => props.wellRad}px
-  );
-  grid-template-rows: repeat(
-    ${(props) => props.rows + 2},
-    ${(props) => props.wellRad}px
-  );
-  column-gap: ${(props) => props.gap}px;
-  row-gap: ${(props) => props.gap}px;
-`;
-
-const StyledColumnIdentifier = styled.div`
-  justify-self: center;
-  align-self: center;
-  grid-row: ${(props) => props.row};
-  grid-column: ${(props) => props.col};
-`;
-const StyledRowIdentifier = styled.div`
-  justify-self: center;
-  align-self: center;
-  grid-row: ${(props) => props.row}; /* row position */
-  grid-column: ${(props) => props.col};
-`;
-
-/* Props should hold all values as data, rows, cols etc..*/
+/**
+ * Renders the container that holds the (or all) resulting plates.
+ *
+ * @param props.data contains the output from the minizinc model
+ * @param props.rows the amount of rows specified in the form
+ * @param props.cols the amount of cols specified in the form
+ * @param props.sizeEmptyEdge the amount of empty edges in the plate specified in the form
+ */
 const PlateLayout = (props) => {
   /* rowList, colList used to map over in the return as to render each component */
+  /* There is no way to use a loop in JSX hence this "hack" */
   let rowList = [];
   let colList = [];
-
   for (let i = 0; i < props.rows; i++) {
     rowList.push(i);
   }
@@ -108,78 +65,79 @@ const PlateLayout = (props) => {
     colList.push(i);
   }
 
-  const emptyWells =
+  /* emptyWells  */
+  const amountEmptyWells =
     props.cols * props.sizeEmptyEdge * 2 +
-    props.rows * props.sizeEmptyEdge * 2 -
-    4 * props.sizeEmptyEdge;
+    (props.rows - props.sizeEmptyEdge*2) * props.sizeEmptyEdge * 2
 
+  console.log(amountEmptyWells)
+  /* separate all data by corresponding plate */
   let plates = [];
-
   for (
     let i = 0;
     i < props.data.length;
-    i += props.rows * props.cols - emptyWells
+    i += props.rows * props.cols - amountEmptyWells
   ) {
-    plates.push(props.data.slice(i, i + props.rows * props.cols - emptyWells));
+    plates.push(
+      props.data.slice(i, i + props.rows * props.cols - amountEmptyWells)
+    );
+  }
+  console.log(plates)
+
+  let listOfCompoundMaps = [];
+
+  for (let plate of plates) {
+    let compoundMap = new Map();
+    /* map each compound name to all its corresponding concentrations */
+    for (let o of plate) {
+      let val = compoundMap.get(o.cmpdname);
+      if (val !== undefined) {
+        compoundMap.set(o.cmpdname, [...val, o]);
+      } else {
+        compoundMap.set(o.cmpdname, [o]);
+      }
+    }
+
+    /* sort each compound from high to low concentration */
+    for (let [cmp, vals] of compoundMap) {
+      vals.sort(compareConcum);
+      compoundMap.set(cmp, vals);
+    }
+    listOfCompoundMaps.push(compoundMap);
   }
 
-  let compoundToColorMap = new Map();
-  let chosenColors = [EMPTY_WELL_COLOR];
-  for (let plate of plates) {
-    plate.map((o) => {
-      assignColorToCompound(o, compoundToColorMap, chosenColors);
-    });
+  let listOfCompoundToColorMaps = [];
+  /* Assign color for each compound */
+  for (let compoundMap of listOfCompoundMaps) {
+    let compoundToColorMap = new Map();
+    let colors = generateHslHues(compoundMap.size);
+    let i = 0;
+    for (let entry of compoundMap) {
+      assignColorToCompound(entry[1], colors[i], compoundToColorMap);
+      i++;
+    }
+    listOfCompoundToColorMaps.push(compoundToColorMap);
   }
 
   return (
-    <StyledContainer>
-      {plates.map((data) => {
+    <StyledPlateContainer>
+      {plates.map((data, index) => {
         return (
-          <StyledResultLayoutContainer>
-            <StyledPlateWrapper
-              rows={props.rows}
-              cols={props.cols}
-              wellRad={45}
-              gap={2.5}
-            >
-              {rowList.map((i) => {
-                return React.createElement(
-                  StyledRowIdentifier,
-                  { key: ALPHABET[i], row: i + 2, col: 1 },
-                  ALPHABET[i]
-                );
-              })}
-              {colList.map((i) => {
-                return React.createElement(
-                  StyledColumnIdentifier,
-                  { key: i + 1, row: 1, col: i + 2 },
-                  i + 1
-                );
-              })}
-              <Plate
-                rows={props.rows}
-                cols={props.cols}
-                emptyEdges={props.sizeEmptyEdge}
-                data={data}
-                alphabet={ALPHABET}
-                emptyWellColor={EMPTY_WELL_COLOR}
-                compoundToColorMap={compoundToColorMap}
-              />
-            </StyledPlateWrapper>
-            <ColorLegend
-              wellRad={45}
-              gap={2.5}
-              rows={props.rows}
-              cols={props.cols}
-              emptyEdges={props.sizeEmptyEdge}
-              emptyWellColor={EMPTY_WELL_COLOR}
-              data={data}
-              compoundToColorMap={compoundToColorMap}
-            />
-          </StyledResultLayoutContainer>
+          <Plate
+            key={data[0].plateID}
+            rowList={rowList}
+            colList={colList}
+            rows={props.rows}
+            cols={props.cols}
+            data={data}
+            plates={plates}
+            emptyEdges={props.sizeEmptyEdge}
+            compoundMap={listOfCompoundMaps[index]}
+            compoundToColorMap={listOfCompoundToColorMaps[index]}
+          />
         );
       })}
-    </StyledContainer>
+    </StyledPlateContainer>
   );
 };
 

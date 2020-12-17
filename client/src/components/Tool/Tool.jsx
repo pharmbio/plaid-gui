@@ -7,9 +7,13 @@ const StyledToolWrapper = styled.div`
   position: relative;
   height: 100vh;
 `;
+
+/**
+ * Renders the container that switches between the form, loader and eventually
+ * the visualization of the resulting output from the minizinc model
+ */
 const Tool = () => {
   const [data, setData] = useState(undefined);
-
   return (
     <StyledToolWrapper>
       {data !== undefined ? (
