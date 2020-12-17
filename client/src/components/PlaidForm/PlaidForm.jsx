@@ -8,9 +8,14 @@ import HorizontalStepper from "./HorizontalStepper";
 import Step from "./Step"
 import Loader from "./../Loader";
 import { Formik, Form } from 'formik'
+import { Persist } from 'formik-persist'
 import styled from "styled-components";
 import * as Yup from "yup";
 /* TODO: Refactor to handle onChange with Formik!!
+        the object storing the entered data should not be processed instantly, just validated so that the input is correct. This is needed 
+        to persist the entered data.
+        Change input fields requiring large input into textields.
+        Find a way to store the inital dropdown value in the json object. Must it be hardcoded??
         Find a way to reset onChange value to default when resetting (e.g erasing all input)!
         Find a way to reset stored value to default when an error is triggered for that specific field
         Find a way to disable next button if there is an error. (Must lift out validation from children to top level component)
@@ -188,7 +193,7 @@ const PlaidForm = (props) => {
             postForm={postForm}
           >
             <Step label='Experiment Setup'>
-              <ExperimentForm handleInputChange={handleInputChange} errorState={errorState} state={formState}/>
+              <ExperimentForm num_rows={formState.num_rows} handleInputChange={handleInputChange} errorState={errorState} state={formState} />
               <ConstraintForm handleInputChange={handleInputChange} />
             </Step>
             <Step label='Compound Setup'>
@@ -210,6 +215,7 @@ const PlaidForm = (props) => {
               />
             </Step>
           </Stepper>
+
         )}
     </>
   );

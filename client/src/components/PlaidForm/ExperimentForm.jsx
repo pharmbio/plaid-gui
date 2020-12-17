@@ -65,7 +65,7 @@ const StyledErrorMessage = styled.div`
   color: red;
 `;
 
-const ExperimentForm = ({ handleInputChange}) => {
+const ExperimentForm = ({num_rows, handleInputChange}) => {
 
   const [customState, setCustomState] = useState(false)
   const [selectState, setSelectState] = useState({ value: '{num_row: 6, num_col: 8} ' })
@@ -176,7 +176,7 @@ const ExperimentForm = ({ handleInputChange}) => {
     {customState === true ? <><StyledRowLabelContainer>
       <StyledLabel> Plate rows  </StyledLabel>
     </StyledRowLabelContainer>
-      <><StyledInput type='number' id='num_rows' name='num_rows' onChange={inputHandler} onBlur={handleValidation} />
+      <><StyledInput type='number' id='num_rows' name='num_rows' value={num_rows} onChange={inputHandler} onBlur={handleValidation} />
         <StyledErrorMessage>{errorState.num_rows ? errorMsg.num_rows : null}</StyledErrorMessage>
       </>
       <StyledColLabelContainer>
