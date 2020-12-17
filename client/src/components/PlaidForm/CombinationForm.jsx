@@ -1,62 +1,73 @@
-import React from 'react'
+import React from "react";
 import styled from "styled-components";
 const StyledCombinationsContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-top: 100px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const StyledCombinationsLabel = styled.label`
-    margin-left:500px;
-    margin-top: 50px;
+  margin-top: 5px;
 `;
 const StyledCombinations = styled.input`
-    margin-left:500px; 
-    width: 20%;
+  margin-top: 5px;
 `;
 const StyledCombinationsNames = styled.input`
-    margin-left:500px;
-    width: 35%;
+  margin-top: 5px;
 `;
 
 const StyledCombinationsNamesLabel = styled.label`
-    margin-left:500px;
+  margin-top: 5px;
 `;
 const StyledCombinationsConc = styled.input`
-    margin-left:500px;
-    width: 20%;
+  margin-top: 5px;
 `;
 const StyledCombinationsConcLabel = styled.label`
-    margin-left:500px;
-    margin-top: 30px;
+  margin-top: 5px;
 `;
 const StyledCombinationsConcName = styled.input`
-    margin-left:500px;
-    width: 35%;
+  margin-top: 5px;
 `;
 const StyledCombinationsConcNameLabel = styled.label`
-    margin-left:500px;
+  margin-top: 5px;
 `;
 const CombinationForm = ({ handleInputChange, handleArrayChange }) => {
-    return (<>
-        <StyledCombinationsContainer>
-            <StyledCombinationsLabel>Combinations:</StyledCombinationsLabel>
-            <StyledCombinations type="number" name='combinations' onChange={handleInputChange} />
-            <StyledCombinationsNamesLabel>Combination names:</StyledCombinationsNamesLabel>
+  return (
+    <>
+      <StyledCombinationsContainer>
+        <StyledCombinationsLabel>Combinations:</StyledCombinationsLabel>
+        <StyledCombinations
+          type="number"
+          name="combinations"
+          onChange={handleInputChange}
+        />
+        <StyledCombinationsNamesLabel>
+          Combination names:
+        </StyledCombinationsNamesLabel>
 
-            <StyledCombinationsNames type="text" name='combination_names' onChange={handleArrayChange} />
-            <StyledCombinationsConcLabel>Combination concentrations: </StyledCombinationsConcLabel>
-            <StyledCombinationsConc
-                type="number" name='combination_concentrations' onChange={handleInputChange}
-            />
-            <StyledCombinationsConcNameLabel>Combination concentration names:</StyledCombinationsConcNameLabel>
-            <StyledCombinationsConcName
-                type="text" name='combination_concentration_names' onChange={handleArrayChange}
-            />
-
-        </StyledCombinationsContainer>
+        <StyledCombinationsNames
+          type="text"
+          name="combination_names"
+          onChange={handleArrayChange}
+        />
+        <StyledCombinationsConcLabel>
+          Combination concentrations:{" "}
+        </StyledCombinationsConcLabel>
+        <StyledCombinationsConc
+          type="number"
+          name="combination_concentrations"
+          onChange={handleInputChange}
+        />
+        <StyledCombinationsConcNameLabel>
+          Combination concentration names:
+        </StyledCombinationsConcNameLabel>
+        <StyledCombinationsConcName
+          type="text"
+          name="combination_concentration_names"
+          onChange={handleArrayChange}
+        />
+      </StyledCombinationsContainer>
     </>
-    )
-}
+  );
+};
 
-export default CombinationForm
+export default CombinationForm;

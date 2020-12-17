@@ -1,33 +1,28 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+
+const StyledConstraintFormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 const StyledCheckboxContainer = styled.div`
-
-  margin-right: 19.5%;
-  margin-top:10px;
-  margin-left: 500px;
-
+margin-top:10px;
 `;
 const StyledCheckboxLabel = styled.label`
-  margin-top:30px;  
-  margin-right: 23%;
+margin-top:10px;
   font-weight: bold;  
-  margin-left: 500px;
 `;
 
 const StyledColLabelContainer = styled.div`
-  margin-top: 20px;
-  margin-right: 19%;
-  margin-left: 500px;
+margin-top:10px;
 
 `;
 const StyledInput = styled.input`
-  width: 30%;
-  height: 5%;
-  margin-left: 500px;
+margin-top:10px;
 `;
 const StyledErrorMessage = styled.div`
-  margin-left:500px;
+  font-size:12px;
   color: red;
 `;
 
@@ -76,7 +71,7 @@ const ConstraintForm = ({ handleInputChange }) => {
     }
   }
 
-  return (<>
+  return (<StyledConstraintFormContainer>
     <StyledCheckboxLabel>
       Constraints
         </StyledCheckboxLabel>
@@ -92,7 +87,7 @@ const ConstraintForm = ({ handleInputChange }) => {
         </StyledColLabelContainer>
     <StyledInput type="number" name='size_empty_edge' onChange={inputHandler} disabled={!emptyState} />
     <StyledErrorMessage>{errorState.size_empty_edge && emptyState ? errorMsg.size_empty_edge : null}</StyledErrorMessage>
-  </>
+  </StyledConstraintFormContainer>
   )
 
 }

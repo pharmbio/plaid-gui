@@ -3,6 +3,7 @@ import { React } from 'react';
 import { ReactComponent as Checkmark } from '../../assets/icons/check-solid.svg';
 
 const HoriztonalStepperContainer = styled.ul`
+  align-self: center;
   display: flex;
   flex-direction: row;
   justify-content: center;

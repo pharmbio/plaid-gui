@@ -3,61 +3,51 @@ import styled from "styled-components";
 const StyledControlContainer = styled.div`
     display: flex;
     flex-direction: column;
-    margin-top: 100px;
 `;
 
 const StyledControlLabel = styled.label`
-    margin-left:500px;
-    margin-top: 50px;
+  margin-top: 5px;
 `;
 const StyledControl = styled.input`
-    margin-left:500px; 
-    width: 20%;
+  margin-top: 5px;
 `;
 const StyledControlNames = styled.input`
-    margin-left:500px;
-    width: 35%;
+  margin-top: 5px;
 `;
 
 const StyledControlNamesLabel = styled.label`
-    margin-left:500px;
+  margin-top: 5px;
 `;
 const StyledControlConc = styled.input`
-    margin-left:500px;
-    width: 20%;
+  margin-top: 5px;
 `;
 const StyledControlConcLabel = styled.label`
-    margin-left:500px;
-    margin-top: 30px;
+  margin-top: 5px;
 `;
 const StyledControlConcName = styled.input`
-    margin-left:500px;
-    width: 35%;
+  margin-top: 5px;
 `;
 const StyledControlConcNameLabel = styled.label`
-    margin-left:500px;
+  margin-top: 5px;
 `;
 const StyledControlReplLabel = styled.label`
-    margin-top: 30px;
-    margin-left:500px;
+  margin-top: 5px;
 `;
 const StyledControlRepl = styled.input`
-    margin-left:500px;
-    width: 20%;
+  margin-top: 5px;
 `;
 const StyledControlBlanksLabel = styled.label`
-    margin-left:500px;
+  margin-top: 5px;
 `;
 const StyledControlBlanks = styled.input`
-    margin-left:500px;
-    width: 20%;
+  margin-top: 5px;
 `;
 const StyledControlBlanksNameLabel = styled.label`
-    margin-left:500px;
+  margin-top: 5px;
 `;
 const StyledControlBlanksName = styled.input`
-    margin-left:500px;
-    width: 20%;
+  margin-top: 5px;
+
 `;
 const ControlForm = ({ handleInputChange, handleArrayChange }) => {
     return (<>
