@@ -13,10 +13,7 @@ EXPOSE 5000
 
 ENV PATH="/minizinc:${PATH}"
 
-
 RUN pip3 install --no-cache-dir -r requirements.txt
-ENV FLASK_APP=app.py
-ENV FLASK_ENV=development
-ENV FLASK_DEBUG=1
 
-CMD ["flask", "run"]
+
+CMD ["python3", "./src/app.py"]

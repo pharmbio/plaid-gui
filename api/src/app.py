@@ -6,7 +6,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-cors= CORS(app)
+cors= CORS(app, support_credentials=True)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route("/test_result")
@@ -19,6 +19,7 @@ def test_result_to_json():
     return j_res
     
 @app.route("/", methods=['POST', 'GET'])
+@cross_origin(supports_credentials=True)
 def test_plaid():
 
     if request.method  == 'GET':
