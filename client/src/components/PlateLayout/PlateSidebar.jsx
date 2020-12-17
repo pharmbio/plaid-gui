@@ -2,19 +2,30 @@ import React from "react";
 import styled from "styled-components";
 import DownloadOutputButton from "./DownloadOuputButton.jsx";
 
+
+const StyledSideBar = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 7.5px;
+`;
+
 /* makes sure that each color legend item is positioned in a column fashion */
 const StyledLegendContainer = styled.div`
-  margin: auto;
+  align-self: flex-start;
+  justify-self:flex-start;
   display: flex;
   flex-direction: column;
   padding: 5px;
-  margin-right: 20px;
+  height: ${(props) => (props.rows + 1) * 40}px;
+  overflow-y: auto;
+  padding-right:20px;
 `;
 
 /* covers the positioning of The concentration labels and the colorbox in a column order */
 const StyledConcAndColorBox = styled.div`
   display: flex;
   flex-direction: column;
+  margin: auto;
 `;
 
 /* covers the concentration labels positioning so that they are at the opposite ends of the colorbox */
@@ -32,7 +43,7 @@ const StyledConcWrapper = styled.div`
 /* covers the positioning of colorbox and concentration labels and the compound name label in row order*/
 const StyledLegendItem = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: nowrap;
   cursor: pointer;
 `;
@@ -60,6 +71,7 @@ const StyledLabel = styled.div`
   align-self: center;
   justify-self: center;
   font-family: "Lato", sans-serif;
+  font-weight: bold;
   font-size: 12px;
   margin-left: 2.5px;
 `;
@@ -86,38 +98,39 @@ const PlateSidebar = (props) => {
   let compoundMapEntries = Array.from(props.compoundMap.entries());
 
   return (
-    <StyledLegendContainer>
+    <StyledSideBar rows={props.rows}>
       {props.children}
-
-      {compoundMapEntries.map(([key, val], index) => {
-        return (
-          <StyledConcAndColorBox key={index + key + val[0].plateID}>
-            <StyledLegendItem id={val[0].plateID + key} onClick={handleClick}>
-              <StyledColorBox>
-                {val.map((o, i) => {
-                  return (
-                    <StyledColorItem
-                      key={i + o.cmpdnum}
-                      color={props.compoundToColorMap.get(o.cmpdnum)}
-                    ></StyledColorItem>
-                  );
-                })}
-              </StyledColorBox>
-              <StyledLabel>{key}</StyledLabel>
-            </StyledLegendItem>
-            <StyledConcWrapper>
-              <p>{val[0].CONCuM}</p>
-              <p>
-                {val[val.length - 1].CONCuM === val[0].CONCuM
-                  ? undefined
-                  : val[val.length - 1].CONCuM}
-              </p>
-            </StyledConcWrapper>
-          </StyledConcAndColorBox>
-        );
-      })}
-      <DownloadOutputButton plate={props.plate}/>
-    </StyledLegendContainer>
+      <StyledLegendContainer rows={props.rows}>
+        {compoundMapEntries.map(([key, val], index) => {
+          return (
+            <StyledConcAndColorBox key={index + key + val[0].plateID}>
+              <StyledLegendItem id={val[0].plateID + key} onClick={handleClick}>
+                <StyledLabel>{key}</StyledLabel>
+                <StyledColorBox>
+                  {val.map((o, i) => {
+                    return (
+                      <StyledColorItem
+                        key={i + o.cmpdnum}
+                        color={props.compoundToColorMap.get(o.cmpdnum)}
+                      ></StyledColorItem>
+                    );
+                  })}
+                </StyledColorBox>
+              </StyledLegendItem>
+              <StyledConcWrapper>
+                <p>{val[0].CONCuM}</p>
+                <p>
+                  {val[val.length - 1].CONCuM === val[0].CONCuM
+                    ? undefined
+                    : val[val.length - 1].CONCuM}
+                </p>
+              </StyledConcWrapper>
+            </StyledConcAndColorBox>
+          );
+        })}
+      </StyledLegendContainer>
+      <DownloadOutputButton plate={props.plate} />
+    </StyledSideBar>
   );
 };
 

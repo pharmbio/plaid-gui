@@ -35,47 +35,44 @@ async function postForm(formData, setLoading, setData, event) {
 
 const PlaidForm = (props) => {
   const [formState, setFormState] = useState({
-    num_rows: 8,
-    num_cols: 12,
+    num_rows: 18,
+    num_cols: 26,
     vertical_cell_lines: 1,
     horizontal_cell_lines: 1,
     allow_empty_wells: false,
-    size_empty_edge: 1,
-    compounds: 10,
+    size_empty_edge: 2,
+    compounds: 8,
     compound_concentration_names: [
-      "0.3",
       "1",
-      "3",
-      "5",
+      "3.16",
+      "5.62",
       "10",
-      "15",
-      "30",
-      "100",
+      "17.78",
+      "56.23",
     ], // List
-    compound_concentration_indicators: ["", "", "", "", "", "", "", ""],
+    compound_concentration_indicators: ["", "", "", "", "", ""],
     compound_names: [
-      "comp1",
-      "comp2",
-      "comp3",
-      "comp4",
-      "comp5",
-      "comp6",
-      "comp7",
-      "comp8",
-      "comp9",
-      "comp10",
+      "(1)(M)",
+      "(2)(M)",
+      "(3)(M)",
+      "(4)(M)",
+      "(5)(M)",
+      "(6)(M)",
+      "(7)(M)",
+      "(8)(M)",
     ], // List
-    compound_concentrations: 8,
-    replicates: 2,
-    combinations: 0,
-    combination_concentrations: 0,
-    combination_names: [], // List
-    combination_concentration_names: [], // List
-    num_controls: 4,
-    control_concentrations: 1,
-    control_replicates: [32, 16, 16, 16], // List
-    control_names: ["pos", "neg", "blank", "dmso"], // List
-    control_concentration_names: ["cont-conc1"], // List
+    compound_concentrations: 6,
+    replicates: 4,
+    combinations: 28,
+    combination_concentrations: 3,
+    combination_names: ["(1)(2)","(1)(3)","(1)(4)","(1)(5)","(1)(6)","(1)(7)","(1)(8)","(2)(3)","(2)(4)","(2)(5)","(2)(6)","(2)(7)","(2)(8)","(3)(4)","(3)(5)","(3)(6)",
+    "(3)(7)","(3)(8)","(4)(5)","(4)(6)","(4)(7)","(4)(8)","(5)(6)","(5)(7)","(5)(8)","(6)(7)","(6)(8)","(7)(8)"], // List
+    combination_concentration_names: ["1","5.62","10"], // List
+    num_controls: 9,
+    control_concentrations: 2,
+    control_replicates: [4,4,4,4,4,4,4,4,12], // List
+    control_names: ["[dmso]","[sorbitol]","[I]","[II]","[III]","[IV]","[V]","[VI]","blank"], // List
+    control_concentration_names: ["1","5.62"], // List
     blanks: 0,
     blanks_name: "",
   });

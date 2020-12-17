@@ -68,9 +68,9 @@ const PlateLayout = (props) => {
   /* emptyWells  */
   const amountEmptyWells =
     props.cols * props.sizeEmptyEdge * 2 +
-    props.rows * props.sizeEmptyEdge * 2 -
-    4 * props.sizeEmptyEdge;
+    (props.rows - props.sizeEmptyEdge*2) * props.sizeEmptyEdge * 2
 
+  console.log(amountEmptyWells)
   /* separate all data by corresponding plate */
   let plates = [];
   for (
@@ -82,6 +82,7 @@ const PlateLayout = (props) => {
       props.data.slice(i, i + props.rows * props.cols - amountEmptyWells)
     );
   }
+  console.log(plates)
 
   let listOfCompoundMaps = [];
 
