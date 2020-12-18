@@ -85,8 +85,8 @@ const ConstraintForm = ({ handleInputChange }) => {
     <StyledColLabelContainer>
       Size of empty edges:
         </StyledColLabelContainer>
-    <StyledInput type="number" name='size_empty_edge' onChange={inputHandler} disabled={!emptyState} />
-    <StyledErrorMessage>{errorState.size_empty_edge && emptyState ? errorMsg.size_empty_edge : null}</StyledErrorMessage>
+    <StyledInput type="number" name='size_empty_edge' onChange={inputHandler} />
+    <StyledErrorMessage>{errorState.size_empty_edge ? errorMsg.size_empty_edge : null}</StyledErrorMessage>
   </StyledConstraintFormContainer>
   )
 
