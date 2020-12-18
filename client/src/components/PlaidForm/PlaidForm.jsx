@@ -21,6 +21,11 @@ import * as Yup from "yup";
         Find a way to disable next button if there is an error. (Must lift out validation from children to top level component)
         Dependencies are now stored using an errorState array where each obj key is either true or false if it is in error state or not. Better way?
 
+
+        TODO FREDAG:
+        CSS - Minimize the size of the form container.
+        Fix buttons left corner and then right corner.
+
 */
 
 const StyledForm = styled(Form)`
