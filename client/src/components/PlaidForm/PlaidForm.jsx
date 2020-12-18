@@ -5,10 +5,10 @@ import CompoundForm from "./CompoundForm";
 import ControlForm from "./ControlForm";
 import ConstraintForm from "./ConstraintForm";
 import HorizontalStepper from "./HorizontalStepper";
-import Step from "./Step"
+import Step from "./Step";
 import Loader from "./../Loader";
-import { Formik, Form } from 'formik'
-import { Persist } from 'formik-persist'
+import { Formik, Form } from "formik";
+import { Persist } from "formik-persist";
 import styled from "styled-components";
 import * as Yup from "yup";
 /* TODO: Refactor to handle onChange with Formik!!
@@ -28,35 +28,35 @@ import * as Yup from "yup";
 
 */
 
+const StyledContainer = styled.div`
+  margin-top: 2.5rem;
+  `;
+
 const StyledForm = styled(Form)`
-  display: flex ;
-  justify-content: center;  
-  width: 90%;
-  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content:space-between;
   margin: auto;
-  border: solid;
-  border-width: 1px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  height: 60vh;
+  width: 40vw;
 `;
 
 const StyledInputContainer = styled.div`
-  position: absolute;
-  display: grid;
+  display: flex;
   justify-content: flex-start;
   flex-direction: column;
   align-items: start;
-  width: 90%;
 `;
 const StyledNextButton = styled.button`
+  margin-left:auto;
   background: #0069eb;
   color: #fff;
   border: none;
   border-radius: 0px;
   font-size: 16px;
-  padding: 15px 30px;
+  padding: 12px 26px;
   text-decoration: none;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  margin-left: 10px;
 `;
 const StyledPrevButton = styled.button`
   background: #a6a6a6;
@@ -64,15 +64,15 @@ const StyledPrevButton = styled.button`
   border: none;
   border-radius: 0px;
   font-size: 16px;
-  padding: 15px 30px;
+  padding: 12px 26px;
   text-decoration: none;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  margin-top: 10px;
 `;
-const StyledButtonContainer = styled.span`
-  display: inline;
-  margin-top:20px;
-  margin-left: 500px;
+const StyledButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 15px;
 `;
 
 const axios = require("axios");
@@ -102,11 +102,10 @@ async function postForm(formData, setLoading, setData) {
   }
 }
 
-
 const PlaidForm = (props) => {
   const [loading, setLoading] = useState(false);
   const [validFormState, setValidFormState] = useState(true);
-  const [errorState, setErrorState] = useState({})
+  const [errorState, setErrorState] = useState({});
   const [formState, setFormState] = useState({
     num_rows: 0,
     num_cols: 0,
@@ -116,7 +115,7 @@ const PlaidForm = (props) => {
     size_empty_edge: 0,
     compounds: 0,
     compound_concentration_names: [], // List
-    compound_concentration_indicators: [],
+    compound_concentration_indicators: ["", "", "", "", "", "", "", ""],
     compound_names: [], // List
     compound_concentrations: 0,
     replicates: 0,
@@ -160,22 +159,24 @@ const PlaidForm = (props) => {
     const type = target.type;
     let value;
     switch (type) {
-      case 'checkbox': {
-        if (target.name === 'vertical_cell_lines') {
-          setFormState({ ...formState, ['horizontal_cell_lines']: false })
+      case "checkbox": {
+        if (target.name === "vertical_cell_lines") {
+          setFormState({ ...formState, ["horizontal_cell_lines"]: false });
         }
         value = target.checked;
         break;
       }
-      case 'number': {
+      case "number": {
         value = parseInt(target.value);
         break;
       }
-      case 'select-one': {
-        value = JSON.parse(target.value)
+      case "select-one": {
+        value = JSON.parse(target.value);
         setFormState({
-          ...formState, ['num_rows']: value.num_rows, ['num_cols']: value.num_cols
-        })
+          ...formState,
+          ["num_rows"]: value.num_rows,
+          ["num_cols"]: value.num_cols,
+        });
         return;
       }
       default:
@@ -187,46 +188,50 @@ const PlaidForm = (props) => {
       [name]: value,
     });
   };
-  console.log(formState)
+  console.log(formState);
   return (
-    <>
+    <StyledContainer>
       {loading ? (
         <Loader />
       ) : (
-          <Stepper
-            initialValues={formState}
-            setLoading={setLoading}
-            postForm={postForm}
-          >
-            <Step label='Experiment Setup'>
-              <ExperimentForm num_rows={formState.num_rows} handleInputChange={handleInputChange} errorState={errorState} state={formState} />
-              <ConstraintForm handleInputChange={handleInputChange} />
-            </Step>
-            <Step label='Compound Setup'>
-              <CompoundForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-              />
-            </Step>
-            <Step label='Combinations'>
-              <CombinationForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-              />
-            </Step>
-            <Step label='Experiment Validation'>
-              <ControlForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-              />
-            </Step>
-          </Stepper>
-
-        )}
-    </>
+        <Stepper
+          initialValues={formState}
+          setLoading={setLoading}
+          postForm={postForm}
+          setData={props.setData}
+        >
+          <Step label="Experiment Setup">
+            <ExperimentForm
+              num_rows={formState.num_rows}
+              handleInputChange={handleInputChange}
+              errorState={errorState}
+              state={formState}
+            />
+            <ConstraintForm handleInputChange={handleInputChange} />
+          </Step>
+          <Step label="Compound Setup">
+            <CompoundForm
+              handleInputChange={handleInputChange}
+              handleArrayChange={handleArrayChange}
+            />
+          </Step>
+          <Step label="Combinations">
+            <CombinationForm
+              handleInputChange={handleInputChange}
+              handleArrayChange={handleArrayChange}
+            />
+          </Step>
+          <Step label="Experiment Validation">
+            <ControlForm
+              handleInputChange={handleInputChange}
+              handleArrayChange={handleArrayChange}
+            />
+          </Step>
+        </Stepper>
+      )}
+    </StyledContainer>
   );
 };
-
 
 /* Passing children prop AND then an object with the remaining props
    Anything inside <Stepper> gets passed into Stepped component as a children prop.
@@ -236,32 +241,52 @@ export const Stepper = ({ children, ...props }) => {
   const childrenArray = React.Children.toArray(children);
   const [step, setStep] = useState(0);
   //Child to display on current step. 0 would be immediate child.
-  const currentChild = childrenArray[step]
-  console.log(props.initialValues.num_cols)
+  const currentChild = childrenArray[step];
+  console.log(props.initialValues.num_cols);
   function isLast() {
     return step === childrenArray.length - 1;
   }
   const validationSchema = [
-    Yup.object({ num_cols: Yup.number().positive().required().min(6, 'no') }),
-    Yup.object({ num_rows: Yup.number().positive().integer() })]
+    Yup.object({ num_cols: Yup.number().positive().required().min(6, "no") }),
+    Yup.object({ num_rows: Yup.number().positive().integer() }),
+  ];
 
-  const currentValidation = validationSchema[step]
+  const currentValidation = validationSchema[step];
 
   return (
-    <Formik {...props} initialValues={props.initialValues}
+    <Formik
+      {...props}
+      initialValues={props.initialValues}
       validationSchema={currentValidation}
     >
       <StyledForm>
-        <HorizontalStepper currentStep={step} steps={childrenArray}></HorizontalStepper>
-        <StyledInputContainer>
-          {currentChild}
-          <StyledButtonContainer>
-            {step > 0 ? <StyledPrevButton type='button' onClick={() => setStep(step - 1)}>Previous</StyledPrevButton> : null}
-            <StyledNextButton type='button' onClick={isLast() ? () => props.postForm(props.initialValues, props.setLoading) : () => setStep(step + 1)}>{isLast() ? 'Submit' : 'Next'}</StyledNextButton>
-          </StyledButtonContainer>
-        </StyledInputContainer>
+        <HorizontalStepper currentStep={step} steps={childrenArray} />
+        <StyledInputContainer>{currentChild}</StyledInputContainer>
+        <StyledButtonContainer>
+          {step > 0 ? (
+            <StyledPrevButton type="button" onClick={() => setStep(step - 1)}>
+              Previous
+            </StyledPrevButton>
+          ) : null}
+          <StyledNextButton
+            type="button"
+            onClick={
+              isLast()
+                ? () =>
+                    props.postForm(
+                      props.initialValues,
+                      props.setLoading,
+                      props.setData
+                    )
+                : () => setStep(step + 1)
+            }
+          >
+            {isLast() ? "Submit" : "Next"}
+          </StyledNextButton>
+        </StyledButtonContainer>
       </StyledForm>
-    </Formik >)
-}
+    </Formik>
+  );
+};
 
 export default PlaidForm;
