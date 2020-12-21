@@ -29,7 +29,6 @@ import * as Yup from "yup";
 */
 
 const StyledContainer = styled.div`
-  margin-top: 2.5rem;
   `;
 
 const StyledForm = styled(Form)`

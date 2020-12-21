@@ -4,7 +4,6 @@ import PlaidForm from "./../PlaidForm";
 import PlateLayout from "./../PlateLayout";
 
 const StyledToolWrapper = styled.div`
-  position: relative;
   height: 100vh;
 `;
 
