@@ -86,7 +86,7 @@ const Well = (props) => {
       {!props.empty && props.display !== "none" ? (
         <StyledLabel wellRad={props.wellRad}>
           {props.display === "compound"
-            ? truncateString(props.cmpdObj.cmpdname, 4)
+            ? truncateString(props.cmpdObj.cmpdname, 5)
             : truncateString(props.cmpdObj.CONCuM, 5)}
         </StyledLabel>
       ) : (
