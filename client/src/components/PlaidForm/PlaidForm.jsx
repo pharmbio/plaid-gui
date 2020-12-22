@@ -106,27 +106,27 @@ const PlaidForm = (props) => {
   const [validFormState, setValidFormState] = useState(true);
   const [errorState, setErrorState] = useState({});
   const [formState, setFormState] = useState({
-    num_rows: 0,
-    num_cols: 0,
-    vertical_cell_lines: 0,
-    horizontal_cell_lines: 0,
+    num_rows: 8,
+    num_cols: 12,
+    vertical_cell_lines: 1,
+    horizontal_cell_lines: 1,
     allow_empty_wells: false,
-    size_empty_edge: 0,
-    compounds: 0,
-    compound_concentration_names: [], // List
+    size_empty_edge: 1,
+    compounds: 10,
+    compound_concentration_names: ["0.3", "1", "3", "5", "10", "15", "30", "100"], // List
     compound_concentration_indicators: ["", "", "", "", "", "", "", ""],
-    compound_names: [], // List
-    compound_concentrations: 0,
-    replicates: 0,
+    compound_names: ["c1","c2","c3","c4","c5","c6","c7","c8","coococococococooco9","aaaaabbbbcccddddd10"], // List
+    compound_concentrations: 8,
+    replicates: 2,
     combinations: 0,
     combination_concentrations: 0,
     combination_names: [], // List
     combination_concentration_names: [], // List
-    num_controls: 0,
-    control_concentrations: 0,
-    control_replicates: [], // List
-    control_names: [], // List
-    control_concentration_names: [], // List
+    num_controls: 4,
+    control_concentrations: 1,
+    control_replicates: [32,16,16,16], // List
+    control_names: ["pos","neg","blank","dmso"], // List
+    control_concentration_names: ["cont-conc1"], // List
     blanks: 0,
     blanks_name: "",
   });
