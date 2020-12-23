@@ -43,7 +43,7 @@ const DownloadResult = (props) => {
     rows: props.rows,
     cols: props.cols,
     sizeEmptyEdge: props.sizeEmptyEdge,
-    data: props.data,
+    result: props.data,
   };
 
   return (
