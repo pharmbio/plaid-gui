@@ -218,7 +218,6 @@ const Plate = (props) => {
         compoundToColorMap={props.compoundToColorMap}
         handleSelectedCompound={handleSelectedCompound}
         plate={props.data}
-        plates={props.plates}
         rows={props.rows}
       >
         <Switch handleDisplay={handleDisplay} />

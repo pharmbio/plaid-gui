@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import DownloadOutputButton from "./DownloadOuputButton.jsx";
 
-
 const StyledSideBar = styled.div`
   display: flex;
   flex-direction: column;
@@ -12,13 +11,13 @@ const StyledSideBar = styled.div`
 /* makes sure that each color legend item is positioned in a column fashion */
 const StyledLegendContainer = styled.div`
   align-self: flex-start;
-  justify-self:flex-start;
+  justify-self: flex-start;
   display: flex;
   flex-direction: column;
   padding: 5px;
   height: ${(props) => (props.rows + 1) * 40}px;
   overflow-y: auto;
-  padding-right:20px;
+  padding-right: 20px;
 `;
 
 /* covers the positioning of The concentration labels and the colorbox in a column order */
@@ -129,7 +128,7 @@ const PlateSidebar = (props) => {
           );
         })}
       </StyledLegendContainer>
-      <DownloadOutputButton plate={props.plate} />
+      <DownloadOutputButton plate={props.plate} single={true} />
     </StyledSideBar>
   );
 };

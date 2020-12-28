@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const StyledResultUploadButton = styled.input`
+const StyledUploadResultButton = styled.input`
   font-family: "Roboto", sans-serif;
   font-size: 14px;
 `;
@@ -18,7 +18,7 @@ const UploadResult = (props) => {
 
   return (
     <>
-      <StyledResultUploadButton
+      <StyledUploadResultButton
         type="file"
         name="upload-results"
         id="upload-results"

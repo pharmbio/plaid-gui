@@ -7,6 +7,7 @@ import {
   concentrationsLabels,
 } from "./../../functions/compareConcum.js";
 import DownloadResult from "./DownloadResult.jsx";
+import FixedDownloadButton from "./FixedDownloadButton";
 
 /* Styling of the main container of this component */
 const StyledPlateContainer = styled.div`
@@ -15,7 +16,6 @@ const StyledPlateContainer = styled.div`
   height: 100vh;
   overflow-y: scroll;
 `;
-
 
 /* 
   Assign hsla colors to compound depending on concentration (conc)
@@ -72,7 +72,6 @@ const PlateLayout = (props) => {
     props.cols * props.sizeEmptyEdge * 2 +
     (props.rows - props.sizeEmptyEdge * 2) * props.sizeEmptyEdge * 2;
 
-  console.log(amountEmptyWells);
   /* separate all data by corresponding plate */
   let plates = [];
   for (
@@ -84,7 +83,6 @@ const PlateLayout = (props) => {
       props.data.slice(i, i + props.rows * props.cols - amountEmptyWells)
     );
   }
-  console.log(plates);
 
   let listOfCompoundMaps = [];
 
@@ -128,9 +126,7 @@ const PlateLayout = (props) => {
         rows={props.rows}
         cols={props.cols}
         sizeEmptyEdge={props.sizeEmptyEdge}
-      >
-
-      </DownloadResult>
+      ></DownloadResult>
       {plates.map((data, index) => {
         return (
           <Plate
@@ -147,6 +143,7 @@ const PlateLayout = (props) => {
           />
         );
       })}
+      <FixedDownloadButton plates={plates}/>
     </StyledPlateContainer>
   );
 };
