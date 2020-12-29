@@ -6,7 +6,7 @@ import {
   compareConcum,
   concentrationsLabels,
 } from "./../../functions/compareConcum.js";
-import DownloadResult from "./DownloadResult.jsx";
+import DownloadResultJson from "./DownloadResultJson.jsx";
 import FixedDownloadButton from "./FixedDownloadButton";
 
 /* Styling of the main container of this component */
@@ -121,12 +121,12 @@ const PlateLayout = (props) => {
 
   return (
     <StyledPlateContainer>
-      <DownloadResult
+      <DownloadResultJson
         data={props.data}
         rows={props.rows}
         cols={props.cols}
         sizeEmptyEdge={props.sizeEmptyEdge}
-      ></DownloadResult>
+      ></DownloadResultJson>
       {plates.map((data, index) => {
         return (
           <Plate

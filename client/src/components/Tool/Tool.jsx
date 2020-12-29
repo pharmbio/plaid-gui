@@ -17,9 +17,7 @@ const Tool = () => {
   const [results, setUploadedResults] = useState(null);
 
   const handleUploadedResults = (res) => {
-    let parsedResult = JSON.parse(res);
-    console.log(parsedResult);
-    setData(parsedResult);
+    setData(res);
   };
 
   console.log(results);

@@ -38,7 +38,7 @@ const handleDownload = async (data) => {
   document.body.removeChild(link);
 };
 
-const DownloadResult = (props) => {
+const DownloadResultJson = (props) => {
   const data = {
     rows: props.rows,
     cols: props.cols,
@@ -57,4 +57,4 @@ const DownloadResult = (props) => {
   );
 };
 
-export default DownloadResult;
+export default DownloadResultJson;
