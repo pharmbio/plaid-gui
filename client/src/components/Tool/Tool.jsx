@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import PlaidForm from "./../PlaidForm";
-import PlateLayout from "./../PlateLayout";
 
+import PlateLayout from "./../PlateLayout";
+import TransitionPage from "./TransitionPage.jsx";
 const StyledToolWrapper = styled.div`
-  position: relative;
   height: 100vh;
 `;
 
@@ -14,6 +13,13 @@ const StyledToolWrapper = styled.div`
  */
 const Tool = () => {
   const [data, setData] = useState(undefined);
+
+
+
+  const handleUploadedResults = (res) => {
+    setData(res);
+  };
+
   return (
     <StyledToolWrapper>
       {data !== undefined ? (
@@ -24,7 +30,10 @@ const Tool = () => {
           sizeEmptyEdge={data.sizeEmptyEdge}
         />
       ) : (
-        <PlaidForm setData={setData} />
+        <TransitionPage
+        handleUploadedResults={handleUploadedResults}
+        setData={setData}
+      />
       )}
     </StyledToolWrapper>
   );

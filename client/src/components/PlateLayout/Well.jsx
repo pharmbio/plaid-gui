@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import truncateString from "./../../functions/truncateString.js";
 
 /* covers the styling and positioning of the well */
 const StyledWell = styled.div.attrs((props) =>
@@ -38,7 +39,6 @@ const StyledLabel = styled.div`
   height: ${(props) => props.wellRad}px;
 `;
 
-
 /**
  * Will render the component of one well from plate.
  * 
@@ -58,7 +58,8 @@ const StyledLabel = styled.div`
  * @param color the hsla color (hex if props.empty == true)
  */
 const Well = (props) => {
-  var color = props.color;
+  let color = props.color;
+  let title = "";
   if (!props.empty) {
     var lighten = false;
     if (
@@ -67,6 +68,10 @@ const Well = (props) => {
     ) {
       lighten = true;
     }
+    title =
+      props.display === "compound" || props.display == "none"
+        ? props.cmpdObj.cmpdname
+        : props.cmpdObj.CONCuM;
   }
 
   return (
@@ -76,12 +81,13 @@ const Well = (props) => {
       col={props.col}
       color={color}
       lighten={lighten}
+      title={title}
     >
       {!props.empty && props.display !== "none" ? (
         <StyledLabel wellRad={props.wellRad}>
           {props.display === "compound"
-            ? props.cmpdObj.cmpdname
-            : props.cmpdObj.CONCuM}
+            ? truncateString(props.cmpdObj.cmpdname, 5)
+            : truncateString(props.cmpdObj.CONCuM, 5)}
         </StyledLabel>
       ) : (
         ""

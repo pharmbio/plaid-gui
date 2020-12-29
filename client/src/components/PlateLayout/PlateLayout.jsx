@@ -6,6 +6,8 @@ import {
   compareConcum,
   concentrationsLabels,
 } from "./../../functions/compareConcum.js";
+import DownloadResultJson from "./DownloadResultJson.jsx";
+import FixedDownloadButton from "./FixedDownloadButton";
 
 /* Styling of the main container of this component */
 const StyledPlateContainer = styled.div`
@@ -68,9 +70,8 @@ const PlateLayout = (props) => {
   /* emptyWells  */
   const amountEmptyWells =
     props.cols * props.sizeEmptyEdge * 2 +
-    (props.rows - props.sizeEmptyEdge*2) * props.sizeEmptyEdge * 2
+    (props.rows - props.sizeEmptyEdge * 2) * props.sizeEmptyEdge * 2;
 
-  console.log(amountEmptyWells)
   /* separate all data by corresponding plate */
   let plates = [];
   for (
@@ -82,7 +83,6 @@ const PlateLayout = (props) => {
       props.data.slice(i, i + props.rows * props.cols - amountEmptyWells)
     );
   }
-  console.log(plates)
 
   let listOfCompoundMaps = [];
 
@@ -121,6 +121,12 @@ const PlateLayout = (props) => {
 
   return (
     <StyledPlateContainer>
+      <DownloadResultJson
+        data={props.data}
+        rows={props.rows}
+        cols={props.cols}
+        sizeEmptyEdge={props.sizeEmptyEdge}
+      ></DownloadResultJson>
       {plates.map((data, index) => {
         return (
           <Plate
@@ -137,6 +143,7 @@ const PlateLayout = (props) => {
           />
         );
       })}
+      <FixedDownloadButton plates={plates}/>
     </StyledPlateContainer>
   );
 };

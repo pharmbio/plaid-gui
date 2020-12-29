@@ -4,13 +4,18 @@ import styled from "styled-components";
 /* 
 inspired by: https://gist.github.com/knowbody/578b35164b69e867ed4913423f6bed30
 */
+
+const StyledLoaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  margin: auto;
+  justify-content:center;
+`;
 const StyledSpinner = styled.svg`
   animation: rotate 1s linear infinite;
-  position: absolute;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  margin: 10px;
 
   width: ${(props) => props.size}px;
 
@@ -47,16 +52,19 @@ const StyledSpinner = styled.svg`
 const Loader = () => {
   const size = 45;
   return (
-    <StyledSpinner size={size} viewBox={`0 0 ${size} ${size}`}>
-      <circle
-        className="path"
-        cx={size / 2}
-        cy={size / 2}
-        r="20"
-        fill="none"
-        strokeWidth="2"
-      />
-    </StyledSpinner>
+    <StyledLoaderContainer>
+      <StyledSpinner size={size} viewBox={`0 0 ${size} ${size}`}>
+        <circle
+          className="path"
+          cx={size / 2}
+          cy={size / 2}
+          r="20"
+          fill="none"
+          strokeWidth="2"
+        />
+      </StyledSpinner>
+      Calculating the results...
+    </StyledLoaderContainer>
   );
 };
 
