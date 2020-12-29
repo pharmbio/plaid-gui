@@ -11,6 +11,11 @@ const StyledErrorMessage = styled.p`
   color: red;
 `;
 
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const checkValidUpload = (jsonObj) => {
   return (
     jsonObj.hasOwnProperty("cols") &&
@@ -37,12 +42,7 @@ const UploadResult = (props) => {
   };
 
   return (
-    <>
-      {showError ? (
-        <StyledErrorMessage>
-          Please upload the correct downloaded json file!
-        </StyledErrorMessage>
-      ) : undefined}
+    <StyledContainer>
       <StyledUploadResultButton
         type="file"
         name="upload-results"
@@ -50,7 +50,12 @@ const UploadResult = (props) => {
         accept=".json"
         onChange={handleChange}
       />
-    </>
+      {showError ? (
+        <StyledErrorMessage>
+          Please upload the correct downloaded json file!
+        </StyledErrorMessage>
+      ) : undefined}
+    </StyledContainer>
   );
 };
 
