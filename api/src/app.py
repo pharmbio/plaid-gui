@@ -1,7 +1,8 @@
 import os
 import sys
 from models.minizinc_model import MinizincModel
-from utils.utils import output_to_json
+from services.services import ModelService
+from error_handler import MinizincException
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 
@@ -18,25 +19,28 @@ def test_result_to_json():
         dzn_file_path="./../plate_design/dzn_examples/pl-example11.dzn"
     )
     result = mz.solve_instance()
-    j_res = output_to_json(result)
+    j_res = ModelService.output_to_json(result)
     return j_res
 
 
-@app.route("/", methods=["POST", "GET"])
+@app.route("/", methods=["POST","GET"])
 @cross_origin(supports_credentials=True)
 def test_plaid():
+    data = request.get_json()
+    try:
+        mz = MinizincModel("./plate-design.mzn", "gecode")
+        mz.populate_instance(args_json=data)
+        result = mz.solve_instance()
+        j_res = ModelService.output_to_json(result)
+        return j_res
+    except Exception as e:
+        raise MinizincException(str(e))
 
-    if request.method == "GET":
-        return "Hello!"
-    if request.method == "POST":
-        data = request.get_json()
-        print(data, file=sys.stderr)
-    # return data
-    mz = MinizincModel("./plate-design.mzn", "gecode")
-    mz.populate_instance(args_json=data)
-    result = mz.solve_instance()
-    j_res = output_to_json(result)
-    return j_res
+
+@app.errorhandler(MinizincException)
+def minizinc_error(e):
+    return e.error_msg(), e.status_code
+
 
 
 if __name__ == "__main__":

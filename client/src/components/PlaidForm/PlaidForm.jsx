@@ -41,6 +41,20 @@ const StyledForm = styled(Form)`
   width: 40vw;
 `;
 
+
+const ErrorNotice = styled.div`
+  align-self: center;
+  display: ${(props) => props.error ? 'flex' : 'none'};
+  flex-direction: row;
+  color: black;
+  justify-content: center;
+  align-items: center;
+  height: 8vh;
+  width: 35vw;
+  margin: auto;
+  
+`;
+
 const StyledInputContainer = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -76,36 +90,44 @@ const StyledButtonContainer = styled.div`
 `;
 
 const axios = require("axios");
-async function postForm(formData, setLoading, setData) {
-  console.log("Data sent");
+async function postForm(formData,
+  setResponseError,
+  setFlightState,
+  flightState,
+  setData) {
   let axiosConfig = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-  try {
-    setLoading(true);
-    await axios
-      .post("http://localhost:5000/", formData, axiosConfig)
-      .then((response) => {
-        console.log(response.data);
-        setLoading(false); //data received, remove loader
-        setData({
-          rows: formData.num_rows,
-          cols: formData.num_cols,
-          sizeEmptyEdge: formData.size_empty_edge,
-          result: response.data,
-        });
+  setFlightState({ ...flightState, loading: true, responseError: false })
+  await axios
+    .post("http://localhost:5000/", formData, axiosConfig)
+    .then((response) => {
+      setFlightState({ ...flightState, loading: false, responseError: false })
+
+      setData({
+        rows: formData.num_rows,
+        cols: formData.num_cols,
+        sizeEmptyEdge: formData.size_empty_edge,
+        result: response.data,
       });
-  } catch (e) {
-    console.log(e);
-  }
+    })
+    .catch((error) => {
+      setFlightState({ ...flightState, loading: false, responseError: true })
+      console.log(error.response.data.message);
+      setResponseError(error.response.data.message);
+    });
 }
 
 const PlaidForm = (props) => {
-  const [loading, setLoading] = useState(false);
+  const [flightState, setFlightState] = useState({
+    loading: false,
+    responseError: false,
+  });
   const [validFormState, setValidFormState] = useState(true);
   const [errorState, setErrorState] = useState({});
+  const [responseError, setResponseError] = useState('');
   const [formState, setFormState] = useState({
     num_rows: 0,
     num_cols: 0,
@@ -191,44 +213,47 @@ const PlaidForm = (props) => {
   console.log(formState);
   return (
     <StyledContainer>
-      {loading ? (
+      {flightState['loading'] ? (
         <Loader />
       ) : (
-        <Stepper
-          initialValues={formState}
-          setLoading={setLoading}
-          postForm={postForm}
-          setData={props.setData}
-        >
-          <Step label="Experiment Setup">
-            <ExperimentForm
-              num_rows={formState.num_rows}
-              handleInputChange={handleInputChange}
-              errorState={errorState}
-              state={formState}
-            />
-            <ConstraintForm handleInputChange={handleInputChange} />
-          </Step>
-          <Step label="Compound Setup">
-            <CompoundForm
-              handleInputChange={handleInputChange}
-              handleArrayChange={handleArrayChange}
-            />
-          </Step>
-          <Step label="Combinations">
-            <CombinationForm
-              handleInputChange={handleInputChange}
-              handleArrayChange={handleArrayChange}
-            />
-          </Step>
-          <Step label="Experiment Validation">
-            <ControlForm
-              handleInputChange={handleInputChange}
-              handleArrayChange={handleArrayChange}
-            />
-          </Step>
-        </Stepper>
-      )}
+          <Stepper
+            initialValues={formState}
+            postForm={postForm}
+            setResponseError={setResponseError}
+            responseError={responseError}
+            setFlightState={setFlightState}
+            flightState={flightState}
+            setData={props.setData}
+          >
+            <Step label="Experiment Setup">
+              <ExperimentForm
+                num_rows={formState.num_rows}
+                handleInputChange={handleInputChange}
+                errorState={errorState}
+                state={formState}
+              />
+              <ConstraintForm handleInputChange={handleInputChange} />
+            </Step>
+            <Step label="Compound Setup">
+              <CompoundForm
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+              />
+            </Step>
+            <Step label="Combinations">
+              <CombinationForm
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+              />
+            </Step>
+            <Step label="Experiment Validation">
+              <ControlForm
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+              />
+            </Step>
+          </Stepper>
+        )}
     </StyledContainer>
   );
 };
@@ -251,40 +276,44 @@ export const Stepper = ({ children, ...props }) => {
     Yup.object({ num_rows: Yup.number().positive().integer() }),
   ];
 
-  const currentValidation = validationSchema[step];
-
+  const currentValidation = validationSchema[step]
   return (
     <Formik
       {...props}
       initialValues={props.initialValues}
       validationSchema={currentValidation}
-    >
-      <StyledForm>
-        <HorizontalStepper currentStep={step} steps={childrenArray} />
-        <StyledInputContainer>{currentChild}</StyledInputContainer>
-        <StyledButtonContainer>
-          {step > 0 ? (
-            <StyledPrevButton type="button" onClick={() => setStep(step - 1)}>
-              Previous
-            </StyledPrevButton>
-          ) : null}
-          <StyledNextButton
-            type="button"
-            onClick={
-              isLast()
-                ? () =>
+    ><>
+        
+        <ErrorNotice error={props.flightState['responseError']}> {props.flightState['responseError'] ? props.responseError : null}</ErrorNotice>
+        <StyledForm>
+          <HorizontalStepper currentStep={step} steps={childrenArray} />
+          <StyledInputContainer>{currentChild}</StyledInputContainer>
+          <StyledButtonContainer>
+            {step > 0 ? (
+              <StyledPrevButton type="button" onClick={() => setStep(step - 1)}>
+                Previous
+              </StyledPrevButton>
+            ) : null}
+            <StyledNextButton
+              type="button"
+              onClick={
+                isLast()
+                  ? () =>
                     props.postForm(
                       props.initialValues,
-                      props.setLoading,
+                      props.setResponseError,
+                      props.setFlightState,
+                      props.flightState,
                       props.setData
                     )
-                : () => setStep(step + 1)
-            }
-          >
-            {isLast() ? "Submit" : "Next"}
-          </StyledNextButton>
-        </StyledButtonContainer>
-      </StyledForm>
+                  : () => setStep(step + 1)
+              }
+            >
+              {isLast() ? "Submit" : "Next"}
+            </StyledNextButton>
+          </StyledButtonContainer>
+        </StyledForm>
+      </>
     </Formik>
   );
 };
