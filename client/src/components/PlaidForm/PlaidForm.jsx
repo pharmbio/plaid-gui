@@ -4,13 +4,10 @@ import CombinationForm from "./CombinationForm";
 import CompoundForm from "./CompoundForm";
 import ControlForm from "./ControlForm";
 import ConstraintForm from "./ConstraintForm";
-import HorizontalStepper from "./HorizontalStepper";
+import Stepper from "./Stepper";
 import Step from "./Step";
 import Loader from "./../Loader";
-import { Formik, Form } from "formik";
-import { Persist } from "formik-persist";
 import styled from "styled-components";
-import * as Yup from "yup";
 /* TODO: Refactor to handle onChange with Formik!!
         the object storing the entered data should not be processed instantly, just validated so that the input is correct. This is needed 
         to persist the entered data.
@@ -21,72 +18,12 @@ import * as Yup from "yup";
         Find a way to disable next button if there is an error. (Must lift out validation from children to top level component)
         Dependencies are now stored using an errorState array where each obj key is either true or false if it is in error state or not. Better way?
 
-
-        TODO FREDAG:
-        CSS - Minimize the size of the form container.
-        Fix buttons left corner and then right corner.
-
+        TODO:
+        lift all validation out and isolate it. 
 */
 
 const StyledContainer = styled.div`
   `;
-
-const StyledForm = styled(Form)`
-  display: flex;
-  flex-direction: column;
-  justify-content:space-between;
-  margin: auto;
-  height: 60vh;
-  width: 40vw;
-`;
-
-
-const ErrorNotice = styled.div`
-  align-self: center;
-  display: ${(props) => props.error ? 'flex' : 'none'};
-  flex-direction: row;
-  color: black;
-  justify-content: center;
-  align-items: center;
-  height: 8vh;
-  width: 35vw;
-  margin: auto;
-  
-`;
-
-const StyledInputContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-  align-items: start;
-`;
-const StyledNextButton = styled.button`
-  margin-left:auto;
-  background: #0069eb;
-  color: #fff;
-  border: none;
-  border-radius: 0px;
-  font-size: 16px;
-  padding: 12px 26px;
-  text-decoration: none;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-`;
-const StyledPrevButton = styled.button`
-  background: #a6a6a6;
-  color: #fff;
-  border: none;
-  border-radius: 0px;
-  font-size: 16px;
-  padding: 12px 26px;
-  text-decoration: none;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-`;
-const StyledButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 15px;
-`;
 
 const axios = require("axios");
 async function postForm(formData,
@@ -124,7 +61,6 @@ const PlaidForm = (props) => {
     loading: false,
     responseError: false,
   });
-  const [validFormState, setValidFormState] = useState(true);
   const [errorState, setErrorState] = useState({});
   const [responseError, setResponseError] = useState('');
   const [formState, setFormState] = useState({
@@ -137,7 +73,7 @@ const PlaidForm = (props) => {
     compounds: 10,
     compound_concentration_names: ["0.3", "1", "3", "5", "10", "15", "30", "100"], // List
     compound_concentration_indicators: ["", "", "", "", "", "", "", ""],
-    compound_names: ["c1","c2","c3","c4","c5","c6","c7","c8","coococococococooco9","aaaaabbbbcccddddd10"], // List
+    compound_names: ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "coococococococooco9", "aaaaabbbbcccddddd10"], // List
     compound_concentrations: 8,
     replicates: 2,
     combinations: 0,
@@ -146,8 +82,8 @@ const PlaidForm = (props) => {
     combination_concentration_names: [], // List
     num_controls: 4,
     control_concentrations: 1,
-    control_replicates: [32,16,16,16], // List
-    control_names: ["pos","neg","blank","dmso"], // List
+    control_replicates: [32, 16, 16, 16], // List
+    control_names: ["pos", "neg", "blank", "dmso"], // List
     control_concentration_names: ["cont-conc1"], // List
     blanks: 0,
     blanks_name: "",
@@ -254,66 +190,6 @@ const PlaidForm = (props) => {
           </Stepper>
         )}
     </StyledContainer>
-  );
-};
-
-/* Passing children prop AND then an object with the remaining props
-   Anything inside <Stepper> gets passed into Stepped component as a children prop.
- */
-
-export const Stepper = ({ children, ...props }) => {
-  const childrenArray = React.Children.toArray(children);
-  const [step, setStep] = useState(0);
-  //Child to display on current step. 0 would be immediate child.
-  const currentChild = childrenArray[step];
-  console.log(props.initialValues.num_cols);
-  function isLast() {
-    return step === childrenArray.length - 1;
-  }
-  const validationSchema = [
-    Yup.object({ num_cols: Yup.number().positive().required().min(6, "no") }),
-    Yup.object({ num_rows: Yup.number().positive().integer() }),
-  ];
-
-  const currentValidation = validationSchema[step]
-  return (
-    <Formik
-      {...props}
-      initialValues={props.initialValues}
-      validationSchema={currentValidation}
-    ><>
-        
-        <ErrorNotice error={props.flightState['responseError']}> {props.flightState['responseError'] ? props.responseError : null}</ErrorNotice>
-        <StyledForm>
-          <HorizontalStepper currentStep={step} steps={childrenArray} />
-          <StyledInputContainer>{currentChild}</StyledInputContainer>
-          <StyledButtonContainer>
-            {step > 0 ? (
-              <StyledPrevButton type="button" onClick={() => setStep(step - 1)}>
-                Previous
-              </StyledPrevButton>
-            ) : null}
-            <StyledNextButton
-              type="button"
-              onClick={
-                isLast()
-                  ? () =>
-                    props.postForm(
-                      props.initialValues,
-                      props.setResponseError,
-                      props.setFlightState,
-                      props.flightState,
-                      props.setData
-                    )
-                  : () => setStep(step + 1)
-              }
-            >
-              {isLast() ? "Submit" : "Next"}
-            </StyledNextButton>
-          </StyledButtonContainer>
-        </StyledForm>
-      </>
-    </Formik>
   );
 };
 
