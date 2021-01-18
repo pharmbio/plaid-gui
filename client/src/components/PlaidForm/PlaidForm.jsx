@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import ExperimentForm from "./ExperimentForm";
 import CombinationForm from "./CombinationForm";
 import CompoundForm from "./CompoundForm";
@@ -8,6 +8,7 @@ import Stepper from "./Stepper";
 import Step from "./Step";
 import Loader from "./../Loader";
 import styled from "styled-components";
+import useValidation from "./useValidation";
 /* TODO: Refactor to handle onChange with Formik!!
         the object storing the entered data should not be processed instantly, just validated so that the input is correct. This is needed 
         to persist the entered data.
@@ -21,11 +22,11 @@ import styled from "styled-components";
         TODO:
         lift all validation out and isolate it. 
 */
+const axios = require("axios");
 
 const StyledContainer = styled.div`
   `;
 
-const axios = require("axios");
 async function postForm(formData,
   setResponseError,
   setFlightState,
@@ -61,7 +62,9 @@ const PlaidForm = (props) => {
     loading: false,
     responseError: false,
   });
+  // const { getFieldProps, getFormProps, errors } = useValidation(config);
   const [errorState, setErrorState] = useState({});
+  const [errors, setErrors] = useState({});
   const [responseError, setResponseError] = useState('');
   const [formState, setFormState] = useState({
     num_rows: 8,
@@ -88,6 +91,8 @@ const PlaidForm = (props) => {
     blanks: 0,
     blanks_name: "",
   });
+  //custom validation hook
+  const {error} = useValidation(formState);
 
   const handleArrayChange = (event) => {
     const deviations = { control_replicates: "integer" };
@@ -107,8 +112,10 @@ const PlaidForm = (props) => {
           break;
       }
     }
+    console.log('here');
     setFormState({ ...formState, [name]: delim });
     console.log(formState);
+
   };
 
   const handleInputChange = (event) => {
@@ -145,6 +152,7 @@ const PlaidForm = (props) => {
       [name]: value,
     });
   };
+
   console.log(formState);
   return (
     <StyledContainer>
