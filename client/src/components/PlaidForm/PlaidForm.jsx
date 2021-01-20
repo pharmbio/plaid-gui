@@ -21,6 +21,8 @@ import useValidation from "./useValidation";
 
         TODO:
         lift all validation out and isolate it. 
+
+        TODO: Test the validation now! Pass the error state to e.g compoundForm. Display any relatable errors if they are not null for that field.
 */
 const axios = require("axios");
 
@@ -92,7 +94,8 @@ const PlaidForm = (props) => {
     blanks_name: "",
   });
   //custom validation hook
-  const {error} = useValidation(formState);
+  const errorMsgs = useValidation(formState);
+  console.log(errorMsgs)
 
   const handleArrayChange = (event) => {
     const deviations = { control_replicates: "integer" };
@@ -167,6 +170,7 @@ const PlaidForm = (props) => {
             setFlightState={setFlightState}
             flightState={flightState}
             setData={props.setData}
+            errorMsgs={errorMsgs}
           >
             <Step label="Experiment Setup">
               <ExperimentForm
@@ -179,6 +183,7 @@ const PlaidForm = (props) => {
             </Step>
             <Step label="Compound Setup">
               <CompoundForm
+                errorsMsg={errorMsgs}
                 handleInputChange={handleInputChange}
                 handleArrayChange={handleArrayChange}
               />

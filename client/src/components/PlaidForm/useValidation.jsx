@@ -3,7 +3,9 @@ import React, { useState, useEffect, useReducer } from 'react';
 const validators = {
     minValidSize: function (config) {
         return function (value) {
+            console.log(value);
             if (value < 1) {
+                console.log('Inside!');
                 return config.message;
             }
             return null;
@@ -52,28 +54,31 @@ const config = {
     }
 }
 
-/* function validateField(fieldValue, fieldConfig) {
+function validateField(fieldValue, fieldConfig) {
     //validatorName is for e.g minValidSize
     //fieldConfig is for e.g num_rows
-    for (let validatorName in fieldConfig) { //e. gfor validator in num_rows 
+    for (let validatorName in fieldConfig) { //e. gfor validator in num_rows
         const validatorConfig = fieldConfig[validatorName];
         const validator = validators[validatorName]; //select the correct validator
         const configuredValidator = validator(validatorConfig); //run the validator function, get the configured validator and pass it the field value.
+        console.log(fieldValue);
+        console.log(validatorName);
         const errorMessage = configuredValidator(fieldValue);
+        console.log(fieldValue);
         if (errorMessage) {
             return errorMessage;
         }
         return null;
     }
-} */
+}
 
 function validateFields(fieldValues, fieldConfigs) {
     const errors = {};
     for (let fieldName in fieldConfigs) { //fieldName is e.g num_rows 
         const fieldConfig = fieldConfigs[fieldName]; //get the values stored in key e.g num_rows.
-        const fieldValue = fieldValues[fieldName]; //get the current values found in our large object for num_rows.
-        console.log(fieldName);
-     //   errors[fieldName] = validateField(fieldValue, fieldConfig); // pass the current value and the field into the validator. Return any errors. 
+        //  const fieldValue = fieldValues[fieldName]; //get the current values found in our large object for num_rows.
+        const fieldValue = fieldValues[fieldName];
+        errors[fieldName] = validateField(fieldValue, fieldConfig); // pass the current value and the field into the validator. Return any errors. 
         // These errors will then be displayed in the frontend.
     }
     return errors
@@ -91,14 +96,14 @@ const initialState = {}
 
 //TODO NEXT: Fix this hook so that it works properly with the validatfield/fields. Then try to use it!! Should be called whenever we update values in the object.
 //config can be lifted out so that user can provide his own. I dont think this is necessary for this project.
+//TODO NEXT: fix validateField
 const useValidation = (input) => {
     const [errors, setErrors] = useState({})
-    console.log(input);
     useEffect(() => {
-        console.log('FIRED!!');
-        const errors = validateFields(input, config);
+        const errors = validateFields(input, config.fields);
         setErrors(errors);
     }, [input]);
+    console.log(errors);
     return (errors)
 };
 
