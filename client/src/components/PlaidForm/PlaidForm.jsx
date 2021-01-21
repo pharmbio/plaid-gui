@@ -93,7 +93,9 @@ const PlaidForm = (props) => {
     blanks: 0,
     blanks_name: "",
   });
-  //custom validation hook
+  /* custom validation hook. TODO: Pass this validation into each component. Assiciate each name with the correct validation field 
+     and simply check if the error is null or not. If it's not, display that error. TOFIX, only one error at a time?
+  */
   const errorMsgs = useValidation(formState);
   console.log(errorMsgs)
 
