@@ -32,7 +32,7 @@ const StyledConcWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  font-family: "Lato", sans-serif;
+  font-family: ${props => props.theme.fonts.secondary};
   font-size: 12px;
   margin-top: 2.5px;
   margin-bottom: 2.5px;

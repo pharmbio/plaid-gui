@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledSideBar = styled.nav`
-  background-color: #323439;
+  background-color: ${props => props.theme.backgroundColors.navbar};
   height: 100vh;
 `;
 const StyledLinkItem = styled.li`
@@ -12,14 +12,14 @@ const StyledLinkItem = styled.li`
 
 const activeClassName = "nav-item-active";
 const StyledNavLink = styled(NavLink).attrs({ activeClassName })`
-  color: #c3c3c3;
+  color: ${props => props.theme.colors.navbarNormal};
   text-decoration: none;
   font-size: 22px;
-  font-family: "Lato", sans-serif;
+  font-family: ${props => props.theme.fonts.secondary};
   font-weight: 300;
 
   &.${activeClassName} {
-    color: #fafafa;
+    color: ${props => props.theme.colors.navbarActive};
     font-weight: 400;
   }
 `;

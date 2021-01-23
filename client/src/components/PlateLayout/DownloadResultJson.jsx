@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledHighlightedWrapper = styled.section`
-  background-color: #bbeffd;
+  background-color: ${props => props.theme.backgroundColors.highlightBlue};
   padding: 10px 16px 10px 16px;
   margin: 20px;
-  font-family: "Lato", sans-serif;
+  font-family: ${props => props.theme.fonts.secondary};
   align-self: center;
   justify-self: center;
   width: 850px;
@@ -16,7 +16,7 @@ const StyledParagraph = styled.p`
   line-height: 1.7;
   font-weight: 400;
   font-style: normal;
-  font-family: "Lato", sans-serif;
+  font-family: ${props => props.theme.fonts.secondary};
   margin: 10px;
 `;
 

@@ -5,7 +5,7 @@ import styled from "styled-components";
 const StyledSwitchWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  font-family: "Lato", sans-serif;
+  font-family: ${props => props.theme.fonts.secondary};
   margin-top:5px;
   margin-bottom: 20px;
   font-size: 12px;

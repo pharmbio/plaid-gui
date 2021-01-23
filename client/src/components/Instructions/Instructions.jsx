@@ -15,7 +15,7 @@ const StyledInstructionsWrapper = styled.main`
   display: flex;
 
   flex-direction: column;
-  color: #000;
+  color: ${props => props.theme.colors.text};
 `;
 
 const StyledHeading1 = styled.h1`
@@ -44,7 +44,7 @@ const StyledParagraph = styled.p`
   line-height: 1.7;
   font-weight: 400;
   font-style: normal;
-  font-family: "Lato", sans-serif;
+  font-family: ${props => props.theme.fonts.secondary};
   margin: 10px;
 `;
 
