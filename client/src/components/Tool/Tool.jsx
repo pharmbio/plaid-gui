@@ -14,8 +14,6 @@ const StyledToolWrapper = styled.div`
 const Tool = () => {
   const [data, setData] = useState(undefined);
 
-
-
   const handleUploadedResults = (res) => {
     setData(res);
   };

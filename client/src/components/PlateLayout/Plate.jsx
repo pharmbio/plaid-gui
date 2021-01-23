@@ -3,12 +3,13 @@ import styled from "styled-components";
 import Well from "./Well.jsx";
 import PlateSidebar from "./PlateSidebar.jsx";
 import Switch from "./Switch.jsx";
+import getAlphabet from "./../../functions/getAlphabet.js";
 
 /* covers the positioning of the styledPlate and ColorLegend components in row fashion */
 const StyledLayoutContainer = styled.div`
   margin: auto;
   margin-top: 2.5rem;
-  margin-bottom:2.5rem;
+  margin-bottom: 2.5rem;
   display: flex;
   flex-direction: row;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -64,44 +65,11 @@ const StyledRowIdentifier = styled.div`
   grid-column: ${(props) => props.col};
 `;
 
-/* used for the row identifier label */
-const ALPHABET = [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "J",
-  "K",
-  "L",
-  "M",
-  "N",
-  "O",
-  "P",
-  "Q",
-  "R",
-  "S",
-  "T",
-  "U",
-  "V",
-  "W",
-  "X",
-  "Y",
-  "Z",
-];
-
 const EMPTY_WELL_COLOR = "#e9e9e9";
 
-
-
-
-/**  
+/**
  * Renders the plate (the row/col identifiers) and each corresponding well
- * 
+ *
  * @param props.rowList a list containing an integer for every row
  * @param props.colList a list containing an integer for every column
  * @param props.rows the amount of rows specified in the form
@@ -113,7 +81,9 @@ const EMPTY_WELL_COLOR = "#e9e9e9";
  * @param props.compoundToColorMap maping cmpdObject.cmpdnum to the corresponding hsla color
  */
 const Plate = (props) => {
-  const WELL_RAD = 40;
+  const wellRad = 40;
+  /* used for the row identifier label */
+  const alphabet = getAlphabet();
 
   const [selectedCompound, setSelectedCompound] = React.useState("");
   const handleSelectedCompound = (selected) => {
@@ -146,7 +116,7 @@ const Plate = (props) => {
       <StyledPlateWrapper
         rows={props.rows}
         cols={props.cols}
-        wellRad={WELL_RAD}
+        wellRad={wellRad}
         gap={2.5}
       >
         {props.rowList.map((i) => {
@@ -154,11 +124,11 @@ const Plate = (props) => {
             StyledRowIdentifier,
             /* will there ever be the case where data[0] is undefined? */
             {
-              key: ALPHABET[i] + props.data[0].plateID,
+              key: alphabet[i] + props.data[0].plateID,
               row: i + 2,
               col: 1,
             },
-            ALPHABET[i]
+            alphabet[i]
           );
         })}
         {props.colList.map((i) => {
@@ -172,7 +142,7 @@ const Plate = (props) => {
         <StyledPlate
           rows={props.rows}
           cols={props.cols}
-          wellRad={WELL_RAD}
+          wellRad={wellRad}
           gap={2.5}
         >
           {emptyWells.map((pos) => {
@@ -182,7 +152,7 @@ const Plate = (props) => {
                 empty={true}
                 row={pos[0]}
                 col={pos[1]}
-                key={ALPHABET[pos[0] - 1] + pos[1]}
+                key={alphabet[pos[0] - 1] + pos[1]}
                 color={EMPTY_WELL_COLOR} //grey
               />
             );
@@ -195,13 +165,13 @@ const Plate = (props) => {
                 plateID
                 well
             */
-            let row = ALPHABET.indexOf(cmpdObj.well[0]) + 1;
+            let row = alphabet.indexOf(cmpdObj.well[0]) + 1;
             let col = parseInt(cmpdObj.well.slice(1, cmpdObj.well.length));
             return (
               <Well
                 empty={false}
                 selected={selectedCompound}
-                wellRad={WELL_RAD}
+                wellRad={wellRad}
                 display={display}
                 row={row}
                 col={col}

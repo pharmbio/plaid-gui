@@ -18,7 +18,7 @@ const StyledParagraph = styled.p`
   line-height: 1.7;
   font-weight: 400;
   font-style: normal;
-  font-family: "Lato", sans-serif;
+  font-family: ${props => props.theme.fonts.secondary};
 `;
 
 const StyledRowContainer = styled.div`

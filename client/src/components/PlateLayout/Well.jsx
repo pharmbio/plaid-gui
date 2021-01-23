@@ -69,7 +69,7 @@ const Well = (props) => {
       lighten = true;
     }
     title =
-      props.display === "compound" || props.display == "none"
+      props.display === "compound" || props.display === "none"
         ? props.cmpdObj.cmpdname
         : props.cmpdObj.CONCuM;
   }
