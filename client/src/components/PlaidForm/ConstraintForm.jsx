@@ -2,15 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import FormPage from "./FormPage";
 import InputNumber from "./Fields/InputNumber";
+import InputCheck from "./Fields/InputCheck";
 
-const StyledCheckboxContainer = styled.div`
-  margin-top: 10px;
-`;
 const StyledSectionLabel = styled.label`
   margin-bottom: 5px;
   font-weight: bold;
 `;
-
 
 const ConstraintForm = ({ handleInputChange }) => {
   const [emptyState, setEmptyState] = useState(false);
@@ -56,16 +53,13 @@ const ConstraintForm = ({ handleInputChange }) => {
   return (
     <FormPage>
       <StyledSectionLabel>Constraints</StyledSectionLabel>
-      <StyledCheckboxContainer>
-        <label>
-          Allow empty wells
-          <input
-            name="allow_empty_wells"
-            type="checkbox"
-            onChange={inputHandler}
-          />
-        </label>
-      </StyledCheckboxContainer>
+      <InputCheck
+        label="Allow empty wells"
+        onChange={inputHandler}
+        name={"allow_empty_wells"}
+        value={null}
+        errorMsg={null}
+      />
       <InputNumber
         name="size_empty_edge"
         label="Amount of empty edges"

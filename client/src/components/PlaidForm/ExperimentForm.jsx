@@ -2,17 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import FormPage from "./FormPage";
 import InputNumber from "./Fields/InputNumber";
+import InputSelect from "./Fields/InputSelect";
 
 const StyledSectionLabel = styled.label`
   margin-bottom: 5px;
   font-weight: bold;
-`;
-
-const StyledSelect = styled.select`
-  align-self: flex-start;
-`;
-const StyledSizeLabel = styled.label`
-  align-self: flex-start;
 `;
 
 const ExperimentForm = ({ num_rows, handleInputChange }) => {
@@ -50,14 +44,16 @@ const ExperimentForm = ({ num_rows, handleInputChange }) => {
   return (
     <FormPage>
       <StyledSectionLabel>Plate dimensions</StyledSectionLabel>
-      <StyledSizeLabel> Plate Size</StyledSizeLabel>
       {/* TODO: Json-data must load with the values of the preselected value */}
-      <StyledSelect
+
+      <InputSelect
         name="select_plate_size"
         id="size_options"
         value={selectState.value}
         onChange={displaySize}
         onfocus="this.selectedIndex = 1;"
+        label={"Plate size"}
+        errorMsg={null}
       >
         <option value='{"num_rows": 6, "num_cols": 8}'>48</option>
         <option value='{"num_rows": 8, "num_cols": 12}'>96</option>
@@ -65,7 +61,7 @@ const ExperimentForm = ({ num_rows, handleInputChange }) => {
         <option value='{"num_rows": 32, "num_cols": 48}'>1536</option>
         <option value='{"num_rows": 48, "num_cols": 72}'>3456</option>
         <option value="custom">Custom size</option>
-      </StyledSelect>
+      </InputSelect>
 
       {customState === true ? (
         <>
