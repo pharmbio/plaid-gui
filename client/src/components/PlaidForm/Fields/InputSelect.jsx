@@ -15,7 +15,7 @@ const StyledLabel = styled.label`
   margin-right: 5px;
 `;
 
-const StyledNumberField = styled.input`
+const StyledSelectField = styled.select`
   max-width: 80px;
 `;
 
@@ -25,21 +25,22 @@ const StyledErrorMessage = styled.div`
   font-family: ${(props) => props.theme.fonts.secondary};
 `;
 
-const InputNumber = (props) => {
+const InputSelect = (props) => {
   return (
     <StyledNumberFieldContainer>
       <StyledLabel for={props.name}>{props.label}</StyledLabel>
-      <StyledNumberField
-        id={props.name}
+      <StyledSelectField
+        id={props.id}
         name={props.name}
-        type="number"
         onChange={props.onChange}
         value={props.value}
-        onBlur={props.onBlur}
-      />
+        onFocus={props.onFocus}
+      >
+        {props.children}
+      </StyledSelectField>
       <StyledErrorMessage>{props.errorMsg}</StyledErrorMessage>
     </StyledNumberFieldContainer>
   );
 };
 
-export default InputNumber;
+export default InputSelect;
