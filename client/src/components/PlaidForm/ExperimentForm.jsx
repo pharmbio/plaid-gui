@@ -67,27 +67,17 @@ const StyledErrorMessage = styled.div`
   color: red;
 `;
 
-const ExperimentForm = ({ num_rows, handleInputChange }) => {
+const ExperimentForm = ({ handleInputChange, errors, state }) => {
   const [customState, setCustomState] = useState(false);
   const [selectState, setSelectState] = useState({
     value: "{num_row: 6, num_col: 8} ",
   });
   const [validFormState, setValidFormState] = useState(false);
 
-  const [errorMsg, setErrorMsg] = useState({});
-  /* This state imanages if a specific state is invalid or not */
-  const [errorState, setErrorState] = useState({
-    num_rows: false,
-    num_cols: false,
-    vertical_cell_lines: true,
-    horizontal_cell_lines: true,
-  });
-
   /* Input handler for the checkbox */
   const displaySize = (event) => {
     setSelectState({ value: event.target.value });
     if (event.target.value === "custom") {
-      setErrorState({ ...errorState, num_rows: true, num_cols: true });
       setCustomState(!customState);
     } else {
       handleInputChange(event);
@@ -132,11 +122,11 @@ const ExperimentForm = ({ num_rows, handleInputChange }) => {
                   type="number"
                   id="num_rows"
                   name="num_rows"
-                  value={num_rows}
+                  value={state.num_rows ? state.num_rows : null}
                   onChange={inputHandler}
                 />
                 <StyledErrorMessage>
-                  {errorState.num_rows ? errorMsg.num_rows : null}
+                  {errors.num_rows ? errors.num_rows : null}
                 </StyledErrorMessage>
               </>
             </StyledGroupCol>
@@ -147,10 +137,11 @@ const ExperimentForm = ({ num_rows, handleInputChange }) => {
               <StyledInput
                 type="number"
                 name="num_cols"
+                value={state.num_cols ? state.num_cols : null}
                 onChange={inputHandler}
               />
               <StyledErrorMessage>
-                {errorState.num_cols ? errorMsg.num_cols : null}
+                {errors.num_cols ? errors.num_cols : null}
               </StyledErrorMessage>
             </StyledGroupCol>
           </>
@@ -169,9 +160,7 @@ const ExperimentForm = ({ num_rows, handleInputChange }) => {
                 onChange={inputHandler}
               />
               <StyledErrorMessage>
-                {errorState.vertical_cell_lines
-                  ? errorMsg.vertical_cell_lines
-                  : null}
+
               </StyledErrorMessage>
             </StyledGroupCol>
             <StyledGroupCol>
@@ -182,9 +171,6 @@ const ExperimentForm = ({ num_rows, handleInputChange }) => {
                 onChange={inputHandler}
               />
               <StyledErrorMessage>
-                {errorState.horizontal_cell_lines
-                  ? errorMsg.horizontal_cell_lines
-                  : null}
               </StyledErrorMessage>
             </StyledGroupCol>
           </StyledGroupRow>

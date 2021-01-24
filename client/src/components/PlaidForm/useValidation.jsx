@@ -4,8 +4,7 @@ const validators = {
     minValidSize: function (config) {
         return function (value) {
             console.log(value);
-            if (value < 1) {
-                console.log('Inside!');
+            if (value < 1 || isNaN(value)) {
                 return config.message;
             }
             return null;
@@ -61,10 +60,7 @@ function validateField(fieldValue, fieldConfig) {
         const validatorConfig = fieldConfig[validatorName];
         const validator = validators[validatorName]; //select the correct validator
         const configuredValidator = validator(validatorConfig); //run the validator function, get the configured validator and pass it the field value.
-        console.log(fieldValue);
-        console.log(validatorName);
         const errorMessage = configuredValidator(fieldValue);
-        console.log(fieldValue);
         if (errorMessage) {
             return errorMessage;
         }
@@ -103,7 +99,6 @@ const useValidation = (input) => {
         const errors = validateFields(input, config.fields);
         setErrors(errors);
     }, [input]);
-    console.log(errors);
     return (errors)
 };
 

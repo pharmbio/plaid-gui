@@ -54,7 +54,6 @@ async function postForm(formData,
     })
     .catch((error) => {
       setFlightState({ ...flightState, loading: false, responseError: true })
-      console.log(error.response.data.message);
       setResponseError(error.response.data.message);
     });
 }
@@ -117,9 +116,7 @@ const PlaidForm = (props) => {
           break;
       }
     }
-    console.log('here');
     setFormState({ ...formState, [name]: delim });
-    console.log(formState);
 
   };
 
@@ -176,9 +173,8 @@ const PlaidForm = (props) => {
           >
             <Step label="Experiment Setup">
               <ExperimentForm
-                num_rows={formState.num_rows}
                 handleInputChange={handleInputChange}
-                errorState={errorState}
+                errors={errorMsgs}
                 state={formState}
               />
               <ConstraintForm handleInputChange={handleInputChange} />
