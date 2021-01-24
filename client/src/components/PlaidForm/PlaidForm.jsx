@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import ExperimentForm from "./ExperimentForm";
 import CombinationForm from "./CombinationForm";
 import CompoundForm from "./CompoundForm";
@@ -8,6 +8,7 @@ import Stepper from "./Stepper";
 import Step from "./Step";
 import Loader from "./../Loader";
 import styled from "styled-components";
+import useValidation from "./useValidation";
 /* TODO: Refactor to handle onChange with Formik!!
         the object storing the entered data should not be processed instantly, just validated so that the input is correct. This is needed 
         to persist the entered data.
@@ -20,12 +21,14 @@ import styled from "styled-components";
 
         TODO:
         lift all validation out and isolate it. 
+
+        TODO: Test the validation now! Pass the error state to e.g compoundForm. Display any relatable errors if they are not null for that field.
 */
+const axios = require("axios");
 
 const StyledContainer = styled.div`
   `;
 
-const axios = require("axios");
 async function postForm(formData,
   setResponseError,
   setFlightState,
@@ -61,7 +64,9 @@ const PlaidForm = (props) => {
     loading: false,
     responseError: false,
   });
+  // const { getFieldProps, getFormProps, errors } = useValidation(config);
   const [errorState, setErrorState] = useState({});
+  const [errors, setErrors] = useState({});
   const [responseError, setResponseError] = useState('');
   const [formState, setFormState] = useState({
     num_rows: 8,
@@ -88,6 +93,11 @@ const PlaidForm = (props) => {
     blanks: 0,
     blanks_name: "",
   });
+  /* custom validation hook. TODO: Pass this validation into each component. Assiciate each name with the correct validation field 
+     and simply check if the error is null or not. If it's not, display that error. TOFIX, only one error at a time?
+  */
+  const errorMsgs = useValidation(formState);
+  console.log(errorMsgs)
 
   const handleArrayChange = (event) => {
     const deviations = { control_replicates: "integer" };
@@ -107,8 +117,10 @@ const PlaidForm = (props) => {
           break;
       }
     }
+    console.log('here');
     setFormState({ ...formState, [name]: delim });
     console.log(formState);
+
   };
 
   const handleInputChange = (event) => {
@@ -145,6 +157,7 @@ const PlaidForm = (props) => {
       [name]: value,
     });
   };
+
   console.log(formState);
   return (
     <StyledContainer>
@@ -159,6 +172,7 @@ const PlaidForm = (props) => {
             setFlightState={setFlightState}
             flightState={flightState}
             setData={props.setData}
+            errorMsgs={errorMsgs}
           >
             <Step label="Experiment Setup">
               <ExperimentForm
@@ -171,6 +185,7 @@ const PlaidForm = (props) => {
             </Step>
             <Step label="Compound Setup">
               <CompoundForm
+                errorsMsg={errorMsgs}
                 handleInputChange={handleInputChange}
                 handleArrayChange={handleArrayChange}
               />
