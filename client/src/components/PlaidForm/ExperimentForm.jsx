@@ -74,7 +74,7 @@ const ExperimentForm = ({ num_rows, handleInputChange }) => {
             label="Rows"
             value={num_rows}
             onChange={inputHandler}
-            onBlur={handleValidation}
+            onBlur={null}
             errorMsg={errorState.num_rows ? errorMsg.num_rows : null}
           />
           <InputNumber

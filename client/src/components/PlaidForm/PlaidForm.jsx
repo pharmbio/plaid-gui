@@ -31,8 +31,6 @@ const StyledContainer = styled.div`
   height: 100vh;
 `;
 
-
-const axios = require("axios");
 async function postForm(
   formData,
   setResponseError,
