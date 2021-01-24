@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import ExperimentForm from "./ExperimentForm";
 import CombinationForm from "./CombinationForm";
 import CompoundForm from "./CompoundForm";
@@ -8,6 +8,7 @@ import Stepper from "./Stepper";
 import Step from "./Step";
 import Loader from "./../Loader";
 import styled from "styled-components";
+import useValidation from "./useValidation";
 /* TODO: Refactor to handle onChange with Formik!!
         the object storing the entered data should not be processed instantly, just validated so that the input is correct. This is needed 
         to persist the entered data.
@@ -20,12 +21,16 @@ import styled from "styled-components";
 
         TODO:
         lift all validation out and isolate it. 
+
+        TODO: Test the validation now! Pass the error state to e.g compoundForm. Display any relatable errors if they are not null for that field.
 */
+const axios = require("axios");
 
 const StyledContainer = styled.div`
   overflow-y: scroll;
   height: 100vh;
 `;
+
 
 const axios = require("axios");
 async function postForm(
@@ -65,6 +70,7 @@ const PlaidForm = (props) => {
     loading: false,
     responseError: false,
   });
+  // const { getFieldProps, getFormProps, errors } = useValidation(config);
   const [errorState, setErrorState] = useState({});
   const [responseError, setResponseError] = useState("");
   const [formState, setFormState] = useState({
@@ -112,6 +118,11 @@ const PlaidForm = (props) => {
     blanks: 0,
     blanks_name: "",
   });
+  /* custom validation hook. TODO: Pass this validation into each component. Assiciate each name with the correct validation field 
+     and simply check if the error is null or not. If it's not, display that error. TOFIX, only one error at a time?
+  */
+  const errorMsgs = useValidation(formState);
+  console.log(errorMsgs)
 
   const handleArrayChange = (event) => {
     const deviations = { control_replicates: "integer" };
@@ -131,8 +142,10 @@ const PlaidForm = (props) => {
           break;
       }
     }
+    console.log('here');
     setFormState({ ...formState, [name]: delim });
     console.log(formState);
+
   };
 
   const handleInputChange = (event) => {
@@ -169,50 +182,53 @@ const PlaidForm = (props) => {
       [name]: value,
     });
   };
+
   console.log(formState);
   return (
     <StyledContainer>
       {flightState["loading"] ? (
         <Loader />
       ) : (
-        <Stepper
-          initialValues={formState}
-          postForm={postForm}
-          setResponseError={setResponseError}
-          responseError={responseError}
-          setFlightState={setFlightState}
-          flightState={flightState}
-          setData={props.setData}
-        >
-          <Step label="Experiment Setup">
-            <ExperimentForm
-              num_rows={formState.num_rows}
-              handleInputChange={handleInputChange}
-              errorState={errorState}
-              state={formState}
-            />
-            <ConstraintForm handleInputChange={handleInputChange} />
-          </Step>
-          <Step label="Compound Setup">
-            <CompoundForm
-              handleInputChange={handleInputChange}
-              handleArrayChange={handleArrayChange}
-            />
-          </Step>
-          <Step label="Combinations">
-            <CombinationForm
-              handleInputChange={handleInputChange}
-              handleArrayChange={handleArrayChange}
-            />
-          </Step>
-          <Step label="Experiment Validation">
-            <ControlForm
-              handleInputChange={handleInputChange}
-              handleArrayChange={handleArrayChange}
-            />
-          </Step>
-        </Stepper>
-      )}
+          <Stepper
+            initialValues={formState}
+            postForm={postForm}
+            setResponseError={setResponseError}
+            responseError={responseError}
+            setFlightState={setFlightState}
+            flightState={flightState}
+            setData={props.setData}
+            errorMsgs={errorMsgs}
+          >
+            <Step label="Experiment Setup">
+              <ExperimentForm
+                num_rows={formState.num_rows}
+                handleInputChange={handleInputChange}
+                errorState={errorState}
+                state={formState}
+              />
+              <ConstraintForm handleInputChange={handleInputChange} />
+            </Step>
+            <Step label="Compound Setup">
+              <CompoundForm
+                errorsMsg={errorMsgs}
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+              />
+            </Step>
+            <Step label="Combinations">
+              <CombinationForm
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+              />
+            </Step>
+            <Step label="Experiment Validation">
+              <ControlForm
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+              />
+            </Step>
+          </Stepper>
+        )}
     </StyledContainer>
   );
 };
