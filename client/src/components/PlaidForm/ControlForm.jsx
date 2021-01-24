@@ -1,86 +1,75 @@
-import React from 'react'
-import styled from "styled-components";
-const StyledControlContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
+import React from "react";
+import FormPage from "./FormPage";
+import InputTextArea from "./Fields/InputTextArea";
+import InputNumber from "./Fields/InputNumber";
 
-const StyledControlLabel = styled.label`
-  margin-top: 5px;
-`;
-const StyledControl = styled.input`
-  margin-top: 5px;
-`;
-const StyledControlNames = styled.input`
-  margin-top: 5px;
-`;
-
-const StyledControlNamesLabel = styled.label`
-  margin-top: 5px;
-`;
-const StyledControlConc = styled.input`
-  margin-top: 5px;
-`;
-const StyledControlConcLabel = styled.label`
-  margin-top: 5px;
-`;
-const StyledControlConcName = styled.input`
-  margin-top: 5px;
-`;
-const StyledControlConcNameLabel = styled.label`
-  margin-top: 5px;
-`;
-const StyledControlReplLabel = styled.label`
-  margin-top: 5px;
-`;
-const StyledControlRepl = styled.input`
-  margin-top: 5px;
-`;
-const StyledControlBlanksLabel = styled.label`
-  margin-top: 5px;
-`;
-const StyledControlBlanks = styled.input`
-  margin-top: 5px;
-`;
-const StyledControlBlanksNameLabel = styled.label`
-  margin-top: 5px;
-`;
-const StyledControlBlanksName = styled.input`
-  margin-top: 5px;
-
-`;
 const ControlForm = ({ handleInputChange, handleArrayChange }) => {
-    return (<>
-        <StyledControlContainer>
-            <StyledControlLabel>Number of controls:</StyledControlLabel>
-            <StyledControl type="number" name='num_controls' onChange={handleInputChange} />
+  return (
+    <FormPage>
+      <InputNumber
+        name="num_controls"
+        label="Amount of controls"
+        value={null}
+        onChange={handleInputChange}
+        onBlur={null}
+        errorMsg={null}
+      />
 
-            <StyledControlNamesLabel>Control names:</StyledControlNamesLabel>
-            <StyledControlNames
-                type="text" name='control_names' onChange={handleArrayChange}
-            />
-            <StyledControlConcLabel>Control concentrations: </StyledControlConcLabel>
-            <StyledControlConc type="number" name='control_concentrations' onChange={handleInputChange} />
-            <StyledControlConcNameLabel>Control concentration names: </StyledControlConcNameLabel>
-            <StyledControlConcName
-                type="text" name='control_concentration_names' onChange={handleArrayChange}
-            />
-            <StyledControlReplLabel>Control replicates:  </StyledControlReplLabel>
-            <StyledControlRepl
-                type="text" name='control_replicates' onChange={handleArrayChange}
-            />
-            <StyledControlBlanksLabel>Blanks: </StyledControlBlanksLabel>
-            <StyledControlBlanks
-                type="number" name='blanks' onChange={handleInputChange}
-            />
+      <InputTextArea
+        label={"Control names"}
+        placeholder=""
+        name="control_names"
+        onChange={handleArrayChange}
+        disable={false}
+        errorMsg={null}
+      />
 
-            <StyledControlBlanksNameLabel>Blanks names:  </StyledControlBlanksNameLabel>
-            <StyledControlBlanksName
-                type="text" name='blanks_names' onChange={handleInputChange}
-            />
-        </StyledControlContainer>
-    </>
-    )
-}
+      <InputNumber
+        name="control_concentrations"
+        label="Control concentrations"
+        value={null}
+        onChange={handleInputChange}
+        onBlur={null}
+        errorMsg={null}
+      />
 
-export default ControlForm
+      <InputTextArea
+        label={"Control concentration names"}
+        placeholder=""
+        name="control_concentration_names"
+        onChange={handleArrayChange}
+        disable={false}
+        errorMsg={null}
+      />
+
+      <InputTextArea
+        label={"Control replicates"}
+        placeholder=""
+        name="control_replicates"
+        onChange={handleArrayChange}
+        disable={false}
+        errorMsg={null}
+      />
+
+      <InputNumber
+        name="blanks"
+        label="Blanks"
+        value={null}
+        onChange={handleInputChange}
+        onBlur={null}
+        errorMsg={null}
+      />
+
+      <InputTextArea
+        label={"Blanks names"}
+        placeholder=""
+        name="blanks_names"
+        onChange={handleInputChange}
+        disable={false}
+        errorMsg={null}
+      />
+    </FormPage>
+  );
+};
+
+export default ControlForm;

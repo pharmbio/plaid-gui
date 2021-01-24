@@ -1,58 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import FormPage from "./FormPage";
+import InputNumber from "./Fields/InputNumber";
 
-const StyledExperimentFormContainer = styled.div`
-  
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledFormContainer = styled.div`
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const StyledGroupRow = styled.div`
-  margin-right: 10px;
-  display: flex;
-  flex-direction: row;
-`;
-const StyledGroupCol = styled.div`
-  margin-right: 10px;
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledRowLabelContainer = styled.div`
-  margin-top: 5px;
-`;
-const StyledColLabelContainer = styled.div`
-  margin-top: 5px;
-`;
-const StyledLabel = styled.label`
-  margin-top: 5px;
-
-`;
-const StyledInput = styled.input`
-  margin-top: 5px;
-`;
-
-const StyledCheckboxLabel = styled.label`
-  margin-top: 5px;
+const StyledSectionLabel = styled.label`
+  margin-bottom: 5px;
   font-weight: bold;
-`;
-const StyledVertical = styled.input``;
-const StyledHorizontal = styled.input``;
-
-const StyledHorizontalLabel = styled.label`
-  margin-top: 5px;
-  width: 100px;
-`;
-const StyledVerticalLabel = styled.label`
-  margin-top: 5px;
-  width: 100px;
 `;
 
 const StyledSelect = styled.select`
@@ -90,93 +43,65 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
 
   console.log(validFormState);
   return (
-    <StyledExperimentFormContainer>
-      <StyledFormContainer>
-        <StyledGroupCol>
-          <StyledSizeLabel> Select Plate Size</StyledSizeLabel>
-          {/* TODO: Json-data must load with the values of the preselected value */}
-          <StyledSelect
-            name="select_plate_size"
-            id="size_options"
-            value={selectState.value}
-            onChange={displaySize}
-            onfocus="this.selectedIndex = 1;"
-          >
-            <option value='{"num_rows": 6, "num_cols": 8}'>48</option>
-            <option value='{"num_rows": 8, "num_cols": 12}'>96</option>
-            <option value='{"num_rows": 16, "num_cols": 24}'>384</option>
-            <option value='{"num_rows": 32, "num_cols": 48}'>1536</option>
-            <option value='{"num_rows": 48, "num_cols": 72}'>3456</option>
-            <option value="custom">Custom size</option>
-          </StyledSelect>
-        </StyledGroupCol>
+    <FormPage>
+      <StyledSectionLabel>Plate dimensions</StyledSectionLabel>
+      <StyledSizeLabel> Plate Size</StyledSizeLabel>
+      {/* TODO: Json-data must load with the values of the preselected value */}
+      <StyledSelect
+        name="select_plate_size"
+        id="size_options"
+        value={selectState.value}
+        onChange={displaySize}
+        onfocus="this.selectedIndex = 1;"
+      >
+        <option value='{"num_rows": 6, "num_cols": 8}'>48</option>
+        <option value='{"num_rows": 8, "num_cols": 12}'>96</option>
+        <option value='{"num_rows": 16, "num_cols": 24}'>384</option>
+        <option value='{"num_rows": 32, "num_cols": 48}'>1536</option>
+        <option value='{"num_rows": 48, "num_cols": 72}'>3456</option>
+        <option value="custom">Custom size</option>
+      </StyledSelect>
 
-        {customState === true ? (
-          <>
-            <StyledGroupCol>
-              <StyledRowLabelContainer>
-                <StyledLabel> Plate rows </StyledLabel>
-              </StyledRowLabelContainer>
-              <>
-                <StyledInput
-                  type="number"
-                  id="num_rows"
-                  name="num_rows"
-                  value={state.num_rows ? state.num_rows : null}
-                  onChange={inputHandler}
-                />
-                <StyledErrorMessage>
-                  {errors.num_rows ? errors.num_rows : null}
-                </StyledErrorMessage>
-              </>
-            </StyledGroupCol>
-            <StyledGroupCol>
-              <StyledColLabelContainer>
-                <StyledLabel>Plate columns </StyledLabel>
-              </StyledColLabelContainer>
-              <StyledInput
-                type="number"
-                name="num_cols"
-                value={state.num_cols ? state.num_cols : null}
-                onChange={inputHandler}
-              />
-              <StyledErrorMessage>
-                {errors.num_cols ? errors.num_cols : null}
-              </StyledErrorMessage>
-            </StyledGroupCol>
-          </>
-        ) : null}
-      </StyledFormContainer>
-      {/* TODO: Create grid container around vertical and horizontal cell linse  */}
-      <StyledFormContainer>
-        <StyledGroupCol>
-          <StyledCheckboxLabel>Cell line direction </StyledCheckboxLabel>
-          <StyledGroupRow>
-            <StyledGroupCol>
-              <StyledVerticalLabel>Vertical </StyledVerticalLabel>
-              <StyledVertical
-                name="vertical_cell_lines"
-                type="number"
-                onChange={inputHandler}
-              />
-              <StyledErrorMessage>
+      {customState === true ? (
+        <>
+          <InputNumber
+            name="num_rows"
+            label="Rows"
+            value={state.num_rows ? state.num_rows : null}
+            onChange={inputHandler}
+            onBlur={null}
+            errorMsg={errors.num_rows ? errors.num_rows : null}
+          />
+          <InputNumber
+            name="num_cols"
+            label="Columns"
+            value={state.num_cols ? state.num_cols : null}
+            onChange={inputHandler}
+            onBlur={null}
+            errorMsg={errors.num_cols ? errors.num_cols : null}
 
-              </StyledErrorMessage>
-            </StyledGroupCol>
-            <StyledGroupCol>
-              <StyledHorizontalLabel>Horizontal </StyledHorizontalLabel>
-              <StyledHorizontal
-                name="horizontal_cell_lines"
-                type="number"
-                onChange={inputHandler}
-              />
-              <StyledErrorMessage>
-              </StyledErrorMessage>
-            </StyledGroupCol>
-          </StyledGroupRow>
-        </StyledGroupCol>
-      </StyledFormContainer>
-    </StyledExperimentFormContainer>
+          />
+        </>
+      ) : null}
+      <StyledSectionLabel>Cell line direction </StyledSectionLabel>
+      <InputNumber
+        label={"Vertical"}
+        name="vertical_cell_lines"
+        value={state.vertical_cell_lines ? state.vertical_cell_lines : null}
+        onChange={handleInputChange}
+        errorMsg={errors.vertical_cell_lines ? errors.vertical_cell_lines : null}
+
+      />
+
+      <InputNumber
+        label={"Horizontal"}
+        name="horizontal_cell_lines"
+        value={state.horizontal_cell_lines ? state.horizontal_cell_lines : null}
+        onChange={handleInputChange}
+        errorMsg={errors.horizontal_cell_lines ? errors.horizontal_cell_lines : null}
+
+      />
+    </FormPage>
   );
 };
 
