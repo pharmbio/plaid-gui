@@ -42,7 +42,7 @@ const CompoundForm = ({errors, handleInputChange, handleArrayChange }) => {
         label={"Compounds"}
         name="compounds"
         onChange={inputHandler}
-        errorMsg={errorState.compounds ? errorMsg.compounds : null}
+        errorMsg={null}
         value={null}
         onBlur={null}
       />
@@ -52,8 +52,8 @@ const CompoundForm = ({errors, handleInputChange, handleArrayChange }) => {
         placeholder=""
         name="compound_names"
         onChange={inputHandler}
-        disable={errorState.compounds ? true : false}
-        errorMsg={errorState.compound_names ? errorMsg.compound_names : null}
+        disable={false}
+        errorMsg={null}
       />
 
       <InputNumber

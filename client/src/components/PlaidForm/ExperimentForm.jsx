@@ -75,7 +75,7 @@ const ExperimentForm = ({ num_rows, handleInputChange }) => {
             value={num_rows}
             onChange={inputHandler}
             onBlur={null}
-            errorMsg={errorState.num_rows ? errorMsg.num_rows : null}
+            errorMsg={null}
           />
           <InputNumber
             name="num_cols"
@@ -83,7 +83,7 @@ const ExperimentForm = ({ num_rows, handleInputChange }) => {
             value={null}
             onChange={inputHandler}
             onBlur={null}
-            errorMsg={errorState.num_cols ? errorMsg.num_cols : null}
+            errorMsg={null}
           />
         </>
       ) : null}
@@ -92,20 +92,14 @@ const ExperimentForm = ({ num_rows, handleInputChange }) => {
         label={"Vertical"}
         name="vertical_cell_lines"
         onChange={handleInputChange}
-        errorMsg={
-          errorState.vertical_cell_lines ? errorMsg.vertical_cell_lines : null
-        }
+        errorMsg={null}
       />
 
       <InputNumber
         label={"Horizontal"}
         name="horizontal_cell_lines"
         onChange={handleInputChange}
-        errorMsg={
-          errorState.horizontal_cell_lines
-            ? errorMsg.horizontal_cell_lines
-            : null
-        }
+        errorMsg={null}
       />
     </FormPage>
   );

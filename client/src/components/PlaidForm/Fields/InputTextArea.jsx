@@ -24,6 +24,7 @@ const StyledTextArea = styled.textarea`
     outline: none;
   }
   font-family: ${(props) => props.theme.fonts.secondary};
+  font-size: 14px;
 `;
 
 const StyledErrorMessage = styled.div`

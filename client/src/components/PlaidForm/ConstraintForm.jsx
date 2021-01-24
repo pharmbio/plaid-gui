@@ -72,7 +72,7 @@ const ConstraintForm = ({ handleInputChange }) => {
         value={null}
         onChange={inputHandler}
         onBlur={null}
-        errorMsg={errorState.size_empty_edge ? errorMsg.size_empty_edge : null}
+        errorMsg={null}
       />
     </FormPage>
   );
