@@ -23,24 +23,28 @@ import styled from "styled-components";
 */
 
 const StyledContainer = styled.div`
-  `;
+  overflow-y: scroll;
+  height: 100vh;
+`;
 
 const axios = require("axios");
-async function postForm(formData,
+async function postForm(
+  formData,
   setResponseError,
   setFlightState,
   flightState,
-  setData) {
+  setData
+) {
   let axiosConfig = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-  setFlightState({ ...flightState, loading: true, responseError: false })
+  setFlightState({ ...flightState, loading: true, responseError: false });
   await axios
     .post("http://localhost:5000/", formData, axiosConfig)
     .then((response) => {
-      setFlightState({ ...flightState, loading: false, responseError: false })
+      setFlightState({ ...flightState, loading: false, responseError: false });
 
       setData({
         rows: formData.num_rows,
@@ -50,7 +54,7 @@ async function postForm(formData,
       });
     })
     .catch((error) => {
-      setFlightState({ ...flightState, loading: false, responseError: true })
+      setFlightState({ ...flightState, loading: false, responseError: true });
       console.log(error.response.data.message);
       setResponseError(error.response.data.message);
     });
@@ -62,7 +66,7 @@ const PlaidForm = (props) => {
     responseError: false,
   });
   const [errorState, setErrorState] = useState({});
-  const [responseError, setResponseError] = useState('');
+  const [responseError, setResponseError] = useState("");
   const [formState, setFormState] = useState({
     num_rows: 8,
     num_cols: 12,
@@ -71,9 +75,29 @@ const PlaidForm = (props) => {
     allow_empty_wells: false,
     size_empty_edge: 1,
     compounds: 10,
-    compound_concentration_names: ["0.3", "1", "3", "5", "10", "15", "30", "100"], // List
+    compound_concentration_names: [
+      "0.3",
+      "1",
+      "3",
+      "5",
+      "10",
+      "15",
+      "30",
+      "100",
+    ], // List
     compound_concentration_indicators: ["", "", "", "", "", "", "", ""],
-    compound_names: ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "coococococococooco9", "aaaaabbbbcccddddd10"], // List
+    compound_names: [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "coococococococooco9",
+      "aaaaabbbbcccddddd10",
+    ], // List
     compound_concentrations: 8,
     replicates: 2,
     combinations: 0,
@@ -148,47 +172,47 @@ const PlaidForm = (props) => {
   console.log(formState);
   return (
     <StyledContainer>
-      {flightState['loading'] ? (
+      {flightState["loading"] ? (
         <Loader />
       ) : (
-          <Stepper
-            initialValues={formState}
-            postForm={postForm}
-            setResponseError={setResponseError}
-            responseError={responseError}
-            setFlightState={setFlightState}
-            flightState={flightState}
-            setData={props.setData}
-          >
-            <Step label="Experiment Setup">
-              <ExperimentForm
-                num_rows={formState.num_rows}
-                handleInputChange={handleInputChange}
-                errorState={errorState}
-                state={formState}
-              />
-              <ConstraintForm handleInputChange={handleInputChange} />
-            </Step>
-            <Step label="Compound Setup">
-              <CompoundForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-              />
-            </Step>
-            <Step label="Combinations">
-              <CombinationForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-              />
-            </Step>
-            <Step label="Experiment Validation">
-              <ControlForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-              />
-            </Step>
-          </Stepper>
-        )}
+        <Stepper
+          initialValues={formState}
+          postForm={postForm}
+          setResponseError={setResponseError}
+          responseError={responseError}
+          setFlightState={setFlightState}
+          flightState={flightState}
+          setData={props.setData}
+        >
+          <Step label="Experiment Setup">
+            <ExperimentForm
+              num_rows={formState.num_rows}
+              handleInputChange={handleInputChange}
+              errorState={errorState}
+              state={formState}
+            />
+            <ConstraintForm handleInputChange={handleInputChange} />
+          </Step>
+          <Step label="Compound Setup">
+            <CompoundForm
+              handleInputChange={handleInputChange}
+              handleArrayChange={handleArrayChange}
+            />
+          </Step>
+          <Step label="Combinations">
+            <CombinationForm
+              handleInputChange={handleInputChange}
+              handleArrayChange={handleArrayChange}
+            />
+          </Step>
+          <Step label="Experiment Validation">
+            <ControlForm
+              handleInputChange={handleInputChange}
+              handleArrayChange={handleArrayChange}
+            />
+          </Step>
+        </Stepper>
+      )}
     </StyledContainer>
   );
 };
