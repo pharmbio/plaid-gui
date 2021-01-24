@@ -1,46 +1,7 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-
-const StyledCompoundsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledCompoundsLabel = styled.label`
-  margin-top: 5px;
-`;
-const StyledCompounds = styled.input`
-  margin-top: 5px;
-`;
-const StyledCompoundsNames = styled.input`
-  margin-top: 5px;
-`;
-
-const StyledCompoundsNamesLabel = styled.label`
-  margin-top: 5px;
-`;
-const StyledCompoundsConc = styled.input`
-  margin-top: 5px;
-`;
-const StyledCompoundsConcLabel = styled.label`
-  margin-top: 5px;
-`;
-const StyledCompoundsConcName = styled.input`
-  margin-top: 5px;
-`;
-const StyledCompoundsConcNameLabel = styled.label`
-  margin-top: 5px;
-`;
-const StyledCompoundsReplLabel = styled.label`
-  margin-top: 5px;
-`;
-const StyledCompoundsRepl = styled.input`
-  margin-top: 5px;
-`;
-const StyledErrorMessage = styled.div`
-  font-size: 12px;
-  color: red;
-`;
+import FormPage from "./FormPage";
+import InputTextArea from "./Fields/InputTextArea";
+import InputNumber from "./Fields/InputNumber";
 
 const CompoundForm = ({errors, handleInputChange, handleArrayChange }) => {
   const [validFormState, setValidFormState] = useState(false);
@@ -76,60 +37,60 @@ const CompoundForm = ({errors, handleInputChange, handleArrayChange }) => {
 
 
   return (
-    <>
-      <StyledCompoundsContainer>
-        <StyledCompoundsLabel>Compounds: </StyledCompoundsLabel>
-        <StyledCompounds
-          type="number"
-          name="compounds"
-          onChange={inputHandler}
-        />
-        <StyledErrorMessage>
-          {errorState.compounds ? errorMsg.compounds : null}
-        </StyledErrorMessage>
-        <StyledCompoundsNamesLabel>Compound names: </StyledCompoundsNamesLabel>
-        <StyledCompoundsNames
-          type="text"
-          name="compound_names"
-          onChange={inputHandler}
-          disabled={errorState.compounds ? false : false}
-        />
-        <StyledErrorMessage>
-          {errorState.compound_names ? errorMsg.compound_names : null}
-        </StyledErrorMessage>
+    <FormPage>
+      <InputNumber
+        label={"Compounds"}
+        name="compounds"
+        onChange={inputHandler}
+        errorMsg={errorState.compounds ? errorMsg.compounds : null}
+        value={null}
+        onBlur={null}
+      />
 
-        <StyledCompoundsConcLabel>
-          Compound concentrations:{" "}
-        </StyledCompoundsConcLabel>
-        <StyledCompoundsConc
-          type="number"
-          name="compound_concentrations"
-          onChange={handleInputChange}
-        />
-        <StyledCompoundsConcNameLabel>
-          Compound concentration names:
-        </StyledCompoundsConcNameLabel>
-        <StyledCompoundsConcName
-          type="text"
-          name="compound_concentration_names"
-          onChange={handleArrayChange}
-        />
-        <StyledCompoundsConcNameLabel>
-          Compound concentration indicators:
-        </StyledCompoundsConcNameLabel>
-        <StyledCompoundsConc
-          type="text"
-          name="compound_concentrations_indicators"
-          onChange={handleArrayChange}
-        />
-        <StyledCompoundsReplLabel>Replicates </StyledCompoundsReplLabel>
-        <StyledCompoundsRepl
-          type="number"
-          name="replicates"
-          onChange={handleInputChange}
-        />
-      </StyledCompoundsContainer>
-    </>
+      <InputTextArea
+        label={"Compound names"}
+        placeholder=""
+        name="compound_names"
+        onChange={inputHandler}
+        disable={errorState.compounds ? true : false}
+        errorMsg={errorState.compound_names ? errorMsg.compound_names : null}
+      />
+
+      <InputNumber
+        label={"Compound concentrations"}
+        name="compound_concentrations"
+        onChange={handleInputChange}
+        errorMsg={null}
+        value={null}
+        onBlur={null}
+      />
+
+      <InputTextArea
+        label={"Compound concentration names"}
+        placeholder=""
+        name="compound_concentration_names"
+        onChange={handleArrayChange}
+        disable={false}
+        errorMsg={null}
+      />
+
+      <InputTextArea
+        label={"Compound concentration indicators"}
+        placeholder=""
+        name="compound_concentrations_indicators"
+        onChange={handleArrayChange}
+        disable={false}
+        errorMsg={null}
+      />
+      <InputNumber
+        label={"Replicates"}
+        name="replicates"
+        onChange={handleInputChange}
+        errorMsg={null}
+        value={null}
+        onBlur={null}
+      />
+    </FormPage>
   );
 };
 
