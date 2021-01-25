@@ -28,7 +28,7 @@ const StyledErrorMessage = styled.div`
 const InputSelect = (props) => {
   return (
     <StyledNumberFieldContainer>
-      <StyledLabel for={props.name}>{props.label}</StyledLabel>
+      <StyledLabel  htmlFor={props.name}>{props.label}</StyledLabel>
       <StyledSelectField
         id={props.id}
         name={props.name}
