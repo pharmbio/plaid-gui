@@ -61,7 +61,7 @@ const HoriztonalStepper = ({ currentStep, steps = [], labels = [] }) => {
         <HoriztonalStepperContainer>
 
             {steps.map((child, index) => (
-                <HoriztonalStepperProgress >
+                <HoriztonalStepperProgress key={"step" + index}>
                     <HoriztonalStepperProgressIcon
                         finished={currentStep > index}
                         current={currentStep >= index}

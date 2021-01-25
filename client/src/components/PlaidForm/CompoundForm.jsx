@@ -44,7 +44,7 @@ const CompoundForm = ({ errors, handleInputChange, handleArrayChange, state }) =
         onChange={inputHandler}
         onBlur={null}
         value={state.compounds ? state.compounds : null}
-        errorMsg={errors.compounds ? compounds : null}
+        errorMsg={errors.compounds ? state.compounds : null}
       />
 
       <InputTextArea

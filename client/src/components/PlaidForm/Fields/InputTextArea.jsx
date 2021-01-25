@@ -36,7 +36,7 @@ const StyledErrorMessage = styled.div`
 const InputTextArea = (props) => {
   return (
     <StyledTextAreaFieldContainer>
-      <StyledLabel for={props.name}>{props.label}</StyledLabel>
+      <StyledLabel  htmlFor={props.name}>{props.label}</StyledLabel>
       <StyledTextArea
         id={props.name}
         name={props.name}
