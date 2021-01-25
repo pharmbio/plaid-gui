@@ -3,7 +3,7 @@ import FormPage from "./FormPage";
 import InputTextArea from "./Fields/InputTextArea";
 import InputNumber from "./Fields/InputNumber";
 
-const CompoundForm = ({errors, handleInputChange, handleArrayChange }) => {
+const CompoundForm = ({ errors, handleInputChange, handleArrayChange, state }) => {
   const [validFormState, setValidFormState] = useState(false);
   const [enableCompName, setEnableCompName] = useState(false);
   const [errorMsg, setErrorMsg] = useState({});
@@ -42,9 +42,9 @@ const CompoundForm = ({errors, handleInputChange, handleArrayChange }) => {
         label={"Compounds"}
         name="compounds"
         onChange={inputHandler}
-        errorMsg={null}
-        value={null}
         onBlur={null}
+        value={state.compounds ? state.compounds : null}
+        errorMsg={errors.compounds ? compounds : null}
       />
 
       <InputTextArea

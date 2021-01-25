@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const validators = {
     minValidSize: function (config) {
         return function (value) {
-            console.log(value);
-            if (value < 1 || isNaN(value)) {
+            if (value < config.value || isNaN(value) || value === null) {
                 return config.message;
             }
             return null;
@@ -40,10 +39,16 @@ const config = {
         },
         size_empty_edge: {
             minValidSize: {
-                value: 1,
-                message: 'Empty edges must be a number > 0'
+                value: 0,
+                message: 'Empty edges must be a number >= 0'
             }
         },
+        compounds: {
+            minValidSize: {
+                value: 1,
+                message: 'Compounds must be a number > 0'
+            }
+        }
     },
     selects: {
         select_plate_size: {}
@@ -80,26 +85,29 @@ function validateFields(fieldValues, fieldConfigs) {
     return errors
 }
 
-const initialState = {}
-/* TODO: Probably skip reducer for now and only implement parent-level validation. Only look att validation parts, onchange already works. */
-/* Reducer that determines the type of change, submit or validation event. */
-//Form validation should work directly of the object we're sending. This means it would be easy to create a validaator and simply pass it our current object, validating everything on change.
-//Add the validator in the useEffect tol fire when we update the object we are sending. Value is only updated if all validators are passed. Each validation is its own function.
-//The next button should not   be clickable, thus we must return an collection of current errors from the custom hook and only if this is empty can you go to the next step.
-// We can then pass the updated object and a config that defines the validations.   
-// to a custom hook that returns all current errors.
-// Payload needs to be the event!!
-
-//TODO NEXT: Fix this hook so that it works properly with the validatfield/fields. Then try to use it!! Should be called whenever we update values in the object.
-//config can be lifted out so that user can provide his own. I dont think this is necessary for this project.
-//TODO NEXT: fix validateField
+/* This custom validation hook can be used for onChange validation (comment in useEffect()) and onClick validation through the formUtils function onClick.
+   onClick returns an object containing every field that may or may not have passed validation.
+   There's no point in using both so we select one. 
+*/
 const useValidation = (input) => {
     const [errors, setErrors] = useState({})
-    useEffect(() => {
-        const errors = validateFields(input, config.fields);
-        setErrors(errors);
-    }, [input]);
-    return (errors)
+    const [validated, setValidated] = useState(false);
+    /*  useEffect(() => {
+         const errors = validateFields(input, config.fields);
+         setErrors(errors);
+     }, [input]); */
+    const formUtils = {
+        onClick: () => {
+            const errors = validateFields(input, config.fields);
+            setErrors(errors);
+            console.log(errors);
+            return errors;
+        }
+    }
+    return {
+        errors: errors,
+        formUtils: formUtils
+    }
 };
 
 export default useValidation;

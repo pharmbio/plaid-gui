@@ -9,21 +9,7 @@ import Step from "./Step";
 import Loader from "./../Loader";
 import styled from "styled-components";
 import useValidation from "./useValidation";
-/* TODO: Refactor to handle onChange with Formik!!
-        the object storing the entered data should not be processed instantly, just validated so that the input is correct. This is needed 
-        to persist the entered data.
-        Change input fields requiring large input into textields.
-        Find a way to store the inital dropdown value in the json object. Must it be hardcoded??
-        Find a way to reset onChange value to default when resetting (e.g erasing all input)!
-        Find a way to reset stored value to default when an error is triggered for that specific field
-        Find a way to disable next button if there is an error. (Must lift out validation from children to top level component)
-        Dependencies are now stored using an errorState array where each obj key is either true or false if it is in error state or not. Better way?
 
-        TODO:
-        lift all validation out and isolate it. 
-
-        TODO: Test the validation now! Pass the error state to e.g compoundForm. Display any relatable errors if they are not null for that field.
-*/
 const axios = require("axios");
 
 const StyledContainer = styled.div`
@@ -68,8 +54,6 @@ const PlaidForm = (props) => {
     loading: false,
     responseError: false,
   });
-  // const { getFieldProps, getFormProps, errors } = useValidation(config);
-  const [errorState, setErrorState] = useState({});
   const [responseError, setResponseError] = useState("");
   const [formState, setFormState] = useState({
     num_rows: 8,
@@ -119,8 +103,8 @@ const PlaidForm = (props) => {
   /* custom validation hook. TODO: Pass this validation into each component. Assiciate each name with the correct validation field 
      and simply check if the error is null or not. If it's not, display that error. TOFIX, only one error at a time?
   */
-  const errorMsgs = useValidation(formState);
-  console.log(errorMsgs)
+  const { errors, formUtils } = useValidation(formState);
+  console.log(formUtils)
 
   const handleArrayChange = (event) => {
     const deviations = { control_replicates: "integer" };
@@ -178,7 +162,6 @@ const PlaidForm = (props) => {
       [name]: value,
     });
   };
-
   console.log(formState);
   return (
     <StyledContainer>
@@ -193,36 +176,44 @@ const PlaidForm = (props) => {
             setFlightState={setFlightState}
             flightState={flightState}
             setData={props.setData}
-            errorMsgs={errorMsgs}
+            errors={errors}
+            formUtils={formUtils}
           >
             <Step label="Experiment Setup">
               <ExperimentForm
                 handleInputChange={handleInputChange}
-                errors={errorMsgs}
+                errors={errors}
                 state={formState}
               />
               <ConstraintForm
                 handleInputChange={handleInputChange}
-                errors={errorMsgs}
+                errors={errors}
                 state={formState} />
             </Step>
             <Step label="Compound Setup">
               <CompoundForm
-                errorsMsg={errorMsgs}
                 handleInputChange={handleInputChange}
                 handleArrayChange={handleArrayChange}
+                errors={errors}
+                state={formState}
+
               />
             </Step>
             <Step label="Combinations">
               <CombinationForm
                 handleInputChange={handleInputChange}
                 handleArrayChange={handleArrayChange}
+                errors={errors}
+                state={formState}
+
               />
             </Step>
             <Step label="Experiment Validation">
               <ControlForm
                 handleInputChange={handleInputChange}
                 handleArrayChange={handleArrayChange}
+                errors={errors}
+                state={formState}
               />
             </Step>
           </Stepper>
