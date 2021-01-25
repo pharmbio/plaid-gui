@@ -48,7 +48,6 @@ async function postForm(
       setResponseError(error.response.data.message);
     });
 }
-
 const PlaidForm = (props) => {
   const [flightState, setFlightState] = useState({
     loading: false,
