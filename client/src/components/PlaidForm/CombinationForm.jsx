@@ -9,7 +9,7 @@ const CombinationForm = ({ handleInputChange, handleArrayChange }) => {
       <InputNumber
         name="combinations"
         label="Combinations"
-        value={null}
+        value={""}
         onChange={handleInputChange}
         onBlur={null}
         errorMsg={null}
@@ -22,12 +22,13 @@ const CombinationForm = ({ handleInputChange, handleArrayChange }) => {
         onChange={handleArrayChange}
         disable={false}
         errorMsg={null}
+        value={""}
       />
 
       <InputNumber
         name="combination_concentrations"
         label="Combination concentrations"
-        value={null}
+        value={""}
         onChange={handleInputChange}
         onBlur={null}
         errorMsg={null}
@@ -39,6 +40,7 @@ const CombinationForm = ({ handleInputChange, handleArrayChange }) => {
         name="combination_concentration_names"
         onChange={handleArrayChange}
         disable={false}
+        value={""}
         errorMsg={null}
       />
     </FormPage>

@@ -44,7 +44,7 @@ const ConstraintForm = ({ handleInputChange, errors, state }) => {
       <InputNumber
         name="size_empty_edge"
         label="Size of empty edges"
-        value={state.size_empty_edge ? state.size_empty_edge : null}
+        value={state.size_empty_edge ? state.size_empty_edge : ""}
         onChange={inputHandler}
         errorMsg={errors.size_empty_edge ? errors.size_empty_edge : null}
       />

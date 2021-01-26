@@ -9,18 +9,6 @@ const StyledSectionLabel = styled.label`
   font-weight: bold;
 `;
 
-const StyledSelect = styled.select`
-  align-self: flex-start;
-`;
-const StyledSizeLabel = styled.label`
-  align-self: flex-start;
-`;
-
-const StyledErrorMessage = styled.div`
-  font-size: 12px;
-  color: red;
-`;
-
 const ExperimentForm = ({ handleInputChange, errors, state }) => {
   const [customState, setCustomState] = useState(false);
   const [selectState, setSelectState] = useState({
@@ -70,7 +58,7 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
           <InputNumber
             name="num_rows"
             label="Rows"
-            value={state.num_rows ? state.num_rows : null}
+            value={state.num_rows ? state.num_rows : ""}
             onChange={inputHandler}
             onBlur={null}
             errorMsg={errors.num_rows ? errors.num_rows : null}
@@ -78,7 +66,7 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
           <InputNumber
             name="num_cols"
             label="Columns"
-            value={state.num_cols ? state.num_cols : null}
+            value={state.num_cols ? state.num_cols : ""}
             onChange={inputHandler}
             onBlur={null}
             errorMsg={errors.num_cols ? errors.num_cols : null}
@@ -90,7 +78,7 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
       <InputNumber
         label={"Vertical"}
         name="vertical_cell_lines"
-        value={state.vertical_cell_lines ? state.vertical_cell_lines : null}
+        value={state.vertical_cell_lines ? state.vertical_cell_lines : ""}
         onChange={handleInputChange}
         errorMsg={errors.vertical_cell_lines ? errors.vertical_cell_lines : null}
 
@@ -99,7 +87,7 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
       <InputNumber
         label={"Horizontal"}
         name="horizontal_cell_lines"
-        value={state.horizontal_cell_lines ? state.horizontal_cell_lines : null}
+        value={state.horizontal_cell_lines ? state.horizontal_cell_lines : ""}
         onChange={handleInputChange}
         errorMsg={errors.horizontal_cell_lines ? errors.horizontal_cell_lines : null}
 

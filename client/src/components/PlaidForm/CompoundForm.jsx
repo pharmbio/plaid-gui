@@ -48,7 +48,7 @@ const CompoundForm = ({
     }else {
       setDelimiter(delimiter);
     }
-    
+
     if (compoundNames !== "") {
       new_delimiter = new_delimiter !== "" ? new_delimiter : DEFAULT_DELIMITER;
       const parsedCompoundNames = parse(new_delimiter, compoundNames);
@@ -100,6 +100,7 @@ const CompoundForm = ({
         placeholder=""
         name="compound_concentration_names"
         onChange={handleArrayChange}
+        value={""}
         disable={false}
         errorMsg={null}
       />
