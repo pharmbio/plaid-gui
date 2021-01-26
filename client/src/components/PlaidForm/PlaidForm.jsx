@@ -103,7 +103,7 @@ const PlaidForm = (props) => {
   const { errors, formUtils } = useValidation(formState);
 
   const handleCompoundNamesChange = (compounds) => {
-    setFormState({ ...formState, compound_name: compounds });
+    setFormState({ ...formState, ["compound_names"]: compounds });
   };
 
   const handleArrayChange = (event) => {
