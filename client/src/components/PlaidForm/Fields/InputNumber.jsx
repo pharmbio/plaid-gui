@@ -26,8 +26,7 @@ const StyledErrorMessage = styled.div`
 `;
 
 const InputNumber = (props) => {
-  const [value, setValue] = React.useState("");
-
+  const [value, setValue] = React.useState(props.value);
   const handleChange = (event) => {
     setValue(event.target.value);
     props.onChange(event);
