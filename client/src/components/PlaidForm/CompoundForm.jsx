@@ -3,38 +3,27 @@ import FormPage from "./FormPage";
 import InputTextArea from "./Fields/InputTextArea";
 import InputNumber from "./Fields/InputNumber";
 
-const CompoundForm = ({ errors, handleInputChange, handleArrayChange, state }) => {
-  const [validFormState, setValidFormState] = useState(false);
-  const [enableCompName, setEnableCompName] = useState(false);
-  const [errorMsg, setErrorMsg] = useState({});
-  /* This state manages if a specific state is invalid or not */
-  const [errorState, setErrorState] = useState({
-    compounds: true,
-    size_empty_edge: true,
-    compound_names: true,
-    compound_concentrations: true,
-    compound_concentration_names: true,
-    replicates: true,
-  });
-  /* This state manages the current values of each input. Needed to track cross-validation.
-     Once validation is moved should be enough to check json obj in plaidform. */
-  const [valueState, setValueState] = useState({
-    compounds: 0,
-    compound_names: [],
-    compound_concentrations: [],
-    compound_concentration_names: [],
-    replicates: [],
-  });
+const CompoundForm = ({ errors, handleInputChange, handleArrayChange, state, delimiter, handleDelimiterChange }) => {
 
+  function reconstructTextAreaInput(fieldName){
+    const str = fieldName.toString();
+    str.replace(',', delimiter);
+    
+  }
 
   function inputHandler(event) {
-    if (event.target.name === "compound_names") {
+    console.log(state.compound_names.toString())
+    let name = event.target.name;
+    if (name === "compound_names") {
       handleArrayChange(event);
-    } else {
+    }
+    else if (name === "delimiter_selection") {
+      handleDelimiterChange(event);
+    }
+    else {
       handleInputChange(event);
     }
   }
-
 
   return (
     <FormPage>
@@ -48,10 +37,22 @@ const CompoundForm = ({ errors, handleInputChange, handleArrayChange, state }) =
       />
 
       <InputTextArea
+        label={"Delimitor Selection (Optional)"}
+        placeholder=""
+        name="delimiter_selection"
+        disable={false}
+        value={delimiter}
+        onChange={inputHandler}
+        errorMsg={null}
+      />
+
+
+      <InputTextArea
         label={"Compound names"}
         placeholder=""
         name="compound_names"
         onChange={inputHandler}
+        value={state.compound_names.toString}
         disable={false}
         errorMsg={null}
       />

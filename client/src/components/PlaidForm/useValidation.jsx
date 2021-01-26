@@ -87,7 +87,7 @@ function validateFields(fieldValues, fieldConfigs) {
 
 /* This custom validation hook can be used for onChange validation (comment in useEffect()) and onClick validation through the formUtils function onClick.
    onClick returns an object containing every field that may or may not have passed validation.
-   There's no point in using both so we select one. 
+   There's no point in using both so we select one. Implement setState(updater, callback) to support it.
 */
 const useValidation = (input) => {
     const [errors, setErrors] = useState({})

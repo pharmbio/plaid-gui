@@ -16,7 +16,6 @@ const StyledContainer = styled.div`
   overflow-y: scroll;
   height: 100vh;
 `;
-
 async function postForm(
   formData,
   setResponseError,
@@ -44,7 +43,6 @@ async function postForm(
     })
     .catch((error) => {
       setFlightState({ ...flightState, loading: false, responseError: true });
-      console.log(error.response.data.message);
       setResponseError(error.response.data.message);
     });
 }
@@ -103,15 +101,37 @@ const PlaidForm = (props) => {
      and simply check if the error is null or not. If it's not, display that error. TOFIX, only one error at a time?
   */
   const { errors, formUtils } = useValidation(formState);
-  console.log(formUtils)
+  const [delimiter, setDelimiter] = useState(',');
 
+
+
+
+  function reconstructTextAreaInput(fieldName) {
+    const str = fieldName.toString();
+    str.replace(',', delimiter);
+    return str;
+
+  }
+  const handleDelimiterChange = (event) => {
+    let originalString = reconstructTextAreaInput(formState.compound_names.toString());
+    console.log(originalString);
+    if (event.target.value === null || event.target.value === '') {
+      setDelimiter(',');
+    }
+    else {
+      setDelimiter(event.target.value, handleArrayChange({ target: { value: originalString, name: 'compound_names' } }));
+    }
+
+  }
   const handleArrayChange = (event) => {
+    console.log(event.target.value);
     const deviations = { control_replicates: "integer" };
+    console.log(event.target.name);
     const target = event.target;
     const value = target.value;
     const name = target.name;
     const trim = value.replace(/(^,)|(,$)/g, "");
-    const delim = trim.split(",");
+    const delim = trim.split(delimiter);
     if (name in deviations) {
       switch (deviations[name]) {
         case "integer":
@@ -126,7 +146,6 @@ const PlaidForm = (props) => {
     setFormState({ ...formState, [name]: delim });
 
   };
-
   const handleInputChange = (event) => {
     const target = event.target;
     const type = target.type;
@@ -162,6 +181,7 @@ const PlaidForm = (props) => {
     });
   };
   console.log(formState);
+  console.log(delimiter);
   return (
     <StyledContainer>
       {flightState["loading"] ? (
@@ -193,6 +213,8 @@ const PlaidForm = (props) => {
               <CompoundForm
                 handleInputChange={handleInputChange}
                 handleArrayChange={handleArrayChange}
+                handleDelimiterChange={handleDelimiterChange}
+                delimiter={delimiter}
                 errors={errors}
                 state={formState}
 
