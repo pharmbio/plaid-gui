@@ -9,7 +9,7 @@ const ControlForm = ({ handleInputChange, handleArrayChange }) => {
       <InputNumber
         name="num_controls"
         label="Amount of controls"
-        value={null}
+        value={""}
         onChange={handleInputChange}
         onBlur={null}
         errorMsg={null}
@@ -21,13 +21,14 @@ const ControlForm = ({ handleInputChange, handleArrayChange }) => {
         name="control_names"
         onChange={handleArrayChange}
         disable={false}
+        value={""}
         errorMsg={null}
       />
 
       <InputNumber
         name="control_concentrations"
         label="Control concentrations"
-        value={null}
+        value={""}
         onChange={handleInputChange}
         onBlur={null}
         errorMsg={null}
@@ -39,6 +40,7 @@ const ControlForm = ({ handleInputChange, handleArrayChange }) => {
         name="control_concentration_names"
         onChange={handleArrayChange}
         disable={false}
+        value={""}
         errorMsg={null}
       />
 
@@ -54,7 +56,7 @@ const ControlForm = ({ handleInputChange, handleArrayChange }) => {
       <InputNumber
         name="blanks"
         label="Blanks"
-        value={null}
+        value={""}
         onChange={handleInputChange}
         onBlur={null}
         errorMsg={null}
@@ -65,6 +67,7 @@ const ControlForm = ({ handleInputChange, handleArrayChange }) => {
         placeholder=""
         name="blanks_names"
         onChange={handleInputChange}
+        value={""}
         disable={false}
         errorMsg={null}
       />
