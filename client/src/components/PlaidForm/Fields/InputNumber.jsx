@@ -26,6 +26,12 @@ const StyledErrorMessage = styled.div`
 `;
 
 const InputNumber = (props) => {
+  const [value, setValue] = React.useState("");
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+    props.onChange(event);
+  };
   return (
     <StyledNumberFieldContainer>
       <StyledLabel  htmlFor={props.name}>{props.label}</StyledLabel>
@@ -33,8 +39,8 @@ const InputNumber = (props) => {
         id={props.name}
         name={props.name}
         type="number"
-        onChange={props.onChange}
-        value={props.value}
+        onChange={handleChange}
+        value={value}
         onBlur={props.onBlur}
       />
       <StyledErrorMessage>{props.errorMsg}</StyledErrorMessage>

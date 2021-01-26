@@ -101,28 +101,11 @@ const PlaidForm = (props) => {
      and simply check if the error is null or not. If it's not, display that error. TOFIX, only one error at a time?
   */
   const { errors, formUtils } = useValidation(formState);
-  const [delimiter, setDelimiter] = useState(',');
 
+  const handleCompoundNamesChange = (compounds) => {
+    setFormState({ ...formState, compound_name: compounds });
+  };
 
-
-
-  function reconstructTextAreaInput(fieldName) {
-    const str = fieldName.toString();
-    str.replace(',', delimiter);
-    return str;
-
-  }
-  const handleDelimiterChange = (event) => {
-    let originalString = reconstructTextAreaInput(formState.compound_names.toString());
-    console.log(originalString);
-    if (event.target.value === null || event.target.value === '') {
-      setDelimiter(',');
-    }
-    else {
-      setDelimiter(event.target.value, handleArrayChange({ target: { value: originalString, name: 'compound_names' } }));
-    }
-
-  }
   const handleArrayChange = (event) => {
     console.log(event.target.value);
     const deviations = { control_replicates: "integer" };
@@ -131,7 +114,7 @@ const PlaidForm = (props) => {
     const value = target.value;
     const name = target.name;
     const trim = value.replace(/(^,)|(,$)/g, "");
-    const delim = trim.split(delimiter);
+    const delim = trim.split(",");
     if (name in deviations) {
       switch (deviations[name]) {
         case "integer":
@@ -144,7 +127,6 @@ const PlaidForm = (props) => {
       }
     }
     setFormState({ ...formState, [name]: delim });
-
   };
   const handleInputChange = (event) => {
     const target = event.target;
@@ -181,64 +163,62 @@ const PlaidForm = (props) => {
     });
   };
   console.log(formState);
-  console.log(delimiter);
+
   return (
     <StyledContainer>
       {flightState["loading"] ? (
         <Loader />
       ) : (
-          <Stepper
-            initialValues={formState}
-            postForm={postForm}
-            setResponseError={setResponseError}
-            responseError={responseError}
-            setFlightState={setFlightState}
-            flightState={flightState}
-            setData={props.setData}
-            errors={errors}
-            formUtils={formUtils}
-          >
-            <Step label="Experiment Setup">
-              <ExperimentForm
-                handleInputChange={handleInputChange}
-                errors={errors}
-                state={formState}
-              />
-              <ConstraintForm
-                handleInputChange={handleInputChange}
-                errors={errors}
-                state={formState} />
-            </Step>
-            <Step label="Compound Setup">
-              <CompoundForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-                handleDelimiterChange={handleDelimiterChange}
-                delimiter={delimiter}
-                errors={errors}
-                state={formState}
-
-              />
-            </Step>
-            <Step label="Combinations">
-              <CombinationForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-                errors={errors}
-                state={formState}
-
-              />
-            </Step>
-            <Step label="Experiment Validation">
-              <ControlForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-                errors={errors}
-                state={formState}
-              />
-            </Step>
-          </Stepper>
-        )}
+        <Stepper
+          initialValues={formState}
+          postForm={postForm}
+          setResponseError={setResponseError}
+          responseError={responseError}
+          setFlightState={setFlightState}
+          flightState={flightState}
+          setData={props.setData}
+          errors={errors}
+          formUtils={formUtils}
+        >
+          <Step label="Experiment Setup">
+            <ExperimentForm
+              handleInputChange={handleInputChange}
+              errors={errors}
+              state={formState}
+            />
+            <ConstraintForm
+              handleInputChange={handleInputChange}
+              errors={errors}
+              state={formState}
+            />
+          </Step>
+          <Step label="Compound Setup">
+            <CompoundForm
+              handleInputChange={handleInputChange}
+              handleArrayChange={handleArrayChange}
+              errors={errors}
+              state={formState}
+              handleCompoundNamesChange={handleCompoundNamesChange}
+            />
+          </Step>
+          <Step label="Combinations">
+            <CombinationForm
+              handleInputChange={handleInputChange}
+              handleArrayChange={handleArrayChange}
+              errors={errors}
+              state={formState}
+            />
+          </Step>
+          <Step label="Experiment Validation">
+            <ControlForm
+              handleInputChange={handleInputChange}
+              handleArrayChange={handleArrayChange}
+              errors={errors}
+              state={formState}
+            />
+          </Step>
+        </Stepper>
+      )}
     </StyledContainer>
   );
 };

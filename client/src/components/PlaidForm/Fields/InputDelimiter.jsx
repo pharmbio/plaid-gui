@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const StyledTextAreaFieldContainer = styled.div`
+const StyledDelimiterFieldContainer = styled.div`
   margin-top: 5px;
   margin-bottom: 5px;
   display: flex;
@@ -14,11 +14,8 @@ const StyledLabel = styled.label`
   margin-bottom: 2.5px;
 `;
 
-const StyledTextArea = styled.textarea`
-  min-width: 180px;
-  max-width: 400px;
-  min-height: 120px;
-  max-height: 500px;
+const StyledInput = styled.input`
+  width: 80px;
   padding: 10px;
   &:focus {
     outline: none;
@@ -33,28 +30,29 @@ const StyledErrorMessage = styled.div`
   font-family: ${(props) => props.theme.fonts.secondary};
 `;
 
-const InputTextArea = (props) => {
-  const [value, setValue] = React.useState("");
+const DEFAULT_DELIMITER = ",";
 
+const InputDelimiter = (props) => {
+  const [value, setValue] = React.useState(DEFAULT_DELIMITER);
   const handleChange = (event) => {
-    setValue(event.target.value);
-    props.onChange(event);
-  };
-
+      setValue(event.target.value);
+      props.onChange(event.target.value);
+  }
   return (
-    <StyledTextAreaFieldContainer>
+    <StyledDelimiterFieldContainer>
       <StyledLabel htmlFor={props.name}>{props.label}</StyledLabel>
-      <StyledTextArea
+      <StyledInput
+        type="text"
         id={props.name}
         name={props.name}
         placeholder={props.placeholder}
-        onChange={handleChange}
-        disabled={props.disable} //true or false..
         value={value}
+        disable={props.disable}
+        onChange={handleChange}
       />
       <StyledErrorMessage>{props.errorMsg}</StyledErrorMessage>
-    </StyledTextAreaFieldContainer>
+    </StyledDelimiterFieldContainer>
   );
 };
 
-export default InputTextArea;
+export default InputDelimiter;
