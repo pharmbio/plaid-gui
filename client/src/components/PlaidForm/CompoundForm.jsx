@@ -40,16 +40,18 @@ const CompoundForm = ({
     }
   }
 
-  const handleDelimiterChange = (delimiter) => {
+  const handleDelimiterChange = (new_delimiter) => {
     // When the delimiter has changed => we need to re-parse the compound names that has been written to the field (if not empty)
-    if(delimiter === ""){
+    if(new_delimiter === ""){
       // We want to use the default delimiter if the user leaves the input field empty
       setDelimiter(DEFAULT_DELIMITER);
     }else {
       setDelimiter(delimiter);
     }
+    
     if (compoundNames !== "") {
-      const parsedCompoundNames = parse(delimiter, compoundNames);
+      new_delimiter = new_delimiter !== "" ? new_delimiter : DEFAULT_DELIMITER;
+      const parsedCompoundNames = parse(new_delimiter, compoundNames);
       console.log(parsedCompoundNames);
       handleCompoundNamesChange(parsedCompoundNames);
     }
