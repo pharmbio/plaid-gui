@@ -48,6 +48,24 @@ const config = {
                 value: 1,
                 message: 'Compounds must be a number > 0'
             }
+        },
+        compound_names: {
+            minValidSize: {
+                value: 1,
+                message: 'Compounds must be a number > 0'
+            }
+        },
+        compound_replicates: {
+            minValidSize: {
+                value: 1,
+                message: 'Compounds must be a number > 0'
+            }
+        },
+        compound_concentration_names: {
+            minValidSize: {
+                value: 1,
+                message: 'Compounds must be a number > 0'
+            }
         }
     },
     selects: {
