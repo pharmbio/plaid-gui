@@ -5,9 +5,13 @@ const StyledNumberFieldContainer = styled.div`
   margin: 5px;
   margin-left: 0px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 `;
 
+const StyledRowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 const StyledLabel = styled.label`
   font-family: ${(props) => props.theme.fonts.primary};
   font-size: 14px;
@@ -34,15 +38,17 @@ const InputNumber = (props) => {
   };
   return (
     <StyledNumberFieldContainer>
-      <StyledLabel  htmlFor={props.name}>{props.label}</StyledLabel>
-      <StyledNumberField
-        id={props.name}
-        name={props.name}
-        type="number"
-        onChange={handleChange}
-        value={value}
-        onBlur={props.onBlur}
-      />
+      <StyledRowContainer>
+        <StyledLabel htmlFor={props.name}>{props.label}</StyledLabel>
+        <StyledNumberField
+          id={props.name}
+          name={props.name}
+          type="number"
+          onChange={handleChange}
+          value={value}
+          onBlur={props.onBlur}
+        />
+      </StyledRowContainer>
       <StyledErrorMessage>{props.errorMsg}</StyledErrorMessage>
     </StyledNumberFieldContainer>
   );
