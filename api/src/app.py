@@ -1,8 +1,8 @@
 import os
 import sys
-from models.minizinc_model import MinizincModel
-from services.services import ModelService
-from error_handler import MinizincException
+from .models.minizinc_model import MinizincModel
+from .services.services import ModelService
+from .error_handler import MinizincException
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 

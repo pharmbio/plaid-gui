@@ -9,27 +9,17 @@ const StyledSectionLabel = styled.label`
   font-weight: bold;
 `;
 
-const ExperimentForm = ({ num_rows, handleInputChange }) => {
+const ExperimentForm = ({ handleInputChange, errors, state }) => {
   const [customState, setCustomState] = useState(false);
   const [selectState, setSelectState] = useState({
     value: "{num_row: 6, num_col: 8} ",
   });
   const [validFormState, setValidFormState] = useState(false);
 
-  const [errorMsg, setErrorMsg] = useState({});
-  /* This state imanages if a specific state is invalid or not */
-  const [errorState, setErrorState] = useState({
-    num_rows: false,
-    num_cols: false,
-    vertical_cell_lines: true,
-    horizontal_cell_lines: true,
-  });
-
   /* Input handler for the checkbox */
   const displaySize = (event) => {
     setSelectState({ value: event.target.value });
     if (event.target.value === "custom") {
-      setErrorState({ ...errorState, num_rows: true, num_cols: true });
       setCustomState(!customState);
     } else {
       handleInputChange(event);
@@ -40,7 +30,7 @@ const ExperimentForm = ({ num_rows, handleInputChange }) => {
     handleInputChange(event);
   }
 
-  console.log(validFormState);
+  console.log(state);
   return (
     <FormPage>
       <StyledSectionLabel>Plate dimensions</StyledSectionLabel>
@@ -68,18 +58,19 @@ const ExperimentForm = ({ num_rows, handleInputChange }) => {
           <InputNumber
             name="num_rows"
             label="Rows"
-            value={num_rows}
+            value={state.num_rows ? state.num_rows : ""}
             onChange={inputHandler}
             onBlur={null}
-            errorMsg={null}
+            errorMsg={errors.num_rows ? errors.num_rows : null}
           />
           <InputNumber
             name="num_cols"
             label="Columns"
-            value={null}
+            value={state.num_cols ? state.num_cols : ""}
             onChange={inputHandler}
             onBlur={null}
-            errorMsg={null}
+            errorMsg={errors.num_cols ? errors.num_cols : null}
+
           />
         </>
       ) : null}
@@ -87,15 +78,19 @@ const ExperimentForm = ({ num_rows, handleInputChange }) => {
       <InputNumber
         label={"Vertical"}
         name="vertical_cell_lines"
+        value={state.vertical_cell_lines ? state.vertical_cell_lines : ""}
         onChange={handleInputChange}
-        errorMsg={null}
+        errorMsg={errors.vertical_cell_lines ? errors.vertical_cell_lines : null}
+
       />
 
       <InputNumber
         label={"Horizontal"}
         name="horizontal_cell_lines"
+        value={state.horizontal_cell_lines ? state.horizontal_cell_lines : ""}
         onChange={handleInputChange}
-        errorMsg={null}
+        errorMsg={errors.horizontal_cell_lines ? errors.horizontal_cell_lines : null}
+
       />
     </FormPage>
   );

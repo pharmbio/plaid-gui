@@ -5,9 +5,13 @@ const StyledNumberFieldContainer = styled.div`
   margin: 5px;
   margin-left: 0px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 `;
 
+const StyledRowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 const StyledLabel = styled.label`
   font-family: ${(props) => props.theme.fonts.primary};
   font-size: 14px;
@@ -26,17 +30,24 @@ const StyledErrorMessage = styled.div`
 `;
 
 const InputNumber = (props) => {
+  const [value, setValue] = React.useState(props.value);
+  const handleChange = (event) => {
+    setValue(event.target.value);
+    props.onChange(event);
+  };
   return (
     <StyledNumberFieldContainer>
-      <StyledLabel for={props.name}>{props.label}</StyledLabel>
-      <StyledNumberField
-        id={props.name}
-        name={props.name}
-        type="number"
-        onChange={props.onChange}
-        value={props.value}
-        onBlur={props.onBlur}
-      />
+      <StyledRowContainer>
+        <StyledLabel htmlFor={props.name}>{props.label}</StyledLabel>
+        <StyledNumberField
+          id={props.name}
+          name={props.name}
+          type="number"
+          onChange={handleChange}
+          value={value}
+          onBlur={props.onBlur}
+        />
+      </StyledRowContainer>
       <StyledErrorMessage>{props.errorMsg}</StyledErrorMessage>
     </StyledNumberFieldContainer>
   );
