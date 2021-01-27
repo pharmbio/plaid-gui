@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import HorizontalStepper from "./HorizontalStepper";
 import { Formik, Form } from "formik";
 import styled from "styled-components";
-import NextButton from "./Buttons/NextButton";
-import PrevButton from "./Buttons/PrevButton";
+import NextButton from "../Buttons/NextButton";
+import PrevButton from "../Buttons/PrevButton";
 
 const StyledForm = styled(Form)`
   display: flex;
