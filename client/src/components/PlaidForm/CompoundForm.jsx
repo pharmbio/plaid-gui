@@ -6,6 +6,20 @@ import InputDelimiter from "./Fields/InputDelimiter";
 
 const DEFAULT_DELIMITER = ",";
 
+const compound_state = {
+  compounds: 0,
+  compound_concentration_names: [], 
+  compound_concentration_indicators: [],
+  compound_names: [], 
+  compound_concentrations: [],
+  replicates: 0,
+}
+
+const addToObject = () => {
+  
+}
+
+
 const parse = (delimiter, str) => {
   const re = new RegExp(`/(^${delimiter})|(,$)/g`, "")
   const trim = str.replace(re, "");
@@ -93,9 +107,9 @@ const CompoundForm = ({
         placeholder=""
         name="compound_concentrations"
         onChange={inputHandler}
-        value={concentrationNames }
+        value={concentrationNames}
         disable={false}
-        errorMsg={errors.compound_concentrations ? errors.compound_concentrations: null}
+        errorMsg={errors.compound_concentrations ? errors.compound_concentrations : null}
       />
 
       <InputTextArea
