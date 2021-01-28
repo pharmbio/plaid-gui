@@ -8,82 +8,27 @@ const validators = {
             }
             return null;
         }
-    }
-}
-/* Validation rules are placed here */
-const config = {
-    fields: {
-        num_rows: {
-            minValidSize: {
-                value: 1,
-                message: 'Rows must be a number > 0'
-            },
-        },
-        num_cols: {
-            minValidSize: {
-                value: 1,
-                message: 'Columns must be a number > 0'
+    },
+    minValidLength: function (config) {
+        return function (value) {
+            if (value.length != config.value) {
+                return config.message;
             }
-        },
-        vertical_cell_lines: {
-            minValidSize: {
-                value: 1,
-                message: 'Cell line must be a number > 0'
-            }
-        },
-        horizontal_cell_lines: {
-            minValidSize: {
-                value: 1,
-                message: 'Cell line must be a number > 0'
-            }
-        },
-        size_empty_edge: {
-            minValidSize: {
-                value: 0,
-                message: 'Empty edges must be a number >= 0'
-            }
-        },
-        compounds: {
-            minValidSize: {
-                value: 1,
-                message: 'Compounds must be a number > 0'
-            }
-        },
-        compound_names: {
-            minValidSize: {
-                value: 1,
-                message: 'Compounds must be a number > 0'
-            }
-        },
-        compound_replicates: {
-            minValidSize: {
-                value: 1,
-                message: 'Compounds must be a number > 0'
-            }
-        },
-        compound_concentration_names: {
-            minValidSize: {
-                value: 1,
-                message: 'Compounds must be a number > 0'
-            }
+            return null;
         }
-    },
-    selects: {
-        select_plate_size: {}
-    },
-    checkbox: {
-        allow_empty_wells: {},
     }
 }
 
-function validateField(fieldValue, fieldConfig) {
+
+
+function validateField(fieldValue, fieldConfig, fieldStates) {
     //validatorName is for e.g minValidSize
     //fieldConfig is for e.g num_rows
     for (let validatorName in fieldConfig) { //e. gfor validator in num_rows
         const validatorConfig = fieldConfig[validatorName];
         const validator = validators[validatorName]; //select the correct validator
         const configuredValidator = validator(validatorConfig); //run the validator function, get the configured validator and pass it the field value.
-        const errorMessage = configuredValidator(fieldValue);
+        const errorMessage = configuredValidator(fieldValue,fieldStates);
         if (errorMessage) {
             return errorMessage;
         }
@@ -91,13 +36,13 @@ function validateField(fieldValue, fieldConfig) {
     }
 }
 
-function validateFields(fieldValues, fieldConfigs) {
+function validateFields(fieldValues, fieldStates) {
     const errors = {};
-    for (let fieldName in fieldConfigs) { //fieldName is e.g num_rows 
-        const fieldConfig = fieldConfigs[fieldName]; //get the values stored in key e.g num_rows.
+    for (let fieldName in fieldStates) { //fieldName is e.g num_rows 
+        const fieldConfig = fieldStates[fieldName]; //get the values stored in key e.g num_rows.
         //  const fieldValue = fieldValues[fieldName]; //get the current values found in our large object for num_rows.
         const fieldValue = fieldValues[fieldName];
-        errors[fieldName] = validateField(fieldValue, fieldConfig); // pass the current value and the field into the validator. Return any errors. 
+        errors[fieldName] = validateField(fieldValue, fieldConfig, fieldStates); // pass the current value and the field into the validator. Return any errors. 
         // These errors will then be displayed in the frontend.
     }
     return errors
@@ -107,7 +52,7 @@ function validateFields(fieldValues, fieldConfigs) {
    onClick returns an object containing every field that may or may not have passed validation.
    There's no point in using both so we select one. Implement setState(updater, callback) to support it.
 */
-const useValidation = (input) => {
+const useValidation = (input, config) => {
     const [errors, setErrors] = useState({})
     const [validated, setValidated] = useState(false);
     /*  useEffect(() => {

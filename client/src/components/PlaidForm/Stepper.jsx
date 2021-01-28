@@ -68,9 +68,9 @@ const Stepper = ({ children, ...props }) => {
           om jag väljer onChange, hur kan vi stoppa valideringen från att köra på de tomma fälten innan man använt toolen? */
     function handleNext() {
         let errors = props.formUtils.onClick(); 
-        if(noErrors(errors)){
+       // if(noErrors(errors)){
             setStep(step + 1);
-        };
+      //  };
     }
 
     function noErrors(errorObj) {

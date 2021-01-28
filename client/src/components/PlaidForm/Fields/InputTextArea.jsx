@@ -50,7 +50,7 @@ const InputTextArea = (props) => {
         placeholder={props.placeholder}
         onChange={handleChange}
         disabled={props.disable} //true or false..
-        value={value}
+        value={props.value}
       />
       <StyledErrorMessage>{props.errorMsg}</StyledErrorMessage>
     </StyledTextAreaFieldContainer>

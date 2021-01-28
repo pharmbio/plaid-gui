@@ -83,7 +83,7 @@ const PlaidForm = (props) => {
       "coococococococooco9",
       "aaaaabbbbcccddddd10",
     ], // List
-    compound_concentrations: 8,
+    compound_concentrations: [8,8,8,8,8,8,8,8,8,8],
     replicates: 2,
     combinations: 0,
     combination_concentrations: 0,
@@ -97,18 +97,90 @@ const PlaidForm = (props) => {
     blanks: 0,
     blanks_name: "",
   });
+  const config = {
+    fields: {
+      num_rows: {
+        minValidSize: {
+          value: 1,
+          message: 'Rows must be a number > 0'
+        },
+      },
+      num_cols: {
+        minValidSize: {
+          value: 1,
+          message: 'Columns must be a number > 0'
+        }
+      },
+      vertical_cell_lines: {
+        minValidSize: {
+          value: 1,
+          message: 'Cell line must be a number > 0'
+        }
+      },
+      horizontal_cell_lines: {
+        minValidSize: {
+          value: 1,
+          message: 'Cell line must be a number > 0'
+        }
+      },
+      size_empty_edge: {
+        minValidSize: {
+          value: 0,
+          message: 'Empty edges must be a number >= 0'
+        }
+      },
+      compounds: {
+        minValidSize: {
+          value: 1,
+          message: 'Compounds must be a number > 0'
+        }
+      },
+      compound_names: {
+        minValidLength: {
+          value: formState.compounds,
+          message: 'Number of compound names are not equal to number of compounds'
+        }
+      },
+      compound_concentrations: {
+        minValidLength: {
+          value: formState.compounds,
+          message: 'Number of concentrations are not equal to number of compounds'
+        }
+      },
+      compound_concentration_names: {
+        minValidSize: {
+          value: formState.compounds,
+          message: ''
+        }
+      },
+      compound_replicates: {
+        minValidSize: {
+          value: 1,
+          message: '  Compounds must be a number > 0'
+        }
+      },
+    },
+    selects: {
+      select_plate_size: {}
+    },
+    checkbox: {
+      allow_empty_wells: {},
+    }
+  }
+
   /* custom validation hook. TODO: Pass this validation into each component. Assiciate each name with the correct validation field 
      and simply check if the error is null or not. If it's not, display that error. TOFIX, only one error at a time?
+     We also provide a cu
   */
-  const { errors, formUtils } = useValidation(formState);
 
+  const { errors, formUtils } = useValidation(formState, config);
   const handleCompoundNamesChange = (compounds) => {
     setFormState({ ...formState, ["compound_names"]: compounds });
   };
 
   const handleArrayChange = (event) => {
     console.log(event.target.value);
-    const deviations = { control_replicates: "integer" };
+    const deviations = { control_replicates: "integer", compound_concentrations: "integer" };
     console.log(event.target.name);
     const target = event.target;
     const value = target.value;
@@ -169,56 +241,56 @@ const PlaidForm = (props) => {
       {flightState["loading"] ? (
         <Loader />
       ) : (
-        <Stepper
-          initialValues={formState}
-          postForm={postForm}
-          setResponseError={setResponseError}
-          responseError={responseError}
-          setFlightState={setFlightState}
-          flightState={flightState}
-          setData={props.setData}
-          errors={errors}
-          formUtils={formUtils}
-        >
-          <Step label="Experiment Setup">
-            <ExperimentForm
-              handleInputChange={handleInputChange}
-              errors={errors}
-              state={formState}
-            />
-            <ConstraintForm
-              handleInputChange={handleInputChange}
-              errors={errors}
-              state={formState}
-            />
-          </Step>
-          <Step label="Compound Setup">
-            <CompoundForm
-              handleInputChange={handleInputChange}
-              handleArrayChange={handleArrayChange}
-              errors={errors}
-              state={formState}
-              handleCompoundNamesChange={handleCompoundNamesChange}
-            />
-          </Step>
-          <Step label="Combinations">
-            <CombinationForm
-              handleInputChange={handleInputChange}
-              handleArrayChange={handleArrayChange}
-              errors={errors}
-              state={formState}
-            />
-          </Step>
-          <Step label="Experiment Validation">
-            <ControlForm
-              handleInputChange={handleInputChange}
-              handleArrayChange={handleArrayChange}
-              errors={errors}
-              state={formState}
-            />
-          </Step>
-        </Stepper>
-      )}
+          <Stepper
+            initialValues={formState}
+            postForm={postForm}
+            setResponseError={setResponseError}
+            responseError={responseError}
+            setFlightState={setFlightState}
+            flightState={flightState}
+            setData={props.setData}
+            errors={errors}
+            formUtils={formUtils}
+          >
+            <Step label="Experiment Setup">
+              <ExperimentForm
+                handleInputChange={handleInputChange}
+                errors={errors}
+                state={formState}
+              />
+              <ConstraintForm
+                handleInputChange={handleInputChange}
+                errors={errors}
+                state={formState}
+              />
+            </Step>
+            <Step label="Compound Setup">
+              <CompoundForm
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+                errors={errors}
+                state={formState}
+                handleCompoundNamesChange={handleCompoundNamesChange}
+              />
+            </Step>
+            <Step label="Combinations">
+              <CombinationForm
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+                errors={errors}
+                state={formState}
+              />
+            </Step>
+            <Step label="Experiment Validation">
+              <ControlForm
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+                errors={errors}
+                state={formState}
+              />
+            </Step>
+          </Stepper>
+        )}
     </StyledContainer>
   );
 };

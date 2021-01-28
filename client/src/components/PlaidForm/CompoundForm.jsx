@@ -42,10 +42,10 @@ const CompoundForm = ({
 
   const handleDelimiterChange = (new_delimiter) => {
     // When the delimiter has changed => we need to re-parse the compound names that has been written to the field (if not empty)
-    if(new_delimiter === ""){
+    if (new_delimiter === "") {
       // We want to use the default delimiter if the user leaves the input field empty
       setDelimiter(DEFAULT_DELIMITER);
-    }else {
+    } else {
       setDelimiter(delimiter);
     }
 
@@ -81,18 +81,19 @@ const CompoundForm = ({
         placeholder=""
         name="compound_names"
         onChange={inputHandler}
-        value={compoundNames}
+        value={state.compound_names}
         disable={false}
-        errorMsg={null}
+        errorMsg={errors.compound_names ? errors.compound_names : null}
       />
 
-      <InputNumber
+      <InputTextArea
         label={"Compound concentrations"}
+        placeholder=""
         name="compound_concentrations"
-        onChange={handleInputChange}
-        errorMsg={null}
-        value={""}
-        onBlur={null}
+        onChange={inputHandler}
+        value={state.compound_concentrations}
+        disable={false}
+        errorMsg={errors.compound_concentrations ? errors.compound_concentrations: null}
       />
 
       <InputTextArea
@@ -102,7 +103,7 @@ const CompoundForm = ({
         onChange={handleArrayChange}
         value={""}
         disable={false}
-        errorMsg={null}
+        errorMsg={errors.compound_concentration_names ? errors.compound_concentration_names : null}
       />
 
       <InputTextArea
