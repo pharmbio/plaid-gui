@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 const validators = {
     minValidSize: function (config) {
+        console.log(config)
         return function (value) {
             if (value < config.value || isNaN(value) || value === null) {
                 return config.message;
@@ -16,6 +17,18 @@ const validators = {
             }
             return null;
         }
+    },
+    isNumber: function (config) {
+        console.log(config)
+        return function (value) {
+            console.log(value);
+            for (let i = 0; i < value.length; i++) {
+                if (Number.isNaN(value[i])) {
+                    return config.message;
+                }
+            }
+            return null;
+        }
     }
 }
 
@@ -25,15 +38,17 @@ function validateField(fieldValue, fieldConfig, fieldStates) {
     //validatorName is for e.g minValidSize
     //fieldConfig is for e.g num_rows
     for (let validatorName in fieldConfig) { //e. gfor validator in num_rows
+        console.log(validatorName);
+        console.log(fieldConfig)
         const validatorConfig = fieldConfig[validatorName];
         const validator = validators[validatorName]; //select the correct validator
         const configuredValidator = validator(validatorConfig); //run the validator function, get the configured validator and pass it the field value.
-        const errorMessage = configuredValidator(fieldValue,fieldStates);
+        const errorMessage = configuredValidator(fieldValue, fieldStates);
         if (errorMessage) {
             return errorMessage;
         }
-        return null;
     }
+    return null;
 }
 
 function validateFields(fieldValues, fieldStates) {

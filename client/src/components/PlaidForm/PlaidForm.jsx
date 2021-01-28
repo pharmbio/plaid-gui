@@ -83,7 +83,7 @@ const PlaidForm = (props) => {
       "coococococococooco9",
       "aaaaabbbbcccddddd10",
     ], // List
-    compound_concentrations: [8,8,8,8,8,8,8,8,8,8],
+    compound_concentrations: [8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
     replicates: 2,
     combinations: 0,
     combination_concentrations: 0,
@@ -145,6 +145,10 @@ const PlaidForm = (props) => {
         minValidLength: {
           value: formState.compounds,
           message: 'Number of concentrations are not equal to number of compounds'
+        },
+        isNumber: {
+          value: formState.compounds,
+          message: 'Concentration must be an integer or decimal'
         }
       },
       compound_concentration_names: {
@@ -153,10 +157,16 @@ const PlaidForm = (props) => {
           message: ''
         }
       },
-      compound_replicates: {
+      replicates: {
         minValidSize: {
-          value: 1,
-          message: '  Compounds must be a number > 0'
+          value: 0,
+          message: 'Replicates must be a number >= 0'
+        }
+      },
+      compound_concentration_indicators: {
+        minValidLength: {
+          value: formState.compounds,
+          message: 'Number of indicators does not match number of compounds'
         }
       },
     },
@@ -178,10 +188,12 @@ const PlaidForm = (props) => {
     setFormState({ ...formState, ["compound_names"]: compounds });
   };
 
+  const handleMatrixChange = (event) => {
+
+  }
+
   const handleArrayChange = (event) => {
-    console.log(event.target.value);
     const deviations = { control_replicates: "integer", compound_concentrations: "integer" };
-    console.log(event.target.name);
     const target = event.target;
     const value = target.value;
     const name = target.name;

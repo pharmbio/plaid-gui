@@ -21,6 +21,7 @@ const CompoundForm = ({
   handleCompoundNamesChange,
 }) => {
   const [compoundNames, setCompoundNames] = useState("");
+  const [concentrationNames, setConcentrationNames] = useState("");
   const [delimiter, setDelimiter] = React.useState(DEFAULT_DELIMITER);
 
   function inputHandler(event) {
@@ -33,8 +34,9 @@ const CompoundForm = ({
       const parsedCompoundNames = parse(delimiter, event.target.value);
       console.log(parsedCompoundNames);
       handleCompoundNamesChange(parsedCompoundNames);
-    } else if (name === "delimiter_selection") {
-      //handleDelimiterChange(event, delimiter);
+    } else if (name === "compound_concentrations") {
+      setConcentrationNames(event.target.value);
+      handleArrayChange(event);
     } else {
       handleInputChange(event);
     }
@@ -68,7 +70,7 @@ const CompoundForm = ({
       />
 
       <InputDelimiter
-        label={"Delimitor Selection (Optional)"}
+        label={"Delimitor selection (Optional)"}
         placeholder=""
         name="delimiter_selection"
         disable={false}
@@ -81,7 +83,7 @@ const CompoundForm = ({
         placeholder=""
         name="compound_names"
         onChange={inputHandler}
-        value={state.compound_names}
+        value={compoundNames}
         disable={false}
         errorMsg={errors.compound_names ? errors.compound_names : null}
       />
@@ -91,7 +93,7 @@ const CompoundForm = ({
         placeholder=""
         name="compound_concentrations"
         onChange={inputHandler}
-        value={state.compound_concentrations}
+        value={concentrationNames }
         disable={false}
         errorMsg={errors.compound_concentrations ? errors.compound_concentrations: null}
       />
@@ -100,27 +102,27 @@ const CompoundForm = ({
         label={"Compound concentration names"}
         placeholder=""
         name="compound_concentration_names"
-        onChange={handleArrayChange}
+        onChange={inputHandler}
         value={""}
         disable={false}
         errorMsg={errors.compound_concentration_names ? errors.compound_concentration_names : null}
       />
 
       <InputTextArea
-        label={"Compound concentration indicators"}
+        label={"Compound concentration indicators (Optional)"}
         placeholder=""
         name="compound_concentrations_indicators"
-        onChange={handleArrayChange}
+        onChange={inputHandler}
+        value={state.compound_concentrations ? state.compound_concentration_indicators : ""}
         disable={false}
-        errorMsg={null}
+        errorMsg={errors.compound_concentration_indicators ? errors.compound_concentration_indicators : null}
       />
       <InputNumber
         label={"Replicates"}
         name="replicates"
-        onChange={handleInputChange}
-        errorMsg={null}
-        value={""}
-        onBlur={null}
+        onChange={inputHandler}
+        value={state.replicates ? state.replicates : ""}
+        errorMsg={errors.replicates ? errors.replicates : null}
       />
     </FormPage>
   );
