@@ -37,6 +37,7 @@ class MinizincModel:
             inst = self.instance
             for key,val in args_json.items():
                 inst[key] = val
+            
         else:
             raise Exception("No data provided!")
 

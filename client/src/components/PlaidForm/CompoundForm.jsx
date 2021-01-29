@@ -8,15 +8,15 @@ const DEFAULT_DELIMITER = ",";
 
 const compound_state = {
   compounds: 0,
-  compound_concentration_names: [], 
+  compound_concentration_names: [],
   compound_concentration_indicators: [],
-  compound_names: [], 
+  compound_names: [],
   compound_concentrations: [],
   replicates: 0,
 }
 
 const addToObject = () => {
-  
+
 }
 
 
@@ -127,17 +127,19 @@ const CompoundForm = ({
         placeholder=""
         name="compound_concentrations_indicators"
         onChange={inputHandler}
-        value={state.compound_concentrations ? state.compound_concentration_indicators : ""}
+        value={state.compound_concentration_indicators ? state.compound_concentration_indicators : ""}
         disable={false}
         errorMsg={errors.compound_concentration_indicators ? errors.compound_concentration_indicators : null}
       />
-      <InputNumber
+      <InputTextArea
         label={"Replicates"}
-        name="replicates"
+        placeholder=""
+        name="compound_replicates"
         onChange={inputHandler}
-        value={state.replicates ? state.replicates : ""}
-        errorMsg={errors.replicates ? errors.replicates : null}
+        value={state.compound_replicates ? state.compound_replicates : ""}
+        errorMsg={errors.compound_replicates ? errors.compound_replicates : null}
       />
+
     </FormPage>
   );
 };

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import FormPage from "./FormPage";
 import InputNumber from "./Fields/InputNumber";
 import InputSelect from "./Fields/InputSelect";
-
+import InputCheck from "./Fields/InputCheck";
 const StyledSectionLabel = styled.label`
   margin-bottom: 5px;
   font-weight: bold;
@@ -91,6 +91,34 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
         onChange={handleInputChange}
         errorMsg={errors.horizontal_cell_lines ? errors.horizontal_cell_lines : null}
 
+      />
+      <InputCheck
+        label="concentrations_on_different_rows"
+        onChange={handleInputChange}
+        name={"concentrations_on_different_rows"}
+        value={state.concentrations_on_different_rows ? state.concentrations_on_different_rows : false}
+        errorMsg={""}
+      />
+      <InputCheck
+        label="concentrations_on_different_columns"
+        onChange={handleInputChange}
+        name={"concentrations_on_different_columns"}
+        value={state.concentrations_on_different_columns ? state.concentrations_on_different_columns : false}
+        errorMsg={""}
+      />
+      <InputCheck
+        label="replicates_on_different_plates"
+        onChange={handleInputChange}
+        name={"replicates_on_different_plates"}
+        value={state.replicates_on_different_plates ? state.replicates_on_different_plates : false}
+        errorMsg={errors.replicates_on_different_plates ? errors.replicates_on_different_plates : null}
+      />
+      <InputCheck
+        label="replicates_on_same_plate"
+        onChange={handleInputChange}
+        name={"replicates_on_same_plate"}
+        value={state.replicates_on_same_plate ? state.replicates_on_same_plate  : false}
+        errorMsg={errors.replicates_on_same_plate ? errors.replicates_on_same_plate  : null}
       />
     </FormPage>
   );

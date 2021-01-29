@@ -1,8 +1,8 @@
 import os
 import sys
-from .models.minizinc_model import MinizincModel
-from .services.services import ModelService
-from .error_handler import MinizincException
+from models.minizinc_model import MinizincModel
+from services.services import ModelService
+from error_handler import MinizincException
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 
@@ -16,7 +16,8 @@ def test_result_to_json():
     # print(os.path.abspath(__file__))
     mz = MinizincModel("./plate-design.mzn", "gecode")
     mz.populate_instance(
-        dzn_file_path="./../plate_design/dzn_examples/pl-example11.dzn"
+        dzn_file_path="./../plate_design/dzn_examples/pl-example01.dzn"
+            
     )
     result = mz.solve_instance()
     j_res = ModelService.output_to_json(result)

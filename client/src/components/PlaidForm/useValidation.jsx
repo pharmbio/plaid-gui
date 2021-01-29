@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 const validators = {
     minValidSize: function (config) {
-        console.log(config)
         return function (value) {
             if (value < config.value || isNaN(value) || value === null) {
                 return config.message;
@@ -11,7 +10,9 @@ const validators = {
         }
     },
     minValidLength: function (config) {
+        console.log(config.value)
         return function (value) {
+            console.log(value)
             if (value.length != config.value) {
                 return config.message;
             }
@@ -19,9 +20,7 @@ const validators = {
         }
     },
     isNumber: function (config) {
-        console.log(config)
         return function (value) {
-            console.log(value);
             for (let i = 0; i < value.length; i++) {
                 if (Number.isNaN(value[i])) {
                     return config.message;
@@ -29,7 +28,23 @@ const validators = {
             }
             return null;
         }
-    }
+    },
+    maxNumber: function (config) {
+        return function (value) {
+            if (config.value < Math.max(...value)) {
+                return config.message;
+            }
+            return null;
+        }
+    },
+    isAlsoChecked: function (config) {
+        return function (value) {
+            if (config.value == true && value == true) {
+                return config.message;
+            }
+            return null;
+        }
+    },
 }
 
 
@@ -38,8 +53,7 @@ function validateField(fieldValue, fieldConfig, fieldStates) {
     //validatorName is for e.g minValidSize
     //fieldConfig is for e.g num_rows
     for (let validatorName in fieldConfig) { //e. gfor validator in num_rows
-        console.log(validatorName);
-        console.log(fieldConfig)
+
         const validatorConfig = fieldConfig[validatorName];
         const validator = validators[validatorName]; //select the correct validator
         const configuredValidator = validator(validatorConfig); //run the validator function, get the configured validator and pass it the field value.
@@ -54,6 +68,7 @@ function validateField(fieldValue, fieldConfig, fieldStates) {
 function validateFields(fieldValues, fieldStates) {
     const errors = {};
     for (let fieldName in fieldStates) { //fieldName is e.g num_rows 
+        console.log(fieldName)
         const fieldConfig = fieldStates[fieldName]; //get the values stored in key e.g num_rows.
         //  const fieldValue = fieldValues[fieldName]; //get the current values found in our large object for num_rows.
         const fieldValue = fieldValues[fieldName];
