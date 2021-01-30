@@ -96,7 +96,7 @@ const PlaidForm = (props) => {
     combination_names: [], // List
     combination_concentration_names: [], // List
     num_controls: 4,
-    control_concentrations: [1,1,1,1],
+    control_concentrations: [1, 1, 1, 1],
     control_replicates: [32, 16, 16, 16], // List
     control_names: ["pos", "neg", "blank", "dmso"], // List
     control_concentration_names: [["cont-conc1", "cont-conc2", "cont-conc3", "cont-conc4"],
@@ -249,14 +249,49 @@ const PlaidForm = (props) => {
   */
 
   const { errors, formUtils } = useValidation(formState, config);
+  const [groups, setGroups] = useState({
+    selectedGroup: 0,
+    groups: [
+      {
+        id: "gr-0",
+        compound_names: "",
+        conc_amount: "",
+        compound_concentration_names: "",
+        replicates: "",
+      },
+    ],
+  });
   const handleCompoundNamesChange = (compounds) => {
     setFormState({ ...formState, ["compound_names"]: compounds });
   };
 
-  const handleMatrixChange = (event) => {
 
+  const addCompoundsToState = () => {
+
+    //For each group
+    for(let group in groups['groups']){
+      
+    } 
   }
 
+  const handleChangeOnGroups = (listOfGroups, selected) => {
+    if (listOfGroups === null) {
+      setGroups({
+        selectedGroup: selected,
+        groups: [
+          {
+            id: "gr-0",
+            compound_names: "",
+            conc_amount: "",
+            compound_concentration_names: "",
+            replicates: "",
+          },
+        ],
+      });
+    } else {
+      setGroups({ selectedGroup: selected, groups: listOfGroups });
+    }
+  };
   const handleArrayChange = (event) => {
     const deviations = { control_replicates: "integer", compound_concentrations: "integer", control_concentrations: "integer" };
     const target = event.target;
@@ -313,7 +348,7 @@ const PlaidForm = (props) => {
     });
   };
   console.log(formState);
-
+  console.log(groups)
   return (
     <StyledContainer>
       {flightState["loading"] ? (
@@ -329,6 +364,7 @@ const PlaidForm = (props) => {
             setData={props.setData}
             errors={errors}
             formUtils={formUtils}
+            addCompoundsToState={addCompoundsToState}
           >
             <Step label="Experiment Setup">
               <ExperimentForm
@@ -348,7 +384,8 @@ const PlaidForm = (props) => {
                 handleArrayChange={handleArrayChange}
                 errors={errors}
                 state={formState}
-                handleCompoundNamesChange={handleCompoundNamesChange}
+                groups={groups}
+                handleChangeOnGroups={handleChangeOnGroups}
               />
             </Step>
             <Step label="Combinations">

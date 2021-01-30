@@ -6,20 +6,6 @@ import ListGroupedCompounds from "./ListGroupedCompounds";
 
 const DEFAULT_DELIMITER = ",";
 
-const compound_state = {
-  compounds: 0,
-  compound_concentration_names: [],
-  compound_concentration_indicators: [],
-  compound_names: [],
-  compound_concentrations: [],
-  replicates: 0,
-}
-
-const addToObject = (event) => {
-
-
-}
-
 const parse = (delimiter, str) => {
   const re = new RegExp(`/(^${delimiter})|(,$)/g`, "");
   const trim = str.replace(re, "");
@@ -33,13 +19,14 @@ const CompoundForm = ({
   handleArrayChange,
   state,
   handleCompoundNamesChange,
+  handleChangeOnGroups,
+  groups
 }) => {
   const [compoundNames, setCompoundNames] = useState("");
   const [concentrationNames, setConcentrationNames] = useState("");
   const [delimiter, setDelimiter] = React.useState(DEFAULT_DELIMITER);
 
-/*   function inputHandler(event) {
-    console.log(state.compound_names.toString());
+   function inputHandler(event) {
     let name = event.target.name;
     if (name === "compound_names") {
       // handle change in field belonging to compound_names
@@ -54,25 +41,8 @@ const CompoundForm = ({
     } else {
       handleInputChange(event);
     }
-  } */
+  } 
 
-  // Starting off: add a button that assembles the 2d array and sends the array + the rest of the data to the main json object.
-  // Once this is done the forms are cleared and you can input some more data.
-  // When is validation done?? 
-  // Problems: How do you go back if you input wrong? Validate before adding each? Problem: Can't validate everyhing. e.g if we're missing a concentration until next is clicked.
-
-  const [compoundState, setCompoundState] = useState({
-    compound_names: 0,
-    num_compound_concentration: [],
-    compound_concentrations: [],
-    replicates: 0,
-  })
-  const inputHandler = (event) => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    setCompoundState({ ...compoundState, [name]: value });
-  }
   const handleDelimiterChange = (new_delimiter) => {
     // When the delimiter has changed => we need to re-parse the compound names that has been written to the field (if not empty)
     if (new_delimiter === "") {
@@ -85,7 +55,6 @@ const CompoundForm = ({
     if (compoundNames !== "") {
       new_delimiter = new_delimiter !== "" ? new_delimiter : DEFAULT_DELIMITER;
       const parsedCompoundNames = parse(new_delimiter, compoundNames);
-      console.log(parsedCompoundNames);
       handleCompoundNamesChange(parsedCompoundNames);
     }
   };
@@ -95,37 +64,6 @@ const CompoundForm = ({
     groups contains each group-compound-objets with copound_names, conc_amount, compound_concentration_names and replicates which is needed
     for the formstate object 
   */
-  const [groups, setGroups] = useState({
-    selectedGroup: 0,
-    groups: [
-      {
-        id: "gr-0",
-        compound_names: "",
-        conc_amount: "",
-        compound_concentration_names: "",
-        replicates: "",
-      },
-    ],
-  });
-
-  const handleChangeOnGroups = (listOfGroups, selected) => {
-    if (listOfGroups === null) {
-      setGroups({
-        selectedGroup: selected,
-        groups: [
-          {
-            id: "gr-0",
-            compound_names: "",
-            conc_amount: "",
-            compound_concentration_names: "",
-            replicates: "",
-          },
-        ],
-      });
-    } else {
-      setGroups({ selectedGroup: selected, groups: listOfGroups });
-    }
-  };
 
   return (
     <FormPage>
