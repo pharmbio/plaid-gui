@@ -30,9 +30,7 @@ const StyledErrorMessage = styled.div`
 `;
 
 const InputNumber = (props) => {
-  const [value, setValue] = React.useState(props.value);
   const handleChange = (event) => {
-    setValue(event.target.value);
     props.onChange(event);
   };
   return (
@@ -44,8 +42,7 @@ const InputNumber = (props) => {
           name={props.name}
           type="number"
           onChange={handleChange}
-          value={value}
-          onBlur={props.onBlur}
+          value={props.value}
         />
       </StyledRowContainer>
       <StyledErrorMessage>{props.errorMsg}</StyledErrorMessage>
