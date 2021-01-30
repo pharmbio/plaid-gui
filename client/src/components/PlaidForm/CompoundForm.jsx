@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import FormPage from "./FormPage";
-import InputTextArea from "./Fields/InputTextArea";
 import InputNumber from "./Fields/InputNumber";
 import InputDelimiter from "./Fields/InputDelimiter";
+import ListGroupedCompounds from "./ListGroupedCompounds";
 
 const DEFAULT_DELIMITER = ",";
 
@@ -15,13 +15,13 @@ const compound_state = {
   replicates: 0,
 }
 
-const addToObject = () => {
+const addToObject = (event) => {
+
 
 }
 
-
 const parse = (delimiter, str) => {
-  const re = new RegExp(`/(^${delimiter})|(,$)/g`, "")
+  const re = new RegExp(`/(^${delimiter})|(,$)/g`, "");
   const trim = str.replace(re, "");
   const delim = trim.split(delimiter);
   return delim;
@@ -38,7 +38,7 @@ const CompoundForm = ({
   const [concentrationNames, setConcentrationNames] = useState("");
   const [delimiter, setDelimiter] = React.useState(DEFAULT_DELIMITER);
 
-  function inputHandler(event) {
+/*   function inputHandler(event) {
     console.log(state.compound_names.toString());
     let name = event.target.name;
     if (name === "compound_names") {
@@ -48,14 +48,31 @@ const CompoundForm = ({
       const parsedCompoundNames = parse(delimiter, event.target.value);
       console.log(parsedCompoundNames);
       handleCompoundNamesChange(parsedCompoundNames);
-    } else if (name === "compound_concentrations") {
+    } else if (name === "compound_concentration_names") {
       setConcentrationNames(event.target.value);
       handleArrayChange(event);
     } else {
       handleInputChange(event);
     }
-  }
+  } */
 
+  // Starting off: add a button that assembles the 2d array and sends the array + the rest of the data to the main json object.
+  // Once this is done the forms are cleared and you can input some more data.
+  // When is validation done?? 
+  // Problems: How do you go back if you input wrong? Validate before adding each? Problem: Can't validate everyhing. e.g if we're missing a concentration until next is clicked.
+
+  const [compoundState, setCompoundState] = useState({
+    compound_names: 0,
+    num_compound_concentration: [],
+    compound_concentrations: [],
+    replicates: 0,
+  })
+  const inputHandler = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    setCompoundState({ ...compoundState, [name]: value });
+  }
   const handleDelimiterChange = (new_delimiter) => {
     // When the delimiter has changed => we need to re-parse the compound names that has been written to the field (if not empty)
     if (new_delimiter === "") {
@@ -72,13 +89,50 @@ const CompoundForm = ({
       handleCompoundNamesChange(parsedCompoundNames);
     }
   };
+
+  /* 
+    selectedGroup is the group selected to be visible in the form
+    groups contains each group-compound-objets with copound_names, conc_amount, compound_concentration_names and replicates which is needed
+    for the formstate object 
+  */
+  const [groups, setGroups] = useState({
+    selectedGroup: 0,
+    groups: [
+      {
+        id: "gr-0",
+        compound_names: "",
+        conc_amount: "",
+        compound_concentration_names: "",
+        replicates: "",
+      },
+    ],
+  });
+
+  const handleChangeOnGroups = (listOfGroups, selected) => {
+    if (listOfGroups === null) {
+      setGroups({
+        selectedGroup: selected,
+        groups: [
+          {
+            id: "gr-0",
+            compound_names: "",
+            conc_amount: "",
+            compound_concentration_names: "",
+            replicates: "",
+          },
+        ],
+      });
+    } else {
+      setGroups({ selectedGroup: selected, groups: listOfGroups });
+    }
+  };
+
   return (
     <FormPage>
       <InputNumber
         label={"Compounds"}
         name="compounds"
         onChange={inputHandler}
-        onBlur={null}
         value={state.compounds ? state.compounds : ""}
         errorMsg={errors.compounds ? errors.compounds : null}
       />
@@ -91,53 +145,10 @@ const CompoundForm = ({
         onChange={handleDelimiterChange}
         errorMsg={null}
       />
-
-      <InputTextArea
-        label={"Compound names"}
-        placeholder=""
-        name="compound_names"
-        onChange={inputHandler}
-        value={compoundNames}
-        disable={false}
-        errorMsg={errors.compound_names ? errors.compound_names : null}
-      />
-
-      <InputTextArea
-        label={"Compound concentrations"}
-        placeholder=""
-        name="compound_concentrations"
-        onChange={inputHandler}
-        value={concentrationNames}
-        disable={false}
-        errorMsg={errors.compound_concentrations ? errors.compound_concentrations : null}
-      />
-
-      <InputTextArea
-        label={"Compound concentration names"}
-        placeholder=""
-        name="compound_concentration_names"
-        onChange={inputHandler}
-        value={""}
-        disable={false}
-        errorMsg={errors.compound_concentration_names ? errors.compound_concentration_names : null}
-      />
-
-      <InputTextArea
-        label={"Compound concentration indicators (Optional)"}
-        placeholder=""
-        name="compound_concentrations_indicators"
-        onChange={inputHandler}
-        value={state.compound_concentration_indicators ? state.compound_concentration_indicators : ""}
-        disable={false}
-        errorMsg={errors.compound_concentration_indicators ? errors.compound_concentration_indicators : null}
-      />
-      <InputTextArea
-        label={"Replicates"}
-        placeholder=""
-        name="compound_replicates"
-        onChange={inputHandler}
-        value={state.compound_replicates ? state.compound_replicates : ""}
-        errorMsg={errors.compound_replicates ? errors.compound_replicates : null}
+      <ListGroupedCompounds
+        handleChangeOnGroups={handleChangeOnGroups}
+        groups={groups.groups}
+        selectedGroup={groups.selectedGroup}
       />
 
     </FormPage>
