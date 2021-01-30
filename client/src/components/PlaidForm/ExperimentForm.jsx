@@ -60,7 +60,6 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
             label="Rows"
             value={state.num_rows ? state.num_rows : ""}
             onChange={inputHandler}
-            onBlur={null}
             errorMsg={errors.num_rows ? errors.num_rows : null}
           />
           <InputNumber
@@ -68,9 +67,7 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
             label="Columns"
             value={state.num_cols ? state.num_cols : ""}
             onChange={inputHandler}
-            onBlur={null}
             errorMsg={errors.num_cols ? errors.num_cols : null}
-
           />
         </>
       ) : null}
