@@ -30,10 +30,8 @@ const CompoundForm = ({
     let name = event.target.name;
     if (name === "compound_names") {
       // handle change in field belonging to compound_names
-      console.log(event.target.value);
       setCompoundNames(event.target.value);
       const parsedCompoundNames = parse(delimiter, event.target.value);
-      console.log(parsedCompoundNames);
       handleCompoundNamesChange(parsedCompoundNames);
     } else if (name === "compound_concentration_names") {
       setConcentrationNames(event.target.value);
@@ -44,12 +42,13 @@ const CompoundForm = ({
   } 
 
   const handleDelimiterChange = (new_delimiter) => {
+
     // When the delimiter has changed => we need to re-parse the compound names that has been written to the field (if not empty)
     if (new_delimiter === "") {
       // We want to use the default delimiter if the user leaves the input field empty
       setDelimiter(DEFAULT_DELIMITER);
     } else {
-      setDelimiter(delimiter);
+      setDelimiter(new_delimiter);
     }
 
     if (compoundNames !== "") {
@@ -64,7 +63,6 @@ const CompoundForm = ({
     groups contains each group-compound-objets with copound_names, conc_amount, compound_concentration_names and replicates which is needed
     for the formstate object 
   */
-
   return (
     <FormPage>
       <InputNumber
@@ -85,6 +83,8 @@ const CompoundForm = ({
       />
       <ListGroupedCompounds
         handleChangeOnGroups={handleChangeOnGroups}
+        parse={parse}
+        delimiter={delimiter}
         groups={groups.groups}
         selectedGroup={groups.selectedGroup}
       />

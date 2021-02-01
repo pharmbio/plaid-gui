@@ -45,13 +45,17 @@ const List = (props) => {
     props.handleChangeOnGroups(props.groups, groupIndex);
   };
 
+  const parsedCompoundNames = (delim, str) => {
+    return props.parse(delim,str);
+  }
+
   const handleOnAddButtonClick = (event) => {
     event.preventDefault();
     let newId = "gr-" + props.groups.length;
     let newObj = {
       id: newId,
       compound_names: "",
-      conc_amount: "",
+      conc_amount: 0,
       compound_concentration_names: "",
       replicates: "",
     };
@@ -83,12 +87,18 @@ const List = (props) => {
     let name = event.target.name;
     let value = event.target.value;
 
+    if(name === 'compound_names'){
+      console.log(props.delimiter)
+      value = parsedCompoundNames(props.delimiter, value)
+      console.log(value);
+    }
+
     let items = [...props.groups];
     let item = { ...items[props.selectedGroup], [name]: value };
 
     // need to update the list aswell
     items[props.selectedGroup] = item;
-
+   
     props.handleChangeOnGroups(items, props.selectedGroup);
   };
 

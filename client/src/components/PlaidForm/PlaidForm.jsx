@@ -255,9 +255,9 @@ const PlaidForm = (props) => {
       {
         id: "gr-0",
         compound_names: "",
-        conc_amount: "",
+        conc_amount: 0,
         compound_concentration_names: "",
-        replicates: "",
+        compound_replicates: "",
       },
     ],
   });
@@ -267,11 +267,61 @@ const PlaidForm = (props) => {
 
 
   const addCompoundsToState = () => {
+    const processed_groups = {
+      compound_names: "",
+      compound_concentrations: [],
+      compound_replicates: [],
+      compound_concentration_names: [],
+    }
+    //utility object used to create the 2d array
+    const util_groups = {
+      compound_concentration_names: []
+    }
+    for (let group in groups['groups']) {
+      for (let key in groups['groups'][group]) {
+        switch (key) {
+          case 'compound_names':
+            //Needed to remove leading comma. Can it be avoided?
+            processed_groups[key] = (processed_groups[key] + ',' + groups['groups'][group][key]).replace(/(^,)|(,$)/g, "").split(',');
+            break;
+          case 'conc_amount':
+            const conc_amount = parseInt(groups['groups'][group][key]);
+            for (let i = 0; i < conc_amount; i++) processed_groups['compound_concentrations'].push(conc_amount);
+            break;
+          case 'replicates':
+            const replicate_amount = parseInt(groups['groups'][group][key]);
+            for (let i = 0; i < replicate_amount; i++) processed_groups['compound_replicates'].push(replicate_amount);
+          case 'compound_concentration_names':
+            util_groups[key] = (util_groups[key] + ',' + groups['groups'][group][key]).replace(/(^,)|(,$)/g, "").split(',');
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    //Matrix, num rows is size of compounds. num cols is size of largest compound_concentrations
+    //elements are names concatinated with compound_concentration_names
+    let num_cols = Math.max(...processed_groups['compound_concentrations'])
+    let num_rows = formState.compounds;
+    //let conc_matrix = []
 
-    //For each group
-    for(let group in groups['groups']){
-      
-    } 
+    for (let i = 0; i < num_rows; i++) {
+      let current_row = [];
+      let comp_name = processed_groups['compound_names'][i];
+      let current_conc = processed_groups['compound_concentrations'][i];
+      console.log(current_conc);
+      for (let j = 0; j < num_cols; j++) {
+        //if we reach the max amount of conc for this compound, insert '';
+        if (j >= current_conc - 1) {
+          (current_row.push(""));
+        } else {
+          let conc_val = (util_groups['compound_concentration_names'][j])
+          current_row.push(comp_name + conc_val);
+        }
+      }
+      processed_groups['compound_concentration_names'].push(current_row);
+    }
+    console.log(processed_groups);
   }
 
   const handleChangeOnGroups = (listOfGroups, selected) => {
@@ -321,7 +371,6 @@ const PlaidForm = (props) => {
         if (target.name === "vertical_cell_lines") {
           setFormState({ ...formState, ["horizontal_cell_lines"]: 0 });
         }
-        console.log('HERE I AM');
         value = target.checked;
         break;
       }
@@ -348,7 +397,6 @@ const PlaidForm = (props) => {
     });
   };
   console.log(formState);
-  console.log(groups)
   return (
     <StyledContainer>
       {flightState["loading"] ? (
@@ -364,6 +412,7 @@ const PlaidForm = (props) => {
             setData={props.setData}
             errors={errors}
             formUtils={formUtils}
+
             addCompoundsToState={addCompoundsToState}
           >
             <Step label="Experiment Setup">
@@ -385,6 +434,7 @@ const PlaidForm = (props) => {
                 errors={errors}
                 state={formState}
                 groups={groups}
+                handleCompoundNamesChange={handleCompoundNamesChange}
                 handleChangeOnGroups={handleChangeOnGroups}
               />
             </Step>
