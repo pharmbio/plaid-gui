@@ -99,149 +99,159 @@ const PlaidForm = (props) => {
     control_concentrations: [1, 1, 1, 1],
     control_replicates: [32, 16, 16, 16], // List
     control_names: ["pos", "neg", "blank", "dmso"], // List
-    control_concentration_names: [["cont-conc1", "cont-conc2", "cont-conc3", "cont-conc4"],
-    ["cont-conc1", "cont-conc2", "cont-conc3", "cont-conc4"]], // List
+    control_concentration_names: [
+      ["cont-conc1", "cont-conc2", "cont-conc3", "cont-conc4"],
+      ["cont-conc1", "cont-conc2", "cont-conc3", "cont-conc4"],
+      ["cont-conc1", "cont-conc2", "cont-conc3", "cont-conc4"],
+      ["cont-conc1", "cont-conc2", "cont-conc3", "cont-conc4"],
+    ], // List
   });
   const config = {
     fields: {
       num_rows: {
         minValidSize: {
           value: 1,
-          message: 'Rows must be a number > 0'
+          message: "Rows must be a number > 0",
         },
       },
       num_cols: {
         minValidSize: {
           value: 1,
-          message: 'Columns must be a number > 0'
-        }
+          message: "Columns must be a number > 0",
+        },
       },
       vertical_cell_lines: {
         minValidSize: {
           value: 1,
-          message: 'Cell line must be a number > 0'
-        }
+          message: "Cell line must be a number > 0",
+        },
       },
       horizontal_cell_lines: {
         minValidSize: {
           value: 1,
-          message: 'Cell line must be a number > 0'
-        }
+          message: "Cell line must be a number > 0",
+        },
       },
       replicates_on_different_plates: {
         isAlsoChecked: {
           value: formState.replicates_on_same_plate,
-          message: 'Replicates on different and same plates cannot be checked at the same time'
-        }
+          message:
+            "Replicates on different and same plates cannot be checked at the same time",
+        },
       },
       size_empty_edge: {
         minValidSize: {
           value: 0,
-          message: 'Empty edges must be a number >= 0'
-        }
+          message: "Empty edges must be a number >= 0",
+        },
       },
       compounds: {
         minValidSize: {
           value: 1,
-          message: 'Compounds must be a number > 0'
-        }
+          message: "Compounds must be a number > 0",
+        },
       },
       compound_names: {
         minValidLength: {
           value: formState.compounds,
-          message: 'Number of compound names are not equal to number of compounds'
-        }
+          message:
+            "Number of compound names are not equal to number of compounds",
+        },
       },
       compound_concentrations: {
         minValidLength: {
           value: formState.compounds,
-          message: 'Number of concentrations are not equal to number of compounds'
+          message:
+            "Number of concentrations are not equal to number of compounds",
         },
         isNumber: {
           value: formState.compounds,
-          message: 'Concentration must be an integer or decimal'
-        }
+          message: "Concentration must be an integer or decimal",
+        },
       },
       compound_concentration_names: {
         minValidSize: {
           value: formState.compounds,
-          message: ''
-        }
+          message: "",
+        },
       },
       compound_replicates: {
         minValidLength: {
           value: formState.compounds,
-          message: 'Number of replicates does not match number of compounds'
-        }
+          message: "Number of replicates does not match number of compounds",
+        },
       },
       compound_concentration_indicators: {
         maxNumber: {
           value: formState.compound_concentrations,
-          message: 'Number of indicators does not match number of compounds'
-        }
+          message: "Number of indicators does not match number of compounds",
+        },
       },
       combinations: {
         minValidSize: {
           value: 0,
-          message: 'Combinations must be a number >= 0'
-        }
+          message: "Combinations must be a number >= 0",
+        },
       },
       combination_names: {
         minValidLength: {
           value: formState.combinations,
-          message: 'Number of combination names must be equal to amount of combinations'
-        }
+          message:
+            "Number of combination names must be equal to amount of combinations",
+        },
       },
       combination_concentrations: {
         minValidSize: {
           value: 0,
-          message: 'Combination concentration must be a number >= 0'
-        }
+          message: "Combination concentration must be a number >= 0",
+        },
       },
       combination_concentration_names: {
         minValidSize: {
           value: 0,
-          message: ''
-        }
+          message: "",
+        },
       },
       num_controls: {
         minValidSize: {
           value: 0,
-          message: 'Number of controls must be a number >= 0'
-        }
+          message: "Number of controls must be a number >= 0",
+        },
       },
       control_names: {
         minValidLength: {
           value: formState.num_controls,
-          message: 'The number of control names must match the number of controls'
-        }
+          message:
+            "The number of control names must match the number of controls",
+        },
       },
       control_concentrations: {
         minValidLength: {
           value: formState.num_controls,
-          message: 'Number of control concentrations must be >= 0'
-        }
+          message: "Number of control concentrations must be >= 0",
+        },
       },
       control_concentration_names: {
         minValidSize: {
           value: 0,
-          message: ''
-        }
+          message: "",
+        },
       },
       control_replicates: {
         minValidLength: {
           value: formState.num_controls,
-          message: 'Number of control replicates must match the number of controls'
-        }
+          message:
+            "Number of control replicates must match the number of controls",
+        },
       },
     },
     selects: {
-      select_plate_size: {}
+      select_plate_size: {},
     },
     checkbox: {
       allow_empty_wells: {},
-    }
-  }
+    },
+  };
 
   /* custom validation hook. TODO: Pass this validation into each component. Assiciate each name with the correct validation field 
      and simply check if the error is null or not. If it's not, display that error. TOFIX, only one error at a time?
@@ -256,7 +266,7 @@ const PlaidForm = (props) => {
         id: "gr-0",
         compound_names: "",
         conc_amount: 0,
-        compound_concentration_names: "",
+        concentration_names: "",
         compound_replicates: "",
       },
     ],
@@ -265,64 +275,139 @@ const PlaidForm = (props) => {
     setFormState({ ...formState, ["compound_names"]: compounds });
   };
 
-
   const addCompoundsToState = () => {
-    const processed_groups = {
-      compound_names: "",
-      compound_concentrations: [],
-      compound_replicates: [],
-      compound_concentration_names: [],
-    }
+    let processedGroup;
+
     //utility object used to create the 2d array
-    const util_groups = {
-      compound_concentration_names: []
-    }
-    for (let group in groups['groups']) {
-      for (let key in groups['groups'][group]) {
+    let utilGroup = {
+      compoundNamesOfAllGroups: [],
+      concentrationNamesOfAllGroups: [],
+      compoundConcentrations: [],
+      compoundReplicates: [],
+    };
+
+    let compoundGroups = groups.groups;
+    let map = {};
+    for (let i = 0; i < compoundGroups.length; i++) {
+      let compoundGroup = compoundGroups[i];
+
+      processedGroup = {
+        compound_names: [],
+        compound_concentrations: [],
+        compound_replicates: [],
+        concentration_names: [],
+      };
+      for (let key in compoundGroup) {
         switch (key) {
-          case 'compound_names':
-            //Needed to remove leading comma. Can it be avoided?
-            processed_groups[key] = (processed_groups[key] + ',' + groups['groups'][group][key]).replace(/(^,)|(,$)/g, "").split(',');
+          case "compound_names":
+            let compoundNames = compoundGroup.compound_names;
+            utilGroup.compoundNamesOfAllGroups = (
+              utilGroup.compoundNamesOfAllGroups +
+              "," +
+              compoundNames
+            )
+              .replace(/(^,)|(,$)/g, "")
+              .split(",");
+            processedGroup.compound_names = compoundNames;
+
             break;
-          case 'conc_amount':
-            const conc_amount = parseInt(groups['groups'][group][key]);
-            for (let i = 0; i < conc_amount; i++) processed_groups['compound_concentrations'].push(conc_amount);
+          case "conc_amount":
+            const concAmount = parseInt(compoundGroup.conc_amount);
+            for (let j = 0; j < concAmount; j++)
+              utilGroup.compoundConcentrations.push(concAmount);
             break;
-          case 'replicates':
-            const replicate_amount = parseInt(groups['groups'][group][key]);
-            for (let i = 0; i < replicate_amount; i++) processed_groups['compound_replicates'].push(replicate_amount);
-          case 'compound_concentration_names':
-            util_groups[key] = (util_groups[key] + ',' + groups['groups'][group][key]).replace(/(^,)|(,$)/g, "").split(',');
+          case "replicates":
+            const replicateAmount = parseInt(compoundGroup.compound_replicates);
+            for (let j = 0; j < replicateAmount; j++)
+              utilGroup.compoundReplicates.push(replicateAmount);
+            break;
+          case "concentration_names":
+            let concentrationNames = (compoundGroup.concentration_names + "")
+              .replace(/(^,)|(,$)/g, "")
+              .split(",");
+            utilGroup.concentrationNamesOfAllGroups = (
+              utilGroup.concentrationNamesOfAllGroups +
+              "," +
+              concentrationNames
+            )
+              .replace(/(^,)|(,$)/g, "")
+              .split(",");
+            processedGroup.concentration_names = concentrationNames;
             break;
           default:
             break;
         }
       }
-    }
-    //Matrix, num rows is size of compounds. num cols is size of largest compound_concentrations
-    //elements are names concatinated with compound_concentration_names
-    let num_cols = Math.max(...processed_groups['compound_concentrations'])
-    let num_rows = formState.compounds;
-    //let conc_matrix = []
 
-    for (let i = 0; i < num_rows; i++) {
-      let current_row = [];
-      let comp_name = processed_groups['compound_names'][i];
-      let current_conc = processed_groups['compound_concentrations'][i];
-      console.log(current_conc);
-      for (let j = 0; j < num_cols; j++) {
-        //if we reach the max amount of conc for this compound, insert '';
-        if (j >= current_conc - 1) {
-          (current_row.push(""));
-        } else {
-          let conc_val = (util_groups['compound_concentration_names'][j])
-          current_row.push(comp_name + conc_val);
+      /*
+        create this hash map
+       map = {compoundName : [concName, concName...]} 
+       */
+
+      for (let j = 0; j < processedGroup.compound_names.length; j++) {
+        for (let k = 0; k < processedGroup.concentration_names.length; k++) {
+          if (map[processedGroup.compound_names[j]] === undefined) {
+            map[processedGroup.compound_names[j]] = [
+              processedGroup.concentration_names[k],
+            ];
+          } else {
+            map[processedGroup.compound_names[j]].push(
+              processedGroup.concentration_names[k]
+            );
+          }
         }
       }
-      processed_groups['compound_concentration_names'].push(current_row);
     }
-    console.log(processed_groups);
-  }
+    /* 
+
+    // lets first make sure that utilGroup properties compoundNamesOfAllGroups and ...concentrationNamesOfAllGroups values are unique
+    // because we use them to index into the matrix (cols are max concentration names and rows are amnt of compound names)
+    let concentrationNamesOfAllGroups = [...new Set(utilGroup.concentrationNamesOfAllGroups)];
+    let compoundNamesOfAllGroups = [...new Set(utilGroup.compoundNamesOfAllGroups)]; */
+
+
+    // the matrix
+    let compoundConcentrationNames = [];
+    // the dimensions of the matrix
+    let cols = Math.max(...utilGroup["compoundConcentrations"]);
+
+    // amount of keys in map  === amount of compounds == rows
+
+    for (let key in map) {
+      let row = [];
+      for (let j = 0; j < cols; j++) {
+        if (j > map[key].length) {
+          row.push("");
+        } else {
+          row.push(key + map[key][j]);
+        }
+      }
+      compoundConcentrationNames.push(row);
+    }
+    console.log(compoundConcentrationNames);
+
+    /*     let mapMatrixElements = {}
+    let compoundConcentrationNames = [];
+    for(let i = 0; i < concentrationNamesOfAllGroups.length; i++){
+      let name = compoundNamesOfAllGroups[i];
+      let row = [];
+      for(let j = 0; j < concentrationNamesOfAllGroups.length; j++){
+        row.push("");
+        let conc = concentrationNamesOfAllGroups[j];
+        let exists = map[name].findIndex( x => x === conc);
+        let key = name+conc;
+        if(exists>0){
+          // map compoundConcentrationName to element position
+          mapMatrixElements[key] = [i,j];
+        }
+      }
+      compoundConcentrationNames.push(row);
+    }
+    for(let key in mapMatrixElements){
+      compoundConcentrationNames[mapMatrixElements[key][0]][mapMatrixElements[key][1]] = key;
+    }
+ */
+  };
 
   const handleChangeOnGroups = (listOfGroups, selected) => {
     if (listOfGroups === null) {
@@ -343,7 +428,11 @@ const PlaidForm = (props) => {
     }
   };
   const handleArrayChange = (event) => {
-    const deviations = { control_replicates: "integer", compound_concentrations: "integer", control_concentrations: "integer" };
+    const deviations = {
+      control_replicates: "integer",
+      compound_concentrations: "integer",
+      control_concentrations: "integer",
+    };
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -396,66 +485,64 @@ const PlaidForm = (props) => {
       [name]: value,
     });
   };
-  console.log(formState);
   return (
     <StyledContainer>
       {flightState["loading"] ? (
         <Loader />
       ) : (
-          <Stepper
-            initialValues={formState}
-            postForm={postForm}
-            setResponseError={setResponseError}
-            responseError={responseError}
-            setFlightState={setFlightState}
-            flightState={flightState}
-            setData={props.setData}
-            errors={errors}
-            formUtils={formUtils}
-
-            addCompoundsToState={addCompoundsToState}
-          >
-            <Step label="Experiment Setup">
-              <ExperimentForm
-                handleInputChange={handleInputChange}
-                errors={errors}
-                state={formState}
-              />
-              <ConstraintForm
-                handleInputChange={handleInputChange}
-                errors={errors}
-                state={formState}
-              />
-            </Step>
-            <Step label="Compound Setup">
-              <CompoundForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-                errors={errors}
-                state={formState}
-                groups={groups}
-                handleCompoundNamesChange={handleCompoundNamesChange}
-                handleChangeOnGroups={handleChangeOnGroups}
-              />
-            </Step>
-            <Step label="Combinations">
-              <CombinationForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-                errors={errors}
-                state={formState}
-              />
-            </Step>
-            <Step label="Experiment Validation">
-              <ControlForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-                errors={errors}
-                state={formState}
-              />
-            </Step>
-          </Stepper>
-        )}
+        <Stepper
+          initialValues={formState}
+          postForm={postForm}
+          setResponseError={setResponseError}
+          responseError={responseError}
+          setFlightState={setFlightState}
+          flightState={flightState}
+          setData={props.setData}
+          errors={errors}
+          formUtils={formUtils}
+          addCompoundsToState={addCompoundsToState}
+        >
+          <Step label="Experiment Setup">
+            <ExperimentForm
+              handleInputChange={handleInputChange}
+              errors={errors}
+              state={formState}
+            />
+            <ConstraintForm
+              handleInputChange={handleInputChange}
+              errors={errors}
+              state={formState}
+            />
+          </Step>
+          <Step label="Compound Setup">
+            <CompoundForm
+              handleInputChange={handleInputChange}
+              handleArrayChange={handleArrayChange}
+              errors={errors}
+              state={formState}
+              groups={groups}
+              handleCompoundNamesChange={handleCompoundNamesChange}
+              handleChangeOnGroups={handleChangeOnGroups}
+            />
+          </Step>
+          <Step label="Combinations">
+            <CombinationForm
+              handleInputChange={handleInputChange}
+              handleArrayChange={handleArrayChange}
+              errors={errors}
+              state={formState}
+            />
+          </Step>
+          <Step label="Experiment Validation">
+            <ControlForm
+              handleInputChange={handleInputChange}
+              handleArrayChange={handleArrayChange}
+              errors={errors}
+              state={formState}
+            />
+          </Step>
+        </Stepper>
+      )}
     </StyledContainer>
   );
 };
