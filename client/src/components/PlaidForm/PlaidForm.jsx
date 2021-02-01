@@ -312,7 +312,7 @@ const PlaidForm = (props) => {
       console.log(current_conc);
       for (let j = 0; j < num_cols; j++) {
         //if we reach the max amount of conc for this compound, insert '';
-        if (j >= current_conc - 1) {
+        if (j > current_conc - 1) {
           (current_row.push(""));
         } else {
           let conc_val = (util_groups['compound_concentration_names'][j])
