@@ -278,10 +278,8 @@ const PlaidForm = (props) => {
   const addCompoundsToState = () => {
     let processedGroup;
 
-    //utility object used to create the 2d array
+    // will hold the replicates array and compound concentrations numbers from each group
     let utilGroup = {
-      compoundNamesOfAllGroups: [],
-      concentrationNamesOfAllGroups: [],
       compoundConcentrations: [],
       compoundReplicates: [],
     };
@@ -293,21 +291,12 @@ const PlaidForm = (props) => {
 
       processedGroup = {
         compound_names: [],
-        compound_concentrations: [],
-        compound_replicates: [],
         concentration_names: [],
       };
       for (let key in compoundGroup) {
         switch (key) {
           case "compound_names":
             let compoundNames = compoundGroup.compound_names;
-            utilGroup.compoundNamesOfAllGroups = (
-              utilGroup.compoundNamesOfAllGroups +
-              "," +
-              compoundNames
-            )
-              .replace(/(^,)|(,$)/g, "")
-              .split(",");
             processedGroup.compound_names = compoundNames;
 
             break;
@@ -323,13 +312,6 @@ const PlaidForm = (props) => {
             break;
           case "concentration_names":
             let concentrationNames = (compoundGroup.concentration_names + "")
-              .replace(/(^,)|(,$)/g, "")
-              .split(",");
-            utilGroup.concentrationNamesOfAllGroups = (
-              utilGroup.concentrationNamesOfAllGroups +
-              "," +
-              concentrationNames
-            )
               .replace(/(^,)|(,$)/g, "")
               .split(",");
             processedGroup.concentration_names = concentrationNames;
@@ -358,14 +340,8 @@ const PlaidForm = (props) => {
         }
       }
     }
-    /* 
-
-    // lets first make sure that utilGroup properties compoundNamesOfAllGroups and ...concentrationNamesOfAllGroups values are unique
-    // because we use them to index into the matrix (cols are max concentration names and rows are amnt of compound names)
-    let concentrationNamesOfAllGroups = [...new Set(utilGroup.concentrationNamesOfAllGroups)];
-    let compoundNamesOfAllGroups = [...new Set(utilGroup.compoundNamesOfAllGroups)]; */
-
-
+    console.log(map);
+    console.log(utilGroup);
     // the matrix
     let compoundConcentrationNames = [];
     // the dimensions of the matrix
@@ -384,29 +360,8 @@ const PlaidForm = (props) => {
       }
       compoundConcentrationNames.push(row);
     }
-    console.log(compoundConcentrationNames);
 
-    /*     let mapMatrixElements = {}
-    let compoundConcentrationNames = [];
-    for(let i = 0; i < concentrationNamesOfAllGroups.length; i++){
-      let name = compoundNamesOfAllGroups[i];
-      let row = [];
-      for(let j = 0; j < concentrationNamesOfAllGroups.length; j++){
-        row.push("");
-        let conc = concentrationNamesOfAllGroups[j];
-        let exists = map[name].findIndex( x => x === conc);
-        let key = name+conc;
-        if(exists>0){
-          // map compoundConcentrationName to element position
-          mapMatrixElements[key] = [i,j];
-        }
-      }
-      compoundConcentrationNames.push(row);
-    }
-    for(let key in mapMatrixElements){
-      compoundConcentrationNames[mapMatrixElements[key][0]][mapMatrixElements[key][1]] = key;
-    }
- */
+    // TODO! (Markus) You have to store compoundConcentrationsNames, utilGroup.replicates and utilGroup.compoundConcentrations map.keys (compoundNames) to formstate
   };
 
   const handleChangeOnGroups = (listOfGroups, selected) => {
