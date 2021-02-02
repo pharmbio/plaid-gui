@@ -452,8 +452,6 @@ const PlaidForm = (props) => {
       [name]: value,
     });
   };
-  console.log(errors);
-  console.log(formState);
   return (
     <StyledContainer>
       {flightState["loading"] ? (

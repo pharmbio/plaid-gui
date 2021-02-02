@@ -5,14 +5,14 @@ import styled from "styled-components";
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
-  justify-content:space-between;
+  justify-content: space-between;
   margin: auto;
   height: 60vh;
   width: 40vw;
 `;
 const ErrorNotice = styled.div`
   align-self: center;
-  display: ${(props) => props.error ? 'flex' : 'none'};
+  display: ${(props) => (props.error ? "flex" : "none")};
   flex-direction: row;
   color: black;
   justify-content: center;
@@ -29,7 +29,7 @@ const StyledInputContainer = styled.div`
   align-items: start;
 `;
 const StyledNextButton = styled.button`
-  margin-left:auto;
+  margin-left: auto;
   background: #0069eb;
   color: #fff;
   border: none;
@@ -56,79 +56,88 @@ const StyledButtonContainer = styled.div`
   margin: 15px;
 `;
 const Stepper = ({ children, ...props }) => {
-    const childrenArray = React.Children.toArray(children);
-    const [step, setStep] = useState(0);
-    const [errorState, setErrorState] = useState(true);
-    //Child to display on current step. 0 would be immediate child.
-    const currentChild = childrenArray[step];
-    function isLast() {
-        return step === childrenArray.length - 1;
+  const childrenArray = React.Children.toArray(children);
+  const [step, setStep] = useState(0);
+  const [errorState, setErrorState] = useState(true);
+  //Child to display on current step. 0 would be immediate child.
+  const currentChild = childrenArray[step];
+  function isLast() {
+    return step === childrenArray.length - 1;
+  }
+  function hasErrors(errors) {
+    for (let key in errors) {
+        
+      if (errors[key] !== null ) {
+        return true;
+      }
     }
-    function hasErrors(errors) {
-        for (let key in errors) {
+    return false;
+  }
 
-            if (isNaN(errors[key] == false)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    /* TODO: onChange eller onClick? Hur hanterar jag då onClick validering, väntar på svar och avgör sedan om vi går next eller ej?
+  const [loading, setLoading] = useState(false);
+
+  /* TODO: onChange eller onClick? Hur hanterar jag då onClick validering, väntar på svar och avgör sedan om vi går next eller ej?
              om jag väljer onChange, hur kan vi stoppa valideringen från att köra på de tomma fälten innan man använt toolen? */
-    function handleNext() {
-        // if(noErrors(errors)){
-        if (step === 1) {
-            props.addCompoundsToState()
-        }
-        let errors = props.formUtils.onClick();
-        console.log(errors);
-        console.log(hasErrors(errors))
-        if (hasErrors(errors)) {
-
-        }
-        else {
-            setStep(step + 1);
-        }
-        //  };
+  async function handleNext() {
+    // if(noErrors(errors)){
+    if (step === 1) {
+      props.addCompoundsToState();
     }
+    setLoading(true);
+  }
 
-    return (
-        <Formik
-            {...props}
-            initialValues={props.initialValues}
-        ><>
-                <ErrorNotice error={props.flightState['responseError']}> {props.flightState['responseError'] ? props.responseError : null}</ErrorNotice>
-                <StyledForm>
-                    <HorizontalStepper currentStep={step} steps={childrenArray} />
-                    <StyledInputContainer>{currentChild}</StyledInputContainer>
-                    <StyledButtonContainer>
-                        {step > 0 ? (
-                            <StyledPrevButton type="button" onClick={() => setStep(step - 1)}>
-                                Previous
-                            </StyledPrevButton>
-                        ) : null}
-                        <StyledNextButton
-                            type="button"
-                            onClick={
-                                isLast()
-                                    ? () =>
-                                        props.postForm(
-                                            props.initialValues,
-                                            props.setResponseError,
-                                            props.setFlightState,
-                                            props.flightState,
-                                            props.setData
-                                        )
-                                    : () => handleNext()
+  React.useEffect(() => {
+    // This is be executed when `loading` state changes
+    if (loading) {
+      let errors = props.formUtils.onClick();
+      console.log("Step: " + step);
+      console.log(errors);
+      console.log(hasErrors(errors));
 
-                            }
-                        >
-                            {isLast() ? "Submit" : "Next"}
-                        </StyledNextButton>
-                    </StyledButtonContainer>
-                </StyledForm>
-            </>
-        </Formik>
-    );
+      if (!hasErrors(errors)) {
+        setStep(step + 1);
+      }
+      setLoading(false);
+    }
+  }, [loading,step,props.formUtils]);
+
+  return (
+    <Formik {...props} initialValues={props.initialValues}>
+      <>
+        <ErrorNotice error={props.flightState["responseError"]}>
+          {" "}
+          {props.flightState["responseError"] ? props.responseError : null}
+        </ErrorNotice>
+        <StyledForm>
+          <HorizontalStepper currentStep={step} steps={childrenArray} />
+          <StyledInputContainer>{currentChild}</StyledInputContainer>
+          <StyledButtonContainer>
+            {step > 0 ? (
+              <StyledPrevButton type="button" onClick={() => setStep(step - 1)}>
+                Previous
+              </StyledPrevButton>
+            ) : null}
+            <StyledNextButton
+              type="button"
+              onClick={
+                isLast()
+                  ? () =>
+                      props.postForm(
+                        props.initialValues,
+                        props.setResponseError,
+                        props.setFlightState,
+                        props.flightState,
+                        props.setData
+                      )
+                  : () => handleNext()
+              }
+            >
+              {isLast() ? "Submit" : "Next"}
+            </StyledNextButton>
+          </StyledButtonContainer>
+        </StyledForm>
+      </>
+    </Formik>
+  );
 };
 export default Stepper;
