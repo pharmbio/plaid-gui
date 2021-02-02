@@ -64,15 +64,31 @@ const Stepper = ({ children, ...props }) => {
     function isLast() {
         return step === childrenArray.length - 1;
     }
+    function hasErrors(errors) {
+        for (let key in errors) {
+
+            if (isNaN(errors[key] == false)) {
+                return true;
+            }
+        }
+        return false;
+    }
     /* TODO: onChange eller onClick? Hur hanterar jag då onClick validering, väntar på svar och avgör sedan om vi går next eller ej?
              om jag väljer onChange, hur kan vi stoppa valideringen från att köra på de tomma fälten innan man använt toolen? */
     function handleNext() {
-        let errors = props.formUtils.onClick();
         // if(noErrors(errors)){
         if (step === 1) {
             props.addCompoundsToState()
         }
-        setStep(step + 1);
+        let errors = props.formUtils.onClick();
+        console.log(errors);
+        console.log(hasErrors(errors))
+        if (hasErrors(errors)) {
+
+        }
+        else {
+            setStep(step + 1);
+        }
         //  };
     }
 

@@ -45,10 +45,6 @@ const List = (props) => {
     props.handleChangeOnGroups(props.groups, groupIndex);
   };
 
-  const parsedCompoundNames = (delim, str) => {
-    return props.parse(delim,str);
-  }
-
   const handleOnAddButtonClick = (event) => {
     event.preventDefault();
     let newId = "gr-" + props.groups.length;
@@ -56,7 +52,7 @@ const List = (props) => {
       id: newId,
       compound_names: "",
       conc_amount: 0,
-      compound_concentration_names: "",
+      concentration_names: "",
       replicates: "",
     };
     let items = props.groups;
@@ -89,7 +85,7 @@ const List = (props) => {
 
     if(name === 'compound_names'){
       console.log(props.delimiter)
-      value = parsedCompoundNames(props.delimiter, value)
+      value = props.parse(props.delimiter, value)
       console.log(value);
     }
 
@@ -112,7 +108,7 @@ const List = (props) => {
           onChange={handleOnInputChange}
           value={props.groups[props.selectedGroup].compound_names}
           disable={false}
-          errorMsg={null}
+          errorMsg={props.errors.compound_names ? props.errors.compound_names : null}
         />
 
         <InputNumber
@@ -125,19 +121,19 @@ const List = (props) => {
         />
 
         <InputTextArea
-          label={"Compound concentration names"}
+          label={"Concentration names"}
           placeholder=""
-          name="compound_concentration_names"
+          name="concentration_names"
           onChange={handleOnInputChange}
-          value={props.groups[props.selectedGroup].compound_concentration_names}
+          value={props.groups[props.selectedGroup].concentration_names}
           disable={false}
           errorMsg={null}
         />
         <InputNumber
           label={"Replicates"}
-          name="replicates"
+          name="compound_replicates"
           onChange={handleOnInputChange}
-          value={props.groups[props.selectedGroup].replicates}
+          value={props.groups[props.selectedGroup].compound_replicates}
           errorMsg={null}
         />
       </FormPage>

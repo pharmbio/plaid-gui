@@ -33,7 +33,7 @@ const CompoundForm = ({
       setCompoundNames(event.target.value);
       const parsedCompoundNames = parse(delimiter, event.target.value);
       handleCompoundNamesChange(parsedCompoundNames);
-    } else if (name === "compound_concentration_names") {
+    } else if (name === "concentration_names") {
       setConcentrationNames(event.target.value);
       handleArrayChange(event);
     } else {
@@ -87,6 +87,7 @@ const CompoundForm = ({
         delimiter={delimiter}
         groups={groups.groups}
         selectedGroup={groups.selectedGroup}
+        errors={errors}
       />
 
     </FormPage>
