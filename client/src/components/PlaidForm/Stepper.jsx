@@ -78,7 +78,7 @@ const Stepper = ({ children, ...props }) => {
 
   /* TODO: onChange eller onClick? Hur hanterar jag då onClick validering, väntar på svar och avgör sedan om vi går next eller ej?
              om jag väljer onChange, hur kan vi stoppa valideringen från att köra på de tomma fälten innan man använt toolen? */
-  async function handleNext() {
+function handleNext() {
     // if(noErrors(errors)){
     if (step === 1) {
       props.addCompoundsToState();
@@ -87,7 +87,6 @@ const Stepper = ({ children, ...props }) => {
   }
 
   React.useEffect(() => {
-    // This is be executed when `loading` state changes
     if (loading) {
       let errors = props.formUtils.onClick();
       console.log("Step: " + step);
