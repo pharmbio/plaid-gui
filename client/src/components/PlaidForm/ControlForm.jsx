@@ -3,16 +3,25 @@ import FormPage from "./FormPage";
 import InputTextArea from "./Fields/InputTextArea";
 import InputNumber from "./Fields/InputNumber";
 
-const ControlForm = ({ handleInputChange, handleArrayChange }) => {
+const ControlForm = ({ handleInputChange, handleArrayChange, errors, state }) => {
   return (
     <FormPage>
       <InputNumber
         name="num_controls"
         label="Amount of controls"
-        value={""}
+        value={state.num_controls ? state.num_controls : ''}
         onChange={handleInputChange}
         onBlur={null}
-        errorMsg={null}
+        errorMsg={errors.num_controls ? errors.num_controls : null}
+      />
+
+      <InputTextArea
+        label={"Control replicates"}
+        placeholder=""
+        name="control_replicates"
+        onChange={handleArrayChange}
+        disable={false}
+        errorMsg={errors.control_replicates ? errors.control_replicates : null}
       />
 
       <InputTextArea
@@ -22,16 +31,16 @@ const ControlForm = ({ handleInputChange, handleArrayChange }) => {
         onChange={handleArrayChange}
         disable={false}
         value={""}
-        errorMsg={null}
+        errorMsg={errors.control_names ? errors.control_names : null}
       />
 
-      <InputNumber
+      <InputTextArea
         name="control_concentrations"
         label="Control concentrations"
+        placeholder={""}
+        onChange={handleArrayChange}
         value={""}
-        onChange={handleInputChange}
-        onBlur={null}
-        errorMsg={null}
+        errorMsg={errors.control_concentrations ? errors.control_concentrations : null}
       />
 
       <InputTextArea
@@ -41,36 +50,10 @@ const ControlForm = ({ handleInputChange, handleArrayChange }) => {
         onChange={handleArrayChange}
         disable={false}
         value={""}
-        errorMsg={null}
+        errorMsg={errors.control_concentration_names ? errors.control_concentration_names : null}
       />
 
-      <InputTextArea
-        label={"Control replicates"}
-        placeholder=""
-        name="control_replicates"
-        onChange={handleArrayChange}
-        disable={false}
-        errorMsg={null}
-      />
 
-      <InputNumber
-        name="blanks"
-        label="Blanks"
-        value={""}
-        onChange={handleInputChange}
-        onBlur={null}
-        errorMsg={null}
-      />
-
-      <InputTextArea
-        label={"Blanks names"}
-        placeholder=""
-        name="blanks_names"
-        onChange={handleInputChange}
-        value={""}
-        disable={false}
-        errorMsg={null}
-      />
     </FormPage>
   );
 };

@@ -34,10 +34,7 @@ const StyledErrorMessage = styled.div`
 `;
 
 const InputTextArea = (props) => {
-  const [value, setValue] = React.useState(props.value);
-
   const handleChange = (event) => {
-    setValue(event.target.value);
     props.onChange(event);
   };
 
@@ -50,7 +47,7 @@ const InputTextArea = (props) => {
         placeholder={props.placeholder}
         onChange={handleChange}
         disabled={props.disable} //true or false..
-        value={value}
+        value={props.value}
       />
       <StyledErrorMessage>{props.errorMsg}</StyledErrorMessage>
     </StyledTextAreaFieldContainer>

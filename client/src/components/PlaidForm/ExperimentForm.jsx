@@ -68,7 +68,6 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
             label="Rows"
             value={state.num_rows ? state.num_rows : ""}
             onChange={inputHandler}
-            onBlur={null}
             errorMsg={errors.num_rows ? errors.num_rows : null}
           />
           <InputNumber
@@ -76,7 +75,6 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
             label="Columns"
             value={state.num_cols ? state.num_cols : ""}
             onChange={inputHandler}
-            onBlur={null}
             errorMsg={errors.num_cols ? errors.num_cols : null}
           />
         </>
@@ -115,6 +113,34 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
         value={state.size_empty_edge ? state.size_empty_edge : ""}
         onChange={inputHandler}
         errorMsg={errors.size_empty_edge ? errors.size_empty_edge : null}
+      />
+      <InputCheck
+        label="concentrations_on_different_rows"
+        onChange={handleInputChange}
+        name={"concentrations_on_different_rows"}
+        value={state.concentrations_on_different_rows ? state.concentrations_on_different_rows : false}
+        errorMsg={""}
+      />
+      <InputCheck
+        label="concentrations_on_different_columns"
+        onChange={handleInputChange}
+        name={"concentrations_on_different_columns"}
+        value={state.concentrations_on_different_columns ? state.concentrations_on_different_columns : false}
+        errorMsg={""}
+      />
+      <InputCheck
+        label="replicates_on_different_plates"
+        onChange={handleInputChange}
+        name={"replicates_on_different_plates"}
+        value={state.replicates_on_different_plates ? state.replicates_on_different_plates : false}
+        errorMsg={errors.replicates_on_different_plates ? errors.replicates_on_different_plates : null}
+      />
+      <InputCheck
+        label="replicates_on_same_plate"
+        onChange={handleInputChange}
+        name={"replicates_on_same_plate"}
+        value={state.replicates_on_same_plate ? state.replicates_on_same_plate  : false}
+        errorMsg={errors.replicates_on_same_plate ? errors.replicates_on_same_plate  : null}
       />
     </FormPage>
   );
