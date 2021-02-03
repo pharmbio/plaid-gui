@@ -15,6 +15,7 @@ const parse = (delimiter, str) => {
 
 const CompoundForm = ({
   errors,
+  groupErrors,
   handleInputChange,
   handleArrayChange,
   state,
@@ -25,7 +26,7 @@ const CompoundForm = ({
   const [compoundNames, setCompoundNames] = useState("");
   const [concentrationNames, setConcentrationNames] = useState("");
   const [delimiter, setDelimiter] = React.useState(DEFAULT_DELIMITER);
-
+  console.log(groupErrors)
    function inputHandler(event) {
     let name = event.target.name;
     if (name === "compound_names") {
@@ -88,6 +89,7 @@ const CompoundForm = ({
         groups={groups.groups}
         selectedGroup={groups.selectedGroup}
         errors={errors}
+        groupErrors={groupErrors}
       />
 
     </FormPage>

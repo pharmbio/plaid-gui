@@ -53,7 +53,7 @@ const List = (props) => {
       compound_names: "",
       conc_amount: 0,
       concentration_names: "",
-      replicates: "",
+      replicates: 0,
     };
     let items = props.groups;
     items.push(newObj);
@@ -88,7 +88,7 @@ const List = (props) => {
       value = props.parse(props.delimiter, value)
       console.log(value);
     }
-
+ 
     let items = [...props.groups];
     let item = { ...items[props.selectedGroup], [name]: value };
 
@@ -117,7 +117,7 @@ const List = (props) => {
           name="conc_amount"
           onChange={handleOnInputChange}
           value={props.groups[props.selectedGroup].conc_amount}
-          errorMsg={null}
+          errorMsg={props.groupErrors.conc_amount ? props.groupErrors.conc_amount : null}
         />
 
         <InputTextArea

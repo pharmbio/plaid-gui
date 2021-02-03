@@ -150,6 +150,7 @@ const PlaidForm = (props) => {
           value: 1,
           message: "Compounds must be a number > 0",
         },
+
       },
       compound_names: {
         minValidLength: {
@@ -169,10 +170,10 @@ const PlaidForm = (props) => {
           message: "Concentration must be an integer or decimal",
         },
       },
-      compound_concentration_names: {
+      concentration_names: {
         minValidSize: {
           value: formState.compounds,
-          message: "",
+          message: "Number of concentration names must match number of compounds",
         },
       },
       compound_replicates: {
@@ -253,17 +254,16 @@ const PlaidForm = (props) => {
     },
   };
 
-  /* custom validation hook. TODO: Pass this validation into each component. Assiciate each name with the correct validation field 
-     and simply check if the error is null or not. If it's not, display that error. TOFIX, only one error at a time?
-     We also provide a cu
-  */
-
-  const { errors, formUtils } = useValidation(formState, config);
-
-  useEffect(() => {
-    const errors = formUtils.onClick()
-  }, [formState,])
-  
+  const groupConfig = {
+    fields: {
+      conc_amount: {
+        minValidSize: {
+          value: 0,
+          message: "Concentrations must be a number >= 0",
+        },
+      }
+    }
+  }
 
   const [groups, setGroups] = useState({
     selectedGroup: 0,
@@ -277,9 +277,28 @@ const PlaidForm = (props) => {
       },
     ],
   });
-  const handleCompoundNamesChange = (compounds) => {
-    setFormState({ ...formState, ["compound_names"]: compounds });
-  };
+
+  /* utility function that converts groups to something the validation hook can read */
+  const mergeGroups = (obj) => {
+    let errors = {}
+    let group;
+    console.log(obj)
+    for (let i = 0; i < obj.groups.length; i++) {
+
+      group = obj.groups[i];
+      for (let key in group) {
+        if (key === 'conc_amount') {
+            errors[key] = parseInt(group[key]);
+            console.log(errors)
+          }
+        }
+      }
+      return errors;
+    }
+  
+
+  const [errors, formUtils] = useValidation(formState, config);
+  const [groupErrors, groupUtils] = useValidation(groups, groupConfig, mergeGroups);
 
   const addCompoundsToState = () => {
     let processedGroup;
@@ -372,8 +391,10 @@ const PlaidForm = (props) => {
       ['compound_concentration_names']: compoundConcentrationNames,
       ['compound_replicates']: utilGroup.compoundReplicates
     }, formUtils.onClick())
+  };
 
-    // TODO! (Markus) You have to store compoundConcentrationsNames, utilGroup.replicates and utilGroup.compoundConcentrations map.keys (compoundNames) to formstate
+  const handleCompoundNamesChange = (compounds) => {
+    setFormState({ ...formState, ["compound_names"]: compounds });
   };
 
   const handleChangeOnGroups = (listOfGroups, selected) => {
@@ -384,9 +405,9 @@ const PlaidForm = (props) => {
           {
             id: "gr-0",
             compound_names: "",
-            conc_amount: "",
+            conc_amount: 0,
             compound_concentration_names: "",
-            replicates: "",
+            replicates: 0,
           },
         ],
       });
@@ -454,63 +475,66 @@ const PlaidForm = (props) => {
   };
   return (
     <StyledContainer>
-      {flightState["loading"] ? (
-        <Loader />
-      ) : (
-          <Stepper
-            initialValues={formState}
-            postForm={postForm}
-            setResponseError={setResponseError}
-            responseError={responseError}
-            setFlightState={setFlightState}
-            flightState={flightState}
-            setData={props.setData}
-            errors={errors}
-            formUtils={formUtils}
-            addCompoundsToState={addCompoundsToState}
-          >
-            <Step label="Experiment Setup">
-              <ExperimentForm
-                handleInputChange={handleInputChange}
-                errors={errors}
-                state={formState}
-              />
-              <ConstraintForm
-                handleInputChange={handleInputChange}
-                errors={errors}
-                state={formState}
-              />
-            </Step>
-            <Step label="Compound Setup">
-              <CompoundForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-                errors={errors}
-                state={formState}
-                groups={groups}
-                handleCompoundNamesChange={handleCompoundNamesChange}
-                handleChangeOnGroups={handleChangeOnGroups}
-              />
-            </Step>
-            <Step label="Combinations">
-              <CombinationForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-                errors={errors}
-                state={formState}
-              />
-            </Step>
-            <Step label="Experiment Validation">
-              <ControlForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-                errors={errors}
-                state={formState}
-              />
-            </Step>
-          </Stepper>
-        )}
-    </StyledContainer>
+      {
+        flightState["loading"] ? (
+          <Loader />
+        ) : (
+            <Stepper
+              initialValues={formState}
+              postForm={postForm}
+              setResponseError={setResponseError}
+              responseError={responseError}
+              setFlightState={setFlightState}
+              flightState={flightState}
+              setData={props.setData}
+              errors={errors}
+              formUtils={formUtils}
+              groupUtils={groupUtils}
+              addCompoundsToState={addCompoundsToState}
+            >
+              <Step label="Experiment Setup">
+                <ExperimentForm
+                  handleInputChange={handleInputChange}
+                  errors={errors}
+                  state={formState}
+                />
+                <ConstraintForm
+                  handleInputChange={handleInputChange}
+                  errors={errors}
+                  state={formState}
+                />
+              </Step>
+              <Step label="Compound Setup">
+                <CompoundForm
+                  handleInputChange={handleInputChange}
+                  handleArrayChange={handleArrayChange}
+                  errors={errors}
+                  groupErrors={groupErrors}
+                  state={formState}
+                  groups={groups}
+                  handleCompoundNamesChange={handleCompoundNamesChange}
+                  handleChangeOnGroups={handleChangeOnGroups}
+                />
+              </Step>
+              <Step label="Combinations">
+                <CombinationForm
+                  handleInputChange={handleInputChange}
+                  handleArrayChange={handleArrayChange}
+                  errors={errors}
+                  state={formState}
+                />
+              </Step>
+              <Step label="Experiment Validation">
+                <ControlForm
+                  handleInputChange={handleInputChange}
+                  handleArrayChange={handleArrayChange}
+                  errors={errors}
+                  state={formState}
+                />
+              </Step>
+            </Stepper>
+          )}
+    </StyledContainer >
   );
 };
 
