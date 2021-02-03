@@ -40,42 +40,49 @@ const StyledRowContainer = styled.div`
   align-items: flex-end;
 `;
 
-const List = (props) => {
-  const handleOnGroupClick = (event, groupIndex) => {
-    props.handleChangeOnGroups(props.groups, groupIndex);
+const List = ({
+  groups,
+  handleChangeOnGroups,
+  selectedGroup,
+  parse,
+  delimiter,
+  errors
+}) => {
+  const handleOnGroupClick = (event) => {
+    handleChangeOnGroups(groups, event.target.value);
   };
 
   const handleOnAddButtonClick = (event) => {
     event.preventDefault();
-    let newId = "gr-" + props.groups.length;
+    let newId = "gr-" + groups.length;
     let newObj = {
       id: newId,
       compound_names: "",
       conc_amount: 0,
       concentration_names: "",
-      replicates: "",
+      replicates: 0,
     };
-    let items = props.groups;
+    let items = groups;
     items.push(newObj);
 
     // handle change in groups and focus on the newly added group
-    props.handleChangeOnGroups(items, items.length - 1);
+    handleChangeOnGroups(items, items.length - 1);
   };
 
   const handleOnRemoveButtonClick = (event) => {
     event.preventDefault();
-    let items = [...props.groups];
+    let items = [...groups];
     if (items.length === 1) {
-      props.handleChangeOnGroups(null, 0);
+      handleChangeOnGroups(null, 0);
     } else {
-      items.splice(props.selectedGroup, 1);
+      items.splice(selectedGroup, 1);
 
       //update ids
       for (var i = 0; i < items.length; i++) {
         items[i].id = "gr-" + i;
       }
       //handle the updated group list and refocus on the first group after removing a group
-      props.handleChangeOnGroups(items, 0);
+      handleChangeOnGroups(items, items.length - 1);
     }
   };
 
@@ -83,32 +90,32 @@ const List = (props) => {
     let name = event.target.name;
     let value = event.target.value;
 
-    if(name === 'compound_names'){
-      console.log(props.delimiter)
-      value = props.parse(props.delimiter, value)
-      console.log(value);
+    if (name === "compound_names") {
+      value = parse(delimiter, value);
     }
 
-    let items = [...props.groups];
-    let item = { ...items[props.selectedGroup], [name]: value };
+    let items = [...groups];
+    let item = { ...items[selectedGroup], [name]: value };
 
     // need to update the list aswell
-    items[props.selectedGroup] = item;
-   
-    props.handleChangeOnGroups(items, props.selectedGroup);
+    items[selectedGroup] = item;
+
+    handleChangeOnGroups(items, selectedGroup);
   };
 
   return (
     <StyledRowContainer>
-      <FormPage>
+    <FormPage>
         <InputTextArea
           label={"Compound names"}
           placeholder=""
           name="compound_names"
           onChange={handleOnInputChange}
-          value={props.groups[props.selectedGroup].compound_names}
+          value={groups[selectedGroup].compound_names}
           disable={false}
-          errorMsg={props.errors.compound_names ? props.errors.compound_names : null}
+          errorMsg={
+            errors.compound_names ? errors.compound_names : null
+          }
         />
 
         <InputNumber
@@ -116,16 +123,15 @@ const List = (props) => {
           placeholder=""
           name="conc_amount"
           onChange={handleOnInputChange}
-          value={props.groups[props.selectedGroup].conc_amount}
+          value={groups[selectedGroup].conc_amount}
           errorMsg={null}
         />
-
         <InputTextArea
           label={"Concentration names"}
           placeholder=""
           name="concentration_names"
           onChange={handleOnInputChange}
-          value={props.groups[props.selectedGroup].concentration_names}
+          value={groups[selectedGroup].concentration_names}
           disable={false}
           errorMsg={null}
         />
@@ -133,27 +139,22 @@ const List = (props) => {
           label={"Replicates"}
           name="compound_replicates"
           onChange={handleOnInputChange}
-          value={props.groups[props.selectedGroup].compound_replicates}
+          value={groups[selectedGroup].replicates}
           errorMsg={null}
-        />
-      </FormPage>
+        /> 
+      </FormPage> 
       <StyledRowContainer>
         <StyledSelect
           id="select_group"
           name="select_group"
-          value={props.selectedGroup}
+          value={selectedGroup}
           onChange={(event) => {
-            handleOnGroupClick(props.groups, event.target.value);
+            handleOnGroupClick(event);
           }}
         >
-          {props.groups.map((obj, index) => {
+          {groups.map((obj, index) => {
             return (
-              <option
-                onClick={(event) => handleOnGroupClick(event, index)}
-                id={obj.id}
-                key={obj.id}
-                value={index}
-              >
+              <option id={obj.id} key={obj.id} value={index}>
                 {"Group " + (index + 1)}
               </option>
             );

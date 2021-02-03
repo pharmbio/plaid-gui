@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ExperimentForm from "./ExperimentForm";
 import CombinationForm from "./CombinationForm";
 import CompoundForm from "./CompoundForm";
@@ -272,7 +272,7 @@ const PlaidForm = (props) => {
         compound_names: "",
         conc_amount: 0,
         concentration_names: "",
-        compound_replicates: "",
+        replicates: 0,
       },
     ],
   });
@@ -383,9 +383,9 @@ const PlaidForm = (props) => {
           {
             id: "gr-0",
             compound_names: "",
-            conc_amount: "",
-            compound_concentration_names: "",
-            replicates: "",
+            conc_amount: 0,
+            concentration_names: "",
+            replicates: 0,
           },
         ],
       });
@@ -470,11 +470,6 @@ const PlaidForm = (props) => {
           >
             <Step label="Experiment Setup">
               <ExperimentForm
-                handleInputChange={handleInputChange}
-                errors={errors}
-                state={formState}
-              />
-              <ConstraintForm
                 handleInputChange={handleInputChange}
                 errors={errors}
                 state={formState}
