@@ -16,6 +16,7 @@ const StyledContainer = styled.div`
   flex-direction: column;
 `;
 
+/* return an object containing the properties num_rows , num_cols and size_empty_edge from the dzn file which are needed for the visualization */
 const parseDznInput = (data) => {
   let stored = { rows: null, cols: null, sizeEmptyEdge: null };
   for (const line of data.split(/[\r\n]+/)) {
@@ -72,8 +73,8 @@ const validProperties = [
   "compound_replicates",
   "combinations",
   "combination_concentrations",
-  "combination_names", // List
-  " combination_concentration_names", // List
+  "combination_names",
+  " combination_concentration_names", 
   "num_controls",
   "control_concentrations",
   "control_replicates",
@@ -126,8 +127,8 @@ const UploadExperiment = (props) => {
     <StyledContainer>
       <StyledUploadResultButton
         type="file"
-        name="upload-results"
-        id="upload-results"
+        name="upload-exp"
+        id="upload-exp"
         accept=".dzn,.json"
         onChange={handleChange}
       />
