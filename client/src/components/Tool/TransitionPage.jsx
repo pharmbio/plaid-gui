@@ -4,6 +4,7 @@ import UploadResult from "./UploadResult.jsx";
 import UploadExperiment from "./UploadExperiment.jsx";
 import { BiRightArrowAlt } from "react-icons/bi";
 import PlaidForm from "./../PlaidForm";
+import NextButton from "../Buttons/NextButton";
 
 const StyledTransitionPageContainer = styled.div`
   height: 100vh;
@@ -32,15 +33,6 @@ const StyledFlexItem = styled.div`
   padding: 10px;
 `;
 
-const StyledButton = styled.button`
-  background: none;
-  color: inherit;
-  border: none;
-  padding: 0;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
-`;
 
 const TransitionPage = (props) => {
   const [transition, setTransition] = React.useState("main");
@@ -73,9 +65,7 @@ const TransitionPage = (props) => {
               <UploadResult
                 handleUploadedResults={props.handleUploadedResults}
               />
-              <StyledButton onClick={() => handleClick("experiment")}>
-                <BiRightArrowAlt size={28} />
-              </StyledButton>
+              <NextButton isLast = {false} onClick={() => handleClick("experiment")}/>
             </StyledRowContainer>
           </StyledFlexItem>
         </StyledTransitionPageContainer>
@@ -91,9 +81,7 @@ const TransitionPage = (props) => {
                 handleUploadedDznFile={props.handleUploadedDznFile}
                 handleUploadedJsonConfig={handleUploadedJsonConfig}
               />
-              <StyledButton onClick={() => handleClick("form")}>
-                <BiRightArrowAlt size={28} />
-              </StyledButton>
+              <NextButton isLast={false} onClick={() => handleClick("form")}/>
             </StyledRowContainer>
           </StyledFlexItem>
         </StyledTransitionPageContainer>
