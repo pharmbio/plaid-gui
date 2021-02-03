@@ -44,6 +44,16 @@ const StyledButton = styled.button`
 
 const TransitionPage = (props) => {
   const [transition, setTransition] = React.useState("main");
+
+  /**
+   * @param {*} content an object containing data to prepopulate the form fields with. (each property name in content is valid property name to the formState object)
+   */
+  const handleUploadedJsonConfig = (content) => {
+    // TODO send the object as props to PlaidForm and prepopulate the data in formState!
+    console.log(content);
+    setTransition("form");
+  };
+
   const handleClick = (state) => {
     setTransition(state);
   };
@@ -79,6 +89,7 @@ const TransitionPage = (props) => {
             <StyledRowContainer>
               <UploadExperiment
                 handleUploadedDznFile={props.handleUploadedDznFile}
+                handleUploadedJsonConfig={handleUploadedJsonConfig}
               />
               <StyledButton onClick={() => handleClick("form")}>
                 <BiRightArrowAlt size={28} />

@@ -27,7 +27,7 @@ const parseDznInput = (data) => {
       if (line[0] !== "%") {
         //its not a minizinc comment
         let rows = line.split("=");
-        stored.rows = parseInt( rows[1].split(";", 1)[0].trim());
+        stored.rows = parseInt(rows[1].split(";", 1)[0].trim());
       }
       continue;
     }
@@ -43,7 +43,9 @@ const parseDznInput = (data) => {
       if (line[0] !== "%") {
         //its not a minizinc comment
         let sizeEmptyEdge = line.split("=");
-        stored.sizeEmptyEdge = parseInt(sizeEmptyEdge[1].split(";", 1)[0].trim());
+        stored.sizeEmptyEdge = parseInt(
+          sizeEmptyEdge[1].split(";", 1)[0].trim()
+        );
       }
       continue;
     }
@@ -51,18 +53,72 @@ const parseDznInput = (data) => {
   return stored;
 };
 
+/* these are from the formState object and represents each input field available in the forms */
+const validProperties = [
+  "num_rows",
+  "num_cols",
+  "vertical_cell_lines",
+  "horizontal_cell_lines",
+  "allow_empty_wells",
+  "size_empty_edge",
+  "concentrations_on_different_rows",
+  "concentrations_on_different_columns",
+  "replicates_on_different_plates",
+  "replicates_on_same_plate",
+  "compounds",
+  "compound_concentration_indicators",
+  "compound_names",
+  "compound_concentrations",
+  "compound_replicates",
+  "combinations",
+  "combination_concentrations",
+  "combination_names", // List
+  " combination_concentration_names", // List
+  "num_controls",
+  "control_concentrations",
+  "control_replicates",
+  "control_names",
+  "control_concentration_names",
+];
+
+/* makes sure that the uploaded json content only has allowed property names */
+const validateJsonProperties = (jsonObj) => {
+  for (let key in jsonObj) {
+    if (!validProperties.includes(key)) {
+      return false;
+    }
+  }
+  return true;
+};
+
 const UploadExperiment = (props) => {
   /* needed error messages?? */
-  const [showError, setShowError] = React.useState(false);
-
+  const [error, setShowError] = React.useState({ show: false, message: "" });
 
   const handleChange = (event) => {
+    let extension = event.target.files[0].name.split(".").pop().toLowerCase();
+
     const fr = new FileReader();
     fr.readAsText(event.target.files[0], "UTF-8");
     fr.onload = (event) => {
-      let content = event.target.result;
-      let parsedDataNeededForVisualization = parseDznInput(content);
-      props.handleUploadedDznFile(parsedDataNeededForVisualization, content)
+      if (extension === "dzn") {
+        let content = event.target.result;
+        let parsedDataNeededForVisualization = parseDznInput(content);
+        props.handleUploadedDznFile(parsedDataNeededForVisualization, content);
+        return;
+      }
+      if (extension === "json") {
+        let content = JSON.parse(event.target.result);
+        if (validateJsonProperties(content)) {
+          props.handleUploadedJsonConfig(content);
+        } else {
+          setShowError({
+            ...error,
+            show: true,
+            message: "The uploaded json file contains properties not allowed.",
+          });
+        }
+      }
     };
   };
 
@@ -72,11 +128,11 @@ const UploadExperiment = (props) => {
         type="file"
         name="upload-results"
         id="upload-results"
-        accept=".dzn"
+        accept=".dzn,.json"
         onChange={handleChange}
       />
-      {showError ? (
-        <StyledErrorMessage>The dzn file is incorrect!</StyledErrorMessage>
+      {error.show ? (
+        <StyledErrorMessage>{error.message}</StyledErrorMessage>
       ) : undefined}
     </StyledContainer>
   );

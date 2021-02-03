@@ -38,7 +38,7 @@ const Tool = () => {
       )
       .then(
         (res) => {
-          console.log(res.data)
+          console.log(res.data);
           setData({
             rows: parsedData.rows,
             cols: parsedData.cols,
@@ -51,6 +51,8 @@ const Tool = () => {
         }
       );
   };
+
+
 
   return (
     <StyledToolWrapper>
