@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import UploadResult from "./UploadResult.jsx";
+import UploadExperiment from "./UploadExperiment.jsx";
 import { BiRightArrowAlt } from "react-icons/bi";
 import PlaidForm from "./../PlaidForm";
 
@@ -18,7 +19,7 @@ const StyledParagraph = styled.p`
   line-height: 1.7;
   font-weight: 400;
   font-style: normal;
-  font-family: ${props => props.theme.fonts.secondary};
+  font-family: ${(props) => props.theme.fonts.secondary};
 `;
 
 const StyledRowContainer = styled.div`
@@ -76,7 +77,9 @@ const TransitionPage = (props) => {
               experiment or continue to get to the forms.
             </StyledParagraph>
             <StyledRowContainer>
-              <button>TODO upload</button>
+              <UploadExperiment
+                handleUploadedDznFile={props.handleUploadedDznFile}
+              />
               <StyledButton onClick={() => handleClick("form")}>
                 <BiRightArrowAlt size={28} />
               </StyledButton>
