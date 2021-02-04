@@ -57,12 +57,13 @@ const StyledButtonContainer = styled.div`
 `;
 const Stepper = ({ children, ...props }) => {
   const childrenArray = React.Children.toArray(children);
-  const [step, setStep] = useState(0);
   const [errorState, setErrorState] = useState(true);
+  //const [step, setStep] = useState(0);
+
   //Child to display on current step. 0 would be immediate child.
-  const currentChild = childrenArray[step];
+  const currentChild = childrenArray[props.step];
   function isLast() {
-    return step === childrenArray.length - 1;
+    return props.step === childrenArray.length - 1;
   }
   /* complete waste having objects here. Refactor so the main object uses categories. Move the stepper button to each child and let them handle its own validation for best results!! */
   function hasErrors(errors, step) {
@@ -72,8 +73,8 @@ const Stepper = ({ children, ...props }) => {
       concentrations_on_different_columns: null, replicates_on_different_plates: null, replicates_on_same_plate: null
     }
     const compounds = {
-      compounds: null, compound_concentration_names: null, compound_concentration_indicators: null, compound_names: null,
-      compound_concentrations: null, compound_replicates: null,
+      compounds: null, compound_concentration_indicators: null, compound_names: null,
+      compound_concentrations: null, compound_replicates: null, conc_amount: null, concentration_names: null,
     }
     const combinations = {
       combinations: null, combination_concentrations: null, combination_names: null, combination_concentration_names: null,
@@ -83,12 +84,14 @@ const Stepper = ({ children, ...props }) => {
       num_controls: null, control_concentrations: null, control_replicates: null, control_names: null,
       control_concentration_names: null
     }
-    const groups = {
-      conc_amount: null
-    }
+    /* const groups = {
+      //conc_amount: null,
+      concentration_names: null,
+    } */
 
     for (let key in errors) {
-
+      console.log(errors);
+      console.log(key);
       switch (step) {
         case 0:
           if (key in experiment) {
@@ -117,7 +120,6 @@ const Stepper = ({ children, ...props }) => {
               return true;
             }
           }
-          break;
         default:
           break;
       }
@@ -131,7 +133,7 @@ const Stepper = ({ children, ...props }) => {
              om jag väljer onChange, hur kan vi stoppa valideringen från att köra på de tomma fälten innan man använt toolen? */
   function handleNext() {
     // if(noErrors(errors)){
-    if (step === 1) {
+    if (props.step === 1) {
       props.addCompoundsToState();
     }
     setLoading(true);
@@ -141,12 +143,14 @@ const Stepper = ({ children, ...props }) => {
     if (loading) {
       let errors = props.formUtils.onClick();
       let groupErrors = props.groupUtils.onClick();
-      if (!hasErrors(errors, step) && !hasErrors(groupErrors, step)) {
-        setStep(step + 1);
+      console.log(errors);
+      console.log(groupErrors);
+      if (!hasErrors(errors, props.step) && !hasErrors(groupErrors, props.step)) {
+        props.handleStep(props.step + 1);
       }
       setLoading(false);
     }
-  }, [loading, step, props.formUtils,]);
+  }, [loading, props.step, props.formUtils,]);
 
   return (
     <Formik {...props} initialValues={props.initialValues}>
@@ -156,11 +160,11 @@ const Stepper = ({ children, ...props }) => {
           {props.flightState["responseError"] ? props.responseError : null}
         </ErrorNotice>
         <StyledForm>
-          <HorizontalStepper currentStep={step} steps={childrenArray} />
+          <HorizontalStepper currentStep={props.step} steps={childrenArray} />
           <StyledInputContainer>{currentChild}</StyledInputContainer>
           <StyledButtonContainer>
-            {step > 0 ? (
-              <StyledPrevButton type="button" onClick={() => setStep(step - 1)}>
+            {props.step > 0 ? (
+              <StyledPrevButton type="button" onClick={() => props.handleStep(props.step - 1)}>
                 Previous
               </StyledPrevButton>
             ) : null}

@@ -2,7 +2,10 @@ import React, { useState, useEffect, useCallback } from "react";
 
 const validators = {
   minValidSize: function (config) {
+    console.log(config)
+
     return function (value) {
+      console.log(value)
       if (value < config.value || isNaN(value) || value === null) {
         return config.message;
       }
@@ -43,6 +46,19 @@ const validators = {
       return null;
     };
   },
+  concNameCount: function (config) {
+    return function (value) {
+      let groups = config.value.groups;
+      for (let i = 0; i < groups.lenth; i++) {
+        let group = groups[i];
+        if (value.length < group['conc_amount']) {
+          return config.message;
+        }
+      }
+      return null;
+    }
+  
+  },
 };
 
 
@@ -69,6 +85,7 @@ function validateFields(fieldValues, fieldStates) {
     const fieldConfig = fieldStates[fieldName]; //get the values stored in key e.g num_rows.
     //  const fieldValue = fieldValues[fieldName]; //get the current values found in our large object for num_rows.
     const fieldValue = fieldValues[fieldName];
+
     errors[fieldName] = validateField(fieldValue, fieldConfig, fieldStates); // pass the current value and the field into the validator. Return any errors.
     // These errors will then be displayed in the frontend.
   }
@@ -90,7 +107,6 @@ const useValidation = (input, config, func = null) => {
       if (func) {
         input = func(input);
       }
-  
       const errors = validateFields(input, config.fields);
       setErrors(errors);
       return errors;

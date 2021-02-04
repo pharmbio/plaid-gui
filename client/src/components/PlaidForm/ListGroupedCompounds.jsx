@@ -83,20 +83,21 @@ const List = (props) => {
     let name = event.target.name;
     let value = event.target.value;
 
-    if(name === 'compound_names'){
+    if (name === 'compound_names') {
       console.log(props.delimiter)
       value = props.parse(props.delimiter, value)
       console.log(value);
     }
- 
+
     let items = [...props.groups];
     let item = { ...items[props.selectedGroup], [name]: value };
 
     // need to update the list aswell
     items[props.selectedGroup] = item;
-   
+
     props.handleChangeOnGroups(items, props.selectedGroup);
   };
+  console.log(props.groups[props.selectedGroup].compound_names)
 
   return (
     <StyledRowContainer>
@@ -127,7 +128,7 @@ const List = (props) => {
           onChange={handleOnInputChange}
           value={props.groups[props.selectedGroup].concentration_names}
           disable={false}
-          errorMsg={null}
+          errorMsg={props.groupErrors.concentration_names ? props.groupErrors.concentration_names : null}
         />
         <InputNumber
           label={"Replicates"}

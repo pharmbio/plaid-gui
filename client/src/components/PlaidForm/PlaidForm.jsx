@@ -52,6 +52,7 @@ const PlaidForm = (props) => {
     responseError: false,
   });
   const [responseError, setResponseError] = useState("");
+  const [step, setStep] = useState(0);
   const [formState, setFormState] = useState({
     num_rows: 8,
     num_cols: 12,
@@ -159,23 +160,6 @@ const PlaidForm = (props) => {
             "Number of compound names are not equal to number of compounds",
         },
       },
-      compound_concentrations: {
-        minValidLength: {
-          value: formState.compounds,
-          message:
-            "Number of concentrations are not equal to number of compounds",
-        },
-        isNumber: {
-          value: formState.compounds,
-          message: "Concentration must be an integer or decimal",
-        },
-      },
-      concentration_names: {
-        minValidSize: {
-          value: formState.compounds,
-          message: "Number of concentration names must match number of compounds",
-        },
-      },
       compound_replicates: {
         minValidLength: {
           value: formState.compounds,
@@ -254,16 +238,7 @@ const PlaidForm = (props) => {
     },
   };
 
-  const groupConfig = {
-    fields: {
-      conc_amount: {
-        minValidSize: {
-          value: 0,
-          message: "Concentrations must be a number >= 0",
-        },
-      }
-    }
-  }
+
 
   const [groups, setGroups] = useState({
     selectedGroup: 0,
@@ -278,28 +253,49 @@ const PlaidForm = (props) => {
     ],
   });
 
+  //TODO add function mentioned in concentration_names. Fix everything left regarding valdation.
+  const groupConfig = {
+    fields: {
+      conc_amount: {
+        minValidSize: {
+          value: 1,
+          message: "Concentrations must be a number > 0",
+        },
+      },
+      concentration_names: {
+        concNameCount: { //change to function that iterates groups and finds any conc_amount/concentration_name missmatch
+          value: groups,
+          message: "The number of conc names must match the amount specified",
+        },
+      }
+    }
+  }
   /* utility function that converts groups to something the validation hook can read */
   const mergeGroups = (obj) => {
-    let errors = {}
+    let newState = {}
     let group;
-    console.log(obj)
     for (let i = 0; i < obj.groups.length; i++) {
 
       group = obj.groups[i];
       for (let key in group) {
         if (key === 'conc_amount') {
-            errors[key] = parseInt(group[key]);
-            console.log(errors)
-          }
+          newState[key] = parseInt(group[key]);
+        }
+        if (key === 'concentration_names') {
+          newState[key] = group[key].split(',');
         }
       }
-      return errors;
     }
-  
+    console.log(newState)
+
+    return newState;
+  }
+
 
   const [errors, formUtils] = useValidation(formState, config);
   const [groupErrors, groupUtils] = useValidation(groups, groupConfig, mergeGroups);
-
+  console.log(errors);
+  console.log(groupErrors);
   const addCompoundsToState = () => {
     let processedGroup;
 
@@ -324,6 +320,7 @@ const PlaidForm = (props) => {
             processedGroup.compound_names = compoundNames;
 
             break;
+          //length of compoundConcentrations
           case "conc_amount":
             const concAmount = parseInt(compoundGroup.conc_amount);
             for (let j = 0; j < concAmount; j++)
@@ -391,6 +388,10 @@ const PlaidForm = (props) => {
       ['compound_concentration_names']: compoundConcentrationNames,
       ['compound_replicates']: utilGroup.compoundReplicates
     }, formUtils.onClick())
+  };
+
+  const handleStep = (val) => {
+    setStep(val);
   };
 
   const handleCompoundNamesChange = (compounds) => {
@@ -490,6 +491,8 @@ const PlaidForm = (props) => {
               errors={errors}
               formUtils={formUtils}
               groupUtils={groupUtils}
+              handleStep={handleStep}
+              step={step}
               addCompoundsToState={addCompoundsToState}
             >
               <Step label="Experiment Setup">
@@ -534,7 +537,7 @@ const PlaidForm = (props) => {
               </Step>
             </Stepper>
           )}
-    </StyledContainer >
+    </StyledContainer>
   );
 };
 
