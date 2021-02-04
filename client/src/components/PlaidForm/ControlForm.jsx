@@ -16,21 +16,11 @@ const ControlForm = ({ handleInputChange, handleArrayChange, errors, state }) =>
       />
 
       <InputTextArea
-        label={"Control replicates"}
-        placeholder=""
-        name="control_replicates"
-        onChange={handleArrayChange}
-        disable={false}
-        errorMsg={errors.control_replicates ? errors.control_replicates : null}
-      />
-
-      <InputTextArea
         label={"Control names"}
         placeholder=""
         name="control_names"
         onChange={handleArrayChange}
         disable={false}
-        value={""}
         errorMsg={errors.control_names ? errors.control_names : null}
       />
 
@@ -39,21 +29,17 @@ const ControlForm = ({ handleInputChange, handleArrayChange, errors, state }) =>
         label="Control concentrations"
         placeholder={""}
         onChange={handleArrayChange}
-        value={""}
         errorMsg={errors.control_concentrations ? errors.control_concentrations : null}
       />
 
       <InputTextArea
-        label={"Control concentration names"}
+        label={"Control replicates"}
         placeholder=""
-        name="control_concentration_names"
+        name="control_replicates"
         onChange={handleArrayChange}
         disable={false}
-        value={""}
-        errorMsg={errors.control_concentration_names ? errors.control_concentration_names : null}
+        errorMsg={errors.control_replicates ? errors.control_replicates : null}
       />
-
-
     </FormPage>
   );
 };

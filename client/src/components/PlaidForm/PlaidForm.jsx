@@ -398,9 +398,6 @@ const PlaidForm = (props) => {
     console.log(utilGroup)
     console.log(processedGroup)
   };
-  console.log(formState.compound_names)
-  console.log(formState.compound_replicates)
-  console.log(formState.compound_concentration_indicators);
 
   const handleCompoundNamesChange = (compounds) => {
     setFormState({ ...formState, ["compound_names"]: compounds });
