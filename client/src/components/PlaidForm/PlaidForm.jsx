@@ -285,8 +285,6 @@ const PlaidForm = (props) => {
         }
       }
     }
-    console.log(newState)
-
     return newState;
   }
 
@@ -302,6 +300,7 @@ const PlaidForm = (props) => {
     let utilGroup = {
       compoundConcentrations: [],
       compoundReplicates: [],
+      compound_concentration_indicators: [],
     };
 
     let compoundGroups = groups.groups;
@@ -325,10 +324,13 @@ const PlaidForm = (props) => {
             console.log(concAmount)
             for (let j = 0; j < compoundGroup.compound_names.length; j++) {
               utilGroup.compoundConcentrations.push(concAmount);
+              utilGroup.compound_concentration_indicators.push("");
             }
             break;
           case "compound_replicates":
             const replicateAmount = parseInt(compoundGroup.compound_replicates);
+            console.log(replicateAmount )
+            console.log(compoundGroup.compound_names.length)
             for (let j = 0; j < compoundGroup.compound_names.length; j++) {
               utilGroup.compoundReplicates.push(replicateAmount);
             }
@@ -390,13 +392,15 @@ const PlaidForm = (props) => {
       ['compound_names']: Object.keys(map),
       ['compound_concentrations']: utilGroup.compoundConcentrations,
       ['compound_concentration_names']: compoundConcentrationNames,
-      ['compound_replicates']: utilGroup.compoundReplicates
+      ['compound_replicates']: utilGroup.compoundReplicates,
+      ['compound_concentration_indicators']: utilGroup.compound_concentration_indicators,
     }, formUtils.onClick())
     console.log(utilGroup)
     console.log(processedGroup)
   };
   console.log(formState.compound_names)
   console.log(formState.compound_replicates)
+  console.log(formState.compound_concentration_indicators);
 
   const handleCompoundNamesChange = (compounds) => {
     setFormState({ ...formState, ["compound_names"]: compounds });

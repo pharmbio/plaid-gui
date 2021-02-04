@@ -53,7 +53,7 @@ const List = (props) => {
       compound_names: "",
       conc_amount: 0,
       concentration_names: "",
-      replicates: 0,
+      compound_replicates: 0,
     };
     let items = props.groups;
     items.push(newObj);
