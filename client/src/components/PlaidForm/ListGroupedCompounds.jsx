@@ -40,7 +40,7 @@ const StyledRowContainer = styled.div`
   align-items: flex-end;
 `;
 
-const List = ({
+const ListGroupedCompounds = ({
   groups,
   handleChangeOnGroups,
   selectedGroup,
@@ -48,6 +48,7 @@ const List = ({
   delimiter,
   errors
 }) => {
+
   const handleOnGroupClick = (event) => {
     handleChangeOnGroups(groups, event.target.value);
   };
@@ -174,4 +175,4 @@ const List = ({
   );
 };
 
-export default List;
+export default ListGroupedCompounds;
