@@ -67,29 +67,47 @@ const Stepper = ({ children, ...props }) => {
   /* complete waste having objects here. Refactor so the main object uses categories. Move the stepper button to each child and let them handle its own validation for best results!! */
   function hasErrors(errors, step) {
     const experiment = {
-      num_rows: null, num_cols: null, vertical_cell_lines: null, vertical_cell_lines: null,
-      horizontal_cell_lines: null, allow_empty_wells: null, size_empty_edge: null, concentrations_on_different_rows: null,
-      concentrations_on_different_columns: null, replicates_on_different_plates: null, replicates_on_same_plate: null
-    }
+      num_rows: null,
+      num_cols: null,
+      vertical_cell_lines: null,
+      vertical_cell_lines: null,
+      horizontal_cell_lines: null,
+      allow_empty_wells: null,
+      size_empty_edge: null,
+      concentrations_on_different_rows: null,
+      concentrations_on_different_columns: null,
+      replicates_on_different_plates: null,
+      replicates_on_same_plate: null,
+    };
     const compounds = {
-      compounds: null, compound_concentration_indicators: null, compound_names: null,
-      compound_concentrations: null, compound_replicates: null, conc_amount: null, concentration_names: null,
-    }
+      compounds: null,
+      compound_concentration_indicators: null,
+      compound_names: null,
+      compound_concentrations: null,
+      compound_replicates: null,
+      conc_amount: null,
+      concentration_names: null,
+    };
     const combinations = {
-      combinations: null, combination_concentrations: null, combination_names: null, combination_concentration_names: null,
-    }
+      combinations: null,
+      combination_concentrations: null,
+      combination_names: null,
+      combination_concentration_names: null,
+    };
 
     const validation = {
-      num_controls: null, control_concentrations: null, control_replicates: null, control_names: null,
-      control_concentration_names: null
-    }
+      num_controls: null,
+      control_concentrations: null,
+      control_replicates: null,
+      control_names: null,
+      control_concentration_names: null,
+    };
     /* const groups = {
       //conc_amount: null,
       concentration_names: null,
     } */
 
     for (let key in errors) {
-
       switch (step) {
         case 0:
           if (key in experiment) {
@@ -134,6 +152,8 @@ const Stepper = ({ children, ...props }) => {
     // if(noErrors(errors)){
     if (step === 1) {
       props.addCompoundsToState();
+    } else if (step === 3) {
+      props.addControlConcentrationNames();
     }
     setLoading(true);
   }
@@ -143,11 +163,22 @@ const Stepper = ({ children, ...props }) => {
       let errors = props.formUtils.onClick();
       let groupErrors = props.groupUtils.onClick();
       if (!hasErrors(errors, step) && !hasErrors(groupErrors, step)) {
-        setStep(step + 1);
+        if (step !== 3) {
+          setStep(step + 1);
+        } else {
+          console.log(props.initialValues)
+          props.postForm(
+            props.initialValues,
+            props.setResponseError,
+            props.setFlightState,
+            props.flightState,
+            props.setData
+          );
+        }
       }
       setLoading(false);
     }
-  }, [loading, step, props.formUtils,]);
+  }, [loading, step, props.formUtils]);
 
   return (
     <Formik {...props} initialValues={props.initialValues}>
@@ -165,21 +196,7 @@ const Stepper = ({ children, ...props }) => {
                 Previous
               </StyledPrevButton>
             ) : null}
-            <StyledNextButton
-              type="button"
-              onClick={
-                isLast()
-                  ? () =>
-                    props.postForm(
-                      props.initialValues,
-                      props.setResponseError,
-                      props.setFlightState,
-                      props.flightState,
-                      props.setData
-                    )
-                  : () => handleNext()
-              }
-            >
+            <StyledNextButton type="button" onClick={() => handleNext()}>
               {isLast() ? "Submit" : "Next"}
             </StyledNextButton>
           </StyledButtonContainer>
