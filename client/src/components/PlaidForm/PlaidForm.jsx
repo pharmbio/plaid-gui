@@ -53,53 +53,33 @@ const PlaidForm = (props) => {
   });
   const [responseError, setResponseError] = useState("");
   const [formState, setFormState] = useState({
-    num_rows: 8,
-    num_cols: 12,
-    vertical_cell_lines: 1,
-    horizontal_cell_lines: 1,
+    num_rows: 4,
+    num_cols: 6,
+    vertical_cell_lines: 0,
+    horizontal_cell_lines: 0,
     allow_empty_wells: false,
-    size_empty_edge: 1,
-    concentrations_on_different_rows: true,
-    concentrations_on_different_columns: true,
-    replicates_on_different_plates: true,
+    size_empty_edge: 0,
+    concentrations_on_different_rows: false,
+    concentrations_on_different_columns: false,
+    replicates_on_different_plates: false,
     replicates_on_same_plate: false,
-    compounds: 10,
+    compounds: 0,
     compound_concentration_names: [
-      ["a0.3", "a1", "a3", "a5", "a10", "a15", "a30", "a100"],
-      ["b0.3", "b1", "b3", "b5", "b10", "b15", "b30", "b100"],
-      ["c0.3", "c1", "c3", "c5", "c10", "c15", "c30", "c100"],
-      ["d0.3", "d1", "d3", "d5", "d10", "d15", "d30", "d100"],
-      ["e0.3", "e1", "e3", "e5", "e10", "e15", "e30", "e100"],
-      ["f0.3", "f1", "f3", "f5", "f10", "f15", "f30", "f100"],
-      ["g0.3", "g1", "g3", "g5", "g10", "g15", "g30", "g100"],
-      ["h0.3", "h1", "h3", "h5", "h10", "h15", "h30", "h100"],
-      ["i0.3", "i1", "i3", "i5", "i10", "i15", "i30", "i100"],
-      ["j0.3", "j1", "j3", "j5", "j10", "j15", "j30", "j100"],
+     
     ], // List
-    compound_concentration_indicators: ["", "", "", "", "", "", "", ""],
-    compound_names: [
-      "c1",
-      "c2",
-      "c3",
-      "c4",
-      "c5",
-      "c6",
-      "c7",
-      "c8",
-      "c9",
-      "c10",
-    ], // List
-    compound_concentrations: [8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-    compound_replicates: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+    compound_concentration_indicators: [],
+    compound_names: [], // List
+    compound_concentrations: [],
+    compound_replicates: [],
     combinations: 0,
     combination_concentrations: 0,
     combination_names: [], // List
     combination_concentration_names: [], // List
-    num_controls: 4,
-    control_concentrations: [1, 1, 1, 1],
-    control_replicates: [32, 16, 16, 16], // List
-    control_names: ["pos", "neg", "blank", "dmso"], // List
-    control_concentration_names: ["cont-conc1"], // List
+    num_controls: 0,
+    control_concentrations: [],
+    control_replicates: [], // List
+    control_names: [], // List
+    control_concentration_names: [], // List
   });
   const config = {
     fields: {

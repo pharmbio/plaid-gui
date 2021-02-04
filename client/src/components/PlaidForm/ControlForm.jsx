@@ -54,7 +54,7 @@ const ControlForm = ({ handleControlFormChange, errors, state }) => {
         placeholder=""
         name="control_names"
         onChange={handleChange}
-        value={state.control_names.toString()}
+        //value={state.control_names.toString()}
         disable={false}
         errorMsg={errors.control_names ? errors.control_names : null}
       />
@@ -64,7 +64,7 @@ const ControlForm = ({ handleControlFormChange, errors, state }) => {
         label="Control concentrations"
         placeholder={""}
         onChange={handleChange}
-        value={state.control_concentrations.toString()}
+        //value={state.control_concentrations.toString()}
         errorMsg={
           errors.control_concentrations ? errors.control_concentrations : null
         }
@@ -76,7 +76,7 @@ const ControlForm = ({ handleControlFormChange, errors, state }) => {
         name="control_replicates"
         onChange={handleChange}
         disable={false}
-        value={state.control_replicates.toString()}
+      //  value={state.control_replicates.toString()}
         errorMsg={errors.control_replicates ? errors.control_replicates : null}
       />
 
@@ -85,9 +85,9 @@ const ControlForm = ({ handleControlFormChange, errors, state }) => {
         placeholder=""
         name="control_concentration_names"
         onChange={handleChange}
-        value={
-          state.control_concentration_names.toString()
-        }
+        //value={
+        //  state.control_concentration_names.toString()
+        //}
         disable={false}
         errorMsg={null}
       />
