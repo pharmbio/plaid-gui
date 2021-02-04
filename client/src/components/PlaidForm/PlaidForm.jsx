@@ -263,9 +263,9 @@ const PlaidForm = (props) => {
       },
       concentration_names: {
         concNameCount: { //change to function that iterates groups and finds any conc_amount/concentration_name missmatch
-          value: groups, 
+          value: groups,
           message: "The number of conc names must match the amount specified",
-        },  
+        },
       }
     }
   }
@@ -319,18 +319,23 @@ const PlaidForm = (props) => {
             processedGroup.compound_names = compoundNames;
 
             break;
-            //length of compoundConcentrations
+          //length of compoundConcentrations
           case "conc_amount":
             const concAmount = parseInt(compoundGroup.conc_amount);
-            for (let j = 0; j < concAmount; j++)
+            console.log(concAmount)
+            for (let j = 0; j < compoundGroup.compound_names.length; j++) {
               utilGroup.compoundConcentrations.push(concAmount);
+            }
             break;
           case "compound_replicates":
             const replicateAmount = parseInt(compoundGroup.compound_replicates);
-            for (let j = 0; j < replicateAmount; j++)
+            for (let j = 0; j < compoundGroup.compound_names.length; j++) {
               utilGroup.compoundReplicates.push(replicateAmount);
+            }
+
             break;
           case "concentration_names":
+            console.log(compoundGroup.concentration_names)
             let concentrationNames = (compoundGroup.concentration_names + "")
               .replace(/(^,)|(,$)/g, "")
               .split(",");
@@ -340,7 +345,6 @@ const PlaidForm = (props) => {
             break;
         }
       }
-
       /*
         create this hash map
        map = {compoundName : [concName, concName...]} 
@@ -359,6 +363,7 @@ const PlaidForm = (props) => {
           }
         }
       }
+
     }
 
     // the matrix
@@ -387,7 +392,11 @@ const PlaidForm = (props) => {
       ['compound_concentration_names']: compoundConcentrationNames,
       ['compound_replicates']: utilGroup.compoundReplicates
     }, formUtils.onClick())
+    console.log(utilGroup)
+    console.log(processedGroup)
   };
+  console.log(formState.compound_names)
+  console.log(formState.compound_replicates)
 
   const handleCompoundNamesChange = (compounds) => {
     setFormState({ ...formState, ["compound_names"]: compounds });

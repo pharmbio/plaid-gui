@@ -135,7 +135,7 @@ const List = (props) => {
           name="compound_replicates"
           onChange={handleOnInputChange}
           value={props.groups[props.selectedGroup].compound_replicates}
-          errorMsg={null}
+          errorMsg={props.errors.compound_replicates ? props.errors.compound_replicates : null}
         />
       </FormPage>
       <StyledRowContainer>

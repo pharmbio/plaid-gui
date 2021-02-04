@@ -2,10 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 
 const validators = {
   minValidSize: function (config) {
-    console.log(config)
-
     return function (value) {
-      console.log(value)
       if (value < config.value || isNaN(value) || value === null) {
         return config.message;
       }
@@ -49,9 +46,9 @@ const validators = {
   concNameCount: function (config) {
     return function (value) {
       let groups = config.value.groups;
-      for (let i = 0; i < groups.lenth; i++) {
+      for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        if (value.length < group['conc_amount']) {
+        if (value.length !== parseInt(group['conc_amount']) || (value[0].length === 0)) {
           return config.message;
         }
       }

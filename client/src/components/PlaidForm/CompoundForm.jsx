@@ -26,7 +26,6 @@ const CompoundForm = ({
   const [compoundNames, setCompoundNames] = useState("");
   const [concentrationNames, setConcentrationNames] = useState("");
   const [delimiter, setDelimiter] = React.useState(DEFAULT_DELIMITER);
-  console.log(groupErrors)
    function inputHandler(event) {
     let name = event.target.name;
     if (name === "compound_names") {
