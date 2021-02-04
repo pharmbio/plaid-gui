@@ -52,7 +52,6 @@ const PlaidForm = (props) => {
     responseError: false,
   });
   const [responseError, setResponseError] = useState("");
-  const [step, setStep] = useState(0);
   const [formState, setFormState] = useState({
     num_rows: 8,
     num_cols: 12,
@@ -264,9 +263,9 @@ const PlaidForm = (props) => {
       },
       concentration_names: {
         concNameCount: { //change to function that iterates groups and finds any conc_amount/concentration_name missmatch
-          value: groups,
+          value: groups, 
           message: "The number of conc names must match the amount specified",
-        },
+        },  
       }
     }
   }
@@ -295,7 +294,7 @@ const PlaidForm = (props) => {
   const [errors, formUtils] = useValidation(formState, config);
   const [groupErrors, groupUtils] = useValidation(groups, groupConfig, mergeGroups);
   console.log(errors);
-  console.log(groupErrors);
+  console.log(groupErrors)
   const addCompoundsToState = () => {
     let processedGroup;
 
@@ -320,7 +319,7 @@ const PlaidForm = (props) => {
             processedGroup.compound_names = compoundNames;
 
             break;
-          //length of compoundConcentrations
+            //length of compoundConcentrations
           case "conc_amount":
             const concAmount = parseInt(compoundGroup.conc_amount);
             for (let j = 0; j < concAmount; j++)
@@ -388,10 +387,6 @@ const PlaidForm = (props) => {
       ['compound_concentration_names']: compoundConcentrationNames,
       ['compound_replicates']: utilGroup.compoundReplicates
     }, formUtils.onClick())
-  };
-
-  const handleStep = (val) => {
-    setStep(val);
   };
 
   const handleCompoundNamesChange = (compounds) => {
@@ -491,8 +486,6 @@ const PlaidForm = (props) => {
               errors={errors}
               formUtils={formUtils}
               groupUtils={groupUtils}
-              handleStep={handleStep}
-              step={step}
               addCompoundsToState={addCompoundsToState}
             >
               <Step label="Experiment Setup">

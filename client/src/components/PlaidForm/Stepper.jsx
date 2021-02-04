@@ -57,13 +57,12 @@ const StyledButtonContainer = styled.div`
 `;
 const Stepper = ({ children, ...props }) => {
   const childrenArray = React.Children.toArray(children);
+  const [step, setStep] = useState(0);
   const [errorState, setErrorState] = useState(true);
-  //const [step, setStep] = useState(0);
-
   //Child to display on current step. 0 would be immediate child.
-  const currentChild = childrenArray[props.step];
+  const currentChild = childrenArray[step];
   function isLast() {
-    return props.step === childrenArray.length - 1;
+    return step === childrenArray.length - 1;
   }
   /* complete waste having objects here. Refactor so the main object uses categories. Move the stepper button to each child and let them handle its own validation for best results!! */
   function hasErrors(errors, step) {
@@ -90,8 +89,7 @@ const Stepper = ({ children, ...props }) => {
     } */
 
     for (let key in errors) {
-      console.log(errors);
-      console.log(key);
+
       switch (step) {
         case 0:
           if (key in experiment) {
@@ -120,6 +118,7 @@ const Stepper = ({ children, ...props }) => {
               return true;
             }
           }
+
         default:
           break;
       }
@@ -133,7 +132,7 @@ const Stepper = ({ children, ...props }) => {
              om jag väljer onChange, hur kan vi stoppa valideringen från att köra på de tomma fälten innan man använt toolen? */
   function handleNext() {
     // if(noErrors(errors)){
-    if (props.step === 1) {
+    if (step === 1) {
       props.addCompoundsToState();
     }
     setLoading(true);
@@ -143,14 +142,12 @@ const Stepper = ({ children, ...props }) => {
     if (loading) {
       let errors = props.formUtils.onClick();
       let groupErrors = props.groupUtils.onClick();
-      console.log(errors);
-      console.log(groupErrors);
-      if (!hasErrors(errors, props.step) && !hasErrors(groupErrors, props.step)) {
-        props.handleStep(props.step + 1);
+      if (!hasErrors(errors, step) && !hasErrors(groupErrors, step)) {
+        setStep(step + 1);
       }
       setLoading(false);
     }
-  }, [loading, props.step, props.formUtils,]);
+  }, [loading, step, props.formUtils,]);
 
   return (
     <Formik {...props} initialValues={props.initialValues}>
@@ -160,11 +157,11 @@ const Stepper = ({ children, ...props }) => {
           {props.flightState["responseError"] ? props.responseError : null}
         </ErrorNotice>
         <StyledForm>
-          <HorizontalStepper currentStep={props.step} steps={childrenArray} />
+          <HorizontalStepper currentStep={step} steps={childrenArray} />
           <StyledInputContainer>{currentChild}</StyledInputContainer>
           <StyledButtonContainer>
-            {props.step > 0 ? (
-              <StyledPrevButton type="button" onClick={() => props.handleStep(props.step - 1)}>
+            {step > 0 ? (
+              <StyledPrevButton type="button" onClick={() => setStep(step - 1)}>
                 Previous
               </StyledPrevButton>
             ) : null}
