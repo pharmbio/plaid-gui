@@ -65,7 +65,7 @@ const PlaidForm = (props) => {
     replicates_on_same_plate: false,
     compounds: 0,
     compound_concentration_names: [
-     
+
     ], // List
     compound_concentration_indicators: [],
     compound_names: [], // List
@@ -299,6 +299,8 @@ const PlaidForm = (props) => {
             console.log(concAmount);
             for (let j = 0; j < compoundGroup.compound_names.length; j++) {
               utilGroup.compoundConcentrations.push(concAmount);
+            }
+            for (let j = 0; j < concAmount; j++) {
               utilGroup.compound_concentration_indicators.push("");
             }
             break;
@@ -475,66 +477,67 @@ const PlaidForm = (props) => {
       [name]: value,
     });
   };
+  console.log(formState);
   return (
     <StyledContainer>
       {flightState["loading"] ? (
         <Loader />
       ) : (
-        <Stepper
-          initialValues={formState}
-          postForm={postForm}
-          setResponseError={setResponseError}
-          responseError={responseError}
-          setFlightState={setFlightState}
-          flightState={flightState}
-          setData={props.setData}
-          errors={errors}
-          formUtils={formUtils}
-          groupUtils={groupUtils}
-          addCompoundsToState={addCompoundsToState}
-          addControlConcentrationNames={addControlConcentrationNames}
-        >
-          <Step label="Experiment Setup">
-            <ExperimentForm
-              handleInputChange={handleInputChange}
-              errors={errors}
-              state={formState}
-            />
-            <ConstraintForm
-              handleInputChange={handleInputChange}
-              errors={errors}
-              state={formState}
-            />
-          </Step>
-          <Step label="Compound Setup">
-            <CompoundForm
-              handleInputChange={handleInputChange}
-              handleArrayChange={handleArrayChange}
-              errors={errors}
-              groupErrors={groupErrors}
-              state={formState}
-              groups={groups}
-              handleCompoundNamesChange={handleCompoundNamesChange}
-              handleChangeOnGroups={handleChangeOnGroups}
-            />
-          </Step>
-          <Step label="Combinations">
-            <CombinationForm
-              handleInputChange={handleInputChange}
-              handleArrayChange={handleArrayChange}
-              errors={errors}
-              state={formState}
-            />
-          </Step>
-          <Step label="Experiment Validation">
-            <ControlForm
-              handleControlFormChange={handleControlFormChange}
-              errors={errors}
-              state={formState}
-            />
-          </Step>
-        </Stepper>
-      )}
+          <Stepper
+            initialValues={formState}
+            postForm={postForm}
+            setResponseError={setResponseError}
+            responseError={responseError}
+            setFlightState={setFlightState}
+            flightState={flightState}
+            setData={props.setData}
+            errors={errors}
+            formUtils={formUtils}
+            groupUtils={groupUtils}
+            addCompoundsToState={addCompoundsToState}
+            addControlConcentrationNames={addControlConcentrationNames}
+          >
+            <Step label="Experiment Setup">
+              <ExperimentForm
+                handleInputChange={handleInputChange}
+                errors={errors}
+                state={formState}
+              />
+              <ConstraintForm
+                handleInputChange={handleInputChange}
+                errors={errors}
+                state={formState}
+              />
+            </Step>
+            <Step label="Compound Setup">
+              <CompoundForm
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+                errors={errors}
+                groupErrors={groupErrors}
+                state={formState}
+                groups={groups}
+                handleCompoundNamesChange={handleCompoundNamesChange}
+                handleChangeOnGroups={handleChangeOnGroups}
+              />
+            </Step>
+            <Step label="Combinations">
+              <CombinationForm
+                handleInputChange={handleInputChange}
+                handleArrayChange={handleArrayChange}
+                errors={errors}
+                state={formState}
+              />
+            </Step>
+            <Step label="Experiment Validation">
+              <ControlForm
+                handleControlFormChange={handleControlFormChange}
+                errors={errors}
+                state={formState}
+              />
+            </Step>
+          </Stepper>
+        )}
     </StyledContainer>
   );
 };
