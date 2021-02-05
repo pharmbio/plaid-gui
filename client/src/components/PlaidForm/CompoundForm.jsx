@@ -1,45 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import FormPage from "./FormPage";
-import InputNumber from "./Fields/InputNumber";
 import InputDelimiter from "./Fields/InputDelimiter";
 import ListGroupedCompounds from "./ListGroupedCompounds";
+//import parse from "../../functions/parse.js"
 
 const DEFAULT_DELIMITER = ",";
 
-const parse = (delimiter, str) => {
-  const re = new RegExp(`/(^${delimiter})|(,$)/g`, "");
-  const trim = str.replace(re, "");
-  const delim = trim.split(delimiter);
-  return delim;
-};
-
 const CompoundForm = ({
-  errors,
-  groupErrors,
-  handleInputChange,
-  handleArrayChange,
-  state,
-  handleCompoundNamesChange,
   handleChangeOnGroups,
   groups
 }) => {
-  const [compoundNames, setCompoundNames] = useState("");
-  const [concentrationNames, setConcentrationNames] = useState("");
   const [delimiter, setDelimiter] = React.useState(DEFAULT_DELIMITER);
-   function inputHandler(event) {
-    let name = event.target.name;
-    if (name === "compound_names") {
-      // handle change in field belonging to compound_names
-      setCompoundNames(event.target.value);
-      const parsedCompoundNames = parse(delimiter, event.target.value);
-      handleCompoundNamesChange(parsedCompoundNames);
-    } else if (name === "concentration_names") {
-      setConcentrationNames(event.target.value);
-      handleArrayChange(event);
-    } else {
-      handleInputChange(event);
-    }
-  } 
+
 
   const handleDelimiterChange = (new_delimiter) => {
 
@@ -51,11 +23,6 @@ const CompoundForm = ({
       setDelimiter(new_delimiter);
     }
 
-    if (compoundNames !== "") {
-      new_delimiter = new_delimiter !== "" ? new_delimiter : DEFAULT_DELIMITER;
-      const parsedCompoundNames = parse(new_delimiter, compoundNames);
-      handleCompoundNamesChange(parsedCompoundNames);
-    }
   };
 
   /* 
@@ -65,14 +32,6 @@ const CompoundForm = ({
   */
   return (
     <FormPage>
-      <InputNumber
-        label={"Compounds"}
-        name="compounds"
-        onChange={inputHandler}
-        value={state.compounds ? state.compounds : ""}
-        errorMsg={errors.compounds ? errors.compounds : null}
-      />
-
       <InputDelimiter
         label={"Delimitor selection (Optional)"}
         placeholder=""
@@ -83,12 +42,9 @@ const CompoundForm = ({
       />
       <ListGroupedCompounds
         handleChangeOnGroups={handleChangeOnGroups}
-        parse={parse}
         delimiter={delimiter}
         groups={groups.groups}
         selectedGroup={groups.selectedGroup}
-        errors={errors}
-        groupErrors={groupErrors}
       />
 
     </FormPage>

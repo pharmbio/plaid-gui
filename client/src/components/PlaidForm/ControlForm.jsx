@@ -2,18 +2,11 @@ import React from "react";
 import FormPage from "./FormPage";
 import InputTextArea from "./Fields/InputTextArea";
 import InputNumber from "./Fields/InputNumber";
+import parse from "../../functions/parse.js"
 
 const DEFAULT_DELIMITER = ",";
 
-const parse = (delimiter, str) => {
-  const re = new RegExp(`/(^${delimiter})|(,$)/g`, "");
-  const trim = str.replace(re, "");
-  const delim = trim.split(delimiter);
-  return delim;
-};
-
-const ControlForm = ({ handleControlFormChange, errors, state }) => {
-  console.log(state);
+const ControlForm = ({ handleControlFormChange, state }) => {
   const handleChange = (event) => {
     let name = event.target.name;
     let value = event.target.value;
@@ -46,7 +39,7 @@ const ControlForm = ({ handleControlFormChange, errors, state }) => {
         value={state.num_controls}
         onChange={handleChange}
         onBlur={null}
-        errorMsg={errors.num_controls ? errors.num_controls : null}
+        errorMsg={null}
       />
 
       <InputTextArea
@@ -56,7 +49,7 @@ const ControlForm = ({ handleControlFormChange, errors, state }) => {
         onChange={handleChange}
         //value={state.control_names.toString()}
         disable={false}
-        errorMsg={errors.control_names ? errors.control_names : null}
+        errorMsg={null}
       />
 
       <InputTextArea
@@ -65,8 +58,7 @@ const ControlForm = ({ handleControlFormChange, errors, state }) => {
         placeholder={""}
         onChange={handleChange}
         //value={state.control_concentrations.toString()}
-        errorMsg={
-          errors.control_concentrations ? errors.control_concentrations : null
+        errorMsg={null
         }
       />
 
@@ -77,7 +69,7 @@ const ControlForm = ({ handleControlFormChange, errors, state }) => {
         onChange={handleChange}
         disable={false}
       //  value={state.control_replicates.toString()}
-        errorMsg={errors.control_replicates ? errors.control_replicates : null}
+        errorMsg={null}
       />
 
       <InputTextArea

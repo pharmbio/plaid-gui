@@ -43,17 +43,6 @@ const HoriztonalStepperProgressIcon = styled.div`
     display: ${(props) => props.isLast ? 'none' : 'inline-block'}
   }
 `;
-// TODO: Solve svg animations using styled components
-const HoriztonalStepperCheckmark = styled.svg`
-  stroke-dasharray: ${(props) => props.length};
-  stroke-dashoffset: ${(props) => props.length};
-  animation: dash 5s linear forwards;
-  @keyframes dash {
-    to {
-        stroke-dashoffset: 0;
-    }
-  }
-`;
 
 const HoriztonalStepper = ({ currentStep, steps = [], labels = [] }) => {
 

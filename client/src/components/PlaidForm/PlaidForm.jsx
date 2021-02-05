@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import ExperimentForm from "./ExperimentForm";
-import CombinationForm from "./CombinationForm";
 import CompoundForm from "./CompoundForm";
 import ControlForm from "./ControlForm";
 import Stepper from "./Stepper";
 import Step from "./Step";
 import Loader from "./../Loader";
 import styled from "styled-components";
-import useValidation from "./useValidation";
 
 const axios = require("axios");
 
@@ -63,152 +61,18 @@ const PlaidForm = (props) => {
     replicates_on_different_plates: false,
     replicates_on_same_plate: false,
     compounds: 0,
-    compound_concentration_names: [
-
-    ], // List
+    compound_concentration_names: [], // List
     compound_concentration_indicators: [],
     compound_names: [], // List
     compound_concentrations: [],
     compound_replicates: [],
-    combinations: 0,
-    combination_concentrations: 0,
-    combination_names: [], // List
-    combination_concentration_names: [], // List
     num_controls: 0,
     control_concentrations: [],
     control_replicates: [], // List
     control_names: [], // List
     control_concentration_names: [], // List
   });
-  const config = {
-    fields: {
-      num_rows: {
-        minValidSize: {
-          value: 1,
-          message: "Rows must be a number > 0",
-        },
-      },
-      num_cols: {
-        minValidSize: {
-          value: 1,
-          message: "Columns must be a number > 0",
-        },
-      },
-      vertical_cell_lines: {
-        minValidSize: {
-          value: 1,
-          message: "Cell line must be a number > 0",
-        },
-      },
-      horizontal_cell_lines: {
-        minValidSize: {
-          value: 1,
-          message: "Cell line must be a number > 0",
-        },
-      },
-      replicates_on_different_plates: {
-        isAlsoChecked: {
-          value: formState.replicates_on_same_plate,
-          message:
-            "Replicates on different and same plates cannot be checked at the same time",
-        },
-      },
-      size_empty_edge: {
-        minValidSize: {
-          value: 0,
-          message: "Empty edges must be a number >= 0",
-        },
-      },
-      compounds: {
-        minValidSize: {
-          value: 1,
-          message: "Compounds must be a number > 0",
-        },
-      },
-      compound_names: {
-        minValidLength: {
-          value: formState.compounds,
-          message:
-            "Number of compound names are not equal to number of compounds",
-        },
-      },
-      compound_replicates: {
-        minValidLength: {
-          value: formState.compounds,
-          message: "Number of replicates does not match number of compounds",
-        },
-      },
-      compound_concentration_indicators: {
-        maxNumber: {
-          value: formState.compound_concentrations,
-          message: "Number of indicators does not match number of compounds",
-        },
-      },
-      combinations: {
-        minValidSize: {
-          value: 0,
-          message: "Combinations must be a number >= 0",
-        },
-      },
-      combination_names: {
-        minValidLength: {
-          value: formState.combinations,
-          message:
-            "Number of combination names must be equal to amount of combinations",
-        },
-      },
-      combination_concentrations: {
-        minValidSize: {
-          value: 0,
-          message: "Combination concentration must be a number >= 0",
-        },
-      },
-      combination_concentration_names: {
-        minValidSize: {
-          value: 0,
-          message: "",
-        },
-      },
-      num_controls: {
-        minValidSize: {
-          value: 0,
-          message: "Number of controls must be a number >= 0",
-        },
-      },
-      control_names: {
-        minValidLength: {
-          value: formState.num_controls,
-          message:
-            "The number of control names must match the number of controls",
-        },
-      },
-      control_concentrations: {
-        minValidLength: {
-          value: formState.num_controls,
-          message: "Number of control concentrations must be >= 0",
-        },
-      },
-      control_concentration_names: {
-        minValidSize: {
-          value: 0,
-          message: "",
-        },
-      },
-      control_replicates: {
-        minValidLength: {
-          value: formState.num_controls,
-          message:
-            "Number of control replicates must match the number of controls",
-        },
-      },
-    },
-    selects: {
-      select_plate_size: {},
-    },
-    checkbox: {
-      allow_empty_wells: {},
-    },
-  };
+  
 
   const [groups, setGroups] = useState({
     selectedGroup: 0,
@@ -216,57 +80,12 @@ const PlaidForm = (props) => {
       {
         id: "gr-0",
         compound_names: "",
-        conc_amount: 0,
         concentration_names: "",
         compound_replicates: 0,
       },
     ],
   });
 
-  //TODO add function mentioned in concentration_names. Fix everything left regarding valdation.
-  const groupConfig = {
-    fields: {
-      conc_amount: {
-        minValidSize: {
-          value: 1,
-          message: "Concentrations must be a number > 0",
-        },
-      },
-      concentration_names: {
-        concNameCount: {
-          //change to function that iterates groups and finds any conc_amount/concentration_name missmatch
-          value: groups,
-          message: "The number of conc names must match the amount specified",
-        },
-      },
-    },
-  };
-  /* utility function that converts groups to something the validation hook can read */
-  const mergeGroups = (obj) => {
-    let newState = {};
-    let group;
-    for (let i = 0; i < obj.groups.length; i++) {
-      group = obj.groups[i];
-      for (let key in group) {
-        if (key === "conc_amount") {
-          newState[key] = parseInt(group[key]);
-        }
-        if (key === "concentration_names") {
-          newState[key] = group[key].split(",");
-        }
-      }
-    }
-    return newState;
-  };
-
-  const [errors, formUtils] = useValidation(formState, config);
-  const [groupErrors, groupUtils] = useValidation(
-    groups,
-    groupConfig,
-    mergeGroups
-  );
-  console.log(errors);
-  console.log(groupErrors);
   const addCompoundsToState = () => {
     let processedGroup;
     let concAmount;
@@ -292,14 +111,6 @@ const PlaidForm = (props) => {
             processedGroup.compound_names = compoundNames;
 
             break;
-          //length of compoundConcentrations
-          case "conc_amount":
-            concAmount = parseInt(compoundGroup.conc_amount);
-            console.log(concAmount);
-            for (let j = 0; j < compoundGroup.compound_names.length; j++) {
-              utilGroup.compoundConcentrations.push(concAmount);
-            }
-            break;
           case "compound_replicates":
             const replicateAmount = parseInt(compoundGroup.compound_replicates);
             console.log(replicateAmount);
@@ -307,7 +118,6 @@ const PlaidForm = (props) => {
             for (let j = 0; j < compoundGroup.compound_names.length; j++) {
               utilGroup.compoundReplicates.push(replicateAmount);
             }
-
             break;
           case "concentration_names":
             console.log(compoundGroup.concentration_names);
@@ -320,11 +130,17 @@ const PlaidForm = (props) => {
             break;
         }
       }
+
+      // fill the amount of concentrations for each compound
+      let concAmount = processedGroup.concentration_names.length;
+      for (let j = 0; j < compoundGroup.compound_names.length; j++) {
+        utilGroup.compoundConcentrations.push(concAmount);
+      }
+
       /*
         create this hash map
        map = {compoundName : [concName, concName...]} 
        */
-
       for (let j = 0; j < processedGroup.compound_names.length; j++) {
         for (let k = 0; k < processedGroup.concentration_names.length; k++) {
           if (map[processedGroup.compound_names[j]] === undefined) {
@@ -360,25 +176,28 @@ const PlaidForm = (props) => {
       compoundConcentrationNames.push(row);
     }
 
+    // all the compound names
+    const compoundNames = Object.keys(map);
+    // amount of compounds
+    const compounds = compoundNames.length;
+
     //run the validator here as a 2nd argument callback!! then check in stepper if no errors exist.
+    // TODO removed the error thing since we are supposed to refactor
     setFormState(
       {
         ...formState,
-        ["compound_names"]: Object.keys(map),
-        ["compound_concentrations"]: utilGroup.compoundConcentrations,
-        ["compound_concentration_names"]: compoundConcentrationNames,
-        ["compound_replicates"]: utilGroup.compoundReplicates,
-        ["compound_concentration_indicators"]:
+        compound_names: Object.keys(map),
+        compounds: compounds,
+        compound_concentrations: utilGroup.compoundConcentrations,
+        compound_concentration_names: compoundConcentrationNames,
+        compound_replicates: utilGroup.compoundReplicates,
+        compound_concentration_indicators:
           utilGroup.compound_concentration_indicators,
-      },
-      formUtils.onClick()
-    );
-    console.log(utilGroup);
-    console.log(processedGroup);
+      });
   };
 
   const handleCompoundNamesChange = (compounds) => {
-    setFormState({ ...formState, ["compound_names"]: compounds });
+    setFormState({ ...formState, compound_names: compounds });
   };
 
   const handleChangeOnGroups = (listOfGroups, selected) => {
@@ -389,7 +208,6 @@ const PlaidForm = (props) => {
           {
             id: "gr-0",
             compound_names: "",
-            conc_amount: 0,
             concentration_names: "",
             compound_replicates: 0,
           },
@@ -481,56 +299,41 @@ const PlaidForm = (props) => {
       {flightState["loading"] ? (
         <Loader />
       ) : (
-          <Stepper
-            initialValues={formState}
-            postForm={postForm}
-            setResponseError={setResponseError}
-            responseError={responseError}
-            setFlightState={setFlightState}
-            flightState={flightState}
-            setData={props.setData}
-            errors={errors}
-            formUtils={formUtils}
-            groupUtils={groupUtils}
-            addCompoundsToState={addCompoundsToState}
-            addControlConcentrationNames={addControlConcentrationNames}
-          >
-            <Step label="Experiment Setup">
-              <ExperimentForm
-                handleInputChange={handleInputChange}
-                errors={errors}
-                state={formState}
-              />
-            </Step>
-            <Step label="Compound Setup">
-              <CompoundForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-                errors={errors}
-                groupErrors={groupErrors}
-                state={formState}
-                groups={groups}
-                handleCompoundNamesChange={handleCompoundNamesChange}
-                handleChangeOnGroups={handleChangeOnGroups}
-              />
-            </Step>
-            <Step label="Combinations">
-              <CombinationForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
-                errors={errors}
-                state={formState}
-              />
-            </Step>
-            <Step label="Experiment Validation">
-              <ControlForm
-                handleControlFormChange={handleControlFormChange}
-                errors={errors}
-                state={formState}
-              />
-            </Step>
-          </Stepper>
-        )}
+        <Stepper
+          initialValues={formState}
+          postForm={postForm}
+          setResponseError={setResponseError}
+          responseError={responseError}
+          setFlightState={setFlightState}
+          flightState={flightState}
+          setData={props.setData}
+          addCompoundsToState={addCompoundsToState}
+          addControlConcentrationNames={addControlConcentrationNames}
+        >
+          <Step label="Experiment Setup">
+            <ExperimentForm
+              handleInputChange={handleInputChange}
+              state={formState}
+            />
+          </Step>
+          <Step label="Compound Setup">
+            <CompoundForm
+              handleInputChange={handleInputChange}
+              handleArrayChange={handleArrayChange}
+              state={formState}
+              groups={groups}
+              handleCompoundNamesChange={handleCompoundNamesChange}
+              handleChangeOnGroups={handleChangeOnGroups}
+            />
+          </Step>
+          <Step label="Experiment Validation">
+            <ControlForm
+              handleControlFormChange={handleControlFormChange}
+              state={formState}
+            />
+          </Step>
+        </Stepper>
+      )}
     </StyledContainer>
   );
 };

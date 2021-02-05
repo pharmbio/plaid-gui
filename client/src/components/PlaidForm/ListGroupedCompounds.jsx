@@ -5,6 +5,7 @@ import { RiDeleteBin2Line } from "react-icons/ri";
 import InputTextArea from "./Fields/InputTextArea";
 import InputNumber from "./Fields/InputNumber";
 import FormPage from "./FormPage";
+import parse from "../../functions/parse.js";
 
 const StyledSelect = styled.select`
   margin: 5px;
@@ -41,7 +42,6 @@ const StyledRowContainer = styled.div`
 `;
 
 const ListGroupedCompounds = (props) => {
-
   const handleOnGroupClick = (event) => {
     props.handleChangeOnGroups(props.groups, event.target.value);
   };
@@ -52,7 +52,6 @@ const ListGroupedCompounds = (props) => {
     let newObj = {
       id: newId,
       compound_names: "",
-      conc_amount: 0,
       concentration_names: "",
       compound_replicates: 0,
     };
@@ -85,7 +84,7 @@ const ListGroupedCompounds = (props) => {
     let value = event.target.value;
 
     if (name === "compound_names") {
-      value = props.parse(props.delimiter, value);
+      value = parse(props.delimiter, value);
     }
 
     let items = [...props.groups];
@@ -96,10 +95,10 @@ const ListGroupedCompounds = (props) => {
 
     props.handleChangeOnGroups(items, props.selectedGroup);
   };
-
+  console.log(props.groups);
   return (
     <StyledRowContainer>
-    <FormPage>
+      <FormPage>
         <InputTextArea
           label={"Compound names"}
           placeholder=""
@@ -107,18 +106,7 @@ const ListGroupedCompounds = (props) => {
           onChange={handleOnInputChange}
           value={props.groups[props.selectedGroup].compound_names}
           disable={false}
-          errorMsg={
-            props.errors.compound_names ? props.errors.compound_names : null
-          }
-        />
-
-        <InputNumber
-          label={"Amount of concentrations"}
-          placeholder=""
-          name="conc_amount"
-          onChange={handleOnInputChange}
-          value={props.groups[props.selectedGroup].conc_amount}
-          errorMsg={props.groupErrors.conc_amount ? props.groupErrors.conc_amount : null}
+          errorMsg={null}
         />
         <InputTextArea
           label={"Concentration names"}
@@ -127,14 +115,14 @@ const ListGroupedCompounds = (props) => {
           onChange={handleOnInputChange}
           value={props.groups[props.selectedGroup].concentration_names}
           disable={false}
-          errorMsg={props.groupErrors.concentration_names ? props.groupErrors.concentration_names : null}
+          errorMsg={null}
         />
         <InputNumber
           label={"Replicates"}
           name="compound_replicates"
           onChange={handleOnInputChange}
           value={props.groups[props.selectedGroup].compound_replicates}
-          errorMsg={props.errors.compound_replicates ? props.errors.compound_replicates : null}
+          errorMsg={null}
         />
       </FormPage>
 

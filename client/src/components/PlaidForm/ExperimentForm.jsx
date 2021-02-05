@@ -11,12 +11,11 @@ const StyledSectionLabel = styled.label`
   font-weight: bold;
 `;
 
-const ExperimentForm = ({ handleInputChange, errors, state }) => {
+const ExperimentForm = ({ handleInputChange, state }) => {
   const [customState, setCustomState] = useState(false);
   const [selectState, setSelectState] = useState({
     value: "{num_row: 6, num_col: 8} ",
   });
-  const [validFormState, setValidFormState] = useState(false);
   const [emptyState, setEmptyState] = useState(false);
   /* Input handler for the checkbox */
   const displaySize = (event) => {
@@ -66,14 +65,14 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
             label="Rows"
             value={state.num_rows ? state.num_rows : ""}
             onChange={inputHandler}
-            errorMsg={errors.num_rows ? errors.num_rows : null}
+            errorMsg={null}
           />
           <InputNumber
             name="num_cols"
             label="Columns"
             value={state.num_cols ? state.num_cols : ""}
             onChange={inputHandler}
-            errorMsg={errors.num_cols ? errors.num_cols : null}
+            errorMsg={null}
           />
         </>
       ) : null}
@@ -83,9 +82,7 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
         name="vertical_cell_lines"
         value={state.vertical_cell_lines ? state.vertical_cell_lines : ""}
         onChange={handleInputChange}
-        errorMsg={
-          errors.vertical_cell_lines ? errors.vertical_cell_lines : null
-        }
+        errorMsg={null}
       />
 
       <InputNumber
@@ -93,9 +90,7 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
         name="horizontal_cell_lines"
         value={state.horizontal_cell_lines ? state.horizontal_cell_lines : ""}
         onChange={handleInputChange}
-        errorMsg={
-          errors.horizontal_cell_lines ? errors.horizontal_cell_lines : null
-        }
+        errorMsg={null}
       />
       <StyledSectionLabel>Constraints</StyledSectionLabel>
       <InputCheck
@@ -110,35 +105,51 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
         label="Size of empty edges"
         value={state.size_empty_edge ? state.size_empty_edge : ""}
         onChange={inputHandler}
-        errorMsg={errors.size_empty_edge ? errors.size_empty_edge : null}
+        errorMsg={null}
       />
       <InputCheck
         label="concentrations_on_different_rows"
         onChange={handleInputChange}
-        name={"concentrations_on_different_rows"}
-        value={state.concentrations_on_different_rows ? state.concentrations_on_different_rows : false}
+        name={"concentrations on different rows"}
+        value={
+          state.concentrations_on_different_rows
+            ? state.concentrations_on_different_rows
+            : false
+        }
         errorMsg={""}
       />
       <InputCheck
         label="concentrations_on_different_columns"
         onChange={handleInputChange}
-        name={"concentrations_on_different_columns"}
-        value={state.concentrations_on_different_columns ? state.concentrations_on_different_columns : false}
+        name={"concentrations on different columns"}
+        value={
+          state.concentrations_on_different_columns
+            ? state.concentrations_on_different_columns
+            : false
+        }
         errorMsg={""}
       />
       <InputCheck
         label="replicates_on_different_plates"
         onChange={handleInputChange}
-        name={"replicates_on_different_plates"}
-        value={state.replicates_on_different_plates ? state.replicates_on_different_plates : false}
-        errorMsg={errors.replicates_on_different_plates ? errors.replicates_on_different_plates : null}
+        name={"replicates on different plates"}
+        value={
+          state.replicates_on_different_plates
+            ? state.replicates_on_different_plates
+            : false
+        }
+        errorMsg={null}
       />
       <InputCheck
         label="replicates_on_same_plate"
         onChange={handleInputChange}
-        name={"replicates_on_same_plate"}
-        value={state.replicates_on_same_plate ? state.replicates_on_same_plate  : false}
-        errorMsg={errors.replicates_on_same_plate ? errors.replicates_on_same_plate  : null}
+        name={"replicates on same plate"}
+        value={
+          state.replicates_on_same_plate
+            ? state.replicates_on_same_plate
+            : false
+        }
+        errorMsg={null}
       />
     </FormPage>
   );
