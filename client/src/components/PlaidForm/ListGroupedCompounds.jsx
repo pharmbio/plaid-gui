@@ -41,61 +41,73 @@ const StyledRowContainer = styled.div`
   align-items: flex-end;
 `;
 
-const ListGroupedCompounds = (props) => {
+const ListGroupedCompounds = ({
+  groups,
+  handleChangeOnGroups,
+  selectedGroup,
+  delimiter,
+}) => {
   const handleOnGroupClick = (event) => {
-    props.handleChangeOnGroups(props.groups, event.target.value);
+    handleChangeOnGroups(groups, event.target.value);
   };
 
   const handleOnAddButtonClick = (event) => {
     event.preventDefault();
-    let newId = "gr-" + props.groups.length;
+    let newId = "gr-" + groups.length;
     let newObj = {
       id: newId,
       compound_names: "",
+      compound_names_parsed: "",
       concentration_names: "",
       compound_replicates: 0,
     };
-    let items = props.groups;
+    let items = groups;
     items.push(newObj);
 
     // handle change in groups and focus on the newly added group
-    props.handleChangeOnGroups(items, items.length - 1);
+    handleChangeOnGroups(items, items.length - 1);
   };
 
   const handleOnRemoveButtonClick = (event) => {
     event.preventDefault();
-    let items = [...props.groups];
+    let items = [...groups];
     if (items.length === 1) {
-      props.handleChangeOnGroups(null, 0);
+      handleChangeOnGroups(null, 0);
     } else {
-      items.splice(props.selectedGroup, 1);
+      items.splice(selectedGroup, 1);
 
       //update ids
       for (var i = 0; i < items.length; i++) {
         items[i].id = "gr-" + i;
       }
       //handle the updated group list and refocus on the first group after removing a group
-      props.handleChangeOnGroups(items, items.length - 1);
+      handleChangeOnGroups(items, items.length - 1);
     }
   };
 
   const handleOnInputChange = (event) => {
     let name = event.target.name;
     let value = event.target.value;
+    let items = [...groups];
+    let item;
 
     if (name === "compound_names") {
-      value = parse(props.delimiter, value);
+      item = {
+        ...items[selectedGroup],
+        compound_names: value,
+        compound_names_parsed: parse(delimiter, value),
+      };
+    } else {
+      item = {
+        ...items[selectedGroup],
+        [name]: value,
+      };
     }
-
-    let items = [...props.groups];
-    let item = { ...items[props.selectedGroup], [name]: value };
-
     // need to update the list aswell
-    items[props.selectedGroup] = item;
+    items[selectedGroup] = item;
 
-    props.handleChangeOnGroups(items, props.selectedGroup);
+    handleChangeOnGroups(items, selectedGroup);
   };
-  console.log(props.groups);
   return (
     <StyledRowContainer>
       <FormPage>
@@ -104,7 +116,7 @@ const ListGroupedCompounds = (props) => {
           placeholder=""
           name="compound_names"
           onChange={handleOnInputChange}
-          value={props.groups[props.selectedGroup].compound_names}
+          value={groups[selectedGroup].compound_names}
           disable={false}
           errorMsg={null}
         />
@@ -113,7 +125,7 @@ const ListGroupedCompounds = (props) => {
           placeholder=""
           name="concentration_names"
           onChange={handleOnInputChange}
-          value={props.groups[props.selectedGroup].concentration_names}
+          value={groups[selectedGroup].concentration_names}
           disable={false}
           errorMsg={null}
         />
@@ -121,7 +133,7 @@ const ListGroupedCompounds = (props) => {
           label={"Replicates"}
           name="compound_replicates"
           onChange={handleOnInputChange}
-          value={props.groups[props.selectedGroup].compound_replicates}
+          value={groups[selectedGroup].compound_replicates}
           errorMsg={null}
         />
       </FormPage>
@@ -130,12 +142,12 @@ const ListGroupedCompounds = (props) => {
         <StyledSelect
           id="select_group"
           name="select_group"
-          value={props.selectedGroup}
+          value={selectedGroup}
           onChange={(event) => {
             handleOnGroupClick(event);
           }}
         >
-          {props.groups.map((obj, index) => {
+          {groups.map((obj, index) => {
             return (
               <option id={obj.id} key={obj.id} value={index}>
                 {"Group " + (index + 1)}

@@ -215,47 +215,6 @@ const PlaidForm = (props) => {
     setFormState({ ...formState, compound_names: compounds });
   };
 
-  const handleChangeOnGroups = (listOfGroups, selected) => {
-    if (listOfGroups === null) {
-      setGroups({
-        selectedGroup: selected,
-        groups: [
-          {
-            id: "gr-0",
-            compound_names: "",
-            concentration_names: "",
-            compound_replicates: 0,
-          },
-        ],
-      });
-    } else {
-      setGroups({ selectedGroup: selected, groups: listOfGroups });
-    }
-  };
-  const handleArrayChange = (event) => {
-    const deviations = {
-      control_replicates: "integer",
-      compound_concentrations: "integer",
-      control_concentrations: "integer",
-    };
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    const trim = value.replace(/(^,)|(,$)/g, "");
-    const delim = trim.split(",");
-    if (name in deviations) {
-      switch (deviations[name]) {
-        case "integer":
-          delim.forEach((x, index) => {
-            delim[index] = parseInt(x);
-          });
-          break;
-        default:
-          break;
-      }
-    }
-    setFormState({ ...formState, [name]: delim });
-  };
   const handleControlFormChange = (key, data) => {
     setFormState({ ...formState, [key]: data });
   };
@@ -359,27 +318,50 @@ const PlaidForm = (props) => {
               ]}
             />
             {step === 0 && (
-                <ExperimentForm
-                  handleInputChange={handleInputChange}
-                  state={formState}
-                />
+              <ExperimentForm
+                experimentState={{
+                  num_rows: formState.num_rows,
+                  num_cols: formState.num_cols,
+                  vertical_cell_lines: formState.vertical_cell_lines,
+                  horizontal_cell_lines: formState.horizontal_cell_lines,
+                  allow_empty_wells: formState.allow_empty_wells,
+                  size_empty_edge: formState.size_empty_edge,
+                  concentrations_on_different_rows:
+                    formState.concentrations_on_different_rows,
+                  concentrations_on_different_columns:
+                    formState.concentrations_on_different_columns,
+                  replicates_on_different_plates:
+                    formState.replicates_on_different_plates,
+                  replicates_on_same_plate: formState.replicates_on_same_plate,
+                }}
+              />
             )}
             {step === 1 && (
-                <CompoundForm
-                  handleInputChange={handleInputChange}
-                  handleArrayChange={handleArrayChange}
-                  state={formState}
-                  groups={groups}
-                  handleCompoundNamesChange={handleCompoundNamesChange}
-                  handleChangeOnGroups={handleChangeOnGroups}
-                />
+              <CompoundForm
+                compoundState={{
+                  compounds: formState.compounds,
+                  compound_concentration_indicators:
+                    formState.compound_concentration_indicators,
+                  groups: {
+                    selectedGroup: 0,
+                    groups: [
+                      {
+                        id: "gr-0",
+                        compound_names: "",
+                        compound_names_parsed:"",
+                        concentration_names: "",
+                        compound_replicates: 0,
+                      },
+                    ],
+                  },
+                }}
+              />
             )}
             {step === 2 && (
-
-                <ControlForm
-                  handleControlFormChange={handleControlFormChange}
-                  state={formState}
-                />
+              <ControlForm
+                handleControlFormChange={handleControlFormChange}
+                state={formState}
+              />
             )}
             <StyledButtonContainer>
               {step > 0 ? (
