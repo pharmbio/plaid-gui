@@ -35,7 +35,7 @@ const StyledButtonContainer = styled.div`
 const Stepper = ({ children, ...props }) => {
   const childrenArray = React.Children.toArray(children);
   const [step, setStep] = useState(0);
-  const [errorState, setErrorState] = useState(true);
+
   //Child to display on current step. 0 would be immediate child.
   const currentChild = childrenArray[step];
   function isLast() {
@@ -113,7 +113,7 @@ const Stepper = ({ children, ...props }) => {
               return true;
             }
           }
-
+          break;
         default:
           break;
       }
