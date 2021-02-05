@@ -269,7 +269,7 @@ const PlaidForm = (props) => {
   console.log(groupErrors);
   const addCompoundsToState = () => {
     let processedGroup;
-
+    let concAmount;
     // will hold the replicates array and compound concentrations numbers from each group
     let utilGroup = {
       compoundConcentrations: [],
@@ -294,13 +294,10 @@ const PlaidForm = (props) => {
             break;
           //length of compoundConcentrations
           case "conc_amount":
-            const concAmount = parseInt(compoundGroup.conc_amount);
+            concAmount = parseInt(compoundGroup.conc_amount);
             console.log(concAmount);
             for (let j = 0; j < compoundGroup.compound_names.length; j++) {
               utilGroup.compoundConcentrations.push(concAmount);
-            }
-            for (let j = 0; j < concAmount; j++) {
-              utilGroup.compound_concentration_indicators.push("");
             }
             break;
           case "compound_replicates":
@@ -342,7 +339,9 @@ const PlaidForm = (props) => {
         }
       }
     }
-
+    for (let j = 0; j < concAmount; j++) {
+      utilGroup.compound_concentration_indicators.push("");
+    }
     // the matrix
     let compoundConcentrationNames = [];
     // the dimensions of the matrix
