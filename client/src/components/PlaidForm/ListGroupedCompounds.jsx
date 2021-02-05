@@ -40,50 +40,43 @@ const StyledRowContainer = styled.div`
   align-items: flex-end;
 `;
 
-const ListGroupedCompounds = ({
-  groups,
-  handleChangeOnGroups,
-  selectedGroup,
-  parse,
-  delimiter,
-  errors
-}) => {
+const ListGroupedCompounds = (props) => {
 
   const handleOnGroupClick = (event) => {
-    handleChangeOnGroups(groups, event.target.value);
+    props.handleChangeOnGroups(props.groups, event.target.value);
   };
 
   const handleOnAddButtonClick = (event) => {
     event.preventDefault();
-    let newId = "gr-" + groups.length;
+    let newId = "gr-" + props.groups.length;
     let newObj = {
       id: newId,
       compound_names: "",
       conc_amount: 0,
       concentration_names: "",
-      replicates: 0,
+      compound_replicates: 0,
     };
-    let items = groups;
+    let items = props.groups;
     items.push(newObj);
 
     // handle change in groups and focus on the newly added group
-    handleChangeOnGroups(items, items.length - 1);
+    props.handleChangeOnGroups(items, items.length - 1);
   };
 
   const handleOnRemoveButtonClick = (event) => {
     event.preventDefault();
-    let items = [...groups];
+    let items = [...props.groups];
     if (items.length === 1) {
-      handleChangeOnGroups(null, 0);
+      props.handleChangeOnGroups(null, 0);
     } else {
-      items.splice(selectedGroup, 1);
+      items.splice(props.selectedGroup, 1);
 
       //update ids
       for (var i = 0; i < items.length; i++) {
         items[i].id = "gr-" + i;
       }
       //handle the updated group list and refocus on the first group after removing a group
-      handleChangeOnGroups(items, items.length - 1);
+      props.handleChangeOnGroups(items, items.length - 1);
     }
   };
 
@@ -92,16 +85,16 @@ const ListGroupedCompounds = ({
     let value = event.target.value;
 
     if (name === "compound_names") {
-      value = parse(delimiter, value);
+      value = props.parse(props.delimiter, value);
     }
 
-    let items = [...groups];
-    let item = { ...items[selectedGroup], [name]: value };
+    let items = [...props.groups];
+    let item = { ...items[props.selectedGroup], [name]: value };
 
     // need to update the list aswell
-    items[selectedGroup] = item;
+    items[props.selectedGroup] = item;
 
-    handleChangeOnGroups(items, selectedGroup);
+    props.handleChangeOnGroups(items, props.selectedGroup);
   };
 
   return (
@@ -112,10 +105,10 @@ const ListGroupedCompounds = ({
           placeholder=""
           name="compound_names"
           onChange={handleOnInputChange}
-          value={groups[selectedGroup].compound_names}
+          value={props.groups[props.selectedGroup].compound_names}
           disable={false}
           errorMsg={
-            errors.compound_names ? errors.compound_names : null
+            props.errors.compound_names ? props.errors.compound_names : null
           }
         />
 
@@ -124,36 +117,37 @@ const ListGroupedCompounds = ({
           placeholder=""
           name="conc_amount"
           onChange={handleOnInputChange}
-          value={groups[selectedGroup].conc_amount}
-          errorMsg={null}
+          value={props.groups[props.selectedGroup].conc_amount}
+          errorMsg={props.groupErrors.conc_amount ? props.groupErrors.conc_amount : null}
         />
         <InputTextArea
           label={"Concentration names"}
           placeholder=""
           name="concentration_names"
           onChange={handleOnInputChange}
-          value={groups[selectedGroup].concentration_names}
+          value={props.groups[props.selectedGroup].concentration_names}
           disable={false}
-          errorMsg={null}
+          errorMsg={props.groupErrors.concentration_names ? props.groupErrors.concentration_names : null}
         />
         <InputNumber
           label={"Replicates"}
           name="compound_replicates"
           onChange={handleOnInputChange}
-          value={groups[selectedGroup].replicates}
-          errorMsg={null}
-        /> 
-      </FormPage> 
+          value={props.groups[props.selectedGroup].compound_replicates}
+          errorMsg={props.errors.compound_replicates ? props.errors.compound_replicates : null}
+        />
+      </FormPage>
+
       <StyledRowContainer>
         <StyledSelect
           id="select_group"
           name="select_group"
-          value={selectedGroup}
+          value={props.selectedGroup}
           onChange={(event) => {
             handleOnGroupClick(event);
           }}
         >
-          {groups.map((obj, index) => {
+          {props.groups.map((obj, index) => {
             return (
               <option id={obj.id} key={obj.id} value={index}>
                 {"Group " + (index + 1)}

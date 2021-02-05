@@ -37,8 +37,6 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
       handleInputChange(event);
     }
   }
-
-  console.log(state);
   return (
     <FormPage>
       <StyledSectionLabel>Plate dimensions</StyledSectionLabel>

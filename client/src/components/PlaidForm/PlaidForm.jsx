@@ -52,58 +52,33 @@ const PlaidForm = (props) => {
   });
   const [responseError, setResponseError] = useState("");
   const [formState, setFormState] = useState({
-    num_rows: 8,
-    num_cols: 12,
-    vertical_cell_lines: 1,
-    horizontal_cell_lines: 1,
+    num_rows: 4,
+    num_cols: 6,
+    vertical_cell_lines: 0,
+    horizontal_cell_lines: 0,
     allow_empty_wells: false,
-    size_empty_edge: 1,
-    concentrations_on_different_rows: true,
-    concentrations_on_different_columns: true,
-    replicates_on_different_plates: true,
+    size_empty_edge: 0,
+    concentrations_on_different_rows: false,
+    concentrations_on_different_columns: false,
+    replicates_on_different_plates: false,
     replicates_on_same_plate: false,
-    compounds: 10,
+    compounds: 0,
     compound_concentration_names: [
-      ["a0.3", "a1", "a3", "a5", "a10", "a15", "a30", "a100"],
-      ["b0.3", "b1", "b3", "b5", "b10", "b15", "b30", "b100"],
-      ["c0.3", "c1", "c3", "c5", "c10", "c15", "c30", "c100"],
-      ["d0.3", "d1", "d3", "d5", "d10", "d15", "d30", "d100"],
-      ["e0.3", "e1", "e3", "e5", "e10", "e15", "e30", "e100"],
-      ["f0.3", "f1", "f3", "f5", "f10", "f15", "f30", "f100"],
-      ["g0.3", "g1", "g3", "g5", "g10", "g15", "g30", "g100"],
-      ["h0.3", "h1", "h3", "h5", "h10", "h15", "h30", "h100"],
-      ["i0.3", "i1", "i3", "i5", "i10", "i15", "i30", "i100"],
-      ["j0.3", "j1", "j3", "j5", "j10", "j15", "j30", "j100"],
+
     ], // List
-    compound_concentration_indicators: ["", "", "", "", "", "", "", ""],
-    compound_names: [
-      "c1",
-      "c2",
-      "c3",
-      "c4",
-      "c5",
-      "c6",
-      "c7",
-      "c8",
-      "c9",
-      "c10",
-    ], // List
-    compound_concentrations: [8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-    compound_replicates: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+    compound_concentration_indicators: [],
+    compound_names: [], // List
+    compound_concentrations: [],
+    compound_replicates: [],
     combinations: 0,
     combination_concentrations: 0,
     combination_names: [], // List
     combination_concentration_names: [], // List
-    num_controls: 4,
-    control_concentrations: [1, 1, 1, 1],
-    control_replicates: [32, 16, 16, 16], // List
-    control_names: ["pos", "neg", "blank", "dmso"], // List
-    control_concentration_names: [
-      ["cont-conc1", "cont-conc2", "cont-conc3", "cont-conc4"],
-      ["cont-conc1", "cont-conc2", "cont-conc3", "cont-conc4"],
-      ["cont-conc1", "cont-conc2", "cont-conc3", "cont-conc4"],
-      ["cont-conc1", "cont-conc2", "cont-conc3", "cont-conc4"],
-    ], // List
+    num_controls: 0,
+    control_concentrations: [],
+    control_replicates: [], // List
+    control_names: [], // List
+    control_concentration_names: [], // List
   });
   const config = {
     fields: {
@@ -155,23 +130,6 @@ const PlaidForm = (props) => {
           value: formState.compounds,
           message:
             "Number of compound names are not equal to number of compounds",
-        },
-      },
-      compound_concentrations: {
-        minValidLength: {
-          value: formState.compounds,
-          message:
-            "Number of concentrations are not equal to number of compounds",
-        },
-        isNumber: {
-          value: formState.compounds,
-          message: "Concentration must be an integer or decimal",
-        },
-      },
-      compound_concentration_names: {
-        minValidSize: {
-          value: formState.compounds,
-          message: "",
         },
       },
       compound_replicates: {
@@ -252,18 +210,6 @@ const PlaidForm = (props) => {
     },
   };
 
-  /* custom validation hook. TODO: Pass this validation into each component. Assiciate each name with the correct validation field 
-     and simply check if the error is null or not. If it's not, display that error. TOFIX, only one error at a time?
-     We also provide a cu
-  */
-
-  const { errors, formUtils } = useValidation(formState, config);
-
-  useEffect(() => {
-    const errors = formUtils.onClick()
-  }, [formState,])
-  
-
   const [groups, setGroups] = useState({
     selectedGroup: 0,
     groups: [
@@ -272,14 +218,55 @@ const PlaidForm = (props) => {
         compound_names: "",
         conc_amount: 0,
         concentration_names: "",
-        replicates: 0,
+        compound_replicates: 0,
       },
     ],
   });
-  const handleCompoundNamesChange = (compounds) => {
-    setFormState({ ...formState, ["compound_names"]: compounds });
+
+  //TODO add function mentioned in concentration_names. Fix everything left regarding valdation.
+  const groupConfig = {
+    fields: {
+      conc_amount: {
+        minValidSize: {
+          value: 1,
+          message: "Concentrations must be a number > 0",
+        },
+      },
+      concentration_names: {
+        concNameCount: {
+          //change to function that iterates groups and finds any conc_amount/concentration_name missmatch
+          value: groups,
+          message: "The number of conc names must match the amount specified",
+        },
+      },
+    },
+  };
+  /* utility function that converts groups to something the validation hook can read */
+  const mergeGroups = (obj) => {
+    let newState = {};
+    let group;
+    for (let i = 0; i < obj.groups.length; i++) {
+      group = obj.groups[i];
+      for (let key in group) {
+        if (key === "conc_amount") {
+          newState[key] = parseInt(group[key]);
+        }
+        if (key === "concentration_names") {
+          newState[key] = group[key].split(",");
+        }
+      }
+    }
+    return newState;
   };
 
+  const [errors, formUtils] = useValidation(formState, config);
+  const [groupErrors, groupUtils] = useValidation(
+    groups,
+    groupConfig,
+    mergeGroups
+  );
+  console.log(errors);
+  console.log(groupErrors);
   const addCompoundsToState = () => {
     let processedGroup;
 
@@ -287,6 +274,7 @@ const PlaidForm = (props) => {
     let utilGroup = {
       compoundConcentrations: [],
       compoundReplicates: [],
+      compound_concentration_indicators: [],
     };
 
     let compoundGroups = groups.groups;
@@ -304,17 +292,28 @@ const PlaidForm = (props) => {
             processedGroup.compound_names = compoundNames;
 
             break;
+          //length of compoundConcentrations
           case "conc_amount":
             const concAmount = parseInt(compoundGroup.conc_amount);
-            for (let j = 0; j < concAmount; j++)
+            console.log(concAmount);
+            for (let j = 0; j < compoundGroup.compound_names.length; j++) {
               utilGroup.compoundConcentrations.push(concAmount);
+            }
+            for (let j = 0; j < concAmount; j++) {
+              utilGroup.compound_concentration_indicators.push("");
+            }
             break;
           case "compound_replicates":
             const replicateAmount = parseInt(compoundGroup.compound_replicates);
-            for (let j = 0; j < replicateAmount; j++)
+            console.log(replicateAmount);
+            console.log(compoundGroup.compound_names.length);
+            for (let j = 0; j < compoundGroup.compound_names.length; j++) {
               utilGroup.compoundReplicates.push(replicateAmount);
+            }
+
             break;
           case "concentration_names":
+            console.log(compoundGroup.concentration_names);
             let concentrationNames = (compoundGroup.concentration_names + "")
               .replace(/(^,)|(,$)/g, "")
               .split(",");
@@ -324,7 +323,6 @@ const PlaidForm = (props) => {
             break;
         }
       }
-
       /*
         create this hash map
        map = {compoundName : [concName, concName...]} 
@@ -364,15 +362,24 @@ const PlaidForm = (props) => {
     }
 
     //run the validator here as a 2nd argument callback!! then check in stepper if no errors exist.
-    setFormState({
-      ...formState,
-      ['compound_names']: Object.keys(map),
-      ['compound_concentrations']: utilGroup.compoundConcentrations,
-      ['compound_concentration_names']: compoundConcentrationNames,
-      ['compound_replicates']: utilGroup.compoundReplicates
-    }, formUtils.onClick())
+    setFormState(
+      {
+        ...formState,
+        ["compound_names"]: Object.keys(map),
+        ["compound_concentrations"]: utilGroup.compoundConcentrations,
+        ["compound_concentration_names"]: compoundConcentrationNames,
+        ["compound_replicates"]: utilGroup.compoundReplicates,
+        ["compound_concentration_indicators"]:
+          utilGroup.compound_concentration_indicators,
+      },
+      formUtils.onClick()
+    );
+    console.log(utilGroup);
+    console.log(processedGroup);
+  };
 
-    // TODO! (Markus) You have to store compoundConcentrationsNames, utilGroup.replicates and utilGroup.compoundConcentrations map.keys (compoundNames) to formstate
+  const handleCompoundNamesChange = (compounds) => {
+    setFormState({ ...formState, ["compound_names"]: compounds });
   };
 
   const handleChangeOnGroups = (listOfGroups, selected) => {
@@ -385,7 +392,7 @@ const PlaidForm = (props) => {
             compound_names: "",
             conc_amount: 0,
             concentration_names: "",
-            replicates: 0,
+            compound_replicates: 0,
           },
         ],
       });
@@ -416,6 +423,24 @@ const PlaidForm = (props) => {
       }
     }
     setFormState({ ...formState, [name]: delim });
+  };
+  const handleControlFormChange = (key, data) => {
+    setFormState({ ...formState, [key]: data });
+  };
+  const addControlConcentrationNames = () => {
+    let matrix = [];
+    let control_concentration_names = formState.control_concentration_names;
+    let rows = formState.num_controls;
+    let cols = Math.max(...formState.control_concentrations);
+    for (let i = 0; i < rows; i++) {
+      let row = [];
+      for (let j = 0; j < cols; j++) {
+        row.push(control_concentration_names[j]);
+      }
+      matrix.push(row);
+    }
+
+    setFormState({ ...formState, control_concentration_names: matrix });
   };
   const handleInputChange = (event) => {
     const target = event.target;
@@ -451,6 +476,7 @@ const PlaidForm = (props) => {
       [name]: value,
     });
   };
+  console.log(formState);
   return (
     <StyledContainer>
       {flightState["loading"] ? (
@@ -466,7 +492,9 @@ const PlaidForm = (props) => {
             setData={props.setData}
             errors={errors}
             formUtils={formUtils}
+            groupUtils={groupUtils}
             addCompoundsToState={addCompoundsToState}
+            addControlConcentrationNames={addControlConcentrationNames}
           >
             <Step label="Experiment Setup">
               <ExperimentForm
@@ -480,6 +508,7 @@ const PlaidForm = (props) => {
                 handleInputChange={handleInputChange}
                 handleArrayChange={handleArrayChange}
                 errors={errors}
+                groupErrors={groupErrors}
                 state={formState}
                 groups={groups}
                 handleCompoundNamesChange={handleCompoundNamesChange}
@@ -496,8 +525,7 @@ const PlaidForm = (props) => {
             </Step>
             <Step label="Experiment Validation">
               <ControlForm
-                handleInputChange={handleInputChange}
-                handleArrayChange={handleArrayChange}
+                handleControlFormChange={handleControlFormChange}
                 errors={errors}
                 state={formState}
               />

@@ -43,14 +43,26 @@ const validators = {
       return null;
     };
   },
+  concNameCount: function (config) {
+    return function (value) {
+      let groups = config.value.groups;
+      for (let i = 0; i < groups.length; i++) {
+        let group = groups[i];
+        if (value.length !== parseInt(group['conc_amount']) || (value[0].length === 0)) {
+          return config.message;
+        }
+      }
+      return null;
+    }
+  
+  },
 };
 
-function validateField(fieldValue, fieldConfig, fieldStates) {
-  //validatorName is for e.g minValidSize
-  //fieldConfig is for e.g num_rows
-  for (let validatorName in fieldConfig) {
-    //e. gfor validator in num_rows
 
+
+function validateField(fieldValue, fieldConfig, fieldStates) {
+
+  for (let validatorName in fieldConfig) {
     const validatorConfig = fieldConfig[validatorName];
     const validator = validators[validatorName]; //select the correct validator
     const configuredValidator = validator(validatorConfig); //run the validator function, get the configured validator and pass it the field value.
@@ -62,6 +74,7 @@ function validateField(fieldValue, fieldConfig, fieldStates) {
   return null;
 }
 
+
 function validateFields(fieldValues, fieldStates) {
   const errors = {};
   for (let fieldName in fieldStates) {
@@ -69,6 +82,7 @@ function validateFields(fieldValues, fieldStates) {
     const fieldConfig = fieldStates[fieldName]; //get the values stored in key e.g num_rows.
     //  const fieldValue = fieldValues[fieldName]; //get the current values found in our large object for num_rows.
     const fieldValue = fieldValues[fieldName];
+
     errors[fieldName] = validateField(fieldValue, fieldConfig, fieldStates); // pass the current value and the field into the validator. Return any errors.
     // These errors will then be displayed in the frontend.
   }
@@ -79,24 +93,26 @@ function validateFields(fieldValues, fieldStates) {
    onClick returns an object containing every field that may or may not have passed validation.
    There's no point in using both so we select one. Implement setState(updater, callback) to support it.
 */
-const useValidation = (input, config) => {
+const useValidation = (input, config, func = null) => {
   const [errors, setErrors] = useState({});
-  const [validated, setValidated] = useState(false);
   /*  useEffect(() => {
-         const errors = validateFields(input, config.fields);
-         setErrors(errors);
-     }, [input]); */
+        const errors = validateFields(input, config.fields);
+        setErrors(errors);
+    }, [input]);  */
   const formUtils = {
     onClick: () => {
+      if (func) {
+        input = func(input);
+      }
       const errors = validateFields(input, config.fields);
       setErrors(errors);
       return errors;
     },
   };
-  return {
-    errors: errors,
-    formUtils: formUtils,
-  };
+  return [
+    errors,
+    formUtils,
+  ];
 };
 
 export default useValidation;
