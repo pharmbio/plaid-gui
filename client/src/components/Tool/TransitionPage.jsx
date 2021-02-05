@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import UploadResult from "./UploadResult.jsx";
+import UploadExperiment from "./UploadExperiment.jsx";
 import { BiRightArrowAlt } from "react-icons/bi";
 import PlaidForm from "./../PlaidForm";
+import NextButton from "../Buttons/NextButton";
 
 const StyledTransitionPageContainer = styled.div`
   height: 100vh;
@@ -18,7 +20,7 @@ const StyledParagraph = styled.p`
   line-height: 1.7;
   font-weight: 400;
   font-style: normal;
-  font-family: ${props => props.theme.fonts.secondary};
+  font-family: ${(props) => props.theme.fonts.secondary};
 `;
 
 const StyledRowContainer = styled.div`
@@ -31,18 +33,19 @@ const StyledFlexItem = styled.div`
   padding: 10px;
 `;
 
-const StyledButton = styled.button`
-  background: none;
-  color: inherit;
-  border: none;
-  padding: 0;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
-`;
 
 const TransitionPage = (props) => {
   const [transition, setTransition] = React.useState("main");
+
+  /**
+   * @param {*} content an object containing data to prepopulate the form fields with. (each property name in content is valid property name to the formState object)
+   */
+  const handleUploadedJsonConfig = (content) => {
+    // TODO send the object as props to PlaidForm and prepopulate the data in formState!
+    console.log(content);
+    setTransition("form");
+  };
+
   const handleClick = (state) => {
     setTransition(state);
   };
@@ -62,9 +65,7 @@ const TransitionPage = (props) => {
               <UploadResult
                 handleUploadedResults={props.handleUploadedResults}
               />
-              <StyledButton onClick={() => handleClick("experiment")}>
-                <BiRightArrowAlt size={28} />
-              </StyledButton>
+              <NextButton isLast = {false} onClick={() => handleClick("experiment")}/>
             </StyledRowContainer>
           </StyledFlexItem>
         </StyledTransitionPageContainer>
@@ -76,10 +77,11 @@ const TransitionPage = (props) => {
               experiment or continue to get to the forms.
             </StyledParagraph>
             <StyledRowContainer>
-              <button>TODO upload</button>
-              <StyledButton onClick={() => handleClick("form")}>
-                <BiRightArrowAlt size={28} />
-              </StyledButton>
+              <UploadExperiment
+                handleUploadedDznFile={props.handleUploadedDznFile}
+                handleUploadedJsonConfig={handleUploadedJsonConfig}
+              />
+              <NextButton isLast={false} onClick={() => handleClick("form")}/>
             </StyledRowContainer>
           </StyledFlexItem>
         </StyledTransitionPageContainer>

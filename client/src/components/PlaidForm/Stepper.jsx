@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import HorizontalStepper from "./HorizontalStepper";
 import { Formik, Form } from "formik";
 import styled from "styled-components";
+import NextButton from "../Buttons/NextButton";
+import PrevButton from "../Buttons/PrevButton";
+
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
@@ -22,39 +25,13 @@ const ErrorNotice = styled.div`
   margin: auto;
 `;
 
-const StyledInputContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-  align-items: start;
-`;
-const StyledNextButton = styled.button`
-  margin-left: auto;
-  background: #0069eb;
-  color: #fff;
-  border: none;
-  border-radius: 0px;
-  font-size: 16px;
-  padding: 12px 26px;
-  text-decoration: none;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-`;
-const StyledPrevButton = styled.button`
-  background: #a6a6a6;
-  color: #fff;
-  border: none;
-  border-radius: 0px;
-  font-size: 16px;
-  padding: 12px 26px;
-  text-decoration: none;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-`;
 const StyledButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  margin: 15px;
+  justify-content: flex-end;
+  margin: 10px;
 `;
+
 const Stepper = ({ children, ...props }) => {
   const childrenArray = React.Children.toArray(children);
   const [step, setStep] = useState(0);
@@ -189,16 +166,17 @@ const Stepper = ({ children, ...props }) => {
         </ErrorNotice>
         <StyledForm>
           <HorizontalStepper currentStep={step} steps={childrenArray} />
-          <StyledInputContainer>{currentChild}</StyledInputContainer>
+          {currentChild}
           <StyledButtonContainer>
             {step > 0 ? (
-              <StyledPrevButton type="button" onClick={() => setStep(step - 1)}>
-                Previous
-              </StyledPrevButton>
+              <PrevButton type="button" onClick={() => setStep(step - 1)} />
             ) : null}
-            <StyledNextButton type="button" onClick={() => handleNext()}>
-              {isLast() ? "Submit" : "Next"}
-            </StyledNextButton>
+            <NextButton
+              type="button"
+              isLast={isLast()}
+              onClick={() => handleNext()
+              }
+            />
           </StyledButtonContainer>
         </StyledForm>
       </>

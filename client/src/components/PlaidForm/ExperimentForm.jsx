@@ -4,8 +4,10 @@ import FormPage from "./FormPage";
 import InputNumber from "./Fields/InputNumber";
 import InputSelect from "./Fields/InputSelect";
 import InputCheck from "./Fields/InputCheck";
+
 const StyledSectionLabel = styled.label`
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   font-weight: bold;
 `;
 
@@ -15,7 +17,7 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
     value: "{num_row: 6, num_col: 8} ",
   });
   const [validFormState, setValidFormState] = useState(false);
-
+  const [emptyState, setEmptyState] = useState(false);
   /* Input handler for the checkbox */
   const displaySize = (event) => {
     setSelectState({ value: event.target.value });
@@ -26,8 +28,14 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
       setCustomState(false);
     }
   };
+
   function inputHandler(event) {
-    handleInputChange(event);
+    if (event.target.type === "checkbox") {
+      setEmptyState(!emptyState);
+      handleInputChange(event);
+    } else {
+      handleInputChange(event);
+    }
   }
   return (
     <FormPage>
@@ -75,8 +83,9 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
         name="vertical_cell_lines"
         value={state.vertical_cell_lines ? state.vertical_cell_lines : ""}
         onChange={handleInputChange}
-        errorMsg={errors.vertical_cell_lines ? errors.vertical_cell_lines : null}
-
+        errorMsg={
+          errors.vertical_cell_lines ? errors.vertical_cell_lines : null
+        }
       />
 
       <InputNumber
@@ -84,8 +93,24 @@ const ExperimentForm = ({ handleInputChange, errors, state }) => {
         name="horizontal_cell_lines"
         value={state.horizontal_cell_lines ? state.horizontal_cell_lines : ""}
         onChange={handleInputChange}
-        errorMsg={errors.horizontal_cell_lines ? errors.horizontal_cell_lines : null}
-
+        errorMsg={
+          errors.horizontal_cell_lines ? errors.horizontal_cell_lines : null
+        }
+      />
+      <StyledSectionLabel>Constraints</StyledSectionLabel>
+      <InputCheck
+        label="Allow empty wells"
+        onChange={inputHandler}
+        name={"allow_empty_wells"}
+        value={state.allow_empty_wells ? state.allow_empty_wells : false}
+        errorMsg={null}
+      />
+      <InputNumber
+        name="size_empty_edge"
+        label="Size of empty edges"
+        value={state.size_empty_edge ? state.size_empty_edge : ""}
+        onChange={inputHandler}
+        errorMsg={errors.size_empty_edge ? errors.size_empty_edge : null}
       />
       <InputCheck
         label="concentrations_on_different_rows"
