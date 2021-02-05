@@ -1,13 +1,30 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import ExperimentForm from "./ExperimentForm";
 import CompoundForm from "./CompoundForm";
 import ControlForm from "./ControlForm";
-import Stepper from "./Stepper";
-import Step from "./Step";
 import Loader from "./../Loader";
 import styled from "styled-components";
+import HorizontalStepper from "./HorizontalStepper";
+import { Formik, Form } from "formik";
+import NextButton from "../Buttons/NextButton";
+import PrevButton from "../Buttons/PrevButton";
 
 const axios = require("axios");
+const StyledForm = styled(Form)`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: auto;
+  height: 60vh;
+  width: 40vw;
+`;
+
+const StyledButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin: 10px;
+`;
 
 const StyledContainer = styled.div`
   overflow-y: scroll;
@@ -72,7 +89,6 @@ const PlaidForm = (props) => {
     control_names: [], // List
     control_concentration_names: [], // List
   });
-  
 
   const [groups, setGroups] = useState({
     selectedGroup: 0,
@@ -183,17 +199,16 @@ const PlaidForm = (props) => {
 
     //run the validator here as a 2nd argument callback!! then check in stepper if no errors exist.
     // TODO removed the error thing since we are supposed to refactor
-    setFormState(
-      {
-        ...formState,
-        compound_names: Object.keys(map),
-        compounds: compounds,
-        compound_concentrations: utilGroup.compoundConcentrations,
-        compound_concentration_names: compoundConcentrationNames,
-        compound_replicates: utilGroup.compoundReplicates,
-        compound_concentration_indicators:
-          utilGroup.compound_concentration_indicators,
-      });
+    setFormState({
+      ...formState,
+      compound_names: Object.keys(map),
+      compounds: compounds,
+      compound_concentrations: utilGroup.compoundConcentrations,
+      compound_concentration_names: compoundConcentrationNames,
+      compound_replicates: utilGroup.compoundReplicates,
+      compound_concentration_indicators:
+        utilGroup.compound_concentration_indicators,
+    });
   };
 
   const handleCompoundNamesChange = (compounds) => {
@@ -294,45 +309,90 @@ const PlaidForm = (props) => {
     });
   };
   console.log(formState);
+
+  /* from the Stepper component */
+  const [step, setStep] = useState(0);
+  function isLast() {
+    return step === 2;
+  }
+  const [loading, setLoading] = useState(false);
+
+  function handleNext() {
+    if (step === 1) {
+      addCompoundsToState();
+    } else if (step === 2) {
+      addControlConcentrationNames();
+    }
+    setLoading(true);
+  }
+
+  React.useEffect(() => {
+    if (loading) {
+      if (step !== 2) {
+        setStep(step + 1);
+      } else {
+        postForm(
+          formState,
+          setResponseError,
+          setFlightState,
+          flightState,
+          props.setData
+        );
+      }
+    }
+    setLoading(false);
+  }, [loading, step]);
+
   return (
     <StyledContainer>
       {flightState["loading"] ? (
         <Loader />
       ) : (
-        <Stepper
-          initialValues={formState}
-          postForm={postForm}
-          setResponseError={setResponseError}
-          responseError={responseError}
-          setFlightState={setFlightState}
-          flightState={flightState}
-          setData={props.setData}
-          addCompoundsToState={addCompoundsToState}
-          addControlConcentrationNames={addControlConcentrationNames}
-        >
-          <Step label="Experiment Setup">
-            <ExperimentForm
-              handleInputChange={handleInputChange}
-              state={formState}
+        <Formik initialValues={formState}>
+          <StyledForm>
+            <HorizontalStepper
+              currentStep={step}
+              labels={[
+                "Experiment Setup",
+                "Compound Setup",
+                "Experiment Validation",
+              ]}
             />
-          </Step>
-          <Step label="Compound Setup">
-            <CompoundForm
-              handleInputChange={handleInputChange}
-              handleArrayChange={handleArrayChange}
-              state={formState}
-              groups={groups}
-              handleCompoundNamesChange={handleCompoundNamesChange}
-              handleChangeOnGroups={handleChangeOnGroups}
-            />
-          </Step>
-          <Step label="Experiment Validation">
-            <ControlForm
-              handleControlFormChange={handleControlFormChange}
-              state={formState}
-            />
-          </Step>
-        </Stepper>
+            {step === 0 && (
+                <ExperimentForm
+                  handleInputChange={handleInputChange}
+                  state={formState}
+                />
+            )}
+            {step === 1 && (
+                <CompoundForm
+                  handleInputChange={handleInputChange}
+                  handleArrayChange={handleArrayChange}
+                  state={formState}
+                  groups={groups}
+                  handleCompoundNamesChange={handleCompoundNamesChange}
+                  handleChangeOnGroups={handleChangeOnGroups}
+                />
+            )}
+            {step === 2 && (
+
+                <ControlForm
+                  handleControlFormChange={handleControlFormChange}
+                  state={formState}
+                />
+            )}
+            <StyledButtonContainer>
+              {step > 0 ? (
+                <PrevButton type="button" onClick={() => setStep(step - 1)} />
+              ) : null}
+              <NextButton
+                type="button"
+                isLast={isLast()}
+                onClick={() => handleNext()}
+              />
+            </StyledButtonContainer>
+          </StyledForm>
+        </Formik>
       )}
     </StyledContainer>
   );
