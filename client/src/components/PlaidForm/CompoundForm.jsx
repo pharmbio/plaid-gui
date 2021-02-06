@@ -2,17 +2,15 @@ import React from "react";
 import FormPage from "./FormPage";
 import InputDelimiter from "./Fields/InputDelimiter";
 import ListGroupedCompounds from "./ListGroupedCompounds";
-import parse from "../../functions/parse.js"
+import parse from "../../functions/parse.js";
+import FormButtons from "./FormButtons/FormButtons";
 
 const DEFAULT_DELIMITER = ",";
 
-const CompoundForm = ({
-  compoundState 
-}) => {
+const CompoundForm = ({ compoundState, isLast, handleNext, handlePrev }) => {
   const [compoundForm, setCompoundForm] = React.useState(compoundState);
 
   const [delimiter, setDelimiter] = React.useState(DEFAULT_DELIMITER);
-
 
   const handleDelimiterChange = (new_delimiter) => {
     // When the delimiter has changed => we need to re-parse the compound names that has been written to the field (if not empty)
@@ -34,7 +32,7 @@ const CompoundForm = ({
         );
       }
     }
-    console.log(groups)
+    console.log(groups);
     setCompoundForm({ ...compoundForm, groups: groups });
   };
 
@@ -81,7 +79,12 @@ const CompoundForm = ({
         groups={compoundForm.groups.groups}
         selectedGroup={compoundForm.groups.selectedGroup}
       />
-
+      <FormButtons
+        isLast={isLast}
+        step={1}
+        onClickNext={() => handleNext()}
+        onClickPrev={() => handlePrev()}
+      />
     </FormPage>
   );
 };

@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import UploadResult from "./UploadResult.jsx";
 import UploadExperiment from "./UploadExperiment.jsx";
-import { BiRightArrowAlt } from "react-icons/bi";
 import PlaidForm from "./../PlaidForm";
 import NextButton from "../Buttons/NextButton";
 

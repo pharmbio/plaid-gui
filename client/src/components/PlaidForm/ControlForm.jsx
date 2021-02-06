@@ -1,87 +1,49 @@
 import React from "react";
 import FormPage from "./FormPage";
-import InputTextArea from "./Fields/InputTextArea";
-import InputNumber from "./Fields/InputNumber";
-import parse from "../../functions/parse.js"
+import ListGroupedControls from "./ListGroupedControls";
+import FormButtons from "./FormButtons/FormButtons";
 
-const DEFAULT_DELIMITER = ",";
+const ControlForm = ({
+  controlState,
+  isLast,
+  handleNext,
+  handlePrev,
+}) => {
+  const [controlForm, setControlForm] = React.useState(controlState);
 
-const ControlForm = ({ handleControlFormChange, state }) => {
-  const handleChange = (event) => {
-    let name = event.target.name;
-    let value = event.target.value;
-
-    if (name === "num_controls") {
-      value = parseInt(value);
-    } else if (name === "control_names") {
-      value = parse(DEFAULT_DELIMITER, value);
-    } else if (name === "control_concentrations") {
-      value = parse(DEFAULT_DELIMITER, value);
-      for (let i = 0; i < value.length; i++) {
-        value[i] = parseInt(value[i]);
-      }
-    } else if (name === "control_replicates") {
-      value = parse(DEFAULT_DELIMITER, value);
-      for (let i = 0; i < value.length; i++) {
-        value[i] = parseInt(value[i]);
-      }
-    } else if (name === "control_concentration_names") {
-      value = parse(DEFAULT_DELIMITER, value);
-      console.log(value)
+  const handleChangeOnGroups = (groups, selected) => {
+    if (groups === null) {
+      setControlForm({
+        ...controlForm,
+        groups: {
+          selectedGroup: 0,
+          groups: [
+            {
+              id: "gr-0",
+              control_names: "",
+              control_concentrations: "",
+              control_replicates: 0,
+            },
+          ],
+        },
+      });
+    } else {
+      let newGroup = { groups: groups, selectedGroup: selected };
+      setControlForm({ ...controlForm, groups: newGroup });
     }
-    handleControlFormChange(name, value);
   };
   return (
     <FormPage>
-      <InputNumber
-        name="num_controls"
-        label="Amount of controls"
-        value={state.num_controls}
-        onChange={handleChange}
-        onBlur={null}
-        errorMsg={null}
+      <ListGroupedControls
+        handleChangeOnGroups={handleChangeOnGroups}
+        groups={controlForm.groups.groups}
+        selectedGroup={controlForm.groups.selectedGroup}
       />
-
-      <InputTextArea
-        label={"Control names"}
-        placeholder=""
-        name="control_names"
-        onChange={handleChange}
-        //value={state.control_names.toString()}
-        disable={false}
-        errorMsg={null}
-      />
-
-      <InputTextArea
-        name="control_concentrations"
-        label="Control concentrations"
-        placeholder={""}
-        onChange={handleChange}
-        //value={state.control_concentrations.toString()}
-        errorMsg={null
-        }
-      />
-
-      <InputTextArea
-        label={"Control replicates"}
-        placeholder=""
-        name="control_replicates"
-        onChange={handleChange}
-        disable={false}
-      //  value={state.control_replicates.toString()}
-        errorMsg={null}
-      />
-
-      <InputTextArea
-        label={"Control concentration names"}
-        placeholder=""
-        name="control_concentration_names"
-        onChange={handleChange}
-        //value={
-        //  state.control_concentration_names.toString()
-        //}
-        disable={false}
-        errorMsg={null}
+      <FormButtons
+        step={2}
+        isLast={isLast}
+        onClickNext={() => handleNext()}
+        onClickPrev={() => handlePrev()}
       />
     </FormPage>
   );

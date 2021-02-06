@@ -6,8 +6,6 @@ import Loader from "./../Loader";
 import styled from "styled-components";
 import HorizontalStepper from "./HorizontalStepper";
 import { Formik, Form } from "formik";
-import NextButton from "../Buttons/NextButton";
-import PrevButton from "../Buttons/PrevButton";
 
 const axios = require("axios");
 const StyledForm = styled(Form)`
@@ -17,13 +15,6 @@ const StyledForm = styled(Form)`
   margin: auto;
   height: 60vh;
   width: 40vw;
-`;
-
-const StyledButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  margin: 10px;
 `;
 
 const StyledContainer = styled.div`
@@ -211,10 +202,6 @@ const PlaidForm = (props) => {
     });
   };
 
-  const handleCompoundNamesChange = (compounds) => {
-    setFormState({ ...formState, compound_names: compounds });
-  };
-
   const handleControlFormChange = (key, data) => {
     setFormState({ ...formState, [key]: data });
   };
@@ -233,41 +220,6 @@ const PlaidForm = (props) => {
 
     setFormState({ ...formState, control_concentration_names: matrix });
   };
-  const handleInputChange = (event) => {
-    const target = event.target;
-    const type = target.type;
-    let value;
-    switch (type) {
-      case "checkbox": {
-        if (target.name === "vertical_cell_lines") {
-          setFormState({ ...formState, ["horizontal_cell_lines"]: 0 });
-        }
-        value = target.checked;
-        break;
-      }
-      case "number": {
-        value = parseInt(target.value);
-        break;
-      }
-      case "select-one": {
-        value = JSON.parse(target.value);
-        setFormState({
-          ...formState,
-          ["num_rows"]: value.num_rows,
-          ["num_cols"]: value.num_cols,
-        });
-        return;
-      }
-      default:
-        value = target.value;
-    }
-    const name = target.name;
-    setFormState({
-      ...formState,
-      [name]: value,
-    });
-  };
-  console.log(formState);
 
   /* from the Stepper component */
   const [step, setStep] = useState(0);
@@ -276,14 +228,18 @@ const PlaidForm = (props) => {
   }
   const [loading, setLoading] = useState(false);
 
-  function handleNext() {
+  const handleNext = () => {
     if (step === 1) {
       addCompoundsToState();
     } else if (step === 2) {
       addControlConcentrationNames();
     }
     setLoading(true);
-  }
+  };
+
+  const handlePrev = () => {
+    setStep(step - 1);
+  };
 
   React.useEffect(() => {
     if (loading) {
@@ -319,6 +275,8 @@ const PlaidForm = (props) => {
             />
             {step === 0 && (
               <ExperimentForm
+                handleNext={handleNext}
+                handlePrev={handlePrev}
                 experimentState={{
                   num_rows: formState.num_rows,
                   num_cols: formState.num_cols,
@@ -338,6 +296,8 @@ const PlaidForm = (props) => {
             )}
             {step === 1 && (
               <CompoundForm
+                handleNext={handleNext}
+                handlePrev={handlePrev}
                 compoundState={{
                   compounds: formState.compounds,
                   compound_concentration_indicators:
@@ -348,7 +308,7 @@ const PlaidForm = (props) => {
                       {
                         id: "gr-0",
                         compound_names: "",
-                        compound_names_parsed:"",
+                        compound_names_parsed: "",
                         concentration_names: "",
                         compound_replicates: 0,
                       },
@@ -359,20 +319,26 @@ const PlaidForm = (props) => {
             )}
             {step === 2 && (
               <ControlForm
+                handleNext={handleNext}
+                handlePrev={handlePrev}
                 handleControlFormChange={handleControlFormChange}
-                state={formState}
+                controlState={{
+                  num_controls: formState.num_controls,
+                  groups: {
+                    selectedGroup: 0,
+                    groups: [
+                      {
+                        id: "gr-0",
+                        control_concentrations:
+                          formState.control_concentrations,
+                        control_replicates: formState.control_replicates,
+                        control_names: formState.control_names,
+                      },
+                    ],
+                  },
+                }}
               />
             )}
-            <StyledButtonContainer>
-              {step > 0 ? (
-                <PrevButton type="button" onClick={() => setStep(step - 1)} />
-              ) : null}
-              <NextButton
-                type="button"
-                isLast={isLast()}
-                onClick={() => handleNext()}
-              />
-            </StyledButtonContainer>
           </StyledForm>
         </Formik>
       )}
