@@ -4,7 +4,13 @@ import ListGroupedControls from "./ListGroupedControls";
 import FormButtons from "./FormButtons/FormButtons";
 import parse from "../../functions/parse";
 
-const ControlForm = ({ controlState, isLast, handleNext, handlePrev }) => {
+const ControlForm = ({
+  controlState,
+  isLast,
+  handleNext,
+  handlePrev,
+  handleControlFormChange,
+}) => {
   const [controlForm, setControlForm] = React.useState(controlState);
 
   const handleChangeOnGroups = (groups, selected) => {
@@ -116,8 +122,10 @@ const ControlForm = ({ controlState, isLast, handleNext, handlePrev }) => {
       control_replicates: utilGroup.controlReplicates,
       control_names: Object.keys(map),
       control_concentration_names: controlConcentrationNames,
+      groups: controlForm.groups,
     };
     console.log(controlObject);
+    return controlObject;
   };
 
   /**
@@ -126,10 +134,12 @@ const ControlForm = ({ controlState, isLast, handleNext, handlePrev }) => {
    */
   const onClick = (action) => {
     if (action === "next") {
-      setUpTheControlForm(controlForm.groups.groups);
-      //handleNext();
+      let controlObj = setUpTheControlForm(controlForm.groups.groups);
+      handleControlFormChange(controlObj);
+      handleNext();
     } else {
-      setUpTheControlForm(controlForm.groups.groups);
+      let controlObj = setUpTheControlForm(controlForm.groups.groups);
+      handleControlFormChange(controlObj);
       handlePrev();
     }
   };

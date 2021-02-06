@@ -57,7 +57,59 @@ const PlaidForm = (props) => {
     responseError: false,
   });
   const [responseError, setResponseError] = useState("");
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState({});
+
+  /* prepopulate or default object */
+  const [compoundForm, setCompoundForm] = useState({
+    compounds: 0,
+    compound_concentration_names: [], // List
+    compound_concentration_indicators: [],
+    compound_names: [], // List
+    compound_concentrations: [],
+    compound_replicates: [],
+    groups: {
+      selectedGroup: 0,
+      groups: [
+        {
+          id: "gr-0",
+          compound_names: "",
+          compound_names_parsed: "",
+          concentration_names: "",
+          compound_replicates: 0,
+        },
+      ],
+    },
+  });
+
+  const handleCompoundFormChange = (obj) => {
+    setCompoundForm(obj);
+  };
+
+  /* prepopulate or default object */
+  const [controlForm, setControlForm] = useState({
+    num_controls: 0,
+    control_concentrations: [],
+    control_replicates: [],
+    control_names: [],
+    control_concentration_names: [],
+    groups: {
+      selectedGroup: 0,
+      groups: [
+        {
+          id: "gr-0",
+          concentration_names: "",
+          control_replicates: 0,
+          control_names: "",
+        },
+      ],
+    },
+  });
+
+  const handleControlFormChange = (obj) => {
+    setControlForm(obj);
+  };
+  /* prepopulate or default object */
+  const [experimentForm, setExperimentForm] = useState({
     num_rows: 4,
     num_cols: 6,
     vertical_cell_lines: 0,
@@ -68,24 +120,11 @@ const PlaidForm = (props) => {
     concentrations_on_different_columns: false,
     replicates_on_different_plates: false,
     replicates_on_same_plate: false,
-    compounds: 0,
-    compound_concentration_names: [], // List
-    compound_concentration_indicators: [],
-    compound_names: [], // List
-    compound_concentrations: [],
-    compound_replicates: [],
-    num_controls: 0,
-    control_concentrations: [],
-    control_replicates: [], // List
-    control_names: [], // List
-    control_concentration_names: [], // List
   });
 
-  const handleCompoundFormChange = () => {};
-
-  const handleControlFormChange = () => {};
-
-  const handleExperimentFormChange = () => {};
+  const handleExperimentFormChange = (obj) => {
+    setExperimentForm(obj);
+  };
 
   /* from the Stepper component */
   const [step, setStep] = useState(0);
@@ -105,13 +144,13 @@ const PlaidForm = (props) => {
       if (step !== 2) {
         setStep(step + 1);
       } else {
-        postForm(
+        /*         postForm(
           formState,
           setResponseError,
           setFlightState,
           flightState,
           props.setData
-        );
+        ); */
       }
     }
     setLoading(false);
@@ -136,44 +175,16 @@ const PlaidForm = (props) => {
               <ExperimentForm
                 handleNext={handleNext}
                 handlePrev={handlePrev}
-                experimentState={{
-                  num_rows: formState.num_rows,
-                  num_cols: formState.num_cols,
-                  vertical_cell_lines: formState.vertical_cell_lines,
-                  horizontal_cell_lines: formState.horizontal_cell_lines,
-                  allow_empty_wells: formState.allow_empty_wells,
-                  size_empty_edge: formState.size_empty_edge,
-                  concentrations_on_different_rows:
-                    formState.concentrations_on_different_rows,
-                  concentrations_on_different_columns:
-                    formState.concentrations_on_different_columns,
-                  replicates_on_different_plates:
-                    formState.replicates_on_different_plates,
-                  replicates_on_same_plate: formState.replicates_on_same_plate,
-                }}
+                experimentState={experimentForm}
+                handleExperimentFormChange={handleExperimentFormChange}
               />
             )}
             {step === 1 && (
               <CompoundForm
                 handleNext={handleNext}
                 handlePrev={handlePrev}
-                compoundState={{
-                  compounds: formState.compounds,
-                  compound_concentration_indicators:
-                    formState.compound_concentration_indicators,
-                  groups: {
-                    selectedGroup: 0,
-                    groups: [
-                      {
-                        id: "gr-0",
-                        compound_names: "",
-                        compound_names_parsed: "",
-                        concentration_names: "",
-                        compound_replicates: 0,
-                      },
-                    ],
-                  },
-                }}
+                compoundState={compoundForm}
+                handleCompoundFormChange={handleCompoundFormChange}
               />
             )}
             {step === 2 && (
@@ -181,20 +192,7 @@ const PlaidForm = (props) => {
                 handleNext={handleNext}
                 handlePrev={handlePrev}
                 handleControlFormChange={handleControlFormChange}
-                controlState={{
-                  num_controls: formState.num_controls,
-                  groups: {
-                    selectedGroup: 0,
-                    groups: [
-                      {
-                        id: "gr-0",
-                        concentration_names: [],
-                        control_replicates: formState.control_replicates,
-                        control_names: formState.control_names,
-                      },
-                    ],
-                  },
-                }}
+                controlState={controlForm}
               />
             )}
           </StyledForm>

@@ -17,6 +17,7 @@ const ExperimentForm = ({
   isLast,
   handleNext,
   handlePrev,
+  handleExperimentFormChange,
 }) => {
   const [experimentForm, setExperimentForm] = useState(experimentState);
   const [customState, setCustomState] = useState(false);
@@ -102,6 +103,20 @@ const ExperimentForm = ({
         break;
       default:
         break;
+    }
+  };
+
+  /**
+   * when we click next or previous we want to process the fields and set up the state object that we eventually want to send to the API
+   * @param {string} action defines the action (next or previous button)
+   */
+  const onClick = (action) => {
+    if (action === "next") {
+      handleExperimentFormChange(experimentForm);
+      handleNext();
+    } else {
+      handleExperimentFormChange(experimentForm);
+      handlePrev();
     }
   };
 
@@ -205,8 +220,8 @@ const ExperimentForm = ({
       <FormButtons
         isLast={isLast}
         step={0}
-        onClickNext={() => handleNext()}
-        onClickPrev={() => handlePrev()}
+        onClickNext={() => onClick("next")}
+        onClickPrev={() => onClick("prev")}
       />
     </FormPage>
   );

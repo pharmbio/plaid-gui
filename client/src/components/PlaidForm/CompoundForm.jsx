@@ -7,7 +7,13 @@ import FormButtons from "./FormButtons/FormButtons";
 
 const DEFAULT_DELIMITER = ",";
 
-const CompoundForm = ({ compoundState, isLast, handleNext, handlePrev }) => {
+const CompoundForm = ({
+  compoundState,
+  isLast,
+  handleNext,
+  handlePrev,
+  handleCompoundFormChange,
+}) => {
   const [compoundForm, setCompoundForm] = React.useState(compoundState);
 
   const [delimiter, setDelimiter] = React.useState(DEFAULT_DELIMITER);
@@ -137,7 +143,7 @@ const CompoundForm = ({ compoundState, isLast, handleNext, handlePrev }) => {
     for (let key in map) {
       let row = [];
       for (let j = 0; j < cols; j++) {
-        if (j > map[key].length -1) {
+        if (j > map[key].length - 1) {
           row.push("");
         } else {
           row.push(map[key][j]);
@@ -159,8 +165,10 @@ const CompoundForm = ({ compoundState, isLast, handleNext, handlePrev }) => {
       compound_replicates: utilGroup.compoundReplicates,
       compound_concentration_indicators:
         utilGroup.compound_concentration_indicators,
+      groups: compoundForm.groups,
     };
     console.log(compoundObject);
+    return compoundObject;
   };
   /**
    * when we click next or previous we want to process the fields and set up the state object that we eventually want to send to the API
@@ -168,10 +176,12 @@ const CompoundForm = ({ compoundState, isLast, handleNext, handlePrev }) => {
    */
   const onClick = (action) => {
     if (action === "next") {
-      setUpTheCompoundForm(compoundForm.groups.groups);
-      //handleNext();
+      let compoundObj = setUpTheCompoundForm(compoundForm.groups.groups);
+      handleCompoundFormChange(compoundObj);
+      handleNext();
     } else {
-      setUpTheCompoundForm(compoundForm.groups.groups);
+      let compoundObj = setUpTheCompoundForm(compoundForm.groups.groups);
+      handleCompoundFormChange(compoundObj);
       handlePrev();
     }
   };
