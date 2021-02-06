@@ -55,7 +55,7 @@ const ListGroupedControls = ({
     let newObj = {
       id: newId,
       control_names: "",
-      control_concentrations: "",
+      concentration_names: "",
       control_replicates: 0,
     };
     let items = groups;
@@ -109,11 +109,11 @@ const ListGroupedControls = ({
           errorMsg={null}
         />
         <InputTextArea
-          label={"Control concentrations"}
+          label={"Concentration names"}
           placeholder=""
-          name="control_concentrations"
+          name="concentration_names"
           onChange={handleOnInputChange}
-          value={groups[selectedGroup].control_concentrations}
+          value={groups[selectedGroup].concentration_names}
           disable={false}
           errorMsg={null}
         />
