@@ -43,6 +43,7 @@ const StyledRowContainer = styled.div`
 
 const ListGroupedCompounds = ({
   groups,
+  errors,
   handleChangeOnGroups,
   selectedGroup,
   delimiter,
@@ -118,7 +119,7 @@ const ListGroupedCompounds = ({
           onChange={handleOnInputChange}
           value={groups[selectedGroup].compound_names}
           disable={false}
-          errorMsg={null}
+          errorMsg={ null}
         />
         <InputTextArea
           label={"Concentration names"}
@@ -134,7 +135,7 @@ const ListGroupedCompounds = ({
           name="compound_replicates"
           onChange={handleOnInputChange}
           value={groups[selectedGroup].compound_replicates}
-          errorMsg={null}
+          errorMsg={errors.compound_replicates}
         />
       </FormPage>
 

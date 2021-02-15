@@ -125,7 +125,6 @@ const PlaidForm = (props) => {
   const handleExperimentFormChange = (obj) => {
     setExperimentForm(obj);
   };
-
   /* from the Stepper component */
   const [step, setStep] = useState(0);
 
@@ -144,7 +143,7 @@ const PlaidForm = (props) => {
       if (step !== 2) {
         setStep(step + 1);
       } else {
-        /*         postForm(
+        /*postForm(
           formState,
           setResponseError,
           setFlightState,
@@ -155,13 +154,13 @@ const PlaidForm = (props) => {
     }
     setLoading(false);
   }, [loading, step]);
-
+  console.log(experimentForm);
   return (
     <StyledContainer>
       {flightState["loading"] ? (
         <Loader />
       ) : (
-        <Formik initialValues={formState}>
+        <Formik >
           <StyledForm>
             <HorizontalStepper
               currentStep={step}
