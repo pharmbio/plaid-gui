@@ -5,7 +5,6 @@ import { RiDeleteBin2Line } from "react-icons/ri";
 import InputTextArea from "./Fields/InputTextArea";
 import InputNumber from "./Fields/InputNumber";
 import FormPage from "./FormPage";
-import parse from "../../functions/parse.js";
 
 const StyledSelect = styled.select`
   margin: 5px;
@@ -41,11 +40,10 @@ const StyledRowContainer = styled.div`
   align-items: flex-end;
 `;
 
-const ListGroupedCompounds = ({
+const ListGroupedControls = ({
   groups,
   handleChangeOnGroups,
   selectedGroup,
-  delimiter,
 }) => {
   const handleOnGroupClick = (event) => {
     handleChangeOnGroups(groups, event.target.value);
@@ -56,10 +54,9 @@ const ListGroupedCompounds = ({
     let newId = "gr-" + groups.length;
     let newObj = {
       id: newId,
-      compound_names: "",
-      compound_names_parsed: "",
+      control_names: "",
       concentration_names: "",
-      compound_replicates: 0,
+      control_replicates: 0,
     };
     let items = groups;
     items.push(newObj);
@@ -89,20 +86,11 @@ const ListGroupedCompounds = ({
     let name = event.target.name;
     let value = event.target.value;
     let items = [...groups];
-    let item;
+    let item = {
+      ...items[selectedGroup],
+      [name]: value,
+    };
 
-    if (name === "compound_names") {
-      item = {
-        ...items[selectedGroup],
-        compound_names: value,
-        compound_names_parsed: parse(delimiter, value),
-      };
-    } else {
-      item = {
-        ...items[selectedGroup],
-        [name]: value,
-      };
-    }
     // need to update the list aswell
     items[selectedGroup] = item;
 
@@ -112,11 +100,11 @@ const ListGroupedCompounds = ({
     <StyledRowContainer>
       <FormPage>
         <InputTextArea
-          label={"Compound names"}
+          label={"Control names"}
           placeholder=""
-          name="compound_names"
+          name="control_names"
           onChange={handleOnInputChange}
-          value={groups[selectedGroup].compound_names}
+          value={groups[selectedGroup].control_names}
           disable={false}
           errorMsg={null}
         />
@@ -131,9 +119,9 @@ const ListGroupedCompounds = ({
         />
         <InputNumber
           label={"Replicates"}
-          name="compound_replicates"
+          name="control_replicates"
           onChange={handleOnInputChange}
-          value={groups[selectedGroup].compound_replicates}
+          value={groups[selectedGroup].control_replicates}
           errorMsg={null}
         />
       </FormPage>
@@ -169,4 +157,4 @@ const ListGroupedCompounds = ({
   );
 };
 
-export default ListGroupedCompounds;
+export default ListGroupedControls;
