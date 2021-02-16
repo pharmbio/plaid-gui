@@ -24,7 +24,7 @@ const CompoundForm = ({
   const compoundConfig = {
     fields: {
       compound_replicates: {
-        negativeReplicates: {
+        compNegativeReplicates: {
           value: compoundForm.groups,
           message: "Number of replicates must be a number > 0",
         },
@@ -48,7 +48,7 @@ const CompoundForm = ({
 
   const [delimiter, setDelimiter] = React.useState(DEFAULT_DELIMITER);
   const [errors, utils] = useValidation(compoundForm, compoundConfig);
-  
+
   const [validating, setValidating] = React.useState(false);
   React.useEffect(() => {
     if (validating) {

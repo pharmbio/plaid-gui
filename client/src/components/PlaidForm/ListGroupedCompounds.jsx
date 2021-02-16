@@ -119,7 +119,7 @@ const ListGroupedCompounds = ({
           onChange={handleOnInputChange}
           value={groups[selectedGroup].compound_names}
           disable={false}
-          errorMsg={ null}
+          errorMsg={errors.compound_names ? errors.compound_names : null}
         />
         <InputTextArea
           label={"Concentration names"}
@@ -128,14 +128,14 @@ const ListGroupedCompounds = ({
           onChange={handleOnInputChange}
           value={groups[selectedGroup].concentration_names}
           disable={false}
-          errorMsg={null}
+          errorMsg={errors.concentration_names ? errors.concentration_names : null}
         />
         <InputNumber
           label={"Replicates"}
           name="compound_replicates"
           onChange={handleOnInputChange}
           value={groups[selectedGroup].compound_replicates}
-          errorMsg={errors.compound_replicates}
+          errorMsg={errors.compound_replicates ? errors.compound_replicates : null}
         />
       </FormPage>
 
