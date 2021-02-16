@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import parse from "../../functions/parse.js";
 
 const StyledUploadResultButton = styled.input`
   font-family: ${(props) => props.theme.fonts.primary};
@@ -12,6 +13,7 @@ const StyledErrorMessage = styled.p`
 `;
 
 const StyledContainer = styled.div`
+  align-self: center;
   display: flex;
   flex-direction: column;
 `;
@@ -56,30 +58,10 @@ const parseDznInput = (data) => {
 
 /* these are from the formState object and represents each input field available in the forms */
 const validProperties = [
-  "num_rows",
-  "num_cols",
-  "vertical_cell_lines",
-  "horizontal_cell_lines",
-  "allow_empty_wells",
-  "size_empty_edge",
-  "concentrations_on_different_rows",
-  "concentrations_on_different_columns",
-  "replicates_on_different_plates",
-  "replicates_on_same_plate",
-  "compounds",
-  "compound_concentration_indicators",
-  "compound_names",
-  "compound_concentrations",
-  "compound_replicates",
-  "combinations",
-  "combination_concentrations",
-  "combination_names",
-  " combination_concentration_names", 
-  "num_controls",
-  "control_concentrations",
-  "control_replicates",
-  "control_names",
-  "control_concentration_names",
+  "experimentForm",
+  "compoundForm",
+  "controlForm",
+  "delimiter",
 ];
 
 /* makes sure that the uploaded json content only has allowed property names */
@@ -92,6 +74,40 @@ const validateJsonProperties = (jsonObj) => {
   return true;
 };
 
+const prepareConfigFile = (obj) => {
+  let compoundGroups = obj.compoundForm.groups;
+  let controlGroups = obj.controlForm.groups;
+
+  /* add appropriate IDs and other properties needed for the forms */
+  for (let i = 0; i < compoundGroups.length; i++) {
+    let group = compoundGroups[i];
+    group["id"] = "gr-" + i;
+
+    group["compound_names_parsed"] = parse(
+      obj.delimiter ? obj.delimiter : ",",
+      group.compound_names
+    );
+    compoundGroups[i] = group;
+  }
+
+  /* add appropriate IDs and other properties needed for the forms */
+  for (let i = 0; i < controlGroups.length; i++) {
+    let group = controlGroups[i];
+    group["id"] = "gr-" + i;
+    controlGroups[i] = group;
+  }
+
+  let result = {
+    experimentForm: obj.experimentForm,
+    controlForm: { groups: [...controlGroups], selectedGroup: 0 },
+    compoundForm: {
+      groups: [...compoundGroups],
+      selectedGroup: 0,
+      delimiter: obj.delimiter ? obj.delimiter : ",",
+    },
+  };
+  return result;
+};
 const UploadExperiment = (props) => {
   /* needed error messages?? */
   const [error, setShowError] = React.useState({ show: false, message: "" });
@@ -111,6 +127,7 @@ const UploadExperiment = (props) => {
       if (extension === "json") {
         let content = JSON.parse(event.target.result);
         if (validateJsonProperties(content)) {
+          content = prepareConfigFile(content);
           props.handleUploadedJsonConfig(content);
         } else {
           setShowError({

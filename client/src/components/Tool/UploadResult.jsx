@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledUploadResultButton = styled.input`
-  font-family: ${props => props.theme.fonts.primary};
+  font-family: ${(props) => props.theme.fonts.primary};
   font-size: 14px;
 `;
 

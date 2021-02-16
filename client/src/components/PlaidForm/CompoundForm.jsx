@@ -7,6 +7,112 @@ import FormButtons from "./FormButtons/FormButtons";
 
 const DEFAULT_DELIMITER = ",";
 
+const setUpTheCompoundForm = (groupObj) => {
+  let groups = groupObj.groups;
+  let processedGroup;
+
+  // will hold the replicates array and compound concentrations numbers from each group
+  let utilGroup = {
+    compoundConcentrations: [],
+    compoundReplicates: [],
+    compound_concentration_indicators: [],
+  };
+
+  let map = {};
+  for (let i = 0; i < groups.length; i++) {
+    let compoundGroup = groups[i];
+    processedGroup = {
+      compound_names: [],
+      concentration_names: [],
+      replicates: 0,
+    };
+    for (let key in compoundGroup) {
+      switch (key) {
+        case "compound_names_parsed":
+          processedGroup.compound_names = compoundGroup.compound_names_parsed;
+          break;
+        case "compound_replicates":
+          processedGroup.replicates = parseInt(
+            compoundGroup.compound_replicates
+          );
+          break;
+        case "concentration_names":
+          processedGroup.concentration_names = parse(
+            ",",
+            compoundGroup.concentration_names
+          );
+          break;
+        default:
+          break;
+      }
+    }
+
+    // fill the amount of concentrations and replicates for each compound
+    let concAmount = processedGroup.concentration_names.length;
+    for (let j = 0; j < processedGroup.compound_names.length; j++) {
+      utilGroup.compoundConcentrations.push(concAmount);
+      utilGroup.compoundReplicates.push(processedGroup.replicates);
+    }
+
+    /*
+      create this hash map
+     map = {compoundName : [concName, concName...]} 
+     */
+    for (let j = 0; j < processedGroup.compound_names.length; j++) {
+      for (let k = 0; k < processedGroup.concentration_names.length; k++) {
+        if (map[processedGroup.compound_names[j]] === undefined) {
+          map[processedGroup.compound_names[j]] = [
+            processedGroup.concentration_names[k],
+          ];
+        } else {
+          map[processedGroup.compound_names[j]].push(
+            processedGroup.concentration_names[k]
+          );
+        }
+      }
+    }
+  }
+
+  // TODO this is suposed to be removed from the model right?
+  for (let j = 0; j < Math.max(...utilGroup.compoundConcentrations); j++) {
+    utilGroup.compound_concentration_indicators.push("");
+  }
+  // the matrix
+  let compoundConcentrationNames = [];
+  // the dimensions of the matrix
+  let cols = Math.max(...utilGroup.compoundConcentrations);
+  // amount of keys in map  === amount of compounds == rows
+
+  for (let key in map) {
+    let row = [];
+    for (let j = 0; j < cols; j++) {
+      if (j > map[key].length - 1) {
+        row.push("");
+      } else {
+        row.push(map[key][j]);
+      }
+    }
+    compoundConcentrationNames.push(row);
+  }
+
+  // all the compound names
+  const compoundNames = Object.keys(map);
+  // amount of compounds
+  const compounds = compoundNames.length;
+
+  let compoundObject = {
+    compound_names: compoundNames,
+    compounds: compounds,
+    compound_concentrations: utilGroup.compoundConcentrations,
+    compound_concentration_names: compoundConcentrationNames,
+    compound_replicates: utilGroup.compoundReplicates,
+    compound_concentration_indicators:
+      utilGroup.compound_concentration_indicators,
+    groups: groupObj,
+  };
+  return compoundObject;
+};
+
 const CompoundForm = ({
   compoundState,
   isLast,
@@ -14,10 +120,17 @@ const CompoundForm = ({
   handlePrev,
   handleCompoundFormChange,
 }) => {
-  const [compoundForm, setCompoundForm] = React.useState(compoundState);
+  const [compoundForm, setCompoundForm] = React.useState(() =>
+    setUpTheCompoundForm(compoundState.groups)
+  );
 
-  const [delimiter, setDelimiter] = React.useState(DEFAULT_DELIMITER);
-
+  console.log(compoundForm);
+  const [delimiter, setDelimiter] = React.useState(
+    compoundForm.groups.delimiter
+      ? compoundForm.groups.delimiter
+      : DEFAULT_DELIMITER
+  );
+  console.log(delimiter);
   const handleDelimiterChange = (new_delimiter) => {
     // When the delimiter has changed => we need to re-parse the compound names that has been written to the field (if not empty)
     if (new_delimiter === "") {
@@ -28,6 +141,7 @@ const CompoundForm = ({
     }
 
     let groups = compoundForm.groups;
+    groups.delimiter = new_delimiter;
     for (let i in groups.groups) {
       if (groups.groups[i].compound_names !== "") {
         new_delimiter =
@@ -47,6 +161,7 @@ const CompoundForm = ({
       setCompoundForm({
         ...compoundForm,
         groups: {
+          delimiter: delimiter,
           selectedGroup: 0,
           groups: [
             {
@@ -60,127 +175,26 @@ const CompoundForm = ({
         },
       });
     } else {
-      let newGroup = { groups: groups, selectedGroup: selected };
+      let newGroup = {
+        groups: groups,
+        selectedGroup: selected,
+        delimiter: delimiter,
+      };
       setCompoundForm({ ...compoundForm, groups: newGroup });
     }
   };
 
-  const setUpTheCompoundForm = (groups) => {
-    let processedGroup;
-
-    // will hold the replicates array and compound concentrations numbers from each group
-    let utilGroup = {
-      compoundConcentrations: [],
-      compoundReplicates: [],
-      compound_concentration_indicators: [],
-    };
-
-    let map = {};
-    for (let i = 0; i < groups.length; i++) {
-      let compoundGroup = groups[i];
-      processedGroup = {
-        compound_names: [],
-        concentration_names: [],
-        replicates: 0,
-      };
-      for (let key in compoundGroup) {
-        switch (key) {
-          case "compound_names_parsed":
-            processedGroup.compound_names = compoundGroup.compound_names_parsed;
-            break;
-          case "compound_replicates":
-            processedGroup.replicates = parseInt(
-              compoundGroup.compound_replicates
-            );
-            break;
-          case "concentration_names":
-            processedGroup.concentration_names = parse(
-              ",",
-              compoundGroup.concentration_names
-            );
-            break;
-          default:
-            break;
-        }
-      }
-
-      // fill the amount of concentrations and replicates for each compound
-      let concAmount = processedGroup.concentration_names.length;
-      for (let j = 0; j < processedGroup.compound_names.length; j++) {
-        utilGroup.compoundConcentrations.push(concAmount);
-        utilGroup.compoundReplicates.push(processedGroup.replicates);
-      }
-
-      /*
-        create this hash map
-       map = {compoundName : [concName, concName...]} 
-       */
-      for (let j = 0; j < processedGroup.compound_names.length; j++) {
-        for (let k = 0; k < processedGroup.concentration_names.length; k++) {
-          if (map[processedGroup.compound_names[j]] === undefined) {
-            map[processedGroup.compound_names[j]] = [
-              processedGroup.concentration_names[k],
-            ];
-          } else {
-            map[processedGroup.compound_names[j]].push(
-              processedGroup.concentration_names[k]
-            );
-          }
-        }
-      }
-    }
-
-    // TODO this is suposed to be removed from the model right?
-    for (let j = 0; j < Math.max(...utilGroup.compoundConcentrations); j++) {
-      utilGroup.compound_concentration_indicators.push("");
-    }
-    // the matrix
-    let compoundConcentrationNames = [];
-    // the dimensions of the matrix
-    let cols = Math.max(...utilGroup.compoundConcentrations);
-    // amount of keys in map  === amount of compounds == rows
-
-    for (let key in map) {
-      let row = [];
-      for (let j = 0; j < cols; j++) {
-        if (j > map[key].length - 1) {
-          row.push("");
-        } else {
-          row.push(map[key][j]);
-        }
-      }
-      compoundConcentrationNames.push(row);
-    }
-
-    // all the compound names
-    const compoundNames = Object.keys(map);
-    // amount of compounds
-    const compounds = compoundNames.length;
-
-    let compoundObject = {
-      compound_names: compoundNames,
-      compounds: compounds,
-      compound_concentrations: utilGroup.compoundConcentrations,
-      compound_concentration_names: compoundConcentrationNames,
-      compound_replicates: utilGroup.compoundReplicates,
-      compound_concentration_indicators:
-        utilGroup.compound_concentration_indicators,
-      groups: compoundForm.groups,
-    };
-    console.log(compoundObject);
-    return compoundObject;
-  };
   /**
    * when we click next or previous we want to process the fields and set up the state object that we eventually want to send to the API
    * @param {string} action defines the action (next or previous button)
    */
   const onClick = (action) => {
     if (action === "next") {
-      let compoundObj = setUpTheCompoundForm(compoundForm.groups.groups);
+      let compoundObj = setUpTheCompoundForm(compoundForm.groups);
       handleCompoundFormChange(compoundObj);
       handleNext();
     } else {
-      let compoundObj = setUpTheCompoundForm(compoundForm.groups.groups);
+      let compoundObj = setUpTheCompoundForm(compoundForm.groups);
       handleCompoundFormChange(compoundObj);
       handlePrev();
     }
@@ -189,7 +203,8 @@ const CompoundForm = ({
   return (
     <FormPage>
       <InputDelimiter
-        label={"Delimitor selection (Optional)"}
+        label={"Delimiter selection (Optional)"}
+        delimiter={delimiter}
         placeholder=""
         name="delimiter_selection"
         disable={false}
