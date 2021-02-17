@@ -117,7 +117,6 @@ const setUpTheCompoundForm = (groupObj) => {
 
 const CompoundForm = ({
   compoundState,
-  isLast,
   handleNext,
   handlePrev,
   handleCompoundFormChange,
@@ -261,7 +260,6 @@ const CompoundForm = ({
         selectedGroup={compoundForm.groups.selectedGroup}
       />
       <FormButtons
-        isLast={isLast}
         step={1}
         onClickNext={() => onClick("next")}
         onClickPrev={() => onClick("prev")}

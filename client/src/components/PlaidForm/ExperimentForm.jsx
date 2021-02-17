@@ -16,7 +16,6 @@ const StyledSectionLabel = styled.label`
 
 const ExperimentForm = ({
   experimentState,
-  isLast,
   handleNext,
   handlePrev,
   handleExperimentFormChange,
@@ -286,7 +285,6 @@ const ExperimentForm = ({
         errorMsg={errors.replicates_on_same_plate ? errors.replicates_on_same_plate : null}
       />
       <FormButtons
-        isLast={isLast}
         step={0}
         onClickNext={() => onClick("next")}
         onClickPrev={() => onClick("prev")}

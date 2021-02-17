@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ExperimentForm from "./ExperimentForm";
 import CompoundForm from "./CompoundForm";
 import ControlForm from "./ControlForm";
+import SubmitForm from "./SubmitForm";
 import Loader from "./../Loader";
 import styled from "styled-components";
 import HorizontalStepper from "./HorizontalStepper";
@@ -175,7 +176,7 @@ const PlaidForm = (props) => {
   const [loading, setLoading] = useState(false);
   React.useEffect(() => {
     if (loading) {
-      if (step !== 2) {
+      if (step !== 3) {
         setStep(step + 1);
       } else {
         const property = 'groups';
@@ -209,6 +210,7 @@ const PlaidForm = (props) => {
                   "Experiment Setup",
                   "Compound Setup",
                   "Experiment Validation",
+                  "Submit Form"
                 ]}
               />
               {step === 0 && (
@@ -234,6 +236,16 @@ const PlaidForm = (props) => {
                   handleControlFormChange={handleControlFormChange}
                   controlState={controlForm}
                 />
+              )}
+              {step === 3 && (
+                <SubmitForm
+                handleNext={handleNext}
+                handlePrev={handlePrev}
+                experimentForm={experimentForm}
+                compoundForm={compoundForm.groups}
+                controlForm={controlForm.groups}
+                
+                ></SubmitForm>
               )}
             </StyledForm>
           </Formik>

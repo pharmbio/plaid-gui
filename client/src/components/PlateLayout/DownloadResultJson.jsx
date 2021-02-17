@@ -27,6 +27,7 @@ const StyledSpan = styled.span`
 `;
 
 const handleDownload = async (data) => {
+  console.log(data);
   const json = JSON.stringify(data);
   const blob = new Blob([json], { type: "application/json" });
   const href = await URL.createObjectURL(blob);
@@ -39,20 +40,40 @@ const handleDownload = async (data) => {
 };
 
 const DownloadResultJson = (props) => {
-  const data = {
-    rows: props.rows,
-    cols: props.cols,
-    sizeEmptyEdge: props.sizeEmptyEdge,
-    result: props.data,
-  };
+  let data;
+  if (props.action === "result") {
+    data = {
+      rows: props.rows,
+      cols: props.cols,
+      sizeEmptyEdge: props.sizeEmptyEdge,
+      result: props.data,
+    };
+  }
+  else {  
+    data = {
+      experimentForm: props.experimentForm,
+      compoundForm: {
+        delimiter: props.compoundForm.delimiter,
+        groups: props.compoundForm.groups
+      },
+      controlForm: {
+        groups: props.controlForm.groups
+      }
 
+    };
+  }
   return (
     <StyledHighlightedWrapper>
-      <StyledParagraph>
-        You can download a json file to display the plates at a later time,
-        without having to go through the model again, by pressing
+      {props.action === "result" ?
+        <StyledParagraph>
+          You can download a json file to display the plates at a later time,
+          without having to go through the model again, by pressing
         <StyledSpan onClick={() => handleDownload(data)}> here</StyledSpan>.
-      </StyledParagraph>
+      </StyledParagraph> : null}
+      {props.action === "config" ?
+        <StyledParagraph> Download your input config to reuse the tool at any time!
+        <StyledSpan onClick={() => handleDownload(data)}> here</StyledSpan>.  
+        </StyledParagraph> : null}
     </StyledHighlightedWrapper>
   );
 };

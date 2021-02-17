@@ -96,7 +96,6 @@ const setUpTheControlForm = (groupObj) => {
 
 const ControlForm = ({
   controlState,
-  isLast,
   handleNext,
   handlePrev,
   handleControlFormChange,
@@ -193,7 +192,6 @@ const ControlForm = ({
       />
       <FormButtons
         step={2}
-        isLast={isLast}
         onClickNext={() => onClick("next")}
         onClickPrev={() => onClick("prev")}
       />

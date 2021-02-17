@@ -16,11 +16,11 @@ const StyledButton = styled.button`
 const NextButton = (props) => {
   return (
     <StyledButton
-      title={props.isLast ? "Submit" : "Next"}
+      title={"Next"}
       type="button"
       onClick={props.onClick}
     >
-      {props.isLast ? "SUBMIT" : <BiRightArrowAlt size={28} />}
+    <BiRightArrowAlt size={28} />
     </StyledButton>
   );
 };

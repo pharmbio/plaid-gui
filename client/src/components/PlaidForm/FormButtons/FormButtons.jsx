@@ -14,7 +14,7 @@ const FormButtons = ({ isLast, onClickNext, onClickPrev, step }) => {
   return (
     <StyledButtonContainer>
       {step > 0 ? <PrevButton onClick={onClickPrev} /> : null}
-      <NextButton onClick={onClickNext} isLast={isLast} />
+      {step < 3 ? <NextButton onClick={onClickNext}  /> : null}
     </StyledButtonContainer>
   );
 };
