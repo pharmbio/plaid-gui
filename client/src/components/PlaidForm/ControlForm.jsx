@@ -105,10 +105,6 @@ const ControlForm = ({
     setUpTheControlForm(controlState.groups)
   );
 
-  const [controlForm, setControlForm] = React.useState(() =>
-  setUpTheControlForm(controlState.groups)
-);
-
   const controlConfig = {
     fields: {
       control_replicates: {
