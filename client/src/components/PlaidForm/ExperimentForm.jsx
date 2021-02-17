@@ -88,11 +88,12 @@ const ExperimentForm = ({
 
   /* Input handler for the checkbox */
   const handleChangeOfPlateSize = (event) => {
+
     let value = event.target.value;
     if (value === "custom") {
       setCustomState(true);
     } else {
-      let obj = JSON.parse(value);
+      let obj = JSON.parse(event.target.value);
       setCustomState(false);
       setExperimentForm({
         ...experimentForm,

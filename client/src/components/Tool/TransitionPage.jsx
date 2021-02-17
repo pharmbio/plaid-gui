@@ -30,19 +30,22 @@ const StyledRowContainer = styled.div`
 
 const StyledFlexItem = styled.div`
   padding: 10px;
+  margin: 20px;
+  width: 600px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 `;
-
 
 const TransitionPage = (props) => {
   const [transition, setTransition] = React.useState("main");
+  const [uploadedConfig, setUploadedConfig] = React.useState(null);
 
   /**
-   * @param {*} content an object containing data to prepopulate the form fields with. (each property name in content is valid property name to the formState object)
+   * @param {object} content an object containing data to prepopulate the form fields with. (each property name in content is valid property name to the formState object)
    */
   const handleUploadedJsonConfig = (content) => {
-    // TODO send the object as props to PlaidForm and prepopulate the data in formState!
     console.log(content);
-    setTransition("form");
+    // TODO send the object as props to PlaidForm and prepopulate the data in formState!
+    setUploadedConfig(content);
   };
 
   const handleClick = (state) => {
@@ -50,40 +53,43 @@ const TransitionPage = (props) => {
   };
   return (
     <>
-      {transition === "form" ? (
-        <PlaidForm setData={props.setData} />
-      ) : transition === "main" ? (
-        <StyledTransitionPageContainer>
-          <StyledFlexItem>
-            <StyledParagraph>
-              Press the button below to upload a json file of an already
-              computed experiment. Otherwise continue to create a new
-              experiment.
-            </StyledParagraph>
-            <StyledRowContainer>
+      {transition === "form" || uploadedConfig !== null ? (
+        <PlaidForm
+          setData={props.setData}
+          uploadedConfig={uploadedConfig}
+        />
+      ) : (
+        <>
+          <StyledTransitionPageContainer>
+            <StyledFlexItem>
+              <StyledParagraph>
+                If you want to visualize the plates of an already computed
+                experiment please upload the json file.
+              </StyledParagraph>
               <UploadResult
                 handleUploadedResults={props.handleUploadedResults}
               />
-              <NextButton isLast = {false} onClick={() => handleClick("experiment")}/>
-            </StyledRowContainer>
-          </StyledFlexItem>
-        </StyledTransitionPageContainer>
-      ) : (
-        <StyledTransitionPageContainer>
-          <StyledFlexItem>
-            <StyledParagraph>
-              Upload a yaml | dzn | json file that contains a prepopulated(?)
-              experiment or continue to get to the forms.
-            </StyledParagraph>
-            <StyledRowContainer>
-              <UploadExperiment
-                handleUploadedDznFile={props.handleUploadedDznFile}
-                handleUploadedJsonConfig={handleUploadedJsonConfig}
-              />
-              <NextButton isLast={false} onClick={() => handleClick("form")}/>
-            </StyledRowContainer>
-          </StyledFlexItem>
-        </StyledTransitionPageContainer>
+            </StyledFlexItem>
+            <StyledFlexItem>
+              <StyledParagraph>
+                You may upload a dzn file containing a valid experiment to run
+                through the model directly. You may also provide a json file to
+                prepopulate the forms with data. Otherwise press the arrow
+                button to get straight to the forms.
+              </StyledParagraph>
+              <StyledRowContainer>
+                <UploadExperiment
+                  handleUploadedDznFile={props.handleUploadedDznFile}
+                  handleUploadedJsonConfig={handleUploadedJsonConfig}
+                />
+                <NextButton
+                  isLast={false}
+                  onClick={() => handleClick("form")}
+                />
+              </StyledRowContainer>
+            </StyledFlexItem>
+          </StyledTransitionPageContainer>
+        </>
       )}
     </>
   );

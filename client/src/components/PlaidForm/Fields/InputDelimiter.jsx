@@ -33,11 +33,13 @@ const StyledErrorMessage = styled.div`
 const DEFAULT_DELIMITER = ",";
 
 const InputDelimiter = (props) => {
-  const [value, setValue] = React.useState(DEFAULT_DELIMITER);
+  const [value, setValue] = React.useState(
+    props.delimiter || DEFAULT_DELIMITER
+  );
   const handleChange = (event) => {
-      setValue(event.target.value);
-      props.onChange(event.target.value);
-  }
+    setValue(event.target.value);
+    props.onChange(event.target.value);
+  };
   return (
     <StyledDelimiterFieldContainer>
       <StyledLabel htmlFor={props.name}>{props.label}</StyledLabel>

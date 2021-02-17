@@ -85,18 +85,24 @@ const PlaidForm = (props) => {
     compound_names: [], // List
     compound_concentrations: [],
     compound_replicates: [],
-    groups: {
-      selectedGroup: 0,
-      groups: [
-        {
-          id: "gr-0",
-          compound_names: "",
-          compound_names_parsed: "",
-          concentration_names: "",
-          compound_replicates: 0,
-        },
-      ],
-    },
+
+    groups:
+      props.uploadedConfig &&
+      props.uploadedConfig.compoundForm.groups.length > 0
+        ? props.uploadedConfig.compoundForm
+        : {
+            delimiter: ",",
+            selectedGroup: 0,
+            groups: [
+              {
+                id: "gr-0",
+                compound_names: "",
+                compound_names_parsed: "",
+                concentration_names: "",
+                compound_replicates: 0,
+              },
+            ],
+          },
   });
 
   /* prepopulate or default object */
@@ -106,32 +112,23 @@ const PlaidForm = (props) => {
     control_replicates: [],
     control_names: [],
     control_concentration_names: [],
-    groups: {
-      selectedGroup: 0,
-      groups: [
-        {
-          id: "gr-0",
-          concentration_names: "",
-          control_replicates: 0,
-          control_names: "",
-        },
-      ],
-    },
+    groups:
+      props.uploadedConfig && props.uploadedConfig.controlForm.groups.length > 0
+        ? props.uploadedConfig.controlForm
+        : {
+            selectedGroup: 0,
+            groups: [
+              {
+                id: "gr-0",
+                concentration_names: "",
+                control_replicates: 0,
+                control_names: "",
+              },
+            ],
+          },
   });
     /* prepopulate or default object */
 
-  const [experimentForm, setExperimentForm] = useState({
-    num_rows: 4,
-    num_cols: 6,
-    vertical_cell_lines: 0,
-    horizontal_cell_lines: 0,
-    allow_empty_wells: false,
-    size_empty_edge: 0,
-    concentrations_on_different_rows: false,
-    concentrations_on_different_columns: false,
-    replicates_on_different_plates: false,
-    replicates_on_same_plate: false,
-  });
   const handleCompoundFormChange = (obj) => {
     setCompoundForm(obj);
   };
@@ -139,6 +136,24 @@ const PlaidForm = (props) => {
   const handleControlFormChange = (obj) => {
     setControlForm(obj);
   };
+
+  /* prepopulate or default object */
+  const [experimentForm, setExperimentForm] = useState(
+    props.uploadedConfig
+      ? props.uploadedConfig.experimentForm
+      : {
+          num_rows: 4,
+          num_cols: 6,
+          vertical_cell_lines: 0,
+          horizontal_cell_lines: 0,
+          allow_empty_wells: false,
+          size_empty_edge: 0,
+          concentrations_on_different_rows: false,
+          concentrations_on_different_columns: false,
+          replicates_on_different_plates: false,
+          replicates_on_same_plate: false,
+        }
+  );
 
   const handleExperimentFormChange = (obj) => {
     setExperimentForm(obj);
