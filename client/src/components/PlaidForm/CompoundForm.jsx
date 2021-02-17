@@ -160,7 +160,7 @@ const CompoundForm = ({
     if (validating) {
       const compoundErrors = utils.onClick()
       if (!hasErrors(compoundErrors)) {
-        let compoundObj = setUpTheCompoundForm(compoundForm.groups.groups);
+        let compoundObj = setUpTheCompoundForm(compoundForm.groups);
         handleCompoundFormChange(compoundObj);
         handleNext();
       }
