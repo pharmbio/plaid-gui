@@ -102,6 +102,10 @@ const ControlForm = ({
   handleControlFormChange,
 }) => {
 
+  const [controlForm, setControlForm] = React.useState(() =>
+  setUpTheControlForm(controlState.groups)
+);
+
   const controlConfig = {
     fields: {
       control_replicates: {
@@ -143,9 +147,7 @@ const ControlForm = ({
     }
   }, [validating])
 
-  const [controlForm, setControlForm] = React.useState(() =>
-    setUpTheControlForm(controlState.groups)
-  );
+ 
 
   const handleChangeOnGroups = (groups, selected) => {
     if (groups === null) {

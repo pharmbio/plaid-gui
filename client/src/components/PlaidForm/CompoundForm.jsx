@@ -123,6 +123,10 @@ const CompoundForm = ({
   handleCompoundFormChange,
 }) => {
 
+  const [compoundForm, setCompoundForm] = React.useState(() =>
+    setUpTheCompoundForm(compoundState.groups)
+  );
+
 
   const compoundConfig = {
     fields: {
@@ -155,7 +159,6 @@ const CompoundForm = ({
   React.useEffect(() => {
     if (validating) {
       const compoundErrors = utils.onClick()
-      console.log(compoundErrors);
       if (!hasErrors(compoundErrors)) {
         let compoundObj = setUpTheCompoundForm(compoundForm.groups.groups);
         handleCompoundFormChange(compoundObj);
@@ -165,11 +168,7 @@ const CompoundForm = ({
     }
   }, [validating])
 
-  const [compoundForm, setCompoundForm] = React.useState(() =>
-    setUpTheCompoundForm(compoundState.groups)
-  );
-
-  console.log(compoundForm);
+  
   const [delimiter, setDelimiter] = React.useState(
     compoundForm.groups.delimiter
       ? compoundForm.groups.delimiter
