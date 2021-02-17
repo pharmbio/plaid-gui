@@ -4,6 +4,8 @@ import InputDelimiter from "./Fields/InputDelimiter";
 import ListGroupedCompounds from "./ListGroupedCompounds";
 import parse from "../../functions/parse.js";
 import FormButtons from "./FormButtons/FormButtons";
+import useValidation from "./Validation/useValidation";
+import utils, { hasErrors } from "./utils.js"
 
 const DEFAULT_DELIMITER = ",";
 
@@ -120,6 +122,49 @@ const CompoundForm = ({
   handlePrev,
   handleCompoundFormChange,
 }) => {
+
+
+  const compoundConfig = {
+    fields: {
+      compound_replicates: {
+        compNegativeReplicates: {
+          value: compoundForm.groups,
+          message: "Number of replicates must be a number > 0",
+        },
+      },
+       compound_names: {
+        compNameCount: {
+          value: compoundForm.groups,
+          message:
+            "Number of compound names are not equal to number of compounds",
+        },
+      }, 
+      concentration_names: {
+        concNameCount: {
+          value: compoundForm.groups,
+          message:
+            "Number of compound names are not equal to number of compounds",
+        },
+      }
+    }
+  }
+
+  const [errors, utils] = useValidation(compoundForm, compoundConfig);
+
+  const [validating, setValidating] = React.useState(false);
+  React.useEffect(() => {
+    if (validating) {
+      const compoundErrors = utils.onClick()
+      console.log(compoundErrors);
+      if (!hasErrors(compoundErrors)) {
+        let compoundObj = setUpTheCompoundForm(compoundForm.groups.groups);
+        handleCompoundFormChange(compoundObj);
+        handleNext();
+      }
+      setValidating(false);
+    }
+  }, [validating])
+
   const [compoundForm, setCompoundForm] = React.useState(() =>
     setUpTheCompoundForm(compoundState.groups)
   );
@@ -130,7 +175,7 @@ const CompoundForm = ({
       ? compoundForm.groups.delimiter
       : DEFAULT_DELIMITER
   );
-  console.log(delimiter);
+
   const handleDelimiterChange = (new_delimiter) => {
     // When the delimiter has changed => we need to re-parse the compound names that has been written to the field (if not empty)
     if (new_delimiter === "") {
@@ -190,6 +235,7 @@ const CompoundForm = ({
    */
   const onClick = (action) => {
     if (action === "next") {
+      setValidating(true);
       let compoundObj = setUpTheCompoundForm(compoundForm.groups);
       handleCompoundFormChange(compoundObj);
       handleNext();
@@ -215,6 +261,7 @@ const CompoundForm = ({
         delimiter={delimiter}
         handleChangeOnGroups={handleChangeOnGroups}
         groups={compoundForm.groups.groups}
+        errors={errors}
         selectedGroup={compoundForm.groups.selectedGroup}
       />
       <FormButtons

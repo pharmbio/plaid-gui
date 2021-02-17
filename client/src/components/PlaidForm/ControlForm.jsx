@@ -3,6 +3,8 @@ import FormPage from "./FormPage";
 import ListGroupedControls from "./ListGroupedControls";
 import FormButtons from "./FormButtons/FormButtons";
 import parse from "../../functions/parse";
+import useValidation from "./Validation/useValidation";
+import utils, {hasErrors} from "./utils";
 
 const setUpTheControlForm = (groupObj) => {
   let groups = groupObj.groups;
@@ -99,6 +101,48 @@ const ControlForm = ({
   handlePrev,
   handleControlFormChange,
 }) => {
+
+  const controlConfig = {
+    fields: {
+      control_replicates: {
+        ctrlNegativeReplicates: {
+          value: controlForm.groups,
+          message: "Number of replicates must be a number > 0",
+        },
+      },
+       control_names: {
+        ctrlNameCount: {
+          value: controlForm.groups,
+          message:
+            "Number of compound names are not equal to number of compounds",
+        },
+      }, 
+      concentration_names: {
+        concNameCount: {
+          value: controlForm.groups,
+          message:
+            "Number of compound names are not equal to number of compounds",
+        },
+      }
+    }
+  }
+
+  const [errors, utils] = useValidation(controlForm, controlConfig);
+
+  const [validating, setValidating] = React.useState(false);
+  React.useEffect(() => {
+    if (validating) {
+      const controlErrors = utils.onClick()
+      console.log(controlErrors);
+      if (!hasErrors(controlErrors)) {
+        let controlObj = setUpTheControlForm(controlForm.groups.groups);
+        handleControlFormChange(controlObj);
+        handleNext();
+      }
+      setValidating(false);
+    }
+  }, [validating])
+
   const [controlForm, setControlForm] = React.useState(() =>
     setUpTheControlForm(controlState.groups)
   );
@@ -131,6 +175,7 @@ const ControlForm = ({
    */
   const onClick = (action) => {
     if (action === "next") {
+      setValidating(true);
       let controlObj = setUpTheControlForm(controlForm.groups);
       handleControlFormChange(controlObj);
       handleNext();
@@ -145,6 +190,7 @@ const ControlForm = ({
       <ListGroupedControls
         handleChangeOnGroups={handleChangeOnGroups}
         groups={controlForm.groups.groups}
+        errors={errors}
         selectedGroup={controlForm.groups.selectedGroup}
       />
       <FormButtons

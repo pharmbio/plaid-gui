@@ -28,6 +28,7 @@ async function postForm(
   flightState,
   setData
 ) {
+  console.log(formData);
   let axiosConfig = {
     headers: {
       "Content-Type": "application/json",
@@ -58,7 +59,24 @@ const PlaidForm = (props) => {
   });
   const [responseError, setResponseError] = useState("");
   const [formState, setFormState] = useState({});
+  React.useEffect(() => {
+    if (!(JSON.stringify(formState) === "{}")) {
+      postForm(
+        formState,
+        setResponseError,
+        setFlightState,
+        flightState,
+        props.setData
+      );
+    }
+  }, [formState])
 
+  const [combinationForm, setCombinationForm] = useState({
+    combinations: 0,
+    combination_concentrations: 0,
+    combination_names: [], // List
+    combination_concentration_names: [], // List
+  })
   /* prepopulate or default object */
   const [compoundForm, setCompoundForm] = useState({
     compounds: 0,
@@ -87,10 +105,6 @@ const PlaidForm = (props) => {
           },
   });
 
-  const handleCompoundFormChange = (obj) => {
-    setCompoundForm(obj);
-  };
-
   /* prepopulate or default object */
   const [controlForm, setControlForm] = useState({
     num_controls: 0,
@@ -113,10 +127,16 @@ const PlaidForm = (props) => {
             ],
           },
   });
+    /* prepopulate or default object */
+
+  const handleCompoundFormChange = (obj) => {
+    setCompoundForm(obj);
+  };
 
   const handleControlFormChange = (obj) => {
     setControlForm(obj);
   };
+
   /* prepopulate or default object */
   const [experimentForm, setExperimentForm] = useState(
     props.uploadedConfig
@@ -138,11 +158,9 @@ const PlaidForm = (props) => {
   const handleExperimentFormChange = (obj) => {
     setExperimentForm(obj);
   };
-
   /* from the Stepper component */
   const [step, setStep] = useState(0);
 
-  const [loading, setLoading] = useState(false);
 
   const handleNext = () => {
     setLoading(true);
@@ -152,65 +170,74 @@ const PlaidForm = (props) => {
     setStep(step - 1);
   };
 
+
+
+  const [loading, setLoading] = useState(false);
   React.useEffect(() => {
     if (loading) {
       if (step !== 2) {
         setStep(step + 1);
       } else {
+        const property = 'groups';
+        const { [property]: _, ...finalCompoundForm } = compoundForm;
+        const { groups, ...finalControlForm } = controlForm;
+
+        const mergedState = { ...experimentForm, ...finalCompoundForm, ...finalControlForm, ...combinationForm};
+
+        setFormState(mergedState);
         /*         postForm(
-          formState,
-          setResponseError,
-          setFlightState,
-          flightState,
-          props.setData
-        ); */
+                  formState,
+                  setResponseError,
+                  setFlightState,
+                  flightState,
+                  props.setData
+                );  */
       }
     }
     setLoading(false);
   }, [loading, step]);
-
   return (
     <StyledContainer>
       {flightState["loading"] ? (
         <Loader />
       ) : (
-        <Formik initialValues={formState}>
-          <StyledForm>
-            <HorizontalStepper
-              currentStep={step}
-              labels={[
-                "Experiment Setup",
-                "Compound Setup",
-                "Experiment Validation",
-              ]}
-            />
-            {step === 0 && (
-              <ExperimentForm
-                handleNext={handleNext}
-                handlePrev={handlePrev}
-                experimentState={experimentForm}
-                handleExperimentFormChange={handleExperimentFormChange}
+          <Formik >
+            <StyledForm>
+              <HorizontalStepper
+                currentStep={step}
+                labels={[
+                  "Experiment Setup",
+                  "Compound Setup",
+                  "Experiment Validation",
+                ]}
               />
-            )}
-            {step === 1 && (
-              <CompoundForm
-                handleNext={handleNext}
-                handlePrev={handlePrev}
-                compoundState={compoundForm}
-                handleCompoundFormChange={handleCompoundFormChange}
-              />
-            )}
-            {step === 2 && (
-              <ControlForm
-                handleNext={handleNext}
-                handlePrev={handlePrev}
-                handleControlFormChange={handleControlFormChange}
-                controlState={controlForm}
-              />
-            )}
-          </StyledForm>
-        </Formik>
-      )}
+              {step === 0 && (
+                <ExperimentForm
+                  handleNext={handleNext}
+                  handlePrev={handlePrev}
+                  experimentState={experimentForm}
+                  handleExperimentFormChange={handleExperimentFormChange}
+                />
+              )}
+              {step === 1 && (
+                <CompoundForm
+                  handleNext={handleNext}
+                  handlePrev={handlePrev}
+                  compoundState={compoundForm}
+                  handleCompoundFormChange={handleCompoundFormChange}
+                />
+              )}
+              {step === 2 && (
+                <ControlForm
+                  handleNext={handleNext}
+                  handlePrev={handlePrev}
+                  handleControlFormChange={handleControlFormChange}
+                  controlState={controlForm}
+                />
+              )}
+            </StyledForm>
+          </Formik>
+        )}
     </StyledContainer>
   );
 };

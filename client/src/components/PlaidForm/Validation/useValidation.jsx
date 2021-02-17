@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 
 const validators = {
   minValidSize: function (config) {
@@ -44,18 +44,68 @@ const validators = {
     };
   },
   concNameCount: function (config) {
-    return function (value) {
+    return function () {
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        if (value.length !== parseInt(group['conc_amount']) || (value[0].length === 0)) {
+        if (group.concentration_names === "") {
+          return config.message;
+
+        }
+      }
+      return null;
+    }
+  },
+  compNameCount: function (config) {
+    return function () {
+      let groups = config.value.groups;
+      for (let i = 0; i < groups.length; i++) {
+        let group = groups[i];
+        if (group.compound_names === "") {
+          return config.message;
+
+        }
+      }
+      return null;
+    }
+  },
+  compNegativeReplicates: function (config) {
+    return function () {
+      let groups = config.value.groups;
+      for (let i = 0; i < groups.length; i++) {
+        let group = groups[i];
+        if (parseInt(group.compound_replicates) < 0) {
           return config.message;
         }
       }
       return null;
     }
-  
   },
+  ctrlNameCount: function (config) {
+    return function () {
+      let groups = config.value.groups;
+      for (let i = 0; i < groups.length; i++) {
+        let group = groups[i];
+        if (group.control_names === "") {
+          return config.message;
+
+        }
+      }
+      return null;
+    }
+  },
+  ctrlNegativeReplicates: function (config) {
+    return function () {
+      let groups = config.value.groups;
+      for (let i = 0; i < groups.length; i++) {
+        let group = groups[i];
+        if (parseInt(group.control_replicates) < 0) {
+          return config.message;
+        }
+      }
+      return null;
+    }
+  }
 };
 
 
@@ -95,15 +145,20 @@ function validateFields(fieldValues, fieldStates) {
 */
 const useValidation = (input, config, func = null) => {
   const [errors, setErrors] = useState({});
-  /*  useEffect(() => {
-        const errors = validateFields(input, config.fields);
-        setErrors(errors);
-    }, [input]);  */
+  const [validating, setValidating] = useState(false);
+  /*    React.useEffect(() => {
+       if(validating){
+         const errors = validateFields(input, config.fields);
+         setErrors(errors);
+         setValidating(false);
+       }
+     }, [validating]);  */
   const formUtils = {
     onClick: () => {
       if (func) {
         input = func(input);
       }
+      setValidating(true);
       const errors = validateFields(input, config.fields);
       setErrors(errors);
       return errors;

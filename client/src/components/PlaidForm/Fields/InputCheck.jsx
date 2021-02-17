@@ -33,6 +33,7 @@ const InputCheck = (props) => {
         type="checkbox"
         onChange={props.onChange}
         value={props.value}
+        checked={props.checked}
       >
       </StyledSelectField>
       <StyledErrorMessage>{props.errorMsg}</StyledErrorMessage>
