@@ -123,6 +123,12 @@ const CompoundForm = ({
   handleCompoundFormChange,
 }) => {
 
+  const [compoundForm, setCompoundForm] = React.useState(() =>
+    setUpTheCompoundForm(compoundState.groups)
+  );
+
+  console.log(compoundState)
+
 
   const compoundConfig = {
     fields: {
@@ -157,17 +163,13 @@ const CompoundForm = ({
       const compoundErrors = utils.onClick()
       console.log(compoundErrors);
       if (!hasErrors(compoundErrors)) {
-        let compoundObj = setUpTheCompoundForm(compoundForm.groups.groups);
+        let compoundObj = setUpTheCompoundForm(compoundForm.groups);
         handleCompoundFormChange(compoundObj);
         handleNext();
       }
       setValidating(false);
     }
   }, [validating])
-
-  const [compoundForm, setCompoundForm] = React.useState(() =>
-    setUpTheCompoundForm(compoundState.groups)
-  );
 
   console.log(compoundForm);
   const [delimiter, setDelimiter] = React.useState(
