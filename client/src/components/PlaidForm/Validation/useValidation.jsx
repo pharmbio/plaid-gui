@@ -45,6 +45,7 @@ const validators = {
   },
   concNameCount: function (config) {
     return function () {
+      console.log('HERE');
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];

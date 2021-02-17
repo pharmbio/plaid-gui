@@ -177,9 +177,6 @@ const ControlForm = ({
   const onClick = (action) => {
     if (action === "next") {
       setValidating(true);
-      let controlObj = setUpTheControlForm(controlForm.groups);
-      handleControlFormChange(controlObj);
-      handleNext();
     } else {
       let controlObj = setUpTheControlForm(controlForm.groups);
       handleControlFormChange(controlObj);

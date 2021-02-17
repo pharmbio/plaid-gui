@@ -235,9 +235,6 @@ const CompoundForm = ({
   const onClick = (action) => {
     if (action === "next") {
       setValidating(true);
-      let compoundObj = setUpTheCompoundForm(compoundForm.groups);
-      handleCompoundFormChange(compoundObj);
-      handleNext();
     } else {
       let compoundObj = setUpTheCompoundForm(compoundForm.groups);
       handleCompoundFormChange(compoundObj);
