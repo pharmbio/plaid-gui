@@ -122,7 +122,6 @@ const PlateLayout = (props) => {
   return (
     <StyledPlateContainer>
       <DownloadResultJson
-        action={"result"}
         data={props.data}
         rows={props.rows}
         cols={props.cols}

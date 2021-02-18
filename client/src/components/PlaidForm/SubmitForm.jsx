@@ -1,5 +1,5 @@
 import FormButtons from "./FormButtons/FormButtons"
-import DownloadResultJson from "../PlateLayout/DownloadResultJson";
+import DownloadConfigJson from "./DownloadConfigJson";
 
 
 const SubmitForm = ({ handleNext, handlePrev, experimentForm, compoundForm, controlForm }) => {
@@ -15,7 +15,7 @@ const SubmitForm = ({ handleNext, handlePrev, experimentForm, compoundForm, cont
     };
 
     return (<>
-        <DownloadResultJson action={"config"} experimentForm={experimentForm} compoundForm={compoundForm} controlForm={controlForm}></DownloadResultJson>
+        <DownloadConfigJson experimentForm={experimentForm} compoundForm={compoundForm} controlForm={controlForm}></DownloadConfigJson>
         <button type="button" title="Submit" onClick={() => onClick("submit")}>  </button>
         <FormButtons
             step={3}

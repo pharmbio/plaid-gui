@@ -38,22 +38,26 @@ const handleDownload = async (data) => {
   document.body.removeChild(link);
 };
 
-const DownloadResultJson = (props) => {
+const DownloadConfigJson = (props) => {
   let data = {
-    rows: props.rows,
-    cols: props.cols,
-    sizeEmptyEdge: props.sizeEmptyEdge,
-    result: props.data,
+    experimentForm: props.experimentForm,
+    compoundForm: {
+      delimiter: props.compoundForm.delimiter,
+      groups: props.compoundForm.groups,
+    },
+    controlForm: {
+      groups: props.controlForm.groups,
+    },
   };
+
   return (
     <StyledHighlightedWrapper>
       <StyledParagraph>
-        You can download a json file to display the plates at a later time,
-        without having to go through the model again, by pressing
+        Download your input config to reuse the tool at any time
         <StyledSpan onClick={() => handleDownload(data)}> here</StyledSpan>.
       </StyledParagraph>
     </StyledHighlightedWrapper>
   );
 };
 
-export default DownloadResultJson;
+export default DownloadConfigJson;
