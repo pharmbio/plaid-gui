@@ -59,7 +59,6 @@ const TransitionPage = (props) => {
           uploadedConfig={uploadedConfig}
         />
       ) : (
-        <>
           <StyledTransitionPageContainer>
             <StyledFlexItem>
               <StyledParagraph>
@@ -89,7 +88,6 @@ const TransitionPage = (props) => {
               </StyledRowContainer>
             </StyledFlexItem>
           </StyledTransitionPageContainer>
-        </>
       )}
     </>
   );
