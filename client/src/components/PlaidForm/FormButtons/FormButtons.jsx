@@ -10,11 +10,27 @@ const StyledButtonContainer = styled.div`
   margin: 10px;
 `;
 
-const FormButtons = ({ isLast, onClickNext, onClickPrev, step }) => {
+const FormButtons = ({ submit, onClickNext, onClickPrev, step, title }) => {
   return (
     <StyledButtonContainer>
-      {step > 0 ? <PrevButton onClick={onClickPrev} /> : null}
-      {step < 3 ? <NextButton onClick={onClickNext}  /> : null}
+      {step > 0 ? (
+        <PrevButton
+          title={title ? title : "Previous form page"}
+          onClick={onClickPrev}
+        >
+          PREVIOUS
+        </PrevButton>
+      ) : null}
+      {step < 3 ? (
+        <NextButton title={"Next form page"} onClick={onClickNext}>
+          NEXT
+        </NextButton>
+      ) : null}
+      {submit ? (
+        <NextButton title={"Submit form"} onClick={onClickNext}>
+          SUBMIT
+        </NextButton>
+      ) : null}
     </StyledButtonContainer>
   );
 };

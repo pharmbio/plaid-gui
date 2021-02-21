@@ -1,26 +1,28 @@
 import React from "react";
 import styled from "styled-components";
-import { BiRightArrowAlt } from "react-icons/bi";
+/* import { BiRightArrowAlt } from "react-icons/bi"; */
 
 const StyledButton = styled.button`
   background: none;
   color: inherit;
   border: none;
-  padding: 0;
+  padding: 10px;
   font: inherit;
   cursor: pointer;
   outline: inherit;
-  margin:15px;
+  margin: 15px;
+  border-radius: 7px;
+  border: 1px solid #ccc;
+  &:hover {
+    outline: none;
+    border: 1px solid #5096ff;
+  }
 `;
 
 const NextButton = (props) => {
   return (
-    <StyledButton
-      title={"Next"}
-      type="button"
-      onClick={props.onClick}
-    >
-    <BiRightArrowAlt size={28} />
+    <StyledButton title={props.title} type="button" onClick={props.onClick}>
+      {props.children}
     </StyledButton>
   );
 };

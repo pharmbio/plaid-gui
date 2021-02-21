@@ -81,10 +81,10 @@ const TransitionPage = (props) => {
                   handleUploadedDznFile={props.handleUploadedDznFile}
                   handleUploadedJsonConfig={handleUploadedJsonConfig}
                 />
-                <NextButton
+                <NextButton title={"Take me to the forms"}
                   isLast={false}
                   onClick={() => handleClick("form")}
-                />
+                >GO TO FORMS</NextButton>
               </StyledRowContainer>
             </StyledFlexItem>
           </StyledTransitionPageContainer>

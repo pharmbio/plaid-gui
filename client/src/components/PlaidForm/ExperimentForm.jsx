@@ -12,6 +12,8 @@ const StyledSectionLabel = styled.label`
   margin-bottom: 10px;
   margin-top: 10px;
   font-weight: bold;
+  border-bottom: 1px solid black;
+  font-size:16px;
 `;
 
 const ExperimentForm = ({
@@ -20,9 +22,7 @@ const ExperimentForm = ({
   handlePrev,
   handleExperimentFormChange,
 }) => {
-
-  const [experimentForm, setExperimentForm] = useState(
-    experimentState);
+  const [experimentForm, setExperimentForm] = useState(experimentState);
 
   const ExperimentConfig = {
     fields: {
@@ -63,35 +63,32 @@ const ExperimentForm = ({
           message: "Empty edges must be a number >= 0",
         },
         maxEmptyEdgeSize: {
-          value: {num_cols: experimentForm.num_cols, num_rows: experimentForm.num_rows},
-          message: "The size of the empty edges is too large"
-        }
+          value: {
+            num_cols: experimentForm.num_cols,
+            num_rows: experimentForm.num_rows,
+          },
+          message: "The size of the empty edges is too large",
+        },
       },
-    }
-  }
-
-
+    },
+  };
 
   const [customState, setCustomState] = useState(false);
   const [errors, utils] = useValidation(experimentForm, ExperimentConfig);
   const [validating, setValidating] = useState(false);
   React.useEffect(() => {
     if (validating) {
-      const experimentErrors = utils.onClick()
+      const experimentErrors = utils.onClick();
       if (!hasErrors(experimentErrors)) {
         handleExperimentFormChange(experimentForm);
         handleNext();
       }
       setValidating(false);
     }
-  }, [validating])
-
-
-
+  }, [validating]);
 
   /* Input handler for the checkbox */
   const handleChangeOfPlateSize = (event) => {
-
     let value = event.target.value;
     if (value === "custom") {
       setCustomState(true);
@@ -181,7 +178,6 @@ const ExperimentForm = ({
   const onClick = (action) => {
     if (action === "next") {
       setValidating(true);
-
     } else {
       handleExperimentFormChange(experimentForm);
       handlePrev();
@@ -228,41 +224,62 @@ const ExperimentForm = ({
       <InputNumber
         label={"Vertical"}
         name="vertical_cell_lines"
-        value={experimentForm.vertical_cell_lines ? experimentForm.vertical_cell_lines : 0}
+        value={
+          experimentForm.vertical_cell_lines
+            ? experimentForm.vertical_cell_lines
+            : 0
+        }
         onChange={handleChangeOfInput}
-        errorMsg={errors.vertical_cell_lines ? errors.vertical_cell_lines : null}
+        errorMsg={
+          errors.vertical_cell_lines ? errors.vertical_cell_lines : null
+        }
       />
 
       <InputNumber
         label={"Horizontal"}
         name="horizontal_cell_lines"
-        value={experimentForm.horizontal_cell_lines ? experimentForm.horizontal_cell_lines : 0}
+        value={
+          experimentForm.horizontal_cell_lines
+            ? experimentForm.horizontal_cell_lines
+            : 0
+        }
         onChange={handleChangeOfInput}
-        errorMsg={errors.horizontal_cell_lines ? errors.horizontal_cell_lines : null}
+        errorMsg={
+          errors.horizontal_cell_lines ? errors.horizontal_cell_lines : null
+        }
       />
       <StyledSectionLabel>Constraints</StyledSectionLabel>
+      <InputNumber
+        name="size empty_edge"
+        label="Size of empty edges"
+        value={
+          experimentForm.size_empty_edge ? experimentForm.size_empty_edge : 0
+        }
+        onChange={handleChangeOfInput}
+        errorMsg={errors.size_empty_edge ? errors.size_empty_edge : null}
+      />
       <InputCheck
         label="Allow empty wells"
         onChange={handleChangeOfInput}
         name={"allow_empty_wells"}
         value={experimentForm.allow_empty_wells}
         checked={experimentForm.allow_empty_wells}
-        errorMsg={errors.allow_empty_wells ? errors.horizontal_cell_lines : null}
+        errorMsg={
+          errors.allow_empty_wells ? errors.horizontal_cell_lines : null
+        }
       />
-      <InputNumber
-        name="size empty_edge"
-        label="Size of empty edges"
-        value={experimentForm.size_empty_edge ? experimentForm.size_empty_edge : 0}
-        onChange={handleChangeOfInput}
-        errorMsg={errors.size_empty_edge ? errors.size_empty_edge : null}
-      />
+
       <InputCheck
         label="Concentrations on different rows"
         onChange={handleChangeOfInput}
         name={"concentrations_on_different_rows"}
         value={experimentForm.concentrations_on_different_rows}
         checked={experimentForm.concentrations_on_different_rows}
-        errorMsg={errors.concentrations_on_different_rows ? errors.concentrations_on_different_rows : null}
+        errorMsg={
+          errors.concentrations_on_different_rows
+            ? errors.concentrations_on_different_rows
+            : null
+        }
       />
       <InputCheck
         label="Concentrations on different columns"
@@ -270,7 +287,11 @@ const ExperimentForm = ({
         name={"concentrations_on_different_columns"}
         value={experimentForm.concentrations_on_different_columns}
         checked={experimentForm.concentrations_on_different_columns}
-        errorMsg={errors.concentrations_on_different_columns ? errors.concentrations_on_different_columns : null}
+        errorMsg={
+          errors.concentrations_on_different_columns
+            ? errors.concentrations_on_different_columns
+            : null
+        }
       />
       <InputCheck
         label="Replicates on different plates"
@@ -278,7 +299,11 @@ const ExperimentForm = ({
         name={"replicates_on_different_plates"}
         value={experimentForm.replicates_on_different_plates}
         checked={experimentForm.replicates_on_different_plates}
-        errorMsg={errors.replicates_on_different_plates ? errors.replicates_on_different_plates : null}
+        errorMsg={
+          errors.replicates_on_different_plates
+            ? errors.replicates_on_different_plates
+            : null
+        }
       />
       <InputCheck
         label="Replicates on same plate"
@@ -286,7 +311,11 @@ const ExperimentForm = ({
         name={"replicates_on_same_plate"}
         value={experimentForm.replicates_on_same_plate}
         checked={experimentForm.replicates_on_same_plate}
-        errorMsg={errors.replicates_on_same_plate ? errors.replicates_on_same_plate : null}
+        errorMsg={
+          errors.replicates_on_same_plate
+            ? errors.replicates_on_same_plate
+            : null
+        }
       />
       <FormButtons
         step={0}

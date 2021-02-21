@@ -1,22 +1,28 @@
 import React from "react";
 import styled from "styled-components";
-import { BiLeftArrowAlt } from "react-icons/bi";
+/* import { BiLeftArrowAlt } from "react-icons/bi"; */
 
 const StyledButton = styled.button`
   background: none;
   color: inherit;
   border: none;
-  padding: 0;
+  padding: 10px;
   font: inherit;
   cursor: pointer;
   outline: inherit;
-  margin:15px;
+  margin: 15px;
+  border-radius: 7px;
+  border: 1px solid #ccc;
+  &:hover {
+    outline: none;
+    border: 1px solid #5096ff;
+  }
 `;
 
 const PrevButton = (props) => {
   return (
-    <StyledButton title={"Previous"} type="button" onClick={props.onClick}>
-      <BiLeftArrowAlt size={28} />
+    <StyledButton title={props.title} type="button" onClick={props.onClick}>
+      {props.children}
     </StyledButton>
   );
 };

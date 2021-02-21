@@ -15,7 +15,7 @@ const StyledForm = styled(Form)`
   justify-content: space-between;
   margin: auto;
   height: 60vh;
-  width: 40vw;
+  width: 640px; /* size of horizontal stepper thingy .. */
 `;
 
 const StyledContainer = styled.div`

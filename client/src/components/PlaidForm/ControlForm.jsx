@@ -1,10 +1,19 @@
 import React from "react";
 import FormPage from "./FormPage";
+import styled from "styled-components";
 import ListGroupedControls from "./ListGroupedControls";
 import FormButtons from "./FormButtons/FormButtons";
 import parse from "../../functions/parse";
 import useValidation from "./Validation/useValidation";
 import utils, { hasErrors } from "./utils";
+
+const StyledSectionLabel = styled.label`
+  margin-bottom: 10px;
+  margin-top: 10px;
+  font-weight: bold;
+  border-bottom: 1px solid black;
+  font-size: 16px;
+`;
 
 const setUpTheControlForm = (groupObj) => {
   let groups = groupObj.groups;
@@ -143,9 +152,7 @@ const ControlForm = ({
       }
       setValidating(false);
     }
-  }, [validating])
-
- 
+  }, [validating]);
 
   const handleChangeOnGroups = (groups, selected) => {
     if (groups === null) {
@@ -184,6 +191,7 @@ const ControlForm = ({
   };
   return (
     <FormPage>
+      <StyledSectionLabel>Controls</StyledSectionLabel>
       <ListGroupedControls
         handleChangeOnGroups={handleChangeOnGroups}
         groups={controlForm.groups.groups}

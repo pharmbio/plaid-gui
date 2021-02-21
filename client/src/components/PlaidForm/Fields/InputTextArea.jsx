@@ -15,13 +15,17 @@ const StyledLabel = styled.label`
 `;
 
 const StyledTextArea = styled.textarea`
-  min-width: 180px;
-  max-width: 400px;
-  min-height: 120px;
+  /* todo set sizes  */
+  min-width: 640px;
+  max-width: 640px;
+  min-height: 180px;
   max-height: 500px;
   padding: 10px;
+  border-radius: 7px;
+  border: 1px solid #ccc;
   &:focus {
-    outline: none;
+    outline:none;
+    border: 1px solid #5096FF;
   }
   font-family: ${(props) => props.theme.fonts.secondary};
   font-size: 14px;

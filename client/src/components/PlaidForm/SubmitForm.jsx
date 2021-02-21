@@ -2,8 +2,8 @@ import React from "react";
 import FormButtons from "./FormButtons/FormButtons";
 import styled from "styled-components";
 import useValidation from "./Validation/useValidation";
-import utils, {hasErrors} from "./utils";
-
+import NextButton from "../Buttons/NextButton";
+import utils, { hasErrors } from "./utils";
 
 const StyledContainer = styled.div`
   height: 100vh;
@@ -26,7 +26,7 @@ const StyledRowContainer = styled.div`
   display: flex;
   flex-wrap: nowrap;
   width: 100%;
-  justify-content: space-between;
+  justify-content: flex-end;
 `;
 
 const StyledFlexItem = styled.div`
@@ -36,16 +36,6 @@ const StyledFlexItem = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 `;
 
-const StyledSubmitButton = styled.button`
-  background: none;
-  color: inherit;
-  border: none;
-  padding: 0;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
-  margin: 15px;
-`;
 const StyledSpan = styled.span`
   cursor: pointer;
   color: black;
@@ -74,28 +64,33 @@ const SubmitForm = ({
   let config = {
     submit: {
       hasEmptyWells: {
-        value: { experimentForm: experimentForm, compoundForm: compoundForm, controlForm: controlForm },
-        message: 'You have empty wells! Add more compounds, replicates or controls or make sure to tick allow the empty wells box to support empty wells'
-      }
-    }
-  }
+        value: {
+          experimentForm: experimentForm,
+          compoundForm: compoundForm,
+          controlForm: controlForm,
+        },
+        message:
+          "You have empty wells! Add more compounds, replicates or controls or make sure to tick allow the empty wells box to support empty wells",
+      },
+    },
+  };
 
-  let [errors, utils] = useValidation({},config);
+  let [errors, utils] = useValidation({}, config);
 
   const [validating, setValidating] = React.useState(false);
   React.useEffect(() => {
     if (validating) {
-      const submitErrors = utils.onClick()
+      const submitErrors = utils.onClick();
       console.log(submitErrors);
       if (!hasErrors(submitErrors)) {
         handleNext();
       }
       setValidating(false);
     }
-  }, [validating])
+  }, [validating]);
 
   let data = {
-    experimentForm: experimentForm, 
+    experimentForm: experimentForm,
     compoundForm: {
       delimiter: compoundForm.groups.delimiter,
       groups: compoundForm.groups.groups,
@@ -124,12 +119,11 @@ const SubmitForm = ({
       <StyledRowContainer>
         <FormButtons
           title={"Go back to the forms."}
+          submit={true}
           step={3}
           onClickPrev={() => onClick("prev")}
+          onClickNext={() => onClick("submit")}
         />
-        <StyledSubmitButton type='button' title="Submit" onClick={() => onClick("submit")}>
-          SUBMIT
-        </StyledSubmitButton>
       </StyledRowContainer>
     </StyledContainer>
   );

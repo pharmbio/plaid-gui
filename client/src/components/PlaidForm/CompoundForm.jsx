@@ -1,11 +1,20 @@
 import React from "react";
+import styled from "styled-components";
 import FormPage from "./FormPage";
 import InputDelimiter from "./Fields/InputDelimiter";
 import ListGroupedCompounds from "./ListGroupedCompounds";
 import parse from "../../functions/parse.js";
 import FormButtons from "./FormButtons/FormButtons";
 import useValidation from "./Validation/useValidation";
-import utils, { hasErrors } from "./utils.js"
+import utils, { hasErrors } from "./utils.js";
+
+const StyledSectionLabel = styled.label`
+  margin-bottom: 10px;
+  margin-top: 10px;
+  font-weight: bold;
+  border-bottom: 1px solid black;
+  font-size: 16px;
+`;
 
 const DEFAULT_DELIMITER = ",";
 
@@ -121,11 +130,9 @@ const CompoundForm = ({
   handlePrev,
   handleCompoundFormChange,
 }) => {
-
   const [compoundForm, setCompoundForm] = React.useState(() =>
     setUpTheCompoundForm(compoundState.groups)
   );
-
 
   const compoundConfig = {
     fields: {
@@ -135,29 +142,27 @@ const CompoundForm = ({
           message: "Number of replicates must be a number > 0",
         },
       },
-       compound_names: {
+      compound_names: {
         compNameCount: {
           value: compoundForm.groups,
-          message:
-            "Compound names cannot be left empty",
+          message: "Compound names cannot be left empty",
         },
-      }, 
+      },
       concentration_names: {
         concNameCount: {
           value: compoundForm.groups,
-          message:
-            "Concentration names cannot be left empty",
+          message: "Concentration names cannot be left empty",
         },
-      }
-    }
-  }
+      },
+    },
+  };
 
   const [errors, utils] = useValidation(compoundForm, compoundConfig);
 
   const [validating, setValidating] = React.useState(false);
   React.useEffect(() => {
     if (validating) {
-      const compoundErrors = utils.onClick()
+      const compoundErrors = utils.onClick();
       if (!hasErrors(compoundErrors)) {
         let compoundObj = setUpTheCompoundForm(compoundForm.groups);
         handleCompoundFormChange(compoundObj);
@@ -165,9 +170,8 @@ const CompoundForm = ({
       }
       setValidating(false);
     }
-  }, [validating])
+  }, [validating]);
 
-  
   const [delimiter, setDelimiter] = React.useState(
     compoundForm.groups.delimiter
       ? compoundForm.groups.delimiter
@@ -243,6 +247,7 @@ const CompoundForm = ({
 
   return (
     <FormPage>
+      <StyledSectionLabel>Compounds settings</StyledSectionLabel>
       <InputDelimiter
         label={"Delimiter selection (Optional)"}
         delimiter={delimiter}
@@ -252,6 +257,7 @@ const CompoundForm = ({
         onChange={handleDelimiterChange}
         errorMsg={null}
       />
+      <StyledSectionLabel>Compounds</StyledSectionLabel>
       <ListGroupedCompounds
         delimiter={delimiter}
         handleChangeOnGroups={handleChangeOnGroups}

@@ -11,7 +11,8 @@ const StyledSelect = styled.select`
   margin-left: 20px;
   min-width: 80px;
   height: 20px;
-  color: gray;
+  border-radius: 7px;
+  border: 1px solid #ccc;
   option {
     color: black;
     background: white;
@@ -20,6 +21,17 @@ const StyledSelect = styled.select`
     min-height: 20px;
     padding: 0px 2px 1px;
   }
+  &:focus {
+    outline: none;
+    border: 2px solid #5096ff;
+  }
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Ctitle%3Edown-arrow%3C%2Ftitle%3E%3Cg%20fill%3D%22%23000000%22%3E%3Cpath%20d%3D%22M10.293%2C3.293%2C6%2C7.586%2C1.707%2C3.293A1%2C1%2C0%2C0%2C0%2C.293%2C4.707l5%2C5a1%2C1%2C0%2C0%2C0%2C1.414%2C0l5-5a1%2C1%2C0%2C1%2C0-1.414-1.414Z%22%20fill%3D%22%23000000%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  background-size: 0.6em;
+  background-position: calc(100% - 1em) center;
+  background-repeat: no-repeat;
 `;
 
 const StyledButton = styled.button`
@@ -38,6 +50,7 @@ const StyledRowContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
+  align-self: end;
 `;
 
 const ListGroupedControls = ({
@@ -98,35 +111,7 @@ const ListGroupedControls = ({
     handleChangeOnGroups(items, selectedGroup);
   };
   return (
-    <StyledRowContainer>
-      <FormPage>
-        <InputTextArea
-          label={"Control names"}
-          placeholder=""
-          name="control_names"
-          onChange={handleOnInputChange}
-          value={groups[selectedGroup].control_names}
-          disable={false}
-          errorMsg={errors.control_names ? errors.control_names : null}
-        />
-        <InputTextArea
-          label={"Concentration names"}
-          placeholder=""
-          name="concentration_names"
-          onChange={handleOnInputChange}
-          value={groups[selectedGroup].concentration_names}
-          disable={false}
-          errorMsg={errors.concentration_names ? errors.concentration_names : null}
-        />
-        <InputNumber
-          label={"Replicates"}
-          name="control_replicates"
-          onChange={handleOnInputChange}
-          value={groups[selectedGroup].control_replicates}
-          errorMsg={errors.control_replicates ? errors.control_replicates : null}
-        />
-      </FormPage>
-
+    <FormPage>
       <StyledRowContainer>
         <StyledSelect
           id="select_group"
@@ -154,7 +139,34 @@ const ListGroupedControls = ({
           <RiDeleteBin2Line />
         </StyledButton>
       </StyledRowContainer>
-    </StyledRowContainer>
+      <InputTextArea
+        label={"Control names"}
+        placeholder=""
+        name="control_names"
+        onChange={handleOnInputChange}
+        value={groups[selectedGroup].control_names}
+        disable={false}
+        errorMsg={errors.control_names ? errors.control_names : null}
+      />
+      <InputTextArea
+        label={"Concentration names"}
+        placeholder=""
+        name="concentration_names"
+        onChange={handleOnInputChange}
+        value={groups[selectedGroup].concentration_names}
+        disable={false}
+        errorMsg={
+          errors.concentration_names ? errors.concentration_names : null
+        }
+      />
+      <InputNumber
+        label={"Replicates"}
+        name="control_replicates"
+        onChange={handleOnInputChange}
+        value={groups[selectedGroup].control_replicates}
+        errorMsg={errors.control_replicates ? errors.control_replicates : null}
+      />
+    </FormPage>
   );
 };
 

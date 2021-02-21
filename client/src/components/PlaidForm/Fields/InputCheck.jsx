@@ -15,7 +15,13 @@ const StyledLabel = styled.label`
   margin-right: 5px;
 `;
 
-const StyledSelectField = styled.input``;
+const StyledSelectField = styled.input`
+  width: 20px;
+  &:focus {
+    outline: none;
+    border: 1px solid #5096ff;
+  }
+`;
 
 const StyledErrorMessage = styled.div`
   font-size: 12px;
@@ -26,7 +32,7 @@ const StyledErrorMessage = styled.div`
 const InputCheck = (props) => {
   return (
     <StyledNumberFieldContainer>
-      <StyledLabel  htmlFor={props.name}>{props.label}</StyledLabel>
+      <StyledLabel htmlFor={props.name}>{props.label}</StyledLabel>
       <StyledSelectField
         id={props.name}
         name={props.name}
@@ -34,8 +40,7 @@ const InputCheck = (props) => {
         onChange={props.onChange}
         value={props.value}
         checked={props.checked}
-      >
-      </StyledSelectField>
+      ></StyledSelectField>
       <StyledErrorMessage>{props.errorMsg}</StyledErrorMessage>
     </StyledNumberFieldContainer>
   );
