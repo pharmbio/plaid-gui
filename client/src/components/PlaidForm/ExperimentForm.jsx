@@ -62,6 +62,10 @@ const ExperimentForm = ({
           value: 0,
           message: "Empty edges must be a number >= 0",
         },
+        maxEmptyEdgeSize: {
+          value: {num_cols: experimentForm.num_cols, num_rows: experimentForm.num_rows},
+          message: "The size of the empty edges is too large"
+        }
       },
     }
   }
@@ -232,7 +236,7 @@ const ExperimentForm = ({
       <InputNumber
         label={"Horizontal"}
         name="horizontal_cell_lines"
-        value={experimentForm.horizontal_cell_lines ? experimentForm.vertical_cell_lines : 0}
+        value={experimentForm.horizontal_cell_lines ? experimentForm.horizontal_cell_lines : 0}
         onChange={handleChangeOfInput}
         errorMsg={errors.horizontal_cell_lines ? errors.horizontal_cell_lines : null}
       />
@@ -246,14 +250,14 @@ const ExperimentForm = ({
         errorMsg={errors.allow_empty_wells ? errors.horizontal_cell_lines : null}
       />
       <InputNumber
-        name="size_empty_edge"
+        name="size empty_edge"
         label="Size of empty edges"
         value={experimentForm.size_empty_edge ? experimentForm.size_empty_edge : 0}
         onChange={handleChangeOfInput}
         errorMsg={errors.size_empty_edge ? errors.size_empty_edge : null}
       />
       <InputCheck
-        label="concentrations_on_different_rows"
+        label="Concentrations on different rows"
         onChange={handleChangeOfInput}
         name={"concentrations_on_different_rows"}
         value={experimentForm.concentrations_on_different_rows}
@@ -261,7 +265,7 @@ const ExperimentForm = ({
         errorMsg={errors.concentrations_on_different_rows ? errors.concentrations_on_different_rows : null}
       />
       <InputCheck
-        label="concentrations_on_different_columns"
+        label="Concentrations on different columns"
         onChange={handleChangeOfInput}
         name={"concentrations_on_different_columns"}
         value={experimentForm.concentrations_on_different_columns}
@@ -269,7 +273,7 @@ const ExperimentForm = ({
         errorMsg={errors.concentrations_on_different_columns ? errors.concentrations_on_different_columns : null}
       />
       <InputCheck
-        label="replicates_on_different_plates"
+        label="Replicates on different plates"
         onChange={handleChangeOfInput}
         name={"replicates_on_different_plates"}
         value={experimentForm.replicates_on_different_plates}
@@ -277,7 +281,7 @@ const ExperimentForm = ({
         errorMsg={errors.replicates_on_different_plates ? errors.replicates_on_different_plates : null}
       />
       <InputCheck
-        label="replicates_on_same_plate"
+        label="Replicates on same plate"
         onChange={handleChangeOfInput}
         name={"replicates_on_same_plate"}
         value={experimentForm.replicates_on_same_plate}

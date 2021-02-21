@@ -62,6 +62,7 @@ const PlaidForm = (props) => {
   const [formState, setFormState] = useState({});
   React.useEffect(() => {
     if (!(JSON.stringify(formState) === "{}")) {
+      console.log('Posting!')
       postForm(
         formState,
         setResponseError,
@@ -170,9 +171,6 @@ const PlaidForm = (props) => {
   const handlePrev = () => {
     setStep(step - 1);
   };
-
-
-
   const [loading, setLoading] = useState(false);
   React.useEffect(() => {
     if (loading) {
@@ -242,8 +240,8 @@ const PlaidForm = (props) => {
                 handleNext={handleNext}
                 handlePrev={handlePrev}
                 experimentForm={experimentForm}
-                compoundForm={compoundForm.groups}
-                controlForm={controlForm.groups}
+                compoundForm={compoundForm}
+                controlForm={controlForm}
                 
                 ></SubmitForm>
               )}

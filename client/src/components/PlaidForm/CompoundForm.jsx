@@ -139,14 +139,14 @@ const CompoundForm = ({
         compNameCount: {
           value: compoundForm.groups,
           message:
-            "Number of compound names are not equal to number of compounds",
+            "Compound names cannot be left empty",
         },
       }, 
       concentration_names: {
         concNameCount: {
           value: compoundForm.groups,
           message:
-            "Number of compound names are not equal to number of compounds",
+            "Concentration names cannot be left empty",
         },
       }
     }

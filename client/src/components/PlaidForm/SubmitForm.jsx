@@ -1,5 +1,9 @@
+import React from "react";
 import FormButtons from "./FormButtons/FormButtons";
 import styled from "styled-components";
+import useValidation from "./Validation/useValidation";
+import utils, {hasErrors} from "./utils";
+
 
 const StyledContainer = styled.div`
   height: 100vh;
@@ -67,19 +71,42 @@ const SubmitForm = ({
   compoundForm,
   controlForm,
 }) => {
+  let config = {
+    submit: {
+      hasEmptyWells: {
+        value: { experimentForm: experimentForm, compoundForm: compoundForm, controlForm: controlForm },
+        message: 'You have empty wells! Add more compounds, replicates or controls or make sure to tick allow the empty wells box to support empty wells'
+      }
+    }
+  }
+
+  let [errors, utils] = useValidation({},config);
+
+  const [validating, setValidating] = React.useState(false);
+  React.useEffect(() => {
+    if (validating) {
+      const submitErrors = utils.onClick()
+      console.log(submitErrors);
+      if (!hasErrors(submitErrors)) {
+        handleNext();
+      }
+      setValidating(false);
+    }
+  }, [validating])
+
   let data = {
-    experimentForm: experimentForm,
+    experimentForm: experimentForm, 
     compoundForm: {
-      delimiter: compoundForm.delimiter,
-      groups: compoundForm.groups,
+      delimiter: compoundForm.groups.delimiter,
+      groups: compoundForm.groups.groups,
     },
     controlForm: {
-      groups: controlForm.groups,
+      groups: controlForm.groups.groups,
     },
   };
   const onClick = (action) => {
     if (action === "submit") {
-      handleNext();
+      setValidating(true);
     } else if (action === "prev") {
       handlePrev();
     } else {
@@ -100,7 +127,7 @@ const SubmitForm = ({
           step={3}
           onClickPrev={() => onClick("prev")}
         />
-        <StyledSubmitButton title="Submit" onClick={() => onClick("submit")}>
+        <StyledSubmitButton type='button' title="Submit" onClick={() => onClick("submit")}>
           SUBMIT
         </StyledSubmitButton>
       </StyledRowContainer>
