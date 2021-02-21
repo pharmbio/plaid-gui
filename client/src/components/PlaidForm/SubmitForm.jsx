@@ -2,7 +2,6 @@ import React from "react";
 import FormButtons from "./FormButtons/FormButtons";
 import styled from "styled-components";
 import useValidation from "./Validation/useValidation";
-import NextButton from "../Buttons/NextButton";
 import utils, { hasErrors } from "./utils";
 
 const StyledContainer = styled.div`
@@ -61,6 +60,7 @@ const SubmitForm = ({
   compoundForm,
   controlForm,
 }) => {
+  
   let config = {
     submit: {
       hasEmptyWells: {

@@ -10,6 +10,6 @@ class MinizincException(Exception):
 
     def error_msg(self):
         error = dict(self.payload or ())
-        error['message'] = self.message.split('\n')[0] + '\n' + self.message.split('\n')[2]
+        error['message'] = self.message #.split('\n')[0] + '\n' + self.message.split('\n')[2]
 
         return error

@@ -120,7 +120,7 @@ const validators = {
   hasEmptyWells: function (config) {
     console.log(config.value.compoundForm)
     console.log(config.value.controlForm);
-
+    console.log(config.value);
     const experimentForm = config.value.experimentForm;
     const compoundForm = config.value.compoundForm;
     const controlForm = config.value.controlForm;
@@ -134,10 +134,10 @@ const validators = {
       const numCompoundReplicates = compoundForm.compound_replicates.reduce((a,b) => a+b,0);
       const minConcAmount = numWells - amountEmptyWells - controlForm.num_controls - numCompoundReplicates
         - compoundForm.compounds - numControlReplicates;
-      if (minConcAmount > 0 && !experimentForm.hasEmptyWells) {
+      if (minConcAmount > 0 && !experimentForm.allow_empty_wells) {
         console.log('returned');
         return config.message;
-      }
+      } 
       return null;
     }
   }
