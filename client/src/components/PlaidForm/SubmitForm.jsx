@@ -2,7 +2,7 @@ import React from "react";
 import FormButtons from "./FormButtons/FormButtons";
 import styled from "styled-components";
 import useValidation from "./Validation/useValidation";
-import utils, {hasErrors} from "./utils";
+import utils, { hasErrors } from "./utils";
 
 
 const StyledContainer = styled.div`
@@ -71,6 +71,7 @@ const SubmitForm = ({
   compoundForm,
   controlForm,
 }) => {
+  
   let config = {
     submit: {
       hasEmptyWells: {
@@ -80,7 +81,7 @@ const SubmitForm = ({
     }
   }
 
-  let [errors, utils] = useValidation({},config);
+  let [errors, utils] = useValidation({}, config);
 
   const [validating, setValidating] = React.useState(false);
   React.useEffect(() => {
@@ -95,7 +96,7 @@ const SubmitForm = ({
   }, [validating])
 
   let data = {
-    experimentForm: experimentForm, 
+    experimentForm: experimentForm,
     compoundForm: {
       delimiter: compoundForm.groups.delimiter,
       groups: compoundForm.groups.groups,

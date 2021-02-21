@@ -62,7 +62,6 @@ const PlaidForm = (props) => {
   const [formState, setFormState] = useState({});
   React.useEffect(() => {
     if (!(JSON.stringify(formState) === "{}")) {
-      console.log('Posting!')
       postForm(
         formState,
         setResponseError,
