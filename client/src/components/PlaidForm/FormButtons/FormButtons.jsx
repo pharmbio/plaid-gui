@@ -1,6 +1,7 @@
 import React from "react";
 import NextButton from "../../Buttons/NextButton";
 import PrevButton from "../../Buttons/PrevButton";
+import SubmitButton from "../../Buttons/SubmitButton";
 import styled from "styled-components";
 
 const StyledButtonContainer = styled.div`
@@ -28,7 +29,7 @@ const FormButtons = ({ submit, onClickNext, onClickPrev, step, title }) => {
       ) : null}
       {submit ? (
         <NextButton title={"Submit form"} onClick={onClickNext}>
-          SUBMIT
+          Submit Form
         </NextButton>
       ) : null}
     </StyledButtonContainer>

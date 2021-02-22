@@ -22,6 +22,12 @@ const StyledContainer = styled.div`
   overflow-y: scroll;
   height: 100vh;
 `;
+const StyledWave = styled.div`
+  height: 20vh;
+  width: 100%;
+  transform: skewY(-11deg);
+  background-color:red;
+`;
 async function postForm(
   formData,
   setResponseError,
@@ -246,7 +252,8 @@ const PlaidForm = (props) => {
               )}
             </StyledForm>
           </Formik>
-        )}
+        )
+        }
     </StyledContainer>
   );
 };

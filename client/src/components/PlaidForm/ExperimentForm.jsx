@@ -226,8 +226,6 @@ const ExperimentForm = ({
         name="vertical_cell_lines"
         value={
           experimentForm.vertical_cell_lines
-            ? experimentForm.vertical_cell_lines
-            : 0
         }
         onChange={handleChangeOfInput}
         errorMsg={
@@ -240,8 +238,7 @@ const ExperimentForm = ({
         name="horizontal_cell_lines"
         value={
           experimentForm.horizontal_cell_lines
-            ? experimentForm.horizontal_cell_lines
-            : 0
+
         }
         onChange={handleChangeOfInput}
         errorMsg={
@@ -250,11 +247,10 @@ const ExperimentForm = ({
       />
       <StyledSectionLabel>Constraints</StyledSectionLabel>
       <InputNumber
-        name="size empty_edge"
+        name="size_empty_edge"
         label="Size of empty edges"
         value={
-          experimentForm.size_empty_edge ? experimentForm.size_empty_edge : 0
-        }
+          experimentForm.size_empty_edge}
         onChange={handleChangeOfInput}
         errorMsg={errors.size_empty_edge ? errors.size_empty_edge : null}
       />
