@@ -11,7 +11,7 @@
     "replicates_on_different_plates": false,
     "replicates_on_same_plate": false
   },
-  "delimiter": ",",
+  "delimiterCompounds": ",",
   "compoundForm": {
     "groups": [
       {
@@ -21,6 +21,7 @@
       }
     ]
   },
+  "delimiterControls": ",",
   "controlForm": {
     "groups": [
       {

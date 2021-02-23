@@ -1,6 +1,7 @@
 import React from "react";
 import FormPage from "./FormPage";
 import styled from "styled-components";
+import InputDelimiter from "./Fields/InputDelimiter";
 import ListGroupedControls from "./ListGroupedControls";
 import FormButtons from "./FormButtons/FormButtons";
 import parse from "../../functions/parse";
@@ -14,7 +15,7 @@ const StyledSectionLabel = styled.label`
   border-bottom: 1px solid black;
   font-size: 16px;
 `;
-
+const DEFAULT_DELIMITER = ",";
 const setUpTheControlForm = (groupObj) => {
   let groups = groupObj.groups;
   let processedGroup;
@@ -34,8 +35,8 @@ const setUpTheControlForm = (groupObj) => {
     };
     for (let key in controlGroup) {
       switch (key) {
-        case "control_names":
-          processedGroup.control_names = parse(",", controlGroup.control_names);
+        case "control_names_parsed":
+          processedGroup.control_names = controlGroup.control_names_parsed;
           break;
         case "concentration_names":
           processedGroup.concentration_names = parse(
@@ -144,7 +145,6 @@ const ControlForm = ({
   React.useEffect(() => {
     if (validating) {
       const controlErrors = utils.onClick();
-      console.log(controlErrors);
       if (!hasErrors(controlErrors)) {
         let controlObj = setUpTheControlForm(controlForm.groups);
         handleControlFormChange(controlObj);
@@ -153,6 +153,37 @@ const ControlForm = ({
       setValidating(false);
     }
   }, [validating]);
+
+  const [delimiter, setDelimiter] = React.useState(
+    controlForm.groups.delimiter
+      ? controlForm.groups.delimiter
+      : DEFAULT_DELIMITER
+  );
+
+  const handleDelimiterChange = (new_delimiter) => {
+    // When the delimiter has changed => we need to re-parse the compound names that has been written to the field (if not empty)
+    if (new_delimiter === "") {
+      // We want to use the default delimiter if the user leaves the input field empty
+      setDelimiter(DEFAULT_DELIMITER);
+    } else {
+      setDelimiter(new_delimiter);
+    }
+
+    let groups = controlForm.groups;
+    groups.delimiter = new_delimiter;
+    for (let i in groups.groups) {
+      if (groups.groups[i].control_names !== "") {
+        new_delimiter =
+          new_delimiter !== "" ? new_delimiter : DEFAULT_DELIMITER;
+        groups.groups[i].control_names_parsed = parse(
+          new_delimiter,
+          groups.groups[i].control_names
+        );
+      }
+    }
+    console.log(groups);
+    setControlForm({ ...controlForm, groups: groups });
+  };
 
   const handleChangeOnGroups = (groups, selected) => {
     if (groups === null) {
@@ -164,6 +195,7 @@ const ControlForm = ({
             {
               id: "gr-0",
               control_names: "",
+              control_names_parsed: "",
               concentration_names: "",
               control_replicates: 0,
             },
@@ -171,7 +203,11 @@ const ControlForm = ({
         },
       });
     } else {
-      let newGroup = { groups: groups, selectedGroup: selected };
+      let newGroup = {
+        groups: groups,
+        selectedGroup: selected,
+        delimiter: delimiter,
+      };
       setControlForm({ ...controlForm, groups: newGroup });
     }
   };
@@ -191,6 +227,16 @@ const ControlForm = ({
   };
   return (
     <FormPage>
+      <StyledSectionLabel>Controls settings</StyledSectionLabel>
+      <InputDelimiter
+        label={"Delimiter selection (Optional)"}
+        delimiter={delimiter}
+        placeholder=""
+        name="delimiter_selection"
+        disable={false}
+        onChange={handleDelimiterChange}
+        errorMsg={null}
+      />
       <StyledSectionLabel>Controls</StyledSectionLabel>
       <ListGroupedControls
         handleChangeOnGroups={handleChangeOnGroups}

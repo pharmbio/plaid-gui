@@ -26,7 +26,7 @@ const StyledWave = styled.div`
   height: 20vh;
   width: 100%;
   transform: skewY(-11deg);
-  background-color:red;
+  background-color: red;
 `;
 async function postForm(
   formData,
@@ -76,14 +76,14 @@ const PlaidForm = (props) => {
         props.setData
       );
     }
-  }, [formState])
+  }, [formState]);
 
   const [combinationForm, setCombinationForm] = useState({
     combinations: 0,
     combination_concentrations: 0,
     combination_names: [], // List
     combination_concentration_names: [], // List
-  })
+  });
   /* prepopulate or default object */
   const [compoundForm, setCompoundForm] = useState({
     compounds: 0,
@@ -123,6 +123,7 @@ const PlaidForm = (props) => {
       props.uploadedConfig && props.uploadedConfig.controlForm.groups.length > 0
         ? props.uploadedConfig.controlForm
         : {
+            delimiter: ",",
             selectedGroup: 0,
             groups: [
               {
@@ -134,7 +135,7 @@ const PlaidForm = (props) => {
             ],
           },
   });
-    /* prepopulate or default object */
+  /* prepopulate or default object */
 
   const handleCompoundFormChange = (obj) => {
     setCompoundForm(obj);
@@ -168,7 +169,6 @@ const PlaidForm = (props) => {
   /* from the Stepper component */
   const [step, setStep] = useState(0);
 
-
   const handleNext = () => {
     setLoading(true);
   };
@@ -182,11 +182,16 @@ const PlaidForm = (props) => {
       if (step !== 3) {
         setStep(step + 1);
       } else {
-        const property = 'groups';
+        const property = "groups";
         const { [property]: _, ...finalCompoundForm } = compoundForm;
         const { groups, ...finalControlForm } = controlForm;
 
-        const mergedState = { ...experimentForm, ...finalCompoundForm, ...finalControlForm, ...combinationForm};
+        const mergedState = {
+          ...experimentForm,
+          ...finalCompoundForm,
+          ...finalControlForm,
+          ...combinationForm,
+        };
 
         setFormState(mergedState);
         /*         postForm(
@@ -205,55 +210,53 @@ const PlaidForm = (props) => {
       {flightState["loading"] ? (
         <Loader />
       ) : (
-          <Formik >
-            <StyledForm>
-              <HorizontalStepper
-                currentStep={step}
-                labels={[
-                  "Experiment Setup",
-                  "Compound Setup",
-                  "Experiment Validation",
-                  "Submit Form"
-                ]}
+        <Formik>
+          <StyledForm>
+            <HorizontalStepper
+              currentStep={step}
+              labels={[
+                "Experiment Setup",
+                "Compound Setup",
+                "Experiment Validation",
+                "Submit Form",
+              ]}
+            />
+            {step === 0 && (
+              <ExperimentForm
+                handleNext={handleNext}
+                handlePrev={handlePrev}
+                experimentState={experimentForm}
+                handleExperimentFormChange={handleExperimentFormChange}
               />
-              {step === 0 && (
-                <ExperimentForm
-                  handleNext={handleNext}
-                  handlePrev={handlePrev}
-                  experimentState={experimentForm}
-                  handleExperimentFormChange={handleExperimentFormChange}
-                />
-              )}
-              {step === 1 && (
-                <CompoundForm
-                  handleNext={handleNext}
-                  handlePrev={handlePrev}
-                  compoundState={compoundForm}
-                  handleCompoundFormChange={handleCompoundFormChange}
-                />
-              )}
-              {step === 2 && (
-                <ControlForm
-                  handleNext={handleNext}
-                  handlePrev={handlePrev}
-                  handleControlFormChange={handleControlFormChange}
-                  controlState={controlForm}
-                />
-              )}
-              {step === 3 && (
-                <SubmitForm
+            )}
+            {step === 1 && (
+              <CompoundForm
+                handleNext={handleNext}
+                handlePrev={handlePrev}
+                compoundState={compoundForm}
+                handleCompoundFormChange={handleCompoundFormChange}
+              />
+            )}
+            {step === 2 && (
+              <ControlForm
+                handleNext={handleNext}
+                handlePrev={handlePrev}
+                handleControlFormChange={handleControlFormChange}
+                controlState={controlForm}
+              />
+            )}
+            {step === 3 && (
+              <SubmitForm
                 handleNext={handleNext}
                 handlePrev={handlePrev}
                 experimentForm={experimentForm}
                 compoundForm={compoundForm}
                 controlForm={controlForm}
-                
-                ></SubmitForm>
-              )}
-            </StyledForm>
-          </Formik>
-        )
-        }
+              ></SubmitForm>
+            )}
+          </StyledForm>
+        </Formik>
+      )}
     </StyledContainer>
   );
 };
