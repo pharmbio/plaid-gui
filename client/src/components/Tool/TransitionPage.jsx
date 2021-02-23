@@ -4,36 +4,98 @@ import UploadResult from "./UploadResult.jsx";
 import UploadExperiment from "./UploadExperiment.jsx";
 import PlaidForm from "./../PlaidForm";
 import NextButton from "../Buttons/NextButton";
+import { ReactComponent as ToolIcon } from "../../assets/icons/wrench.svg";
+import { ReactComponent as FormIcon } from "../../assets/icons/card-checklist.svg";
+import { ReactComponent as UploadIcon } from "../../assets/icons/box-arrow-up.svg";
+
+
+const StyledTransitionPageWrapper = styled.div`
+  width: 100%;
+  position: relative;
+`
 
 const StyledTransitionPageContainer = styled.div`
   height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   margin: auto;
 `;
 
 const StyledParagraph = styled.p`
+  position: absolute;
   font-size: 17px;
   line-height: 1.7;
   font-weight: 400;
+  bottom: 10em;
   font-style: normal;
   font-family: ${(props) => props.theme.fonts.secondary};
 `;
 
 const StyledRowContainer = styled.div`
   display: flex;
+  position: absolute;
   flex-wrap: nowrap;
   justify-content: space-between;
+  bottom: 15px;
 `;
 
-const StyledFlexItem = styled.div`
+const StyledFlexItem = styled.div`  
+  position: relative; 
   padding: 10px;
   margin: 20px;
-  width: 600px;
+  height: 400px;
+  width: 300px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 `;
+
+
+const StyledToolButton = styled.button`
+
+  font-family: Whitney, "Open Sans", Helvetica, sans-serif;
+  position: absolute;
+  background-color: #323439;
+  border: 2px solid #323439;
+  color: #fff;
+  font-weight: 400;
+  font-size: 16pt;
+  border-radius: 25px;
+  cursor: pointer;
+  height: 45px;
+  width: 200px;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+  &:hover {
+    outline: none;
+    border: 1px solid #5096ff;
+  }
+`
+const StyledToolIcon = styled(ToolIcon)`
+  display: block;
+  position: absolute;
+  margin-top:50px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+`
+const StyledFormIcon = styled(FormIcon)`
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+`
+const StyledUploadIcon = styled(UploadIcon)`
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+`
 
 const TransitionPage = (props) => {
   const [transition, setTransition] = React.useState("main");
@@ -59,36 +121,43 @@ const TransitionPage = (props) => {
           uploadedConfig={uploadedConfig}
         />
       ) : (
-          <StyledTransitionPageContainer>
-            <StyledFlexItem>
-              <StyledParagraph>
-                If you want to visualize the plates of an already computed
-                experiment please upload the json file.
+          <StyledTransitionPageWrapper>
+            <StyledTransitionPageContainer>
+              <StyledFlexItem>
+                <StyledUploadIcon />
+                <StyledParagraph>
+                  Already computed an experiment layout? You can upload it here to visualize it again, bypassing the form!
               </StyledParagraph>
-              <UploadResult
-                handleUploadedResults={props.handleUploadedResults}
-              />
-            </StyledFlexItem>
-            <StyledFlexItem>
-              <StyledParagraph>
-                You may upload a dzn file containing a valid experiment to run
-                through the model directly. You may also provide a json file to
-                prepopulate the forms with data. Otherwise press the arrow
-                button to get straight to the forms.
-              </StyledParagraph>
-              <StyledRowContainer>
-                <UploadExperiment
-                  handleUploadedDznFile={props.handleUploadedDznFile}
-                  handleUploadedJsonConfig={handleUploadedJsonConfig}
+                <UploadResult
+                  handleUploadedResults={props.handleUploadedResults}
                 />
-                <NextButton title={"Take me to the forms"}
+              </StyledFlexItem>
+              <StyledFlexItem>
+                <StyledToolIcon />
+                <StyledParagraph>
+                  Use the PLAID tool to generate an AI based multiplate layout for your experiments.
+              </StyledParagraph>
+                <StyledToolButton title={"Take me to the forms"}
                   isLast={false}
                   onClick={() => handleClick("form")}
-                >GO TO FORMS</NextButton>
-              </StyledRowContainer>
-            </StyledFlexItem>
-          </StyledTransitionPageContainer>
-      )}
+                >Let's get started!</StyledToolButton>
+              </StyledFlexItem>
+              <StyledFlexItem>
+                <StyledFormIcon />
+                <StyledParagraph>
+                  Upload an existing file in a valid format to prepopulate the form (json, dzn).
+              </StyledParagraph>
+                <StyledRowContainer>
+                  <UploadExperiment
+                    handleUploadedDznFile={props.handleUploadedDznFile}
+                    handleUploadedJsonConfig={handleUploadedJsonConfig}
+                  />
+
+                </StyledRowContainer>
+              </StyledFlexItem>
+            </StyledTransitionPageContainer>
+            </StyledTransitionPageWrapper>
+        )}
     </>
   );
 };
