@@ -24,6 +24,7 @@ const StyledParagraph = styled.p`
   line-height: 1.7;
   font-weight: 400;
   bottom: 8em;
+  margin: 4px;   
   font-style: normal;
   font-family: ${(props) => props.theme.fonts.secondary};
 `;
@@ -38,6 +39,7 @@ const StyledRowContainer = styled.div`
 
 const StyledFlexItem = styled.div`  
   position: relative; 
+  text-align: center;
   padding: 10px;
   margin: 20px;
   height: 400px;
