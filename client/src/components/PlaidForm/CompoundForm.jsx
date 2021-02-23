@@ -137,7 +137,7 @@ const CompoundForm = ({
   const compoundConfig = {
     fields: {
       compound_replicates: {
-        compNegativeReplicates: {
+        compReplicateSize: {
           value: compoundForm.groups,
           message: "Number of replicates must be a number > 0",
         },

@@ -63,7 +63,7 @@ const Loader = () => {
           strokeWidth="2"
         />
       </StyledSpinner>
-      Calculating the results...
+      Your plate layout is being calculated. This process can take several minutes...
     </StyledLoaderContainer>
   );
 };
