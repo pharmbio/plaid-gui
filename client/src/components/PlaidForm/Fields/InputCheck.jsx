@@ -27,6 +27,7 @@ const StyledErrorMessage = styled.div`
   font-size: 12px;
   color: red;
   font-family: ${(props) => props.theme.fonts.secondary};
+  height: 15px;
 `;
 
 const InputCheck = (props) => {

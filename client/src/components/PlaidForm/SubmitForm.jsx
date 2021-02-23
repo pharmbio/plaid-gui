@@ -95,6 +95,8 @@ const StyledErrorMessage = styled.div`
   font-size: 18px;
   color: red;
   font-family: ${(props) => props.theme.fonts.secondary};
+  visibility: ${(props) => props.visibility};
+  height: 10em;
 `;
 
 const handleDownload = async (data) => {
@@ -165,7 +167,7 @@ const SubmitForm = ({
   };
 
   return (<>
-  <StyledErrorMessage> {errors.hasEmptyWells ? "*"+errors.hasEmptyWells : null}</StyledErrorMessage>
+  <StyledErrorMessage visibility={errors.hasEmptyWells ? "visible" : "hiddn"}> {errors.hasEmptyWells}</StyledErrorMessage>
     <StyledContainer>
        <StyledHeader> You're almost done.</StyledHeader>
       <StyledParagraph>You can save your form input by clicking
