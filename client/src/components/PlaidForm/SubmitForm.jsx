@@ -96,7 +96,7 @@ const StyledErrorMessage = styled.div`
   color: red;
   font-family: ${(props) => props.theme.fonts.secondary};
   visibility: ${(props) => props.visibility};
-  height: 10em;
+  height: 100px;
 `;
 
 const handleDownload = async (data) => {
@@ -128,7 +128,7 @@ const SubmitForm = ({
           controlForm: controlForm,
         },
         message:
-          "You have empty wells! Add more compounds, replicates or controls or make sure to tick allow the empty wells box to support empty wells",
+          "*You have empty wells! Add more compounds, replicates or controls or make sure to tick allow the empty wells box to support empty wells.",
       },
     },
   };
