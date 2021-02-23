@@ -1,7 +1,4 @@
 import React from "react";
-import FormButtons from "./FormButtons/FormButtons";
-import SubmitButton from "../Buttons/SubmitButton";
-import PrevButton from "../Buttons/PrevButton";
 import styled from "styled-components";
 import useValidation from "./Validation/useValidation";
 import utils, { hasErrors } from "./utils";
@@ -29,13 +26,6 @@ const StyledRowContainer = styled.div`
   flex-wrap: nowrap;
   width: 100%;
   justify-content: flex-end;
-`;
-
-const StyledFlexItem = styled.div`
-  padding: 10px;
-  margin: 20px;
-  width: 600px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 `;
 
 const StyledSpan = styled.span`
@@ -149,10 +139,11 @@ const SubmitForm = ({
 
   let data = {
     experimentForm: experimentForm,
+    delimiterCompounds:compoundForm.groups.delimiter,
     compoundForm: {
-      delimiter: compoundForm.groups.delimiter,
       groups: compoundForm.groups.groups,
     },
+    delimiterControls:controlForm.groups.delimiter,
     controlForm: {
       groups: controlForm.groups.groups,
     },
