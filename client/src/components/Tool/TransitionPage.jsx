@@ -9,11 +9,6 @@ import { ReactComponent as FormIcon } from "../../assets/icons/card-checklist.sv
 import { ReactComponent as UploadIcon } from "../../assets/icons/box-arrow-up.svg";
 
 
-const StyledTransitionPageWrapper = styled.div`
-  width: 100%;
-  position: relative;
-`
-
 const StyledTransitionPageContainer = styled.div`
   height: 100vh;
   display: flex;
@@ -28,7 +23,7 @@ const StyledParagraph = styled.p`
   font-size: 17px;
   line-height: 1.7;
   font-weight: 400;
-  bottom: 10em;
+  bottom: 8em;
   font-style: normal;
   font-family: ${(props) => props.theme.fonts.secondary};
 `;
@@ -77,7 +72,6 @@ const StyledToolButton = styled.button`
 `
 const StyledToolIcon = styled(ToolIcon)`
   display: block;
-  position: absolute;
   margin-top:50px;
   left: 0;
   right: 0;
@@ -95,6 +89,14 @@ const StyledUploadIcon = styled(UploadIcon)`
   margin-left: auto;
   margin-right: auto;
   margin-top: 50px;
+`
+const StyledHeader = styled.h1`
+ font-size: 20pt;
+ postion: absolute;
+ font-weight: bold;
+ margin: 15px;
+ text-align: center;  
+ 
 `
 
 const TransitionPage = (props) => {
@@ -121,9 +123,9 @@ const TransitionPage = (props) => {
           uploadedConfig={uploadedConfig}
         />
       ) : (
-          <StyledTransitionPageWrapper>
             <StyledTransitionPageContainer>
               <StyledFlexItem>
+              <StyledHeader> UPLOAD </StyledHeader>
                 <StyledUploadIcon />
                 <StyledParagraph>
                   Already computed an experiment layout? You can upload it here to visualize it again, bypassing the form!
@@ -133,6 +135,7 @@ const TransitionPage = (props) => {
                 />
               </StyledFlexItem>
               <StyledFlexItem>
+              <StyledHeader> TOOL </StyledHeader>
                 <StyledToolIcon />
                 <StyledParagraph>
                   Use the PLAID tool to generate an AI based multiplate layout for your experiments.
@@ -143,6 +146,7 @@ const TransitionPage = (props) => {
                 >Let's get started!</StyledToolButton>
               </StyledFlexItem>
               <StyledFlexItem>
+              <StyledHeader> POPULATE </StyledHeader>
                 <StyledFormIcon />
                 <StyledParagraph>
                   Upload an existing file in a valid format to prepopulate the form (json, dzn).
@@ -156,7 +160,6 @@ const TransitionPage = (props) => {
                 </StyledRowContainer>
               </StyledFlexItem>
             </StyledTransitionPageContainer>
-            </StyledTransitionPageWrapper>
         )}
     </>
   );
