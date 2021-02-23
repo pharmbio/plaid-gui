@@ -6,7 +6,7 @@ const StyledUploadResultButton = styled.input`
   font-family: ${(props) => props.theme.fonts.primary};
   font-size: 14px;
   bottom: 15px;
-  
+  padding-left: 10px;
 `;
 
 const StyledErrorMessage = styled.p`

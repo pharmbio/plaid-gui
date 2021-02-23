@@ -40,7 +40,6 @@ const StyledRowContainer = styled.div`
 const StyledFlexItem = styled.div`  
   position: relative; 
   text-align: center;
-  padding: 10px;
   margin: 20px;
   height: 400px;
   width: 300px;
