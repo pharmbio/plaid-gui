@@ -45,7 +45,6 @@ const validators = {
   },
   concNameCount: function (config) {
     return function () {
-      console.log('HERE');
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
@@ -70,26 +69,70 @@ const validators = {
       return null;
     }
   },
-  compNegativeReplicates: function (config) {
+  compReplicateSize: function (config) {
     return function () {
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        if (parseInt(group.compound_replicates) < 0) {
+        if (parseInt(group.compound_replicates) < 1) {
           return config.message;
         }
       }
       return null;
     }
   },
-  ctrlNameCount: function (config) {
+  ctrlReplicateSize: function (config) {
     return function () {
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        if (group.control_names === "") {
+        if (parseInt(group.control_replicates) < 0) {
           return config.message;
+        }
+      }
+      return null;
+    }
+  },
+  ctrlNameAndReplCount: function (config) {
+    return function () {
+      let groups = config.value.groups;
+      for (let i = 0; i < groups.length; i++) {
+        let group = groups[i];
+        //Om names eller conc är tom, eller om båda inte är tomma, så ska replicates vara ett tal 
+        console.log(group.control_names === "" && group.concentration_names === "")
+        console.log(parseInt(group.control_replicates))
+        if ((group.control_names === "" && group.concentration_names === "")
+          && parseInt(group.control_replicates) === 0) {
+          return null;
+        }
 
+        if ((group.control_names === "" || group.concentration_names === "") || (group.control_names !== "" && group.concentration_names !== "")
+          && parseInt(group.control_replicates) < 1) {
+          return config.message;  
+        }
+      }
+      return null;
+    }
+  },
+  ctrlNameEmptyConc: function (config) {
+    return function () {
+      let groups = config.value.groups;
+      for (let i = 0; i < groups.length; i++) {
+        let group = groups[i];
+        if (group.control_names !== "" && group.concentration_names === "") {
+          return config.message;
+        }
+      }
+      return null;
+    }
+  },
+  ctrlConcEmptyName: function (config) {
+    return function () {
+      let groups = config.value.groups;
+      for (let i = 0; i < groups.length; i++) {
+        let group = groups[i];
+        if (group.control_names === "" && group.concentration_names !== "") {
+          return config.message;
         }
       }
       return null;
@@ -106,8 +149,45 @@ const validators = {
       }
       return null;
     }
+  },
+  maxEmptyEdgeSize: function (config) {
+    return function (value) {
+      const num_rows = config.value.num_rows;
+      const num_cols = config.value.num_cols;
+      const minVal = Math.min(num_rows, num_cols);
+      if (value > Math.floor(minVal / 2)) {
+        return config.message;
+      }
+      return null;
+    }
+  },
+  hasEmptyWells: function (config) {
+    console.log(config.value.compoundForm)
+    console.log(config.value.controlForm);
+    console.log(config.value);
+    const experimentForm = config.value.experimentForm;
+    const compoundForm = config.value.compoundForm;
+    const controlForm = config.value.controlForm;
+    return function () {
+      const amountEmptyWells =
+        experimentForm.num_cols * experimentForm.size_empty_edge * 2 + (
+          experimentForm.num_rows - experimentForm.size_empty_edge * 2) * experimentForm.size_empty_edge * 2;
+
+      const numWells = experimentForm.num_cols * experimentForm.num_rows;
+      const numControlReplicates = controlForm.control_replicates.reduce((a, b) => a + b, 0);
+      const numCompoundReplicates = compoundForm.compound_replicates.reduce((a, b) => a + b, 0);
+      const minConcAmount = numWells - amountEmptyWells - controlForm.num_controls - numCompoundReplicates
+        - compoundForm.compounds - numControlReplicates;
+      if (minConcAmount > 0 && !experimentForm.allow_empty_wells) {
+        console.log('returned');
+        return config.message;
+      }
+      return null;
+    }
   }
 };
+
+
 
 
 
@@ -140,29 +220,32 @@ function validateFields(fieldValues, fieldStates) {
   return errors;
 }
 
+function validateSubmit(submitConfig) {
+  const errors = {};
+  for (let validatorName in submitConfig) {
+    const validatorConfig = submitConfig[validatorName];
+    const validator = validators[validatorName];
+    const configuredValidator = validator(validatorConfig); //run the validator function, get the configured validator and pass it the field value.
+    errors[validatorName] = configuredValidator();
+  }
+  return errors;
+}
+
 /* This custom validation hook can be used for onChange validation (comment in useEffect()) and onClick validation through the formUtils function onClick.
    onClick returns an object containing every field that may or may not have passed validation.
    There's no point in using both so we select one. Implement setState(updater, callback) to support it.
 */
-const useValidation = (input, config, func = null) => {
+const useValidation = (input = {}, config, func = null) => {
   const [errors, setErrors] = useState({});
-  const [validating, setValidating] = useState(false);
-  /*    React.useEffect(() => {
-       if(validating){
-         const errors = validateFields(input, config.fields);
-         setErrors(errors);
-         setValidating(false);
-       }
-     }, [validating]);  */
   const formUtils = {
     onClick: () => {
       if (func) {
         input = func(input);
       }
-      setValidating(true);
-      const errors = validateFields(input, config.fields);
-      setErrors(errors);
-      return errors;
+      const submitErrors = validateSubmit(config.submit);
+      const fieldErrors = validateFields(input, config.fields);
+      setErrors({ ...fieldErrors, ...submitErrors });
+      return { ...fieldErrors, ...submitErrors };
     },
   };
   return [

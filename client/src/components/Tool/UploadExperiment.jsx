@@ -5,6 +5,7 @@ import parse from "../../functions/parse.js";
 const StyledUploadResultButton = styled.input`
   font-family: ${(props) => props.theme.fonts.primary};
   font-size: 14px;
+  padding-left: 10px;
 `;
 
 const StyledErrorMessage = styled.p`
@@ -61,7 +62,8 @@ const validProperties = [
   "experimentForm",
   "compoundForm",
   "controlForm",
-  "delimiter",
+  "delimiterCompounds",
+  "delimiterControls",
 ];
 
 /* makes sure that the uploaded json content only has allowed property names */
@@ -84,8 +86,13 @@ const prepareConfigFile = (obj) => {
     group["id"] = "gr-" + i;
 
     group["compound_names_parsed"] = parse(
-      obj.delimiter ? obj.delimiter : ",",
+      obj.delimiterCompounds ? obj.delimiterCompounds : ",",
       group.compound_names
+    );
+
+    group["concentration_names_parsed"] = parse(
+      obj.delimiterCompounds ? obj.delimiterCompounds : ",",
+      group.concentration_names
     );
     compoundGroups[i] = group;
   }
@@ -94,18 +101,30 @@ const prepareConfigFile = (obj) => {
   for (let i = 0; i < controlGroups.length; i++) {
     let group = controlGroups[i];
     group["id"] = "gr-" + i;
+
+    group["control_names_parsed"] = parse(
+      obj.delimiterControls ? obj.delimiterControls : ",",
+      group.control_names
+    );
+    group["concentration_names_parsed"] = parse(      obj.delimiterControls ? obj.delimiterControls : ",",
+    group.concentration_names);
     controlGroups[i] = group;
   }
 
   let result = {
     experimentForm: obj.experimentForm,
-    controlForm: { groups: [...controlGroups], selectedGroup: 0 },
+    controlForm: {
+      groups: [...controlGroups],
+      selectedGroup: 0,
+      delimiter: obj.delimiterControls ? obj.delimiterControls : ",",
+    },
     compoundForm: {
       groups: [...compoundGroups],
       selectedGroup: 0,
-      delimiter: obj.delimiter ? obj.delimiter : ",",
+      delimiter: obj.delimiterCompounds ? obj.delimiterCompounds : ",",
     },
   };
+  console.log(result);
   return result;
 };
 const UploadExperiment = (props) => {

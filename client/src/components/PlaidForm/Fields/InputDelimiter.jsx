@@ -17,11 +17,14 @@ const StyledLabel = styled.label`
 const StyledInput = styled.input`
   width: 80px;
   padding: 10px;
+  border-radius: 7px;
+  border: 1px solid #ccc;
   &:focus {
     outline: none;
+    border: 1px solid #5096ff;
   }
   font-family: ${(props) => props.theme.fonts.secondary};
-  font-size: 14px;
+  font-size: 12px;
 `;
 
 const StyledErrorMessage = styled.div`

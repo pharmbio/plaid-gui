@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PlateLayout from "./../PlateLayout";
 import TransitionPage from "./TransitionPage.jsx";
@@ -7,6 +7,9 @@ import Loader from "./../Loader";
 const StyledToolWrapper = styled.div`
   height: 100vh;
 `;
+const StyledWarningContainer = styled.div`
+  width: 50%;
+`
 
 const axios = require("axios");
 
@@ -17,6 +20,8 @@ const axios = require("axios");
 const Tool = () => {
   const [data, setData] = useState(undefined);
   const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState(false);
 
   const handleUploadedResults = (res) => {
     setData(res);
@@ -29,6 +34,7 @@ const Tool = () => {
    */
   const handleUploadedDznFile = async (parsedData, content) => {
     console.log(content);
+    setError(false);
     setLoading(true);
     axios
       .post(
@@ -49,11 +55,13 @@ const Tool = () => {
             sizeEmptyEdge: parsedData.sizeEmptyEdge,
             result: res.data,
           });
-        },
-        (error) => {
+        }).catch((error) => {
           /* handle error TODO! */
+
+          setLoading(false);
+          setError(true);
         }
-      );
+        );
   };
 
   React.useEffect(() => {
@@ -74,12 +82,13 @@ const Tool = () => {
       ) : loading ? (
         <Loader />
       ) : (
-        <TransitionPage
-          handleUploadedResults={handleUploadedResults}
-          handleUploadedDznFile={handleUploadedDznFile}
-          setData={setData}
-        />
-      )}
+            <TransitionPage
+              handleUploadedResults={handleUploadedResults}
+              handleUploadedDznFile={handleUploadedDznFile}
+              setData={setData}
+              error={error}
+            />
+          )}
     </StyledToolWrapper>
   );
 };

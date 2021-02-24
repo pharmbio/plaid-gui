@@ -1,6 +1,7 @@
 import React from "react";
 import NextButton from "../../Buttons/NextButton";
 import PrevButton from "../../Buttons/PrevButton";
+import SubmitButton from "../../Buttons/SubmitButton";
 import styled from "styled-components";
 
 const StyledButtonContainer = styled.div`
@@ -10,11 +11,27 @@ const StyledButtonContainer = styled.div`
   margin: 10px;
 `;
 
-const FormButtons = ({ isLast, onClickNext, onClickPrev, step }) => {
+const FormButtons = ({ submit, onClickNext, onClickPrev, step, title }) => {
   return (
     <StyledButtonContainer>
-      {step > 0 ? <PrevButton onClick={onClickPrev} /> : null}
-      <NextButton onClick={onClickNext} isLast={isLast} />
+      {step > 0 ? (
+        <PrevButton
+          title={title ? title : "Previous form page"}
+          onClick={onClickPrev}
+        >
+          PREVIOUS
+        </PrevButton>
+      ) : null}
+      {step < 3 ? (
+        <NextButton title={"Next form page"} onClick={onClickNext}>
+          NEXT
+        </NextButton>
+      ) : null}
+      {submit ? (
+        <NextButton title={"Submit form"} onClick={onClickNext}>
+          Submit Form
+        </NextButton>
+      ) : null}
     </StyledButtonContainer>
   );
 };

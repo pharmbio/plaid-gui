@@ -5,7 +5,7 @@ const StyledNumberFieldContainer = styled.div`
   margin: 5px;
   margin-left: 0px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 `;
 
 const StyledLabel = styled.label`
@@ -15,27 +15,40 @@ const StyledLabel = styled.label`
   margin-right: 5px;
 `;
 
-const StyledSelectField = styled.input``;
+const StyledSelectField = styled.input`
+  width: 20px;
+  &:focus {
+    outline: none;
+    border: 1px solid #5096ff;
+  }
+`;
+
+const StyledRowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 
 const StyledErrorMessage = styled.div`
   font-size: 12px;
   color: red;
   font-family: ${(props) => props.theme.fonts.secondary};
+  height: 15px;
 `;
 
 const InputCheck = (props) => {
   return (
     <StyledNumberFieldContainer>
-      <StyledLabel  htmlFor={props.name}>{props.label}</StyledLabel>
-      <StyledSelectField
-        id={props.name}
-        name={props.name}
-        type="checkbox"
-        onChange={props.onChange}
-        value={props.value}
-        checked={props.checked}
-      >
-      </StyledSelectField>
+      <StyledRowContainer>
+        <StyledLabel htmlFor={props.name}>{props.label}</StyledLabel>
+        <StyledSelectField
+          id={props.name}
+          name={props.name}
+          type="checkbox"
+          onChange={props.onChange}
+          value={props.value}
+          checked={props.checked}
+        />
+      </StyledRowContainer>
       <StyledErrorMessage>{props.errorMsg}</StyledErrorMessage>
     </StyledNumberFieldContainer>
   );

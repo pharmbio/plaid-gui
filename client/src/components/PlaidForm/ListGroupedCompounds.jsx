@@ -10,9 +10,11 @@ import parse from "../../functions/parse.js";
 const StyledSelect = styled.select`
   margin: 5px;
   margin-left: 20px;
-  min-width: 80px;
-  height: 20px;
-  color: gray;
+  min-width: 100px;
+  height: 28px;
+  border-radius: 7px;
+  font-size: 14px;
+  border: 1px solid #ccc;
   option {
     color: black;
     background: white;
@@ -21,6 +23,17 @@ const StyledSelect = styled.select`
     min-height: 20px;
     padding: 0px 2px 1px;
   }
+  &:focus {
+    outline: none;
+    border: 2px solid #5096ff;
+  }
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Ctitle%3Edown-arrow%3C%2Ftitle%3E%3Cg%20fill%3D%22%23000000%22%3E%3Cpath%20d%3D%22M10.293%2C3.293%2C6%2C7.586%2C1.707%2C3.293A1%2C1%2C0%2C0%2C0%2C.293%2C4.707l5%2C5a1%2C1%2C0%2C0%2C0%2C1.414%2C0l5-5a1%2C1%2C0%2C1%2C0-1.414-1.414Z%22%20fill%3D%22%23000000%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  background-size: 0.6em;
+  background-position: calc(100% - 0.8em) center;
+  background-repeat: no-repeat;
 `;
 
 const StyledButton = styled.button`
@@ -39,6 +52,7 @@ const StyledRowContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
+  align-self: end;
 `;
 
 const ListGroupedCompounds = ({
@@ -60,6 +74,7 @@ const ListGroupedCompounds = ({
       compound_names: "",
       compound_names_parsed: "",
       concentration_names: "",
+      concentration_names_parsed: "",
       compound_replicates: 0,
     };
     let items = groups;
@@ -98,6 +113,12 @@ const ListGroupedCompounds = ({
         compound_names: value,
         compound_names_parsed: parse(delimiter, value),
       };
+    } else if (name === "concentration_names") {
+      item = {
+        ...items[selectedGroup],
+        concentration_names: value,
+        concentration_names_parsed: parse(delimiter, value),
+      };
     } else {
       item = {
         ...items[selectedGroup],
@@ -110,35 +131,7 @@ const ListGroupedCompounds = ({
     handleChangeOnGroups(items, selectedGroup);
   };
   return (
-    <StyledRowContainer>
-      <FormPage>
-        <InputTextArea
-          label={"Compound names"}
-          placeholder=""
-          name="compound_names"
-          onChange={handleOnInputChange}
-          value={groups[selectedGroup].compound_names}
-          disable={false}
-          errorMsg={errors.compound_names ? errors.compound_names : null}
-        />
-        <InputTextArea
-          label={"Concentration names"}
-          placeholder=""
-          name="concentration_names"
-          onChange={handleOnInputChange}
-          value={groups[selectedGroup].concentration_names}
-          disable={false}
-          errorMsg={errors.concentration_names ? errors.concentration_names : null}
-        />
-        <InputNumber
-          label={"Replicates"}
-          name="compound_replicates"
-          onChange={handleOnInputChange}
-          value={groups[selectedGroup].compound_replicates}
-          errorMsg={errors.compound_replicates ? errors.compound_replicates : null}
-        />
-      </FormPage>
-
+    <FormPage>
       <StyledRowContainer>
         <StyledSelect
           id="select_group"
@@ -157,16 +150,45 @@ const ListGroupedCompounds = ({
           })}
         </StyledSelect>
         <StyledButton title="Add new group" onClick={handleOnAddButtonClick}>
-          <BiPlus />
+          <BiPlus size={18} />
         </StyledButton>
         <StyledButton
           title="Remove selected group"
           onClick={handleOnRemoveButtonClick}
         >
-          <RiDeleteBin2Line />
+          <RiDeleteBin2Line size={18} />
         </StyledButton>
       </StyledRowContainer>
-    </StyledRowContainer>
+      <InputTextArea
+        label={"Compound names"}
+        placeholder=""
+        name="compound_names"
+        onChange={handleOnInputChange}
+        value={groups[selectedGroup].compound_names}
+        disable={false}
+        errorMsg={errors.compound_names ? errors.compound_names : null}
+      />
+      <InputTextArea
+        label={"Concentration names"}
+        placeholder=""
+        name="concentration_names"
+        onChange={handleOnInputChange}
+        value={groups[selectedGroup].concentration_names}
+        disable={false}
+        errorMsg={
+          errors.concentration_names ? errors.concentration_names : null
+        }
+      />
+      <InputNumber
+        label={"Replicates"}
+        name="compound_replicates"
+        onChange={handleOnInputChange}
+        value={groups[selectedGroup].compound_replicates}
+        errorMsg={
+          errors.compound_replicates ? errors.compound_replicates : null
+        }
+      />
+    </FormPage>
   );
 };
 
