@@ -115,13 +115,13 @@ const ControlForm = ({
   const controlConfig = {
     fields: {
       control_replicates: {
-        ctrlNegativeReplicates: {
+         ctrlReplicateSize: {
           value: controlForm.groups,
           message: "Number of replicates must be a number > 0",
-        },
+        }, 
         ctrlNameAndReplCount: {
           value: controlForm.groups,
-          message: "Each replicate needs atleast one compound name and concentration.",
+          message: "A replicate must be provided if a name and concentration is specified.",
         },
       },
       control_names: {

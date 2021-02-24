@@ -162,7 +162,7 @@ const SubmitForm = ({
     <StyledContainer>
       <StyledHeader> You're almost done.</StyledHeader>
       <StyledParagraph>You can save your form input by clicking
-      <StyledSpan onClick={() => handleDownload(data)}> here</StyledSpan>, allowing you to easily prepopulate the form in future runs. Otherwise you can submit the form to genenrate your plate layout!
+      <StyledSpan onClick={() => handleDownload(data)}> here</StyledSpan>, allowing you to easily prepopulate the form in future runs. Otherwise you can submit the form to generate your plate layout!
       </StyledParagraph>
       <StyledRowContainer>
         <StyledButtonWrapper>

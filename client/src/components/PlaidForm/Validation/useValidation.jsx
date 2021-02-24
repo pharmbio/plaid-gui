@@ -81,13 +81,34 @@ const validators = {
       return null;
     }
   },
+  ctrlReplicateSize: function (config) {
+    return function () {
+      let groups = config.value.groups;
+      for (let i = 0; i < groups.length; i++) {
+        let group = groups[i];
+        if (parseInt(group.control_replicates) < 0) {
+          return config.message;
+        }
+      }
+      return null;
+    }
+  },
   ctrlNameAndReplCount: function (config) {
     return function () {
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        if ((group.control_names === "" ||  group.concentration_names === "") && group.control_replicates > 0 ) {
-          return config.message;
+        //Om names eller conc är tom, eller om båda inte är tomma, så ska replicates vara ett tal 
+        console.log(group.control_names === "" && group.concentration_names === "")
+        console.log(parseInt(group.control_replicates))
+        if ((group.control_names === "" && group.concentration_names === "")
+          && parseInt(group.control_replicates) === 0) {
+          return null;
+        }
+
+        if ((group.control_names === "" || group.concentration_names === "") || (group.control_names !== "" && group.concentration_names !== "")
+          && parseInt(group.control_replicates) < 1) {
+          return config.message;  
         }
       }
       return null;
@@ -98,7 +119,7 @@ const validators = {
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        if (group.control_names !== "" && group.concentration_names === "" ) {
+        if (group.control_names !== "" && group.concentration_names === "") {
           return config.message;
         }
       }
@@ -110,7 +131,7 @@ const validators = {
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        if (group.control_names === "" && group.concentration_names !== "" ){
+        if (group.control_names === "" && group.concentration_names !== "") {
           return config.message;
         }
       }
@@ -153,14 +174,14 @@ const validators = {
           experimentForm.num_rows - experimentForm.size_empty_edge * 2) * experimentForm.size_empty_edge * 2;
 
       const numWells = experimentForm.num_cols * experimentForm.num_rows;
-      const numControlReplicates = controlForm.control_replicates.reduce((a,b) => a+b,0);
-      const numCompoundReplicates = compoundForm.compound_replicates.reduce((a,b) => a+b,0);
+      const numControlReplicates = controlForm.control_replicates.reduce((a, b) => a + b, 0);
+      const numCompoundReplicates = compoundForm.compound_replicates.reduce((a, b) => a + b, 0);
       const minConcAmount = numWells - amountEmptyWells - controlForm.num_controls - numCompoundReplicates
         - compoundForm.compounds - numControlReplicates;
       if (minConcAmount > 0 && !experimentForm.allow_empty_wells) {
         console.log('returned');
         return config.message;
-      } 
+      }
       return null;
     }
   }
@@ -199,9 +220,9 @@ function validateFields(fieldValues, fieldStates) {
   return errors;
 }
 
-function validateSubmit(submitConfig){
+function validateSubmit(submitConfig) {
   const errors = {};
-  for(let validatorName in submitConfig){
+  for (let validatorName in submitConfig) {
     const validatorConfig = submitConfig[validatorName];
     const validator = validators[validatorName];
     const configuredValidator = validator(validatorConfig); //run the validator function, get the configured validator and pass it the field value.
@@ -223,8 +244,8 @@ const useValidation = (input = {}, config, func = null) => {
       }
       const submitErrors = validateSubmit(config.submit);
       const fieldErrors = validateFields(input, config.fields);
-      setErrors({...fieldErrors, ...submitErrors});
-      return {...fieldErrors, ...submitErrors};
+      setErrors({ ...fieldErrors, ...submitErrors });
+      return { ...fieldErrors, ...submitErrors };
     },
   };
   return [
