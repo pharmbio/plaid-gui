@@ -119,21 +119,23 @@ const ControlForm = ({
           value: controlForm.groups,
           message: "Number of replicates must be a number > 0",
         },
+        ctrlNameAndReplCount: {
+          value: controlForm.groups,
+          message: "Each replicate needs atleast one compound name and concentration.",
+        },
       },
       control_names: {
-        ctrlNameCount: {
+        ctrlConcEmptyName:{
           value: controlForm.groups,
-          message:
-            "Number of compound names are not equal to number of compounds",
-        },
+          message: "There must be atleast one control name for a given concentration."
+        }
       },
       concentration_names: {
-        concNameCount: {
+        ctrlNameEmptyConc:{
           value: controlForm.groups,
-          message:
-            "Number of compound names are not equal to number of compounds",
-        },
-      },
+          message: "There must be atleast one concentration for a given control name."
+        }
+      }
     },
   };
 

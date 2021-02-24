@@ -69,26 +69,49 @@ const validators = {
       return null;
     }
   },
-  compNegativeReplicates: function (config) {
+  compReplicateSize: function (config) {
     return function () {
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        if (parseInt(group.compound_replicates) < 0) {
+        if (parseInt(group.compound_replicates) < 1) {
           return config.message;
         }
       }
       return null;
     }
   },
-  ctrlNameCount: function (config) {
+  ctrlNameAndReplCount: function (config) {
     return function () {
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        if (group.control_names === "") {
+        if ((group.control_names === "" ||  group.concentration_names === "") && group.control_replicates > 0 ) {
           return config.message;
-
+        }
+      }
+      return null;
+    }
+  },
+  ctrlNameEmptyConc: function (config) {
+    return function () {
+      let groups = config.value.groups;
+      for (let i = 0; i < groups.length; i++) {
+        let group = groups[i];
+        if (group.control_names !== "" && group.concentration_names === "" ) {
+          return config.message;
+        }
+      }
+      return null;
+    }
+  },
+  ctrlConcEmptyName: function (config) {
+    return function () {
+      let groups = config.value.groups;
+      for (let i = 0; i < groups.length; i++) {
+        let group = groups[i];
+        if (group.control_names === "" && group.concentration_names !== "" ){
+          return config.message;
         }
       }
       return null;

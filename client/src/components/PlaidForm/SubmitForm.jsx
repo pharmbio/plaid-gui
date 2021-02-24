@@ -1,4 +1,8 @@
 import React from "react";
+import FormButtons from "./FormButtons/FormButtons";
+import SubmitButton from "../Buttons/SubmitButton";
+import PrevButton from "../Buttons/PrevButton";
+import HighlightedParahraph from "../Instructions/HighlightedParagraph";
 import styled from "styled-components";
 import useValidation from "./Validation/useValidation";
 import utils, { hasErrors } from "./utils";
@@ -81,12 +85,8 @@ const StyledHeader = styled.h1`
   font-size: 36pt;
   font-weight: bold;
 `
-const StyledErrorMessage = styled.div`
-  font-size: 18px;
-  color: red;
-  font-family: ${(props) => props.theme.fonts.secondary};
-  visibility: ${(props) => props.visibility};
-  height: 100px;
+const StyledErrorContainer = styled.div`
+  height: 450px;
 `;
 
 const handleDownload = async (data) => {
@@ -118,7 +118,7 @@ const SubmitForm = ({
           controlForm: controlForm,
         },
         message:
-          "*You have empty wells! Add more compounds, replicates or controls or make sure to tick allow the empty wells box to support empty wells.",
+          "You have empty wells! Add more compounds, replicates, controls or make sure to tick allow the empty wells box to support empty wells.",
       },
     },
   };
@@ -144,7 +144,7 @@ const SubmitForm = ({
       groups: compoundForm.groups.groups,
     },
     delimiterControls:controlForm.groups.delimiter,
-    controlForm: {
+      controlForm: {
       groups: controlForm.groups.groups,
     },
   };
@@ -158,9 +158,9 @@ const SubmitForm = ({
   };
 
   return (<>
-  <StyledErrorMessage visibility={errors.hasEmptyWells ? "visible" : "hiddn"}> {errors.hasEmptyWells}</StyledErrorMessage>
+    <StyledErrorContainer>{errors.hasEmptyWells ? <HighlightedParahraph title={"Error: Empty Wells"} type={"Warning"}> {errors.hasEmptyWells}</HighlightedParahraph> : null}</StyledErrorContainer>
     <StyledContainer>
-       <StyledHeader> You're almost done.</StyledHeader>
+      <StyledHeader> You're almost done.</StyledHeader>
       <StyledParagraph>You can save your form input by clicking
       <StyledSpan onClick={() => handleDownload(data)}> here</StyledSpan>, allowing you to easily prepopulate the form in future runs. Otherwise you can submit the form to genenrate your plate layout!
       </StyledParagraph>
@@ -171,7 +171,7 @@ const SubmitForm = ({
         </StyledButtonWrapper>
       </StyledRowContainer>
     </StyledContainer>
-    </>
+  </>
   );
 };
 

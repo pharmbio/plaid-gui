@@ -4,6 +4,7 @@ import UploadResult from "./UploadResult.jsx";
 import UploadExperiment from "./UploadExperiment.jsx";
 import PlaidForm from "./../PlaidForm";
 import NextButton from "../Buttons/NextButton";
+import HighlightedParahraph from "../Instructions/HighlightedParagraph";
 import { ReactComponent as ToolIcon } from "../../assets/icons/wrench.svg";
 import { ReactComponent as FormIcon } from "../../assets/icons/card-checklist.svg";
 import { ReactComponent as UploadIcon } from "../../assets/icons/box-arrow-up.svg";
@@ -99,7 +100,10 @@ const StyledHeader = styled.h1`
  text-align: center;  
  
 `
-
+const StyledTest = styled.div`
+  position: absolute;
+  top: 20px;
+`
 const TransitionPage = (props) => {
   const [transition, setTransition] = React.useState("main");
   const [uploadedConfig, setUploadedConfig] = React.useState(null);
@@ -124,7 +128,10 @@ const TransitionPage = (props) => {
           uploadedConfig={uploadedConfig}
         />
       ) : (
+        <>
             <StyledTransitionPageContainer>
+            {props.error ? <StyledTest> <HighlightedParahraph title={"Error: File data is incorrect"} type={"Warning"}> There seems to be a problem with the file you uploaded. Make sure your dzn file contains all the necessary data.</HighlightedParahraph></StyledTest> : null  } 
+
               <StyledFlexItem>
               <StyledHeader> UPLOAD </StyledHeader>
                 <StyledUploadIcon />
@@ -150,7 +157,7 @@ const TransitionPage = (props) => {
               <StyledHeader> POPULATE </StyledHeader>
                 <StyledFormIcon />
                 <StyledParagraph>
-                  Upload an existing file in a valid format to prepopulate the form (json, dzn).
+                  Upload an existing form config file to prepopulate the form or an dzn file to compute a layout directly.
               </StyledParagraph>
                 <StyledRowContainer>
                   <UploadExperiment
@@ -161,6 +168,7 @@ const TransitionPage = (props) => {
                 </StyledRowContainer>
               </StyledFlexItem>
             </StyledTransitionPageContainer>
+            </>
         )}
     </>
   );
