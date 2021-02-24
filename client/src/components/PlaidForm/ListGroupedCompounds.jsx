@@ -13,7 +13,7 @@ const StyledSelect = styled.select`
   min-width: 100px;
   height: 28px;
   border-radius: 7px;
-  font-size:14px;
+  font-size: 14px;
   border: 1px solid #ccc;
   option {
     color: black;
@@ -74,6 +74,7 @@ const ListGroupedCompounds = ({
       compound_names: "",
       compound_names_parsed: "",
       concentration_names: "",
+      concentration_names_parsed: "",
       compound_replicates: 0,
     };
     let items = groups;
@@ -112,6 +113,12 @@ const ListGroupedCompounds = ({
         compound_names: value,
         compound_names_parsed: parse(delimiter, value),
       };
+    } else if (name === "concentration_names") {
+      item = {
+        ...items[selectedGroup],
+        concentration_names: value,
+        concentration_names_parsed: parse(delimiter, value),
+      };
     } else {
       item = {
         ...items[selectedGroup],
@@ -143,13 +150,13 @@ const ListGroupedCompounds = ({
           })}
         </StyledSelect>
         <StyledButton title="Add new group" onClick={handleOnAddButtonClick}>
-          <BiPlus size={18}/>
+          <BiPlus size={18} />
         </StyledButton>
         <StyledButton
           title="Remove selected group"
           onClick={handleOnRemoveButtonClick}
         >
-          <RiDeleteBin2Line size={18}/>
+          <RiDeleteBin2Line size={18} />
         </StyledButton>
       </StyledRowContainer>
       <InputTextArea

@@ -14,7 +14,7 @@ const StyledSelect = styled.select`
   height: 28px;
   border-radius: 7px;
   border: 1px solid #ccc;
-  font-size:14px;
+  font-size: 14px;
   option {
     color: black;
     background: white;
@@ -74,6 +74,7 @@ const ListGroupedControls = ({
       control_names: "",
       control_names_parsed: "",
       concentration_names: "",
+      concentration_names_parsed: "",
       control_replicates: 0,
     };
     let items = groups;
@@ -110,6 +111,12 @@ const ListGroupedControls = ({
         ...items[selectedGroup],
         control_names: value,
         control_names_parsed: parse(delimiter, value),
+      };
+    } else if (name === "concentration_names") {
+      item = {
+        ...items[selectedGroup],
+        concentration_names: value,
+        concentration_names_parsed: parse(delimiter, value),
       };
     } else {
       item = {
@@ -149,7 +156,7 @@ const ListGroupedControls = ({
           title="Remove selected group"
           onClick={handleOnRemoveButtonClick}
         >
-          <RiDeleteBin2Line size={18}/>
+          <RiDeleteBin2Line size={18} />
         </StyledButton>
       </StyledRowContainer>
       <InputTextArea

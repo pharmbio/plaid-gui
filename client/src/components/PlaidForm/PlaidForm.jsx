@@ -106,6 +106,7 @@ const PlaidForm = (props) => {
                 compound_names: "",
                 compound_names_parsed: "",
                 concentration_names: "",
+                concentration_names_parsed:"",
                 compound_replicates: 0,
               },
             ],
@@ -129,8 +130,10 @@ const PlaidForm = (props) => {
               {
                 id: "gr-0",
                 concentration_names: "",
+                concentration_names_parsed:"",
                 control_replicates: 0,
                 control_names: "",
+                control_names_parsed:"",
               },
             ],
           },

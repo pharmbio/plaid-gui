@@ -39,10 +39,8 @@ const setUpTheControlForm = (groupObj) => {
           processedGroup.control_names = controlGroup.control_names_parsed;
           break;
         case "concentration_names":
-          processedGroup.concentration_names = parse(
-            ",",
-            controlGroup.concentration_names
-          );
+          processedGroup.concentration_names =
+            controlGroup.concentration_names_parsed;
           break;
         case "control_replicates":
           processedGroup.replicates = parseInt(controlGroup.control_replicates);
@@ -180,6 +178,12 @@ const ControlForm = ({
           groups.groups[i].control_names
         );
       }
+      if (groups.groups[i].concentration_names !== "") {
+        groups.groups[i].concentration_names_parsed = parse(
+          new_delimiter,
+          groups.groups[i].concentration_names
+        );
+      }
     }
     console.log(groups);
     setControlForm({ ...controlForm, groups: groups });
@@ -197,6 +201,7 @@ const ControlForm = ({
               control_names: "",
               control_names_parsed: "",
               concentration_names: "",
+              concentration_names_parsed: "",
               control_replicates: 0,
             },
           ],

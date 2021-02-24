@@ -48,10 +48,8 @@ const setUpTheCompoundForm = (groupObj) => {
           );
           break;
         case "concentration_names":
-          processedGroup.concentration_names = parse(
-            ",",
-            compoundGroup.concentration_names
-          );
+          processedGroup.concentration_names =
+            compoundGroup.concentration_names_parsed;
           break;
         default:
           break;
@@ -198,6 +196,12 @@ const CompoundForm = ({
           groups.groups[i].compound_names
         );
       }
+      if (groups.groups[i].compound_names !== "") {
+        groups.groups[i].concentration_names_parsed = parse(
+          new_delimiter,
+          groups.groups[i].concentration_names
+        );
+      }
     }
     console.log(groups);
     setCompoundForm({ ...compoundForm, groups: groups });
@@ -216,6 +220,7 @@ const CompoundForm = ({
               compound_names: "",
               compound_names_parsed: "",
               concentration_names: "",
+              concentration_names_parsed: "",
               compound_replicates: 0,
             },
           ],

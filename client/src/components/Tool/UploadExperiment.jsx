@@ -89,6 +89,11 @@ const prepareConfigFile = (obj) => {
       obj.delimiterCompounds ? obj.delimiterCompounds : ",",
       group.compound_names
     );
+
+    group["concentration_names_parsed"] = parse(
+      obj.delimiterCompounds ? obj.delimiterCompounds : ",",
+      group.concentration_names
+    );
     compoundGroups[i] = group;
   }
 
@@ -101,6 +106,8 @@ const prepareConfigFile = (obj) => {
       obj.delimiterControls ? obj.delimiterControls : ",",
       group.control_names
     );
+    group["concentration_names_parsed"] = parse(      obj.delimiterControls ? obj.delimiterControls : ",",
+    group.concentration_names);
     controlGroups[i] = group;
   }
 
@@ -117,6 +124,7 @@ const prepareConfigFile = (obj) => {
       delimiter: obj.delimiterCompounds ? obj.delimiterCompounds : ",",
     },
   };
+  console.log(result);
   return result;
 };
 const UploadExperiment = (props) => {
