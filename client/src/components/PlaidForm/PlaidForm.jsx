@@ -197,13 +197,6 @@ const PlaidForm = (props) => {
         };
 
         setFormState(mergedState);
-        /*         postForm(
-                  formState,
-                  setResponseError,
-                  setFlightState,
-                  flightState,
-                  props.setData
-                );  */
       }
     }
     setLoading(false);

@@ -250,6 +250,7 @@ const ControlForm = ({
         groups={controlForm.groups.groups}
         errors={errors}
         selectedGroup={controlForm.groups.selectedGroup}
+        delimiter={delimiter}
       />
       <FormButtons
         step={2}
