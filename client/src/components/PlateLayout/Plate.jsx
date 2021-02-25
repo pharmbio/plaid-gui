@@ -147,14 +147,14 @@ const Plate = (props) => {
           wellRad={wellRad}
           gap={2.5}
         >
-          {emptyWells.map((pos) => {
+          {emptyWells.map((pos, index) => {
             // Fill whole plate with empty wells first
             return (
               <Well
                 empty={true}
                 row={pos[0]}
                 col={pos[1]}
-                key={alphabet[pos[0] - 1] + pos[1]
+                key={"plate-" + index+1 +" "+ alphabet[pos[0] - 1] + pos[1]
                 }
                 color={EMPTY_WELL_COLOR} //grey
               />
