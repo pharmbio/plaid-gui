@@ -154,8 +154,8 @@ const PlaidForm = (props) => {
       : {
           num_rows: 4,
           num_cols: 6,
-          vertical_cell_lines: 0,
-          horizontal_cell_lines: 0,
+          vertical_cell_lines: 1,
+          horizontal_cell_lines: 1,
           allow_empty_wells: false,
           size_empty_edge: 0,
           concentrations_on_different_rows: false,
