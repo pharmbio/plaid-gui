@@ -11,7 +11,7 @@ The PLAID Webb GUI currently supports the following features:
 # Testing the GUI
 1. Clone or fork the repository
 2. Start the development servers and setup the docker container by running docker-compose up --build in the root folder for the application.
-3. Go to localhost:5000 and click on the **Tool** option in the sidebar menu
+3. Go to localhost:3000 and click on the **Tool** option in the sidebar menu
 4. You can now test the form and the other functionalities!
 
 **NOTE**
