@@ -187,7 +187,6 @@ const ControlForm = ({
         );
       }
     }
-    console.log(groups);
     setControlForm({ ...controlForm, groups: groups });
   };
 

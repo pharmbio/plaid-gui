@@ -29,8 +29,15 @@ const validators = {
   },
   maxNumber: function (config) {
     return function (value) {
-      if (config.value < Math.max(...value)) {
-        return config.message;
+      if (Array.isArray(value)) {
+        if (config.value < Math.max(...value)) {
+          return config.message;
+        }
+      }
+      else {
+        if (config.value < value) {
+          return config.message
+        }
       }
       return null;
     };
@@ -99,8 +106,6 @@ const validators = {
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
         //Om names eller conc är tom, eller om båda inte är tomma, så ska replicates vara ett tal 
-        console.log(group.control_names === "" && group.concentration_names === "")
-        console.log(parseInt(group.control_replicates))
         if ((group.control_names === "" && group.concentration_names === "")
           && parseInt(group.control_replicates) === 0) {
           return null;
@@ -108,7 +113,7 @@ const validators = {
 
         if ((group.control_names === "" || group.concentration_names === "") || (group.control_names !== "" && group.concentration_names !== "")
           && parseInt(group.control_replicates) < 1) {
-          return config.message;  
+          return config.message;
         }
       }
       return null;
@@ -162,9 +167,6 @@ const validators = {
     }
   },
   hasEmptyWells: function (config) {
-    console.log(config.value.compoundForm)
-    console.log(config.value.controlForm);
-    console.log(config.value);
     const experimentForm = config.value.experimentForm;
     const compoundForm = config.value.compoundForm;
     const controlForm = config.value.controlForm;
@@ -179,7 +181,6 @@ const validators = {
       const minConcAmount = numWells - amountEmptyWells - controlForm.num_controls - numCompoundReplicates
         - compoundForm.compounds - numControlReplicates;
       if (minConcAmount > 0 && !experimentForm.allow_empty_wells) {
-        console.log('returned');
         return config.message;
       }
       return null;

@@ -119,7 +119,6 @@ const setUpTheCompoundForm = (groupObj) => {
       utilGroup.compound_concentration_indicators,
     groups: groupObj,
   };
-  console.log(compoundObject);
   return compoundObject;
 };
 
@@ -204,7 +203,6 @@ const CompoundForm = ({
         );
       }
     }
-    console.log(groups);
     setCompoundForm({ ...compoundForm, groups: groups });
   };
 

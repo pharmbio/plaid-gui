@@ -35,7 +35,6 @@ async function postForm(
   flightState,
   setData
 ) {
-  console.log(formData);
   let axiosConfig = {
     headers: {
       "Content-Type": "application/json",

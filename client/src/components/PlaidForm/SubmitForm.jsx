@@ -129,7 +129,6 @@ const SubmitForm = ({
   React.useEffect(() => {
     if (validating) {
       const submitErrors = utils.onClick();
-      console.log(submitErrors);
       if (!hasErrors(submitErrors)) {
         handleNext();
       }

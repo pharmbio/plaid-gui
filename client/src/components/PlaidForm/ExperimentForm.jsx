@@ -31,6 +31,10 @@ const ExperimentForm = ({
           value: 1,
           message: "Rows must be a number > 0",
         },
+        maxNumber: {
+          value: 26,
+          message: "Currently, rows up to and including size 26 are supported. "
+        }
       },
       num_cols: {
         minValidSize: {
@@ -183,13 +187,30 @@ const ExperimentForm = ({
       handlePrev();
     }
   };
+  const [selected, setSelected] = useState(0)
+  const handleSelectChange = (event) => {
+    const value = event.target.value;
+    if(value === '{"num_rows": 6, "num_cols": 8}'){
+      setSelected(0);
+    }
+    if(value === '{"num_rows": 8, "num_cols": 12}'){
+      setSelected(1);
+    }
+    if(value === '{"num_rows": 16, "num_cols": 24}'){
+      setSelected(2);
+    }
+    if(value === 'custom'){
+      setSelected(3);
+    }
+    handleChangeOfPlateSize(event);
+  }
   return (
     <FormPage>
       <StyledSectionLabel>Plate dimensions</StyledSectionLabel>
       <InputSelect
         name="select_plate_size"
         id="size_options"
-        onChange={handleChangeOfPlateSize}
+        onChange={handleSelectChange}
         onfocus="this.selectedIndex = 1;"
         label={"Plate size"}
         errorMsg={null}
@@ -197,8 +218,6 @@ const ExperimentForm = ({
         <option value='{"num_rows": 6, "num_cols": 8}'>48</option>
         <option value='{"num_rows": 8, "num_cols": 12}'>96</option>
         <option value='{"num_rows": 16, "num_cols": 24}'>384</option>
-        <option value='{"num_rows": 32, "num_cols": 48}'>1536</option>
-        <option value='{"num_rows": 48, "num_cols": 72}'>3456</option>
         <option value="custom">Custom size</option>
       </InputSelect>
 
