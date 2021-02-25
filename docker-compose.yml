@@ -8,11 +8,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - './client:/app'
-      - '/app/node_modules/'
     ports:
       - 3000:3000
-    environment:
-      - CHOKIDAR_USEPOLLING=true
     depends_on:
       - flaskapi
   
@@ -29,4 +26,3 @@ services:
     environment:
       PORT: 5000
       FLASK_DEBUG: 1
-      CHOKIDAR_USEPOLLING: 'true'
