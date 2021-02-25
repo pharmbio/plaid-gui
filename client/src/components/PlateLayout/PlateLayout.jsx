@@ -126,7 +126,7 @@ const PlateLayout = (props) => {
         rows={props.rows}
         cols={props.cols}
         sizeEmptyEdge={props.sizeEmptyEdge}
-      ></DownloadResultJson>
+      />
       {plates.map((data, index) => {
         return (
           <Plate
@@ -143,7 +143,7 @@ const PlateLayout = (props) => {
           />
         );
       })}
-      <FixedDownloadButton plates={plates}/>
+      <FixedDownloadButton plates={plates} />
     </StyledPlateContainer>
   );
 };

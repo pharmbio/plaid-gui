@@ -124,7 +124,7 @@ const Plate = (props) => {
             StyledRowIdentifier,
             /* will there ever be the case where data[0] is undefined? */
             {
-              key: alphabet[i] + props.data[0].plateID,
+              key: "row-" + (props.rows>alphabet.length ? i :alphabet[i]) + props.data[0].plateID,
               row: i + 2,
               col: 1,
             },
@@ -152,12 +152,12 @@ const Plate = (props) => {
                 empty={true}
                 row={pos[0]}
                 col={pos[1]}
-                key={alphabet[pos[0] - 1] + pos[1]}
+                key={(props.rows>alphabet.length ? pos[0] + pos[1] : alphabet[pos[0] - 1] + pos[1])}
                 color={EMPTY_WELL_COLOR} //grey
               />
             );
           })}
-          {props.data.map((cmpdObj) => {
+          {props.data.map((cmpdObj, index) => {
             /* attrs of cmpdObj:
                 CONCuM
                 cmpdname
@@ -165,7 +165,7 @@ const Plate = (props) => {
                 plateID
                 well
             */
-            let row = alphabet.indexOf(cmpdObj.well[0]) + 1;
+            let row = (props.rows>alphabet.length) ? index +1:alphabet.indexOf(cmpdObj.well[0]) + 1;
             let col = parseInt(cmpdObj.well.slice(1, cmpdObj.well.length));
             return (
               <Well
