@@ -1,4 +1,4 @@
-Plaid layout GUI web application.
+# PLAID Layout GUI Webb Application.
 
 The PLAID Webb GUI currently supports the following features:
 * Adding experimental data to a form and submitting it to generate a multiplate layout
