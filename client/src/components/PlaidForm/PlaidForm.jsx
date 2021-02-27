@@ -162,6 +162,7 @@ const PlaidForm = (props) => {
           concentrations_on_different_columns: false,
           replicates_on_different_plates: false,
           replicates_on_same_plate: false,
+          selected: 48,
         }
   );
 
@@ -187,9 +188,10 @@ const PlaidForm = (props) => {
         const property = "groups";
         const { [property]: _, ...finalCompoundForm } = compoundForm;
         const { groups, ...finalControlForm } = controlForm;
+        const { selected, ...finalExperimentForm } = experimentForm;
 
         const mergedState = {
-          ...experimentForm,
+          ...finalExperimentForm,
           ...finalCompoundForm,
           ...finalControlForm,
           ...combinationForm,
