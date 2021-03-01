@@ -160,7 +160,7 @@ const Plate = (props) => {
               />
             );
           })}
-          {props.data.map((cmpdObj, index) => {
+          {props.data.map((cmpdObj) => {
             /* attrs of cmpdObj:
                 CONCuM
                 cmpdname

@@ -69,7 +69,7 @@ const Tool = () => {
       setLoading(false);
     }
   }, [loading, data]);
-
+  console.log(data);
   return (
     <StyledToolWrapper>
       {data !== undefined ? (
