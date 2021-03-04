@@ -19,12 +19,12 @@ const FormButtons = ({ submit, onClickNext, onClickPrev, step, title }) => {
           title={title ? title : "Previous form page"}
           onClick={onClickPrev}
         >
-          PREVIOUS
+          Previous
         </PrevButton>
       ) : null}
       {step < 3 ? (
         <NextButton title={"Next form page"} onClick={onClickNext}>
-          NEXT
+          Next
         </NextButton>
       ) : null}
       {submit ? (

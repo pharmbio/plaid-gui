@@ -52,8 +52,8 @@ const StyledToolButton = styled.button`
 
   font-family: Whitney, "Open Sans", Helvetica, sans-serif;
   position: absolute;
-  background-color: #323439;
-  border: 2px solid #323439;
+  background-color: #5096FF;
+  border: 2px solid #5096FF;
   color: #fff;
   font-weight: 400;
   font-size: 16pt;
@@ -128,22 +128,13 @@ const TransitionPage = (props) => {
           uploadedConfig={uploadedConfig}
         />
       ) : (
-        <>
+          <>
             <StyledTransitionPageContainer>
-            {props.error ? <StyledTest> <HighlightedParahraph title={"Error: File data is incorrect"} type={"Warning"}> There seems to be a problem with the file you uploaded. Make sure your dzn file contains all the necessary data.</HighlightedParahraph></StyledTest> : null  } 
-
+              {props.error ? <StyledTest> <HighlightedParahraph title={"Error: File data is incorrect"} type={"Warning"}>
+                There seems to be a problem with the file you uploaded. Make sure your dzn file contains all the necessary data.
+              </HighlightedParahraph></StyledTest> : null}
               <StyledFlexItem>
-              <StyledHeader> UPLOAD </StyledHeader>
-                <StyledUploadIcon />
-                <StyledParagraph>
-                  Already computed an experiment layout? You can upload it here to visualize it again, bypassing the form!
-              </StyledParagraph>
-                <UploadResult
-                  handleUploadedResults={props.handleUploadedResults}
-                />
-              </StyledFlexItem>
-              <StyledFlexItem>
-              <StyledHeader> TOOL </StyledHeader>
+                <StyledHeader> PLAN </StyledHeader>
                 <StyledToolIcon />
                 <StyledParagraph>
                   Use the PLAID tool to generate an AI based multiplate layout for your experiments.
@@ -154,7 +145,7 @@ const TransitionPage = (props) => {
                 >Let's get started!</StyledToolButton>
               </StyledFlexItem>
               <StyledFlexItem>
-              <StyledHeader> POPULATE </StyledHeader>
+                <StyledHeader> POPULATE </StyledHeader>
                 <StyledFormIcon />
                 <StyledParagraph>
                   Upload an existing form config file to prepopulate the form or an dzn file to compute a layout directly.
@@ -167,8 +158,19 @@ const TransitionPage = (props) => {
 
                 </StyledRowContainer>
               </StyledFlexItem>
+              <StyledFlexItem>
+                <StyledHeader> UPLOAD </StyledHeader>
+                <StyledUploadIcon />
+                <StyledParagraph>
+                  Already computed an experiment layout? You can upload it here to visualize it again, bypassing the form!
+              </StyledParagraph>
+                <UploadResult
+                  handleUploadedResults={props.handleUploadedResults}
+                />
+              </StyledFlexItem>
+
             </StyledTransitionPageContainer>
-            </>
+          </>
         )}
     </>
   );
