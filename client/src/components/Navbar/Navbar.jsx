@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledSideBar = styled.nav`
-  background-color: ${props => props.theme.backgroundColors.navbar};
+  background-color: ${(props) => props.theme.backgroundColors.navbar};
   height: 100vh;
 `;
 const StyledLinkItem = styled.li`
@@ -12,14 +12,14 @@ const StyledLinkItem = styled.li`
 
 const activeClassName = "nav-item-active";
 const StyledNavLink = styled(NavLink).attrs({ activeClassName })`
-  color: ${props => props.theme.colors.navbarNormal};
+  color: ${(props) => props.theme.colors.navbarNormal};
   text-decoration: none;
   font-size: 22px;
-  font-family: ${props => props.theme.fonts.secondary};
+  font-family: ${(props) => props.theme.fonts.secondary};
   font-weight: 300;
 
   &.${activeClassName} {
-    color: ${props => props.theme.colors.navbarActive};
+    color: ${(props) => props.theme.colors.navbarActive};
     font-weight: 400;
   }
 `;
@@ -34,25 +34,50 @@ const StyledList = styled.ul`
 `;
 
 const Navbar = () => {
+  const [link, setLink] = React.useState("/");
+  const handleClick = (link) => {
+    setLink(link);
+  };
+
+  React.useEffect(() => {
+    if (link === "/tool") {
+      // reload Tool from start.
+      window.location.reload();
+    }
+  },[link]);
   return (
     <StyledSideBar>
       <StyledList>
         <StyledLinkItem>
-          <StyledNavLink to="/" exact={true}>
+          <StyledNavLink to="/" onClick={() => handleClick("/")} exact={true}>
             Home
           </StyledNavLink>
         </StyledLinkItem>
         <StyledLinkItem>
-          <StyledNavLink to="/instructions">Instructions</StyledNavLink>
+          <StyledNavLink
+            to="/instructions"
+            onClick={() => handleClick("/instructions")}
+          >
+            Instructions
+          </StyledNavLink>
         </StyledLinkItem>
         <StyledLinkItem>
-          <StyledNavLink to="/tool">Tool</StyledNavLink>
+          <StyledNavLink to="/tool" onClick={() => handleClick("/tool")}>
+            Tool
+          </StyledNavLink>
         </StyledLinkItem>
         <StyledLinkItem>
-          <StyledNavLink to="/publications">Publications</StyledNavLink>
+          <StyledNavLink
+            to="/publications"
+            onClick={() => handleClick("/publications")}
+          >
+            Publications
+          </StyledNavLink>
         </StyledLinkItem>
         <StyledLinkItem>
-          <StyledNavLink to="/contact">Contact</StyledNavLink>
+          <StyledNavLink to="/contact" onClick={() => handleClick("/contact")}>
+            Contact
+          </StyledNavLink>
         </StyledLinkItem>
       </StyledList>
     </StyledSideBar>
