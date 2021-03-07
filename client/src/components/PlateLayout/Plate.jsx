@@ -190,7 +190,6 @@ const Plate = (props) => {
         compoundMap={props.compoundMap}
         compoundToColorMap={props.compoundToColorMap}
         handleSelectedCompound={handleSelectedCompound}
-        plate={props.data}
         rows={props.rows}
       >
         <Switch handleDisplay={handleDisplay} />
