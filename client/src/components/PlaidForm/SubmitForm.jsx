@@ -9,10 +9,12 @@ import utils, { hasErrors } from "./utils";
 
 const StyledContainer = styled.div`
   height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
   margin: auto;
 `;
 
@@ -29,14 +31,10 @@ const StyledRowContainer = styled.div`
   display: flex;
   flex-wrap: nowrap;
   width: 100%;
-  justify-content: flex-end;
+  justify-content: center;
 `;
 
-const StyledSpan = styled.span`
-  cursor: pointer;
-  color: black;
-  font-weight: bold;
-`;
+
 const StyledSubmitButton = styled.button`
   font-family: Whitney, "Open Sans", Helvetica, sans-serif;
   background-color: #5096FF;
@@ -48,7 +46,8 @@ const StyledSubmitButton = styled.button`
   cursor: pointer;
   height: 45px;
   width: 200px;
-  margin-left: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
   box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
   &:hover {
     outline: none;
@@ -67,6 +66,8 @@ const StyledPrevButton = styled.button`
   cursor: pointer;
   height: 45px;
   width: 200px;
+  margin-left: 10px;
+  margin-right: 10px;
   box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
   &:hover {
     outline: none;
@@ -160,12 +161,13 @@ const SubmitForm = ({
     <StyledErrorContainer>{errors.hasEmptyWells ? <HighlightedParahraph title={"Error: Empty Wells"} type={"Warning"}> {errors.hasEmptyWells}</HighlightedParahraph> : null}</StyledErrorContainer>
     <StyledContainer>
       <StyledHeader> You're almost done.</StyledHeader>
-      <StyledParagraph>You can save your form input by clicking
-      <StyledSpan onClick={() => handleDownload(data)}> here</StyledSpan>, allowing you to easily prepopulate the form in future runs. Otherwise you can submit the form to generate your plate layout!
+      <StyledParagraph> You can go back and review your input, 
+        save your form input allowing you to easily prepopulate the form in future runs or submit the form to generate your plate layout!
       </StyledParagraph>
       <StyledRowContainer>
         <StyledButtonWrapper>
           <StyledPrevButton type='button' onClick={() => onClick("prev")}> Previous</StyledPrevButton>
+          <StyledPrevButton type='button' onClick={() => handleDownload(data)}> Download Input</StyledPrevButton>
           <StyledSubmitButton type='button' onClick={() => onClick("submit")}> Submit Form</StyledSubmitButton>
         </StyledButtonWrapper>
       </StyledRowContainer>

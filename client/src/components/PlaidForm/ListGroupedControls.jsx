@@ -6,6 +6,7 @@ import InputTextArea from "./Fields/InputTextArea";
 import InputNumber from "./Fields/InputNumber";
 import FormPage from "./FormPage";
 import parse from "../../functions/parse.js";
+import HoverInfo from "../HoverInfo/HoverInfo";
 
 const StyledSelect = styled.select`
   margin: 5px;
@@ -133,6 +134,10 @@ const ListGroupedControls = ({
   return (
     <FormPage>
       <StyledRowContainer>
+      <HoverInfo>
+      Groups allow you to associate a set of controls with their corresponding concentrations and replicates.
+      You can add more groups by pressing the ' + ' icon. 
+      </HoverInfo>
         <StyledSelect
           id="select_group"
           name="select_group"

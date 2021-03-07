@@ -5,6 +5,7 @@ import { RiDeleteBin2Line } from "react-icons/ri";
 import InputTextArea from "./Fields/InputTextArea";
 import InputNumber from "./Fields/InputNumber";
 import FormPage from "./FormPage";
+import HoverInfo from "../HoverInfo/HoverInfo";
 import parse from "../../functions/parse.js";
 
 const StyledSelect = styled.select`
@@ -133,6 +134,9 @@ const ListGroupedCompounds = ({
   return (
     <FormPage>
       <StyledRowContainer>
+      <HoverInfo>
+      Groups allow you to associate a set of compounds with their corresponding concentrations and replicates.
+      You can add more groups by pressing the ' + ' icon. </HoverInfo>
         <StyledSelect
           id="select_group"
           name="select_group"
