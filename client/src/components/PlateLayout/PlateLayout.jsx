@@ -4,7 +4,6 @@ import Plate from "./Plate.jsx";
 import generateHslHues from "./../../functions/generateHslHues.js";
 import {
   compareConcum,
-  concentrationsLabels,
 } from "./../../functions/compareConcum.js";
 import DownloadResultJson from "./DownloadResultJson.jsx";
 import FixedDownloadButton from "./FixedDownloadButton";
@@ -33,14 +32,8 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
         o.cmpdnum,
         i === 0
           ? /*  tweak colors here if needed */
-            `hsla(${hue},${95}%,${41}%,0.74)`
-          : `hsla(${hue},${100}%,${
-              57 +
-              i *
-                (concentrationsLabels.includes(o.CONCuM) && o.CONCuM === "L"
-                  ? 10
-                  : 4)
-            }%,0.90)`
+            `hsla(${hue},${70}%,${40}%,0.84)`
+          : `hsla(${hue},${100}%,${40 + i/2 * 5}%,0.90)`
       );
       i++;
     }
@@ -56,7 +49,6 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
  * @param props.sizeEmptyEdge the amount of empty edges in the plate specified in the form
  */
 const PlateLayout = (props) => {
-
   /* rowList, colList used to map over in the return as to render each component */
   /* There is no way to use a loop in JSX hence this "hack" */
   let rowList = [];
@@ -67,42 +59,20 @@ const PlateLayout = (props) => {
   for (let i = 0; i < props.cols; i++) {
     colList.push(i);
   }
-
-  /* emptyWells  */
-  const amountEmptyWells =
-    props.cols * props.sizeEmptyEdge * 2 +
-    (props.rows - props.sizeEmptyEdge * 2) * props.sizeEmptyEdge * 2;
-
-  /* separate all data by corresponding plate */
-/*   let plates = [];
-  for (
-    let i = 0;
-    i < props.data.length;
-    i += props.rows * props.cols - amountEmptyWells
-  ) {
-    plates.push(
-      props.data.slice(i, i + props.rows * props.cols - amountEmptyWells)
-    );
-  } */
-              /* attrs of cmpdObj:
-                CONCuM
-                cmpdname
-                cmpdnum
-                plateID
-                well
-            */
+  // separate compounds into corresponding plate
   let plates = {};
-  for(let i =0; i< props.data.length; i++){
-    if (plates[props.data[i].plateID]){
-      plates[props.data[i].plateID] = [...plates[props.data[i].plateID], props.data[i]];
+  for (let i = 0; i < props.data.length; i++) {
+    if (plates[props.data[i].plateID]) {
+      plates[props.data[i].plateID] = [
+        ...plates[props.data[i].plateID],
+        props.data[i],
+      ];
+    } else {
+      plates[props.data[i].plateID] = [props.data[i]];
+    }
   }
-  else{
-    plates[props.data[i].plateID] = [props.data[i]];
-  }}
-  console.log(plates);
   plates = Object.values(plates);
 
-  console.log(plates);
   let listOfCompoundMaps = [];
 
   for (let plate of plates) {
@@ -137,7 +107,6 @@ const PlateLayout = (props) => {
     }
     listOfCompoundToColorMaps.push(compoundToColorMap);
   }
-
   return (
     <StyledPlateContainer>
       <DownloadResultJson
