@@ -49,7 +49,26 @@ const StyledSpinner = styled.svg`
   }
 `;
 
-const Loader = () => {
+const StyledCancelButton = styled.button`
+  font-family: Whitney, "Open Sans", Helvetica, sans-serif;
+  background-color: #5096FF;
+  border: 2px solid #5096FF;
+  color: #fff;
+  font-weight: 400;
+  font-size: 16pt;
+  border-radius: 25px;
+  cursor: pointer;
+  height: 45px;
+  width: 200px;
+  margin: 50px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+  &:hover {
+    outline: none;
+    border: 1px solid #5096ff;
+  }
+`
+
+const Loader = (props) => {
   const size = 45;
   return (
     <StyledLoaderContainer>
@@ -61,9 +80,11 @@ const Loader = () => {
           r="20"
           fill="none"
           strokeWidth="2"
-        />
+        />       
       </StyledSpinner>
       Your plate layout is being calculated. This process can take several minutes...
+      <StyledCancelButton type='button' onClick={() => props.setCancelRequest(true)}>Cancel</StyledCancelButton>
+
     </StyledLoaderContainer>
   );
 };
