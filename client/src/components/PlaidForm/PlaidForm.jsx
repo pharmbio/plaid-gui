@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ExperimentForm from "./ExperimentForm";
 import CompoundForm from "./CompoundForm";
 import ControlForm from "./ControlForm";
@@ -28,17 +28,27 @@ const StyledWave = styled.div`
   transform: skewY(-11deg);
   background-color: red;
 `;
+
+
+var CancelToken = axios.CancelToken;
+var cancel;
+
 async function postForm(
   formData,
   setResponseError,
+  setCancelRequest,
   setFlightState,
   flightState,
   setData
 ) {
+  console.log(formData);
   let axiosConfig = {
     headers: {
       "Content-Type": "application/json",
     },
+    cancelToken: new CancelToken(function executor(c) {
+      cancel = c;
+    })
   };
   setFlightState({ ...flightState, loading: true, responseError: false });
   await axios
@@ -54,15 +64,28 @@ async function postForm(
       });
     })
     .catch((error) => {
+      if (axios.isCancel(error)) {
+        setFlightState({ ...flightState, loading: false, responseError: false });
+        setCancelRequest(false);
+        return;
+      }
       setFlightState({ ...flightState, loading: false, responseError: true });
       setResponseError(error.response.data.message);
     });
 }
 const PlaidForm = (props) => {
+  const [cancelRequest, setCancelRequest] = useState(false);
+  useEffect(() => {
+    if (cancelRequest) {
+      cancel("Stop!");
+    }
+  }, [cancelRequest])
+
   const [flightState, setFlightState] = useState({
     loading: false,
     responseError: false,
   });
+
   const [responseError, setResponseError] = useState("");
   const [formState, setFormState] = useState({});
   React.useEffect(() => {
@@ -70,6 +93,7 @@ const PlaidForm = (props) => {
       postForm(
         formState,
         setResponseError,
+        setCancelRequest,
         setFlightState,
         flightState,
         props.setData
@@ -94,22 +118,22 @@ const PlaidForm = (props) => {
 
     groups:
       props.uploadedConfig &&
-      props.uploadedConfig.compoundForm.groups.length > 0
+        props.uploadedConfig.compoundForm.groups.length > 0
         ? props.uploadedConfig.compoundForm
         : {
-            delimiter: ",",
-            selectedGroup: 0,
-            groups: [
-              {
-                id: "gr-0",
-                compound_names: "",
-                compound_names_parsed: "",
-                concentration_names: "",
-                concentration_names_parsed:"",
-                compound_replicates: 0,
-              },
-            ],
-          },
+          delimiter: ",",
+          selectedGroup: 0,
+          groups: [
+            {
+              id: "gr-0",
+              compound_names: "",
+              compound_names_parsed: "",
+              concentration_names: "",
+              concentration_names_parsed: "",
+              compound_replicates: 0,
+            },
+          ],
+        },
   });
 
   /* prepopulate or default object */
@@ -123,19 +147,19 @@ const PlaidForm = (props) => {
       props.uploadedConfig && props.uploadedConfig.controlForm.groups.length > 0
         ? props.uploadedConfig.controlForm
         : {
-            delimiter: ",",
-            selectedGroup: 0,
-            groups: [
-              {
-                id: "gr-0",
-                concentration_names: "",
-                concentration_names_parsed:"",
-                control_replicates: 0,
-                control_names: "",
-                control_names_parsed:"",
-              },
-            ],
-          },
+          delimiter: ",",
+          selectedGroup: 0,
+          groups: [
+            {
+              id: "gr-0",
+              concentration_names: "",
+              concentration_names_parsed: "",
+              control_replicates: 0,
+              control_names: "",
+              control_names_parsed: "",
+            },
+          ],
+        },
   });
   /* prepopulate or default object */
 
@@ -152,18 +176,18 @@ const PlaidForm = (props) => {
     props.uploadedConfig
       ? props.uploadedConfig.experimentForm
       : {
-          num_rows: 4,
-          num_cols: 6,
-          vertical_cell_lines: 1,
-          horizontal_cell_lines: 1,
-          allow_empty_wells: false,
-          size_empty_edge: 0,
-          concentrations_on_different_rows: false,
-          concentrations_on_different_columns: false,
-          replicates_on_different_plates: false,
-          replicates_on_same_plate: false,
-          selected: 48,
-        }
+        num_rows: 4,
+        num_cols: 6,
+        vertical_cell_lines: 1,
+        horizontal_cell_lines: 1,
+        allow_empty_wells: false,
+        size_empty_edge: 0,
+        concentrations_on_different_rows: false,
+        concentrations_on_different_columns: false,
+        replicates_on_different_plates: false,
+        replicates_on_same_plate: false,
+        selected: 48,
+      }
   );
 
   const handleExperimentFormChange = (obj) => {
@@ -205,7 +229,7 @@ const PlaidForm = (props) => {
   return (
     <StyledContainer>
       {flightState["loading"] ? (
-        <Loader />
+        <Loader setCancelRequest={setCancelRequest} />
       ) : (
         <Formik>
           <StyledForm>
