@@ -75,7 +75,6 @@ async function postForm(
 }
 const PlaidForm = (props) => {
   const [cancelRequest, setCancelRequest] = useState(false);
-  console.log(cancelRequest);
   useEffect(() => {
     if (cancelRequest) {
       cancel("Stop!");
