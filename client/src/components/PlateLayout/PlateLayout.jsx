@@ -56,7 +56,7 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
  * @param props.sizeEmptyEdge the amount of empty edges in the plate specified in the form
  */
 const PlateLayout = (props) => {
-  console.log(props.data)
+
   /* rowList, colList used to map over in the return as to render each component */
   /* There is no way to use a loop in JSX hence this "hack" */
   let rowList = [];
@@ -74,7 +74,7 @@ const PlateLayout = (props) => {
     (props.rows - props.sizeEmptyEdge * 2) * props.sizeEmptyEdge * 2;
 
   /* separate all data by corresponding plate */
-  let plates = [];
+/*   let plates = [];
   for (
     let i = 0;
     i < props.data.length;
@@ -83,8 +83,26 @@ const PlateLayout = (props) => {
     plates.push(
       props.data.slice(i, i + props.rows * props.cols - amountEmptyWells)
     );
+  } */
+              /* attrs of cmpdObj:
+                CONCuM
+                cmpdname
+                cmpdnum
+                plateID
+                well
+            */
+  let plates = {};
+  for(let i =0; i< props.data.length; i++){
+    if (plates[props.data[i].plateID]){
+      plates[props.data[i].plateID] = [...plates[props.data[i].plateID], props.data[i]];
   }
+  else{
+    plates[props.data[i].plateID] = [props.data[i]];
+  }}
+  console.log(plates);
+  plates = Object.values(plates);
 
+  console.log(plates);
   let listOfCompoundMaps = [];
 
   for (let plate of plates) {
@@ -138,7 +156,6 @@ const PlateLayout = (props) => {
             cols={props.cols}
             data={data}
             plates={plates}
-            emptyEdges={props.sizeEmptyEdge}
             compoundMap={listOfCompoundMaps[index]}
             compoundToColorMap={listOfCompoundToColorMaps[index]}
           />
