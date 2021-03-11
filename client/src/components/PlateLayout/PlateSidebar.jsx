@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import DownloadOutputButton from "./DownloadOuputButton.jsx";
 
 const StyledSideBar = styled.div`
   display: flex;

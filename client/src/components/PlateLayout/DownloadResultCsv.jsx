@@ -9,7 +9,7 @@ const StyledDownloadButton = styled.button`
   color: inherit;
   font: inherit;
   cursor: pointer;
-  align-self: end;
+  
 `;
 
 /*  transform plate output from jso to CSV Converter in the order
@@ -62,6 +62,7 @@ const DownloadOutputButton = (props) => {
         ref={csvRef}
       />
       <BiDownload size={props.single ? 24 : 36} />
+      <p>CSV</p>
     </StyledDownloadButton>
   );
 };

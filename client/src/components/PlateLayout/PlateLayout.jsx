@@ -2,11 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import Plate from "./Plate.jsx";
 import generateHslHues from "./../../functions/generateHslHues.js";
-import {
-  compareConcum,
-} from "./../../functions/compareConcum.js";
-import DownloadResultJson from "./DownloadResultJson.jsx";
-import FixedDownloadButton from "./FixedDownloadButton";
+import { compareConcum } from "./../../functions/compareConcum.js";
+import DownloadButton from "./DownloadButton";
 
 /* Styling of the main container of this component */
 const StyledPlateContainer = styled.div`
@@ -14,6 +11,12 @@ const StyledPlateContainer = styled.div`
   flex-direction: column;
   height: 100vh;
   overflow-y: scroll;
+`;
+
+const StyledDownloadButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
 `;
 
 /* 
@@ -33,7 +36,7 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
         i === 0
           ? /*  tweak colors here if needed */
             `hsla(${hue},${70}%,${40}%,0.84)`
-          : `hsla(${hue},${100}%,${40 + i/2 * 5}%,0.90)`
+          : `hsla(${hue},${100}%,${40 + (i / 2) * 5}%,0.90)`
       );
       i++;
     }
@@ -109,12 +112,17 @@ const PlateLayout = (props) => {
   }
   return (
     <StyledPlateContainer>
-      <DownloadResultJson
-        data={props.data}
-        rows={props.rows}
-        cols={props.cols}
-        sizeEmptyEdge={props.sizeEmptyEdge}
-      />
+      <StyledDownloadButtonContainer>
+        <DownloadButton plates={plates} type={"csv"} />
+        <DownloadButton
+          plates={plates}
+          data={props.data}
+          rows={props.rows}
+          cols={props.cols}
+          sizeEmptyEdge={props.sizeEmptyEdge}
+          type={"json"}
+        />  
+      </StyledDownloadButtonContainer>
       {plates.map((data, index) => {
         return (
           <Plate
@@ -130,7 +138,6 @@ const PlateLayout = (props) => {
           />
         );
       })}
-      <FixedDownloadButton plates={plates} />
     </StyledPlateContainer>
   );
 };

@@ -1,29 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { BiDownload } from "react-icons/bi";
 
-const StyledHighlightedWrapper = styled.section`
-  background-color: ${(props) => props.theme.backgroundColors.highlightBlue};
-  padding: 10px 16px 10px 16px;
-  margin: 20px;
-  font-family: ${(props) => props.theme.fonts.secondary};
-  align-self: center;
-  justify-self: center;
-  width: 850px;
-`;
-
-const StyledParagraph = styled.p`
-  font-size: 17px;
-  line-height: 1.7;
-  font-weight: 400;
-  font-style: normal;
-  font-family: ${(props) => props.theme.fonts.secondary};
-  margin: 10px;
-`;
-
-const StyledSpan = styled.span`
+const StyledDownloadButton = styled.button`
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
   cursor: pointer;
-  color: black;
-  font-weight: bold;
 `;
 
 const handleDownload = async (data) => {
@@ -46,13 +30,10 @@ const DownloadResultJson = (props) => {
     result: props.data,
   };
   return (
-    <StyledHighlightedWrapper>
-      <StyledParagraph>
-        You can download a json file to display the plates at a later time,
-        without having to go through the model again, by pressing
-        <StyledSpan onClick={() => handleDownload(data)}> here</StyledSpan>.
-      </StyledParagraph>
-    </StyledHighlightedWrapper>
+    <StyledDownloadButton onClick={() => handleDownload(data)} title={"Download JSON file"}>
+     <BiDownload size={36} />
+     <p>JSON</p>
+    </StyledDownloadButton>
   );
 };
 
