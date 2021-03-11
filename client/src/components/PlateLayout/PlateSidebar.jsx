@@ -128,6 +128,7 @@ const PlateSidebar = (props) => {
           );
         })}
       </StyledLegendContainer>
+      
     </StyledSideBar>
   );
 };

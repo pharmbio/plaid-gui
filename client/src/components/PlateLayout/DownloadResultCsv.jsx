@@ -9,7 +9,6 @@ const StyledDownloadButton = styled.button`
   color: inherit;
   font: inherit;
   cursor: pointer;
-  
 `;
 
 /*  transform plate output from jso to CSV Converter in the order
