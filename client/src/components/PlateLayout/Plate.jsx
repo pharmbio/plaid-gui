@@ -4,6 +4,8 @@ import Well from "./Well.jsx";
 import PlateSidebar from "./PlateSidebar.jsx";
 import Switch from "./Switch.jsx";
 import getAlphabet from "./../../functions/getAlphabet.js";
+import { exportComponentAsPNG } from "react-component-export-image";
+import { BiImage } from "react-icons/bi";
 
 /* covers the positioning of the styledPlate and ColorLegend components in row fashion */
 const StyledLayoutContainer = styled.div`
@@ -65,6 +67,29 @@ const StyledRowIdentifier = styled.div`
   grid-column: ${(props) => props.col};
 `;
 
+const StyledColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledDownloadPngButton = styled.button`
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  align-self: flex-end;
+  justify-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  background-color: ${(props) =>
+    props.theme.backgroundColors.downloadButtonBlue};
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 10px;
+  margin:10px;
+  border-radius: 4px;
+`;
 const EMPTY_WELL_COLOR = "#e9e9e9";
 
 /**
@@ -109,6 +134,7 @@ const Plate = (props) => {
       emptyWells.push([i, j]);
     }
   }
+  const componentRef = React.useRef();
 
   return (
     <StyledLayoutContainer>
@@ -117,15 +143,14 @@ const Plate = (props) => {
         cols={props.cols}
         wellRad={wellRad}
         gap={2.5}
+        ref={componentRef}
       >
         {props.rowList.map((i) => {
           return React.createElement(
             StyledRowIdentifier,
             /* will there ever be the case where data[0] is undefined? */
             {
-              key:
-                "row-" + alphabet[i] +
-                props.data[0].plateID,
+              key: "row-" + alphabet[i] + props.data[0].plateID,
               row: i + 2,
               col: 1,
             },
@@ -153,8 +178,7 @@ const Plate = (props) => {
                 empty={true}
                 row={pos[0]}
                 col={pos[1]}
-                key={"plate-" + index+1 +" "+ alphabet[pos[0] - 1] + pos[1]
-                }
+                key={"plate-" + index + 1 + " " + alphabet[pos[0] - 1] + pos[1]}
                 color={EMPTY_WELL_COLOR} //grey
               />
             );
@@ -185,14 +209,22 @@ const Plate = (props) => {
           })}
         </StyledPlate>
       </StyledPlateWrapper>
-      <PlateSidebar
-        compoundMap={props.compoundMap}
-        compoundToColorMap={props.compoundToColorMap}
-        handleSelectedCompound={handleSelectedCompound}
-        rows={props.rows}
-      >
-        <Switch handleDisplay={handleDisplay} />
-      </PlateSidebar>
+      <StyledColumn>
+        <PlateSidebar
+          compoundMap={props.compoundMap}
+          compoundToColorMap={props.compoundToColorMap}
+          handleSelectedCompound={handleSelectedCompound}
+          rows={props.rows}
+        >
+          <Switch handleDisplay={handleDisplay} />
+        </PlateSidebar>
+        <StyledDownloadPngButton
+          title={"Download PNG of plate"}
+          onClick={() => exportComponentAsPNG(componentRef, {fileName:"plate.png"} )}
+        >
+          <BiImage size={24} />
+        </StyledDownloadPngButton>
+      </StyledColumn>
     </StyledLayoutContainer>
   );
 };
