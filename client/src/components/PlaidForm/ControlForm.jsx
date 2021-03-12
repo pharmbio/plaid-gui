@@ -115,23 +115,27 @@ const ControlForm = ({
   const controlConfig = {
     fields: {
       control_replicates: {
-         ctrlReplicateSize: {
+        ctrlReplicateSize: {
           value: controlForm.groups,
           message: "Number of replicates must be a number > 0",
-        }, 
+        },
         ctrlNameAndReplCount: {
           value: controlForm.groups,
           message: "A replicate must be provided if a name and concentration is specified.",
         },
       },
       control_names: {
-        ctrlConcEmptyName:{
+        ctrlConcEmptyName: {
           value: controlForm.groups,
           message: "There must be atleast one control name for a given concentration."
-        }
+        },
+        ctrlDuplicates: {
+          value: controlForm.groups,
+          message: "Control names must be unique. You have multiples of the following: ",
+        },
       },
       concentration_names: {
-        ctrlNameEmptyConc:{
+        ctrlNameEmptyConc: {
           value: controlForm.groups,
           message: "There must be atleast one concentration for a given control name."
         }
