@@ -112,14 +112,16 @@ const SubmitForm = ({
 
   let config = {
     submit: {
-      hasEmptyWells: {
+      wrongWellCount: {
         value: {
           experimentForm: experimentForm,
           compoundForm: compoundForm,
           controlForm: controlForm,
         },
-        message:
-          "You have empty wells! Add more compounds, replicates, controls or make sure to tick allow the empty wells box to support empty wells.",
+        message: {
+          hasEmptyWells: "You have empty wells! Add more compounds, replicates, controls or make sure to tick allow the empty wells box to support empty wells.",
+          tooFewWells: "You don't have enough wells for the amount of compounds, replicates and controls specified!",
+        }
       },
     },
   };
@@ -158,7 +160,7 @@ const SubmitForm = ({
   };
 
   return (<>
-    <StyledErrorContainer>{errors.hasEmptyWells ? <HighlightedParahraph title={"Error: Empty Wells"} type={"Warning"}> {errors.hasEmptyWells}</HighlightedParahraph> : null}</StyledErrorContainer>
+    <StyledErrorContainer>{errors.wrongWellCount ? <HighlightedParahraph title={"Error: Invalid Wells"} type={"Warning"}> {errors.wrongWellCount}</HighlightedParahraph> : null}</StyledErrorContainer>
     <StyledContainer>
       <StyledHeader> You're almost done.</StyledHeader>
       <StyledParagraph> You can go back and review your input, 

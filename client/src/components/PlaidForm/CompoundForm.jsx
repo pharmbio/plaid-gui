@@ -119,6 +119,8 @@ const setUpTheCompoundForm = (groupObj) => {
       utilGroup.compound_concentration_indicators,
     groups: groupObj,
   };
+  console.log(compoundObject);
+
   return compoundObject;
 };
 
@@ -144,6 +146,10 @@ const CompoundForm = ({
         compNameCount: {
           value: compoundForm.groups,
           message: "Compound names cannot be left empty",
+        },
+        compDuplicates: {
+          value: compoundForm.groups,
+          message: "Compound names must be unique. You have multiples of the following: ",
         },
       },
       concentration_names: {
