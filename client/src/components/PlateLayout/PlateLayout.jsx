@@ -42,6 +42,9 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
     }
   }
 };
+const find_combinations = (data) => {
+  
+}
 
 /**
  * Renders the container that holds the (or all) resulting plates.
@@ -52,6 +55,8 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
  * @param props.sizeEmptyEdge the amount of empty edges in the plate specified in the form
  */
 const PlateLayout = (props) => {
+
+  const combinations = find_combinations(props.data)
   /* rowList, colList used to map over in the return as to render each component */
   /* There is no way to use a loop in JSX hence this "hack" */
   let rowList = [];
