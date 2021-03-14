@@ -119,8 +119,6 @@ const setUpTheCompoundForm = (groupObj) => {
       utilGroup.compound_concentration_indicators,
     groups: groupObj,
   };
-  console.log(compoundObject);
-
   return compoundObject;
 };
 
@@ -151,6 +149,10 @@ const CompoundForm = ({
           value: compoundForm.groups,
           message: "Compound names must be unique. You have multiples of the following: ",
         },
+        isCombination: {
+          value: compoundForm.groups,
+          message: "Parenthesis is reserved for combinations or wrap single compounds"
+        }
       },
       concentration_names: {
         concNameCount: {

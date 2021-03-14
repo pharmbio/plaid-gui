@@ -44,7 +44,7 @@ const validators = {
   },
   isAlsoChecked: function (config) {
     return function (value) {
-      if (config.value == true && value == true) {
+      if (config.value === true && value === true) {
         return config.message;
       }
       return null;
@@ -111,7 +111,7 @@ const validators = {
           return null;
         }
 
-        if ((group.control_names === "" || group.concentration_names === "") || (group.control_names !== "" && group.concentration_names !== "")
+        if (((group.control_names === "" || group.concentration_names === "") || (group.control_names !== "" && group.concentration_names !== ""))
           && parseInt(group.control_replicates) < 1) {
           return config.message;
         }
@@ -171,9 +171,9 @@ const validators = {
     const compoundForm = config.value.compoundForm;
     const controlForm = config.value.controlForm;
     return function () {
-      
+
       let denom = 1;
-      if(experimentForm.horizontal_cell_lines == 1 || experimentForm.vertical_cell_lines == 1){
+      if (experimentForm.horizontal_cell_lines === 1 || experimentForm.vertical_cell_lines === 1) {
         denom = Math.max(experimentForm.horizontal_cell_lines, experimentForm.vertical_cell_lines);
       } else {
         denom = experimentForm.horizontal_cell_lines + experimentForm.vertical_cell_lines;
@@ -188,8 +188,8 @@ const validators = {
       const numCompoundReplicates = compoundForm.compound_replicates.reduce((a, b) => a + b, 0);
       const wellsLeft = numWells - amountEmptyWells - controlForm.num_controls - numCompoundReplicates
         - compoundForm.compounds - numControlReplicates;
-        
-      if(wellsLeft < 0){
+
+      if (wellsLeft < 0) {
         return config.message.tooFewWells;
       }
 
@@ -208,16 +208,21 @@ const validators = {
       for (let i = 0; i < groups.length; i++) {
         mergedArrays = mergedArrays.concat(groups[i].compound_names_parsed);
       }
+   /*    for(let i = 0; i < mergedArrays.length; i++){
+        if(mergedArrays.includes('('+mergedArrays[i]+')')){
+          return config.message + `${mergedArrays}`; 
+        }
+      } */
       for (let i = 0; i < mergedArrays.length; i++) {
         if (noDupes[mergedArrays[i]] === undefined) {
           noDupes[mergedArrays[i]] = mergedArrays[i];
+          noDupes['('+mergedArrays[i]+')'] = mergedArrays[i];
         }
         else {
+          
           dupes[mergedArrays[i]] = mergedArrays[i];
         }
       }
-      console.log(dupes.length);
-
       if (Object.keys(dupes).length > 0) {
         let dupe_str = Object.keys(dupes).join(',');
         return config.message + `${dupe_str}`
@@ -227,7 +232,7 @@ const validators = {
   },
   ctrlDuplicates: function (config) {
     return function () {
-      let groups = config.value.groups;
+      const groups = config.value.groups;
       let noDupes = {};
       let dupes = {};
       let mergedArrays = [];
@@ -242,7 +247,6 @@ const validators = {
           dupes[mergedArrays[i]] = mergedArrays[i];
         }
       }
-      console.log(dupes.length);
 
       if (Object.keys(dupes).length > 0) {
         let dupe_str = Object.keys(dupes).join(',');
@@ -251,15 +255,23 @@ const validators = {
       return null;
     }
   },
-  maxWellInput: function (config) {
+  isCombination: function (config) {
     return function () {
-      //calculate number of total wells.
-      //calculate wells representing number of horizontal and vertical lines.
-      //If empty wells allowed, account for it.
-      //If empty wells are not allowed, take all wells and subtract with all compounds, vert & horiztonal lines, replicates and controls. This must be 0. If it's negative, it's too many. If it's positive, too few
-      //If they are allowed, take all wells, subtract with all compounds, vert & horizontal lines. This can be a number >= 0.
-
-
+      const groups = config.value.groups;
+      let mergedArrays = [];
+      const regex = RegExp(/^\w*(?<!.)(\([^\(\)\s\t]+\)){1,4}(?=$)/)
+      for (let i = 0; i < groups.length; i++) {
+        mergedArrays = mergedArrays.concat(groups[i].compound_names_parsed);
+      }
+      for(let i = 0; i < mergedArrays.length; i++){
+        let str = mergedArrays[i];
+        if(str.includes("(") || str.includes(")")){
+          if(!regex.test(str)){
+            return config.message;
+          }
+        }
+      }
+      return null;
     }
   }
 };
