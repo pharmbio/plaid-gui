@@ -119,8 +119,6 @@ const setUpTheCompoundForm = (groupObj) => {
       utilGroup.compound_concentration_indicators,
     groups: groupObj,
   };
-  console.log(compoundObject);
-
   return compoundObject;
 };
 

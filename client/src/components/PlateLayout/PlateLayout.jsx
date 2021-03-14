@@ -35,15 +35,48 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
         o.cmpdnum,
         i === 0
           ? /*  tweak colors here if needed */
-            `hsla(${hue},${70}%,${40}%,0.84)`
+          `hsla(${hue},${70}%,${40}%,0.84)`
           : `hsla(${hue},${100}%,${40 + (i / 2) * 5}%,0.90)`
       );
       i++;
     }
   }
 };
+const split_parenthesis = (str) => {
+  let arr = [];
+  let start, end;
+  for (let i = 0; i < str.length; i++) {
+
+    if (str.charAt(i) === "(") {
+      start = i;
+    }
+    if (str.charAt(i) === ")") {
+      end = i + 1;
+      arr.push(str.substring(start, end))
+    }
+  }
+  return arr;
+}
 const find_combinations = (data) => {
-  
+  let combinations = {}
+  let compounds = {}
+  const regex = RegExp(/^\w*(?<!.)(\([^\(\)\s\t]+\)){1,4}(?=$)/)
+
+  for (let i = 0; i < data.length; i++) {
+    for (let key in data[i]) {
+      if (key === 'cmpdname') {
+         compounds[data[i][key]] = data[i][key];
+      }
+    }
+  }
+
+  for (let key in compounds) {
+    console.log(key);
+    if (regex.test(compounds[key])) {
+      combinations[key] = split_parenthesis(compounds[key]);
+    }
+  }
+  console.log(combinations);
 }
 
 /**
@@ -56,7 +89,7 @@ const find_combinations = (data) => {
  */
 const PlateLayout = (props) => {
 
-  const combinations = find_combinations(props.data)
+  const combinations = find_combinations(props.data);
   /* rowList, colList used to map over in the return as to render each component */
   /* There is no way to use a loop in JSX hence this "hack" */
   let rowList = [];
@@ -126,7 +159,7 @@ const PlateLayout = (props) => {
           cols={props.cols}
           sizeEmptyEdge={props.sizeEmptyEdge}
           type={"json"}
-        />  
+        />
       </StyledDownloadButtonContainer>
       {plates.map((data, index) => {
         return (
