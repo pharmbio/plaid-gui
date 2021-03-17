@@ -4,6 +4,7 @@ import Plate from "./Plate.jsx";
 import generateHslHues from "./../../functions/generateHslHues.js";
 import { compareConcum } from "./../../functions/compareConcum.js";
 import DownloadButton from "./DownloadButton";
+import findCombinations from "./../../functions/findCombinations.js";
 
 /* Styling of the main container of this component */
 const StyledPlateContainer = styled.div`
@@ -23,16 +24,23 @@ const StyledDownloadButtonContainer = styled.div`
   Assign hsla colors to compound depending on concentration (conc)
   Each compound has the same base color -> different conc level means different shade
 */
-const assignColorToCompound = (concs, hue, compoundToColorMap) => {
+const assignColorToCompound = (concs, hue, compoundToColorMap, cmpname) => {
   let i = 0;
   for (let o of concs) {
+    const combinations = findCombinations(o.cmpdname);
+    let compdnum = o.cmpdnum;
+    if(combinations){
+      // assuming that cmpdname and concum is always separated with a '_'
+      compdnum = cmpname+"_"+o.CONCuM;
+
+    }
     /* concs are sorted high to low */
-    if (compoundToColorMap.has(o.cmpdnum)) {
+    if (compoundToColorMap.has(compdnum)) {
       /* We have already assigned color to that particular compound and its concentration */
       continue;
     } else {
       compoundToColorMap.set(
-        o.cmpdnum,
+        compdnum,
         i === 0
           ? /*  tweak colors here if needed */
           `hsla(${hue},${70}%,${40}%,0.84)`
@@ -42,42 +50,7 @@ const assignColorToCompound = (concs, hue, compoundToColorMap) => {
     }
   }
 };
-const split_parenthesis = (str) => {
-  let arr = [];
-  let start, end;
-  for (let i = 0; i < str.length; i++) {
 
-    if (str.charAt(i) === "(") {
-      start = i;
-    }
-    if (str.charAt(i) === ")") {
-      end = i + 1;
-      arr.push(str.substring(start, end))
-    }
-  }
-  return arr;
-}
-const find_combinations = (data) => {
-  let combinations = {}
-  let compounds = {}
-  const regex = RegExp(/^\w*(?<!.)(\([^\(\)\s\t]+\)){1,4}(?=$)/)
-
-  for (let i = 0; i < data.length; i++) {
-    for (let key in data[i]) {
-      if (key === 'cmpdname') {
-         compounds[data[i][key]] = data[i][key];
-      }
-    }
-  }
-
-  for (let key in compounds) {
-    console.log(key);
-    if (regex.test(compounds[key])) {
-      combinations[key] = split_parenthesis(compounds[key]);
-    }
-  }
-  console.log(combinations);
-}
 
 /**
  * Renders the container that holds the (or all) resulting plates.
@@ -89,7 +62,6 @@ const find_combinations = (data) => {
  */
 const PlateLayout = (props) => {
 
-  const combinations = find_combinations(props.data);
   /* rowList, colList used to map over in the return as to render each component */
   /* There is no way to use a loop in JSX hence this "hack" */
   let rowList = [];
@@ -114,12 +86,23 @@ const PlateLayout = (props) => {
   }
   plates = Object.values(plates);
 
-  let listOfCompoundMaps = [];
 
+  let listOfCompoundMaps = [];
   for (let plate of plates) {
     let compoundMap = new Map();
     /* map each compound name to all its corresponding concentrations */
     for (let o of plate) {
+      let combinations = findCombinations(o.cmpdname);
+      if(combinations){
+        for(let comp of combinations){
+          let val = compoundMap.get(comp);
+          if (val !== undefined) {
+            compoundMap.set(comp, [...val, o]);
+          } else {
+            compoundMap.set(comp, [o]);
+          }
+        }
+      }
       let val = compoundMap.get(o.cmpdname);
       if (val !== undefined) {
         compoundMap.set(o.cmpdname, [...val, o]);
@@ -140,11 +123,14 @@ const PlateLayout = (props) => {
   /* Assign color for each compound */
   for (let compoundMap of listOfCompoundMaps) {
     let compoundToColorMap = new Map();
-    let colors = generateHslHues(compoundMap.size);
+
+    let colors = generateHslHues(compoundMap.size-1);
     let i = 0;
     for (let entry of compoundMap) {
-      assignColorToCompound(entry[1], colors[i], compoundToColorMap);
-      i++;
+      if(findCombinations(entry[0]) === null){
+        assignColorToCompound(entry[1], colors[i], compoundToColorMap, entry[0]);
+        i++;
+      }
     }
     listOfCompoundToColorMaps.push(compoundToColorMap);
   }
