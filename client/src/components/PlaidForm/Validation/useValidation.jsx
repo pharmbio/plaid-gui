@@ -55,7 +55,7 @@ const validators = {
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        if (group.concentration_names === "") {
+        if (group.concentration_names.trim() === "") {
           return config.message;
 
         }
@@ -68,7 +68,8 @@ const validators = {
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        if (group.compound_names === "") {
+        console.log(group.compound_names.trim())
+        if (group.compound_names.trim() === "") {
           return config.message;
 
         }
@@ -208,22 +209,12 @@ const validators = {
       for (let i = 0; i < groups.length; i++) {
         mergedArrays = mergedArrays.concat(groups[i].compound_names_parsed);
       }
-   /*    for(let i = 0; i < mergedArrays.length; i++){
-        if(mergedArrays.includes('('+mergedArrays[i]+')')){
-          return config.message + `${mergedArrays}`; 
-        }
-      } */
+
       for (let i = 0; i < mergedArrays.length; i++) {
         if (noDupes[mergedArrays[i]] === undefined) {
-          if(mergedArrays[i].length === 3 && mergedArrays[i].charAt(0) === '(' && mergedArrays[i].charAt([mergedArrays[i].length]-1) === ')'){
-            const str = mergedArrays[i].replace(/\(|\)/g, "")
-            console.log(mergedArrays[i])
-            console.log(str)
-            noDupes[str] = str
-          }
-          else{
-            noDupes['('+mergedArrays[i]+')'] = mergedArrays[i];
-          }
+
+          noDupes[mergedArrays[i].replace(/\(|\)/g, "")] = mergedArrays[i].replace(/\(|\)/g, "")
+          noDupes['('+mergedArrays[i]+')'] = mergedArrays[i];
           noDupes[mergedArrays[i]] = mergedArrays[i];
         }
       
@@ -234,6 +225,26 @@ const validators = {
       if (Object.keys(dupes).length > 0) {
         let dupe_str = Object.keys(dupes).join(',');
         return config.message + `${dupe_str}`
+      }
+      return null;
+    }
+  },
+  combinationDuplicates: function (config){
+    return function(){
+      let groups = config.value.groups;
+      let mergedArrays = [];
+      for (let i = 0; i < groups.length; i++) {
+        mergedArrays = mergedArrays.concat(groups[i].compound_names_parsed);
+      }
+      for(let i = 0; i < groups.length; i++){
+        if(mergedArrays[i].charAt(0) === '(' && mergedArrays[i].charAt([mergedArrays[i].length]-1) === ')'){
+          for(let j = 0; j < mergedArrays[i].length; j++){
+            if(/(.).*\1/.test(mergedArrays[i].split(')(').join())){
+              return config.message;
+
+            }
+          }
+        }
       }
       return null;
     }
