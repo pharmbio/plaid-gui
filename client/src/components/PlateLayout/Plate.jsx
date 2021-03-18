@@ -6,6 +6,8 @@ import Switch from "./Switch.jsx";
 import getAlphabet from "./../../functions/getAlphabet.js";
 import { exportComponentAsPNG } from "react-component-export-image";
 import { BiImage } from "react-icons/bi";
+import findCombinations from "./../../functions/findCombinations.js";
+import CombinationWell from "./CombinationWell";
 
 /* covers the positioning of the styledPlate and ColorLegend components in row fashion */
 const StyledLayoutContainer = styled.div`
@@ -15,6 +17,7 @@ const StyledLayoutContainer = styled.div`
   display: flex;
   flex-direction: row;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  
 `;
 
 /* covers the styling and positioning of the plate and the row & column labels*/
@@ -87,10 +90,20 @@ const StyledDownloadPngButton = styled.button`
   align-items: flex-end;
   justify-content: flex-end;
   padding: 10px;
-  margin:10px;
+  margin: 10px;
   border-radius: 4px;
 `;
 const EMPTY_WELL_COLOR = "#e9e9e9";
+
+const handleWellColorCombinations = (o, compoundToColorMap) => {
+  const cmpdName = o.cmpdname;
+  const combinations = findCombinations(cmpdName);
+  let colors = [];
+  for (let comp of combinations) {
+    colors.push(compoundToColorMap.get(comp + "_" + o.CONCuM));
+  }
+  return colors;
+};
 
 /**
  * Renders the plate (the row/col identifiers) and each corresponding well
@@ -134,6 +147,7 @@ const Plate = (props) => {
       emptyWells.push([i, j]);
     }
   }
+  // used for downloading png file
   const componentRef = React.useRef();
 
   return (
@@ -193,19 +207,38 @@ const Plate = (props) => {
             */
             let row = alphabet.indexOf(cmpdObj.well[0]) + 1;
             let col = parseInt(cmpdObj.well.slice(1, cmpdObj.well.length));
-            return (
-              <Well
-                empty={false}
-                selected={selectedCompound}
-                wellRad={wellRad}
-                display={display}
-                row={row}
-                col={col}
-                key={cmpdObj.plateID + cmpdObj.well}
-                cmpdObj={cmpdObj}
-                color={props.compoundToColorMap.get(cmpdObj.cmpdnum)}
-              />
-            );
+            if (findCombinations(cmpdObj.cmpdname)) {
+              const colors = handleWellColorCombinations(
+                cmpdObj,
+                props.compoundToColorMap
+              );
+              return (
+                <CombinationWell
+                  selected={selectedCompound}
+                  wellRad={wellRad}
+                  display={display}
+                  row={row}
+                  col={col}
+                  key={cmpdObj.plateID + cmpdObj.well}
+                  cmpdObj={cmpdObj}
+                  colors={colors}
+                />
+              );
+            } else {
+              return (
+                <Well
+                  empty={false}
+                  selected={selectedCompound}
+                  wellRad={wellRad}
+                  display={display}
+                  row={row}
+                  col={col}
+                  key={cmpdObj.plateID + cmpdObj.well}
+                  cmpdObj={cmpdObj}
+                  color={props.compoundToColorMap.get(cmpdObj.cmpdnum)}
+                />
+              );
+            }
           })}
         </StyledPlate>
       </StyledPlateWrapper>
@@ -220,7 +253,9 @@ const Plate = (props) => {
         </PlateSidebar>
         <StyledDownloadPngButton
           title={"Download PNG of plate"}
-          onClick={() => exportComponentAsPNG(componentRef, {fileName:"plate.png"} )}
+          onClick={() =>
+            exportComponentAsPNG(componentRef, { fileName: "plate.png" })
+          }
         >
           <BiImage size={24} />
         </StyledDownloadPngButton>
