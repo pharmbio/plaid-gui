@@ -101,7 +101,6 @@ const CombinationWell = (props) => {
 
   title = props.cmpdObj.cmpdname + "\n" + props.cmpdObj.CONCuM;
 
-  console.log(colors);
   return sizeColors === 3 ? (
     <StyledThreeCombinationWell
       colorOne={colors[0]}

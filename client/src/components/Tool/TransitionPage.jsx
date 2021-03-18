@@ -112,7 +112,6 @@ const TransitionPage = (props) => {
    * @param {object} content an object containing data to prepopulate the form fields with. (each property name in content is valid property name to the formState object)
    */
   const handleUploadedJsonConfig = (content) => {
-    console.log(content);
     // TODO send the object as props to PlaidForm and prepopulate the data in formState!
     setUploadedConfig(content);
   };

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import findCombinations from "./../../functions/findCombinations.js";
 
 const StyledSideBar = styled.div`
   display: flex;
@@ -33,7 +34,7 @@ const StyledConcWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  font-family: ${props => props.theme.fonts.secondary};
+  font-family: ${(props) => props.theme.fonts.secondary};
   font-size: 12px;
   margin-top: 2.5px;
   margin-bottom: 2.5px;
@@ -64,6 +65,23 @@ const StyledColorItem = styled.div`
   flex-grow: 1;
   /*   border-left: solid 1px; */
   background-color: ${(props) => props.color};
+`;
+
+/* covers the style that holds multiple colors */
+const StyledColorColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: solid 1px;
+  width: 140px;
+  height: 36px;
+  margin: 2.5px;
+  border-bottom:none;
+`;
+const StyledColorRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: ${(props) => props.height}px;
+  border-bottom:solid 1px;
 `;
 
 /* covers the styling and positioning of each compound name label */
@@ -101,34 +119,76 @@ const PlateSidebar = (props) => {
       {props.children}
       <StyledLegendContainer rows={props.rows}>
         {compoundMapEntries.map(([key, val], index) => {
-          return (
-            <StyledConcAndColorBox key={index + key + val[0].plateID}>
-              <StyledLegendItem id={val[0].plateID + key} onClick={handleClick}>
-                <StyledLabel>{key}</StyledLabel>
-                <StyledColorBox>
-                  {val.map((o, i) => {
-                    return (
-                      <StyledColorItem
-                        key={i + o.cmpdnum}
-                        color={props.compoundToColorMap.get(o.cmpdnum)}
-                      ></StyledColorItem>
-                    );
-                  })}
-                </StyledColorBox>
-              </StyledLegendItem>
-              <StyledConcWrapper>
-                <p>{val[0].CONCuM}</p>
-                <p>
-                  {val[val.length - 1].CONCuM === val[0].CONCuM
-                    ? undefined
-                    : val[val.length - 1].CONCuM}
-                </p>
-              </StyledConcWrapper>
-            </StyledConcAndColorBox>
-          );
+          const combinations = findCombinations(key);
+          if (combinations) {
+            return (
+              <StyledConcAndColorBox key={index + key + val[0].plateID}>
+                <StyledLegendItem
+                  id={val[0].plateID + key}
+                  onClick={handleClick}
+                >
+                  <StyledLabel>{key}</StyledLabel>
+                  <StyledColorColumn>
+                    {combinations.map((compound, j) => {
+                      return (
+                        <StyledColorRow key= {val[0].plateID +"_"+ compound + "_" + key} height={36/combinations.length}>
+                          {val.map((o, i) => {
+                            return (
+                              <StyledColorItem
+                                key={i + compound + "_" + o.CONCuM}
+                                color={props.compoundToColorMap.get(
+                                  compound + "_" + o.CONCuM
+                                )}
+                              />
+                            );
+                          })}
+                        </StyledColorRow>
+                      );
+                    })}
+                  </StyledColorColumn>
+                </StyledLegendItem>
+                <StyledConcWrapper>
+                  <p>{val[0].CONCuM}</p>
+                  <p>
+                    {val[val.length - 1].CONCuM === val[0].CONCuM
+                      ? undefined
+                      : val[val.length - 1].CONCuM}
+                  </p>
+                </StyledConcWrapper>
+              </StyledConcAndColorBox>
+            );
+          } else {
+            return (
+              <StyledConcAndColorBox key={index + key + val[0].plateID}>
+                <StyledLegendItem
+                  id={val[0].plateID + key}
+                  onClick={handleClick}
+                >
+                  <StyledLabel>{key}</StyledLabel>
+                  <StyledColorBox>
+                    {val.map((o, i) => {
+                      return (
+                        <StyledColorItem
+                          key={i + o.cmpdnum}
+                          color={props.compoundToColorMap.get(o.cmpdnum)}
+                        />
+                      );
+                    })}
+                  </StyledColorBox>
+                </StyledLegendItem>
+                <StyledConcWrapper>
+                  <p>{val[0].CONCuM}</p>
+                  <p>
+                    {val[val.length - 1].CONCuM === val[0].CONCuM
+                      ? undefined
+                      : val[val.length - 1].CONCuM}
+                  </p>
+                </StyledConcWrapper>
+              </StyledConcAndColorBox>
+            );
+          }
         })}
       </StyledLegendContainer>
-      
     </StyledSideBar>
   );
 };

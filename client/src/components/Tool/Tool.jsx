@@ -33,7 +33,6 @@ const Tool = () => {
    * @param {*} content the dzn file contents that the API mzn model needs to go through
    */
   const handleUploadedDznFile = async (parsedData, content) => {
-    console.log(content);
     setError(false);
     setLoading(true);
     axios
@@ -48,7 +47,6 @@ const Tool = () => {
       )
       .then(
         (res) => {
-          console.log(res.data);
           setData({
             rows: parsedData.rows,
             cols: parsedData.cols,
@@ -69,7 +67,6 @@ const Tool = () => {
       setLoading(false);
     }
   }, [loading, data]);
-  console.log(data);
   return (
     <StyledToolWrapper>
       {data !== undefined ? (

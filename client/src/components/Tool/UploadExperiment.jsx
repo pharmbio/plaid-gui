@@ -124,7 +124,6 @@ const prepareConfigFile = (obj) => {
       delimiter: obj.delimiterCompounds ? obj.delimiterCompounds : ",",
     },
   };
-  console.log(result);
   return result;
 };
 const UploadExperiment = (props) => {

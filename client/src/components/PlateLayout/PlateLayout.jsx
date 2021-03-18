@@ -17,7 +17,7 @@ const StyledPlateContainer = styled.div`
 const StyledDownloadButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content:center;
+  justify-content: center;
 `;
 
 /* 
@@ -29,10 +29,9 @@ const assignColorToCompound = (concs, hue, compoundToColorMap, cmpname) => {
   for (let o of concs) {
     const combinations = findCombinations(o.cmpdname);
     let compdnum = o.cmpdnum;
-    if(combinations){
+    if (combinations) {
       // assuming that cmpdname and concum is always separated with a '_'
-      compdnum = cmpname+"_"+o.CONCuM;
-
+      compdnum = cmpname + "_" + o.CONCuM;
     }
     /* concs are sorted high to low */
     if (compoundToColorMap.has(compdnum)) {
@@ -43,14 +42,13 @@ const assignColorToCompound = (concs, hue, compoundToColorMap, cmpname) => {
         compdnum,
         i === 0
           ? /*  tweak colors here if needed */
-          `hsla(${hue},${70}%,${40}%,0.84)`
+            `hsla(${hue},${70}%,${40}%,0.84)`
           : `hsla(${hue},${100}%,${40 + (i / 2) * 5}%,0.90)`
       );
       i++;
     }
   }
 };
-
 
 /**
  * Renders the container that holds the (or all) resulting plates.
@@ -61,7 +59,6 @@ const assignColorToCompound = (concs, hue, compoundToColorMap, cmpname) => {
  * @param props.sizeEmptyEdge the amount of empty edges in the plate specified in the form
  */
 const PlateLayout = (props) => {
-
   /* rowList, colList used to map over in the return as to render each component */
   /* There is no way to use a loop in JSX hence this "hack" */
   let rowList = [];
@@ -86,6 +83,14 @@ const PlateLayout = (props) => {
   }
   plates = Object.values(plates);
 
+  let mightNotExistAsSinglesOnPlate = [];
+  let amountOfCombinationsPerPlate = [];
+  for (let _ of plates) {
+    amountOfCombinationsPerPlate.push(0);
+    mightNotExistAsSinglesOnPlate.push([]);
+  }
+
+  let j = 0;
 
   let listOfCompoundMaps = [];
   for (let plate of plates) {
@@ -93,21 +98,37 @@ const PlateLayout = (props) => {
     /* map each compound name to all its corresponding concentrations */
     for (let o of plate) {
       let combinations = findCombinations(o.cmpdname);
-      if(combinations){
-        for(let comp of combinations){
+      if (combinations) {
+        for (let comp of combinations) {
+          // we want to remove
+          mightNotExistAsSinglesOnPlate[j].push(comp);
           let val = compoundMap.get(comp);
+          // if the compound "comp" does not exist in the plate as single compound, then we need to create the compound obj
+          // OBS! this assumes that cmpdnum is the compound name and concentration name separated by "_"
+          let newObj = { ...o, cmpdname: comp, cmpdnum: comp + "_" + o.CONCuM };
           if (val !== undefined) {
-            compoundMap.set(comp, [...val, o]);
+            compoundMap.set(comp, [...val, newObj]);
           } else {
-            compoundMap.set(comp, [o]);
+            compoundMap.set(comp, [newObj]);
           }
         }
-      }
-      let val = compoundMap.get(o.cmpdname);
-      if (val !== undefined) {
-        compoundMap.set(o.cmpdname, [...val, o]);
+        // add the combination
+        let val = compoundMap.get(o.cmpdname);
+        if (val !== undefined) {
+          compoundMap.set(o.cmpdname, [...val, o]);
+        } else {
+          compoundMap.set(o.cmpdname, [o]);
+          // increase amount of combinations only on new combination
+          amountOfCombinationsPerPlate[j]++;
+        }
       } else {
-        compoundMap.set(o.cmpdname, [o]);
+        //not a combination
+        let val = compoundMap.get(o.cmpdname);
+        if (val !== undefined) {
+          compoundMap.set(o.cmpdname, [...val, o]);
+        } else {
+          compoundMap.set(o.cmpdname, [o]);
+        }
       }
     }
 
@@ -117,22 +138,49 @@ const PlateLayout = (props) => {
       compoundMap.set(cmp, vals);
     }
     listOfCompoundMaps.push(compoundMap);
+    j += 1;
   }
-
+  j = 0;
   let listOfCompoundToColorMaps = [];
   /* Assign color for each compound */
   for (let compoundMap of listOfCompoundMaps) {
     let compoundToColorMap = new Map();
-
-    let colors = generateHslHues(compoundMap.size-1);
+    let colors = generateHslHues(
+      compoundMap.size - amountOfCombinationsPerPlate[j]
+    );
     let i = 0;
     for (let entry of compoundMap) {
-      if(findCombinations(entry[0]) === null){
-        assignColorToCompound(entry[1], colors[i], compoundToColorMap, entry[0]);
+      if (findCombinations(entry[0]) === null) {
+        assignColorToCompound(
+          entry[1],
+          colors[i],
+          compoundToColorMap,
+          entry[0]
+        );
         i++;
       }
     }
     listOfCompoundToColorMaps.push(compoundToColorMap);
+    j += 1;
+  }
+
+  // remove compounds from compoundMap that actually doesn't exist on plate (taking care of removing)
+
+  for (let compounds of mightNotExistAsSinglesOnPlate) {
+    let i = 0;
+    for (let compound of compounds) {
+      let exist = false;
+      for (let o of plates[i]) {
+
+        if (o.cmpdname === compound) {
+          exist = true;
+          break;
+        }
+      }
+      if(!exist){
+        listOfCompoundMaps[i].delete(compound);
+      }
+    }
   }
   return (
     <StyledPlateContainer>
