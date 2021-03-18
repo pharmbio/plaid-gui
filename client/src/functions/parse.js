@@ -16,7 +16,6 @@ const parse = (delimiter, str) => {
   const res = delim.filter((s) => {
     return(s !== "");
   })
-  console.log(res);
   return res;
 };
 export default parse;

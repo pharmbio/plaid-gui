@@ -215,11 +215,19 @@ const validators = {
       } */
       for (let i = 0; i < mergedArrays.length; i++) {
         if (noDupes[mergedArrays[i]] === undefined) {
+          if(mergedArrays[i].length === 3 && mergedArrays[i].charAt(0) === '(' && mergedArrays[i].charAt([mergedArrays[i].length]-1) === ')'){
+            const str = mergedArrays[i].replace(/\(|\)/g, "")
+            console.log(mergedArrays[i])
+            console.log(str)
+            noDupes[str] = str
+          }
+          else{
+            noDupes['('+mergedArrays[i]+')'] = mergedArrays[i];
+          }
           noDupes[mergedArrays[i]] = mergedArrays[i];
-          noDupes['('+mergedArrays[i]+')'] = mergedArrays[i];
         }
+      
         else {
-          
           dupes[mergedArrays[i]] = mergedArrays[i];
         }
       }
@@ -259,7 +267,7 @@ const validators = {
     return function () {
       const groups = config.value.groups;
       let mergedArrays = [];
-      const regex = RegExp(/^\w*(?<!.)(\([^\(\)\s\t]+\)){1,4}(?=$)/)
+      const regex = RegExp(/^(?<!.)[\s\t]*(\([^\(\)\s\t]+\)){1,4}(?=$)/)
       for (let i = 0; i < groups.length; i++) {
         mergedArrays = mergedArrays.concat(groups[i].compound_names_parsed);
       }
