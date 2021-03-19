@@ -152,6 +152,10 @@ const CompoundForm = ({
         isCombination: {
           value: compoundForm.groups,
           message: "Parenthesis is reserved for combinations or wrap single compounds"
+        },
+        combinationDuplicates: {
+          value: compoundForm.groups,
+          message: "Combinations cannot contain duplicate compounds"
         }
       },
       concentration_names: {
