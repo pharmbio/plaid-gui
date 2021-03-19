@@ -12,6 +12,8 @@ const StyledWarningContainer = styled.div`
 `
 
 const axios = require("axios");
+var CancelToken = axios.CancelToken;
+var cancel;
 
 /**
  * Renders the container that switches between the form, loader and eventually
@@ -20,8 +22,13 @@ const axios = require("axios");
 const Tool = () => {
   const [data, setData] = useState(undefined);
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState(false);
+  const [cancelRequest, setCancelRequest] = useState(false);
+  useEffect(() => {
+    if (cancelRequest) {
+      cancel();
+    }
+  }, [cancelRequest])
 
   const handleUploadedResults = (res) => {
     setData(res);
@@ -43,6 +50,9 @@ const Tool = () => {
           headers: {
             "Content-Type": "application/json",
           },
+          cancelToken: new CancelToken(function executor(c) {
+            cancel = c;
+          })
         }
       )
       .then(
@@ -54,12 +64,14 @@ const Tool = () => {
             result: res.data,
           });
         }).catch((error) => {
-          /* handle error TODO! */
-
-          setLoading(false);
+          if (axios.isCancel(error)) {
+            setLoading(false)
+            setCancelRequest(false);
+            return;
+          }
+          setLoading(false)
           setError(true);
-        }
-        );
+        });
   };
 
   React.useEffect(() => {
@@ -77,15 +89,15 @@ const Tool = () => {
           sizeEmptyEdge={data.sizeEmptyEdge}
         />
       ) : loading ? (
-        <Loader />
+        <Loader setCancelRequest={setCancelRequest}/>
       ) : (
-            <TransitionPage
-              handleUploadedResults={handleUploadedResults}
-              handleUploadedDznFile={handleUploadedDznFile}
-              setData={setData}
-              error={error}
-            />
-          )}
+        <TransitionPage
+          handleUploadedResults={handleUploadedResults}
+          handleUploadedDznFile={handleUploadedDznFile}
+          setData={setData}
+          error={error}
+        />
+      )}
     </StyledToolWrapper>
   );
 };
