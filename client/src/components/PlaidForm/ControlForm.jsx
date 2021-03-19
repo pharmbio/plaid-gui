@@ -133,6 +133,10 @@ const ControlForm = ({
           value: controlForm.groups,
           message: "Control names must be unique. You have multiples of the following: ",
         },
+        isControl: {
+          value: controlForm.groups,
+          message: "Parenthesis are reserved for single control names. Combinations controls are not supported"
+        }
       },
       concentration_names: {
         ctrlNameEmptyConc: {

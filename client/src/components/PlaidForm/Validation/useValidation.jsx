@@ -55,7 +55,7 @@ const validators = {
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        if (group.concentration_names === "") {
+        if (group.concentration_names.trim() === "") {
           return config.message;
 
         }
@@ -68,7 +68,7 @@ const validators = {
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        if (group.compound_names === "") {
+        if (group.compound_names.trim() === "") {
           return config.message;
 
         }
@@ -208,24 +208,41 @@ const validators = {
       for (let i = 0; i < groups.length; i++) {
         mergedArrays = mergedArrays.concat(groups[i].compound_names_parsed);
       }
-   /*    for(let i = 0; i < mergedArrays.length; i++){
-        if(mergedArrays.includes('('+mergedArrays[i]+')')){
-          return config.message + `${mergedArrays}`; 
-        }
-      } */
+
       for (let i = 0; i < mergedArrays.length; i++) {
+        mergedArrays[i] = mergedArrays[i].trim();
         if (noDupes[mergedArrays[i]] === undefined) {
+          noDupes[mergedArrays[i].replace(/\(|\)/g, "")] = mergedArrays[i].replace(/\(|\)/g, "")
+          noDupes['(' + mergedArrays[i] + ')'] = mergedArrays[i];
           noDupes[mergedArrays[i]] = mergedArrays[i];
-          noDupes['('+mergedArrays[i]+')'] = mergedArrays[i];
         }
+
         else {
-          
           dupes[mergedArrays[i]] = mergedArrays[i];
         }
       }
       if (Object.keys(dupes).length > 0) {
         let dupe_str = Object.keys(dupes).join(',');
         return config.message + `${dupe_str}`
+      }
+      return null;
+    }
+  },
+  combinationDuplicates: function (config) {
+    return function () {
+      let groups = config.value.groups;
+      let mergedArrays = [];
+      for (let i = 0; i < groups.length; i++) {
+        mergedArrays = mergedArrays.concat(groups[i].compound_names_parsed);
+      }
+      for (let i = 0; i < groups.length; i++) {
+        if (mergedArrays[i].charAt(0) === '(' && mergedArrays[i].charAt([mergedArrays[i].length] - 1) === ')') {
+          for (let j = 0; j < mergedArrays[i].length; j++) {
+            if (/(.).*\1/.test(mergedArrays[i].split(')(').join(""))) {
+              return config.message;
+            }
+          }
+        }
       }
       return null;
     }
@@ -240,9 +257,13 @@ const validators = {
         mergedArrays = mergedArrays.concat(groups[i].control_names_parsed);
       }
       for (let i = 0; i < mergedArrays.length; i++) {
+        mergedArrays[i] = mergedArrays[i].trim()
         if (noDupes[mergedArrays[i]] === undefined) {
           noDupes[mergedArrays[i]] = mergedArrays[i];
+          noDupes[mergedArrays[i].replace(/\(|\)/g, "")] = mergedArrays[i].replace(/\(|\)/g, "")
+          noDupes['(' + mergedArrays[i] + ')'] = mergedArrays[i];
         }
+
         else {
           dupes[mergedArrays[i]] = mergedArrays[i];
         }
@@ -259,14 +280,33 @@ const validators = {
     return function () {
       const groups = config.value.groups;
       let mergedArrays = [];
-      const regex = RegExp(/^\w*(?<!.)(\([^\(\)\s\t]+\)){1,4}(?=$)/)
+      const regex = RegExp(/^(?<!.)[\s\t]*(\([^\(\)\s\t]+\)){1,4}[\s\t]*(?=$)/)
       for (let i = 0; i < groups.length; i++) {
         mergedArrays = mergedArrays.concat(groups[i].compound_names_parsed);
       }
-      for(let i = 0; i < mergedArrays.length; i++){
+      for (let i = 0; i < mergedArrays.length; i++) {
         let str = mergedArrays[i];
-        if(str.includes("(") || str.includes(")")){
-          if(!regex.test(str)){
+        if (str.includes("(") || str.includes(")")) {
+          if (!regex.test(str)) {
+            return config.message;
+          }
+        }
+      }
+      return null;
+    }
+  },
+  isControl: function (config) {
+    return function () {
+      const groups = config.value.groups;
+      let mergedArrays = [];
+      const regex = RegExp(/^(?<!.)[\s\t]*(\([^\(\)\s\t]+\)){1}[\s\t]*(?=$)/)
+      for (let i = 0; i < groups.length; i++) {
+        mergedArrays = mergedArrays.concat(groups[i].control_names_parsed);
+      }
+      for (let i = 0; i < mergedArrays.length; i++) {
+        let str = mergedArrays[i];
+        if (str.includes("(") || str.includes(")")) {
+          if (!regex.test(str)) {
             return config.message;
           }
         }
