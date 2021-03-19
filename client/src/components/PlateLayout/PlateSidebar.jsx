@@ -131,7 +131,7 @@ const PlateSidebar = (props) => {
                   <StyledColorColumn>
                     {combinations.map((compound, j) => {
                       return (
-                        <StyledColorRow key= {val[0].plateID +"_"+ compound + "_" + key} height={36/combinations.length}>
+                        <StyledColorRow key= {j+val[0].plateID +"_"+ compound + "_" + key} height={36/combinations.length}>
                           {val.map((o, i) => {
                             return (
                               <StyledColorItem

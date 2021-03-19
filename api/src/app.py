@@ -1,5 +1,4 @@
 import os
-import sys
 from models.minizinc_model import MinizincModel
 from services.services import ModelService
 from error_handler import MinizincException
@@ -18,7 +17,6 @@ def test_dzn_file():
         mz = MinizincModel("./src/plate-design.mzn", "gecode")
         mz.populate_instance(dzn_str=content["data"])
         result = mz.solve_instance()
-        print(result)
         j_res = ModelService.output_to_json(result)
         return j_res
     except Exception as e:
