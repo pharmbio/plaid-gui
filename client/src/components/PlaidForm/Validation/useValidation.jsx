@@ -238,7 +238,7 @@ const validators = {
       for (let i = 0; i < groups.length; i++) {
         if (mergedArrays[i].charAt(0) === '(' && mergedArrays[i].charAt([mergedArrays[i].length] - 1) === ')') {
           for (let j = 0; j < mergedArrays[i].length; j++) {
-            if (/(.).*\1/.test(mergedArrays[i].split(')(').join(""))) {
+            if (/(.).*\1/.test(mergedArrays[j].split(')(').join(""))) {
               return config.message;
             }
           }
