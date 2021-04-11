@@ -1,5 +1,27 @@
 import React, { useState } from "react";
 
+import findCombinations from "../../../functions/findCombinations";
+
+const removeParenthesisAndReturnSubCompound = (str) => {
+  let arr = [];
+  let start, end;
+  if (str.charAt(0) !== "(") {
+    return [str];
+  }
+  for (let i = 0; i < str.length; i++) {
+    if (str.charAt(i) === "(") {
+      start = i + 1;
+    }
+    if (str.charAt(i) === ")") {
+      end = i;
+      arr.push(str.substring(start, end));
+    }
+  }
+
+  if (arr.length > 1) return null;
+  return arr;
+};
+
 const validators = {
   minValidSize: function (config) {
     return function (value) {
@@ -33,10 +55,9 @@ const validators = {
         if (config.value < Math.max(...value)) {
           return config.message;
         }
-      }
-      else {
+      } else {
         if (config.value < value) {
-          return config.message
+          return config.message;
         }
       }
       return null;
@@ -57,11 +78,10 @@ const validators = {
         let group = groups[i];
         if (group.concentration_names.trim() === "") {
           return config.message;
-
         }
       }
       return null;
-    }
+    };
   },
   compNameCount: function (config) {
     return function () {
@@ -70,11 +90,10 @@ const validators = {
         let group = groups[i];
         if (group.compound_names.trim() === "") {
           return config.message;
-
         }
       }
       return null;
-    }
+    };
   },
   compReplicateSize: function (config) {
     return function () {
@@ -86,7 +105,7 @@ const validators = {
         }
       }
       return null;
-    }
+    };
   },
   ctrlReplicateSize: function (config) {
     return function () {
@@ -98,26 +117,33 @@ const validators = {
         }
       }
       return null;
-    }
+    };
   },
   ctrlNameAndReplCount: function (config) {
     return function () {
       let groups = config.value.groups;
       for (let i = 0; i < groups.length; i++) {
         let group = groups[i];
-        //Om names eller conc är tom, eller om båda inte är tomma, så ska replicates vara ett tal 
-        if ((group.control_names === "" && group.concentration_names === "")
-          && parseInt(group.control_replicates) === 0) {
+        //Om names eller conc är tom, eller om båda inte är tomma, så ska replicates vara ett tal
+        if (
+          group.control_names === "" &&
+          group.concentration_names === "" &&
+          parseInt(group.control_replicates) === 0
+        ) {
           return null;
         }
 
-        if (((group.control_names === "" || group.concentration_names === "") || (group.control_names !== "" && group.concentration_names !== ""))
-          && parseInt(group.control_replicates) < 1) {
+        if (
+          (group.control_names === "" ||
+            group.concentration_names === "" ||
+            (group.control_names !== "" && group.concentration_names !== "")) &&
+          parseInt(group.control_replicates) < 1
+        ) {
           return config.message;
         }
       }
       return null;
-    }
+    };
   },
   ctrlNameEmptyConc: function (config) {
     return function () {
@@ -129,7 +155,7 @@ const validators = {
         }
       }
       return null;
-    }
+    };
   },
   ctrlConcEmptyName: function (config) {
     return function () {
@@ -141,7 +167,7 @@ const validators = {
         }
       }
       return null;
-    }
+    };
   },
   ctrlNegativeReplicates: function (config) {
     return function () {
@@ -153,7 +179,7 @@ const validators = {
         }
       }
       return null;
-    }
+    };
   },
   maxEmptyEdgeSize: function (config) {
     return function (value) {
@@ -164,30 +190,50 @@ const validators = {
         return config.message;
       }
       return null;
-    }
+    };
   },
   wrongWellCount: function (config) {
     const experimentForm = config.value.experimentForm;
     const compoundForm = config.value.compoundForm;
     const controlForm = config.value.controlForm;
     return function () {
-
       let denom = 1;
-      if (experimentForm.horizontal_cell_lines === 1 || experimentForm.vertical_cell_lines === 1) {
-        denom = Math.max(experimentForm.horizontal_cell_lines, experimentForm.vertical_cell_lines);
+      if (
+        experimentForm.horizontal_cell_lines === 1 ||
+        experimentForm.vertical_cell_lines === 1
+      ) {
+        denom = Math.max(
+          experimentForm.horizontal_cell_lines,
+          experimentForm.vertical_cell_lines
+        );
       } else {
-        denom = experimentForm.horizontal_cell_lines + experimentForm.vertical_cell_lines;
+        denom =
+          experimentForm.horizontal_cell_lines +
+          experimentForm.vertical_cell_lines;
       }
-      const numWells = experimentForm.num_cols * experimentForm.num_rows / denom;
-
+      const numWells =
+        (experimentForm.num_cols * experimentForm.num_rows) / denom;
 
       const amountEmptyWells =
-        experimentForm.num_cols * experimentForm.size_empty_edge * 2 + (
-          experimentForm.num_rows - experimentForm.size_empty_edge * 2) * experimentForm.size_empty_edge * 2;
-      const numControlReplicates = controlForm.control_replicates.reduce((a, b) => a + b, 0);
-      const numCompoundReplicates = compoundForm.compound_replicates.reduce((a, b) => a + b, 0);
-      const wellsLeft = numWells - amountEmptyWells - controlForm.num_controls - numCompoundReplicates
-        - compoundForm.compounds - numControlReplicates;
+        experimentForm.num_cols * experimentForm.size_empty_edge * 2 +
+        (experimentForm.num_rows - experimentForm.size_empty_edge * 2) *
+          experimentForm.size_empty_edge *
+          2;
+      const numControlReplicates = controlForm.control_replicates.reduce(
+        (a, b) => a + b,
+        0
+      );
+      const numCompoundReplicates = compoundForm.compound_replicates.reduce(
+        (a, b) => a + b,
+        0
+      );
+      const wellsLeft =
+        numWells -
+        amountEmptyWells -
+        controlForm.num_controls -
+        numCompoundReplicates -
+        compoundForm.compounds -
+        numControlReplicates;
 
       if (wellsLeft < 0) {
         return config.message.tooFewWells;
@@ -197,12 +243,11 @@ const validators = {
         return config.message.hasEmptyWells;
       }
       return null;
-    }
+    };
   },
   compDuplicates: function (config) {
     return function () {
       let groups = config.value.groups;
-      let noDupes = {};
       let dupes = {};
       let mergedArrays = [];
       for (let i = 0; i < groups.length; i++) {
@@ -210,77 +255,109 @@ const validators = {
       }
 
       for (let i = 0; i < mergedArrays.length; i++) {
-        mergedArrays[i] = mergedArrays[i].trim();
-        if (noDupes[mergedArrays[i]] === undefined) {
-          noDupes[mergedArrays[i].replace(/\(|\)/g, "")] = mergedArrays[i].replace(/\(|\)/g, "")
-          noDupes['(' + mergedArrays[i] + ')'] = mergedArrays[i];
-          noDupes[mergedArrays[i]] = mergedArrays[i];
-        }
+        let subCompounds = removeParenthesisAndReturnSubCompound(
+          mergedArrays[i].trim()
+        );
 
-        else {
-          dupes[mergedArrays[i]] = mergedArrays[i];
+        if (subCompounds !== null) {
+          if (subCompounds.length === 1) {
+            if (dupes[subCompounds[0]] === undefined) {
+              dupes["(" + subCompounds[0] + ")"] = 1;
+              dupes[subCompounds[0]] = 1;
+            } else {
+              dupes["(" + subCompounds[0] + ")"] =
+                dupes["(" + subCompounds[0] + ")"] + 1;
+              dupes[subCompounds[0]] = dupes[subCompounds[0]] + 1;
+            }
+          }
         }
       }
-      if (Object.keys(dupes).length > 0) {
-        let dupe_str = Object.keys(dupes).join(',');
-        return config.message + `${dupe_str}`
+      let dupeStr = [];
+      for (const compound in dupes) {
+        if (dupes[compound] > 1) {
+          dupeStr.push(compound);
+        }
+      }
+      if (dupeStr.length > 0) {
+        dupeStr = dupeStr.join(", ");
+        return config.message + `${dupeStr}`;
       }
       return null;
-    }
+    };
   },
   combinationDuplicates: function (config) {
     return function () {
+      let dupes = {};
       let groups = config.value.groups;
       let mergedArrays = [];
       for (let i = 0; i < groups.length; i++) {
         mergedArrays = mergedArrays.concat(groups[i].compound_names_parsed);
       }
-      for (let i = 0; i < groups.length; i++) {
-        if (mergedArrays[i].charAt(0) === '(' && mergedArrays[i].charAt([mergedArrays[i].length] - 1) === ')') {
-          for (let j = 0; j < mergedArrays[i].length; j++) {
-            if (/(.).*\1/.test(mergedArrays[j].split(')(').join(""))) {
-              return config.message;
-            }
+      for (let i = 0; i < mergedArrays.length; i++) {
+        let combos = findCombinations(mergedArrays[i].trim());
+        if (combos !== null) {
+          // makes sure that we consider permutations of combinations eg. (a)(b) == (b)(a) so if it contains both then we have a duplicate
+          combos.sort();
+          let combination = combos.toString().replaceAll(",", "");
+          if (dupes[combination] === undefined) {
+            dupes[combination] = 1;
+          } else {
+            dupes[combination] = dupes[combination] + 1;
           }
         }
       }
+      // TODO Markus, come up with a way of showing the names.
+      for (const combo in dupes) {
+        if (dupes[combo] > 1) {
+          return "There exist duplicate combinations!";
+        }
+      }
+
       return null;
-    }
+    };
   },
   ctrlDuplicates: function (config) {
     return function () {
-      const groups = config.value.groups;
-      let noDupes = {};
+      let groups = config.value.groups;
       let dupes = {};
       let mergedArrays = [];
       for (let i = 0; i < groups.length; i++) {
         mergedArrays = mergedArrays.concat(groups[i].control_names_parsed);
       }
       for (let i = 0; i < mergedArrays.length; i++) {
-        mergedArrays[i] = mergedArrays[i].trim()
-        if (noDupes[mergedArrays[i]] === undefined) {
-          noDupes[mergedArrays[i]] = mergedArrays[i];
-          noDupes[mergedArrays[i].replace(/\(|\)/g, "")] = mergedArrays[i].replace(/\(|\)/g, "")
-          noDupes['(' + mergedArrays[i] + ')'] = mergedArrays[i];
-        }
-
-        else {
-          dupes[mergedArrays[i]] = mergedArrays[i];
+        let subCompounds = removeParenthesisAndReturnSubCompound(
+          mergedArrays[i].trim()
+        );
+        if (subCompounds !== null) {
+          if (dupes[subCompounds[0]] === undefined) {
+            dupes["(" + subCompounds[0] + ")"] = 1;
+            dupes[subCompounds[0]] = 1;
+          } else {
+            dupes["(" + subCompounds[0] + ")"] =
+              dupes["(" + subCompounds[0] + ")"] + 1;
+            dupes[subCompounds[0]] = dupes[subCompounds[0]] + 1;
+          }
         }
       }
 
-      if (Object.keys(dupes).length > 0) {
-        let dupe_str = Object.keys(dupes).join(',');
-        return config.message + `${dupe_str}`
+      let dupeStr = [];
+      for (const compound in dupes) {
+        if (dupes[compound] > 1) {
+          dupeStr.push(compound);
+        }
+      }
+      if (dupeStr.length > 0) {
+        dupeStr = dupeStr.join(", ");
+        return config.message + `${dupeStr}`;
       }
       return null;
-    }
+    };
   },
   isCombination: function (config) {
     return function () {
       const groups = config.value.groups;
       let mergedArrays = [];
-      const regex = RegExp(/^(?<!.)[\s\t]*(\([^\(\)\s\t]+\)){1,4}[\s\t]*(?=$)/)
+      const regex = RegExp(/^(?<!.)[\s\t]*(\([^\(\)\s\t]+\)){1,4}[\s\t]*(?=$)/);
       for (let i = 0; i < groups.length; i++) {
         mergedArrays = mergedArrays.concat(groups[i].compound_names_parsed);
       }
@@ -293,13 +370,13 @@ const validators = {
         }
       }
       return null;
-    }
+    };
   },
   isControl: function (config) {
     return function () {
       const groups = config.value.groups;
       let mergedArrays = [];
-      const regex = RegExp(/^(?<!.)[\s\t]*(\([^\(\)\s\t]+\)){1}[\s\t]*(?=$)/)
+      const regex = RegExp(/^(?<!.)[\s\t]*(\([^\(\)\s\t]+\)){1}[\s\t]*(?=$)/);
       for (let i = 0; i < groups.length; i++) {
         mergedArrays = mergedArrays.concat(groups[i].control_names_parsed);
       }
@@ -312,13 +389,11 @@ const validators = {
         }
       }
       return null;
-    }
-  }
+    };
+  },
 };
 
-
 function validateField(fieldValue, fieldConfig, fieldStates) {
-
   for (let validatorName in fieldConfig) {
     const validatorConfig = fieldConfig[validatorName];
     const validator = validators[validatorName]; //select the correct validator
@@ -330,7 +405,6 @@ function validateField(fieldValue, fieldConfig, fieldStates) {
   }
   return null;
 }
-
 
 function validateFields(fieldValues, fieldStates) {
   const errors = {};
@@ -374,10 +448,7 @@ const useValidation = (input = {}, config, func = null) => {
       return { ...fieldErrors, ...submitErrors };
     },
   };
-  return [
-    errors,
-    formUtils,
-  ];
+  return [errors, formUtils];
 };
 
 export default useValidation;

@@ -16,7 +16,6 @@ const splitParenthesis = (str) => {
   }
   const findCombinations = (cmpname) => {
     const regex = RegExp(/^\w*(?<!.)(\([^\(\)\s\t]+\)){1,4}(?=$)/);
-  
       if (regex.test(cmpname)) {
         let compoundsInCombos = splitParenthesis(cmpname);
         if(compoundsInCombos.length > 1)
