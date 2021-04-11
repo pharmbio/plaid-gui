@@ -279,7 +279,9 @@ const validators = {
         }
       }
       if (dupeStr.length > 0) {
+      //  console.log(dupeStr.map(() => trim));
         dupeStr = dupeStr.join(", ");
+        console.log(dupeStr);
         return config.message + `${dupeStr}`;
       }
       return null;
@@ -295,10 +297,18 @@ const validators = {
       }
       for (let i = 0; i < mergedArrays.length; i++) {
         let combos = findCombinations(mergedArrays[i].trim());
+        
         if (combos !== null) {
+          console.log(combos);
+          
+          if(new Set(combos).size !== combos.length){
+            return config.message;
+          }
+        
           // makes sure that we consider permutations of combinations eg. (a)(b) == (b)(a) so if it contains both then we have a duplicate
           combos.sort();
           let combination = combos.toString().replaceAll(",", "");
+          console.log(combination)
           if (dupes[combination] === undefined) {
             dupes[combination] = 1;
           } else {
@@ -307,9 +317,10 @@ const validators = {
         }
       }
       // TODO Markus, come up with a way of showing the names.
+      console.log(dupes)
       for (const combo in dupes) {
         if (dupes[combo] > 1) {
-          return "There exist duplicate combinations!";
+          return "There exists duplicate combinations!";
         }
       }
 
