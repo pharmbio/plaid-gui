@@ -195,6 +195,7 @@ constraint global_cardinality(plates,[0]++[ i | i in 1..compound_ids]++[i | i in
 %% Experiments that do not exists are not located in any plate, row, or column.
 constraint forall(i in 1..compound_ids)(((floor((i-1)/(compounds*max_compound_concentrations))<compound_replicates[(floor(((i-1)/max_compound_concentrations)) mod compounds)+1]) /\ ((floor((i-1))) mod max_compound_concentrations) < compound_concentrations[(floor(((i-1)/max_compound_concentrations)) mod compounds)+1]) == false <-> (experiment_plate[i] = 0 /\ experiment_row[i] = 0 /\ experiment_column[i] = 0));
 
+constraint forall(i in 1..compound_ids)(((floor((i-1)/(compounds*max_compound_concentrations))<compound_replicates[(floor(((i-1)/max_compound_concentrations)) mod compounds)+1]) /\ ((floor((i-1))) mod max_compound_concentrations) < compound_concentrations[(floor(((i-1)/max_compound_concentrations)) mod compounds)+1]) <-> (experiment_plate[i] != 0 /\ experiment_row[i] != 0 /\ experiment_column[i] != 0));
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -203,7 +204,6 @@ constraint forall(i in 1..compound_ids)(((floor((i-1)/(compounds*max_compound_co
 constraint forall(l in 1..experiments, i in Plates)(count_eq([plates[i,j,k] | j in Rows, k in Columns],l,(experiment_plate[l] == i)));
 
 constraint forall(l in 1..experiments)(count_eq([plates[i,j,k] | i in Plates, j in Rows, k in Columns],l,(experiment_plate[l] != 0)));
-
 
 
 %% For experiments that do not exist = plate 0 (redundant)
@@ -708,7 +708,7 @@ constraint forall(i in Plates, l in 1..experiments)((experiment_plate[l] != i) -
 
 solve::seq_search([int_search(experiment_plate, first_fail, indomain_random), int_search(crazy_idea, first_fail, indomain_random), 
 int_search(plates, first_fail, indomain_random)]) 
-     :: restart_geometric(1.5,100)
+      %:: restart_geometric(1.5,2000)
      %:: restart_linear(1000)
      %:: restart_constant(10*experiments)
      satisfy; 
@@ -745,7 +745,7 @@ int_search(plates, first_fail, indomain_random)])
 
 output [if testing \/ debugging then "\(numplates) plates\n" else "" endif];
 
-output [if (inner_emptywells>0) then "warning: there are \(inner_emptywells) empty wells. Consider using them as controls.\n\n" else "" endif];
+output [if (testing \/ debugging) /\ (inner_emptywells>0) then "warning: there are \(inner_emptywells) empty wells. Consider using them as controls.\n\n" else "" endif];
 
 output [if debugging then "Plate 1:\n" else "" endif];
          
@@ -772,11 +772,11 @@ output [if debugging then if fix(plates[i,j,k]) == 0 then "  ."
 
 %output ["Compound's plate:\n", show(compound_concentration_names)];    
      
- %output ["\nExperiment's row:\n", show(experiment_row)];
+%output ["\nExperiment's row:\n", show(experiment_row)];
 
  %output ["\nExperiment's column:\n", show(experiment_column)];
 
-% output ["\nControls per row:\n", show(controls_in_row)];
+%output ["\nControls per row:\n", show(controls_in_row)];
 
 %output ["\nControls per half plates:\n", show(controls_ul_plates)];
 
