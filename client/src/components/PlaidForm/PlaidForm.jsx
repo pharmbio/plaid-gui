@@ -41,7 +41,6 @@ async function postForm(
   flightState,
   setData
 ) {
-  console.log(formData);
   let axiosConfig = {
     headers: {
       "Content-Type": "application/json",
@@ -51,6 +50,7 @@ async function postForm(
     })
   };
   setFlightState({ ...flightState, loading: true, responseError: false });
+  console.log(JSON.stringify(formData))
   await axios
     .post("http://localhost:5000/", formData, axiosConfig)
     .then((response) => {

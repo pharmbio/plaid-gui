@@ -317,7 +317,6 @@ const validators = {
         }
       }
       // TODO Markus, come up with a way of showing the names.
-      console.log(dupes)
       for (const combo in dupes) {
         if (dupes[combo] > 1) {
           return "There exists duplicate combinations!";
