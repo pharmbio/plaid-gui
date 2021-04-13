@@ -235,10 +235,6 @@ const validators = {
         compoundForm.compounds -
         numControlReplicates;
 
-      if (wellsLeft < 0) {
-        return config.message.tooFewWells;
-      }
-
       if (wellsLeft > 0 && !experimentForm.allow_empty_wells) {
         return config.message.hasEmptyWells;
       }
