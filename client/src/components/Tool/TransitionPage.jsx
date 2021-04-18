@@ -3,7 +3,6 @@ import styled from "styled-components";
 import UploadResult from "./UploadResult.jsx";
 import UploadExperiment from "./UploadExperiment.jsx";
 import PlaidForm from "./../PlaidForm";
-import NextButton from "../Buttons/NextButton";
 import HighlightedParahraph from "../Instructions/HighlightedParagraph";
 import { ReactComponent as ToolIcon } from "../../assets/icons/wrench.svg";
 import { ReactComponent as FormIcon } from "../../assets/icons/card-checklist.svg";

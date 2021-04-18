@@ -22,13 +22,6 @@ const StyledContainer = styled.div`
   overflow-y: scroll;
   height: 100vh;
 `;
-const StyledWave = styled.div`
-  height: 20vh;
-  width: 100%;
-  transform: skewY(-11deg);
-  background-color: red;
-`;
-
 
 var CancelToken = axios.CancelToken;
 var cancel;
@@ -60,6 +53,7 @@ async function postForm(
         rows: formData.num_rows,
         cols: formData.num_cols,
         sizeEmptyEdge: formData.size_empty_edge,
+        controls: formData.control_names,
         result: response.data,
       });
     })
@@ -220,7 +214,6 @@ const PlaidForm = (props) => {
           ...finalControlForm,
           ...combinationForm,
         };
-
         setFormState(mergedState);
       }
     }

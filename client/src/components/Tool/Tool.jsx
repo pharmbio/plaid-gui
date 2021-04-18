@@ -61,6 +61,7 @@ const Tool = () => {
             rows: parsedData.rows,
             cols: parsedData.cols,
             sizeEmptyEdge: parsedData.sizeEmptyEdge,
+            controls: parsedData.controls,
             result: res.data,
           });
         }).catch((error) => {
@@ -73,7 +74,7 @@ const Tool = () => {
           setError(true);
         });
   };
-
+  console.log(data)
   React.useEffect(() => {
     if (data !== undefined) {
       setLoading(false);
@@ -86,6 +87,7 @@ const Tool = () => {
           data={data.result}
           rows={data.rows}
           cols={data.cols}
+          controls={data.controls}
           sizeEmptyEdge={data.sizeEmptyEdge}
         />
       ) : loading ? (

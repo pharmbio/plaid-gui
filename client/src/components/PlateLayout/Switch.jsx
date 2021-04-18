@@ -5,9 +5,9 @@ import styled from "styled-components";
 const StyledSwitchWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  font-family: ${props => props.theme.fonts.secondary};
-  margin-top:5px;
-  margin-bottom: 20px;
+  font-family: ${(props) => props.theme.fonts.secondary};
+  margin-top: 5px;
+  margin-bottom:5px;
   font-size: 12px;
 `;
 
@@ -27,56 +27,78 @@ const StyledSwitch = styled.div`
 const StyledLabel = styled.span`
   margin-right: 10px;
 `;
-
+const StyledColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 /**
  * Renders the switches used to change what is labeled
- * @param props.handleDisplay callback function for handling the clicking of a switch
+ * @param props.handleToggleLabel callback function for handling the clicking of a switch (label)
+ * @param props.handleToggleWell callback function for handling the clicking of a switch (well)
+ * @param props.activeLabel
+ * @param props.activeWell
  */
 const Switch = (props) => {
-  const [active, setActive] = React.useState("none");
-
   /**
    * will propagate the targeted id of the element clicked to parent component
    */
-  const handleClick = (e) => {
+  const handleClickLabel = (e) => {
     e.preventDefault();
-    let activated = e.currentTarget.id === active ? "none" : e.currentTarget.id;
-    setActive(activated);
-    props.handleDisplay(activated);
+    let activated =
+      e.currentTarget.id === props.activeLabel ? "none" : e.currentTarget.id;
+    props.handleToggleLabel(activated);
+  };
+  const handleClickWell = (e) => {
+    e.preventDefault();
+    let activated =
+      e.currentTarget.id === props.activeWell ? "none" : e.currentTarget.id;
+    props.handleToggleWell(activated);
   };
   return (
-    <StyledSwitchWrapper>
-      <StyledLabel>TOGGLE:</StyledLabel>
-      <StyledSwitch
-        active={active === "none"}
-        id={"none"}
-        onClick={handleClick}
-      >
-        None
-      </StyledSwitch>
-      <StyledSwitch
-        active={active === "compound"}
-        id={"compound"}
-        onClick={handleClick}
-      >
-        Compound
-      </StyledSwitch>
-      <StyledSwitch
-        active={active === "concentration"}
-        id={"concentration"}
-        onClick={handleClick}
-      >
-        Concentration
-      </StyledSwitch>
-      <StyledSwitch
-        active={active === "all"}
-        id={"all"}
-        onClick={handleClick}
-      >
-        All
-      </StyledSwitch>
-    </StyledSwitchWrapper>
+    <StyledColumn>
+      <StyledSwitchWrapper>
+        <StyledLabel>Toggle Labels:</StyledLabel>
+        <StyledSwitch
+          active={props.activeLabel === "compound"}
+          id={"compound"}
+          onClick={handleClickLabel}
+        >
+          Compound
+        </StyledSwitch>
+        <StyledSwitch
+          active={props.activeLabel === "concentration"}
+          id={"concentration"}
+          onClick={handleClickLabel}
+        >
+          Concentration
+        </StyledSwitch>
+        <StyledSwitch
+          active={props.activeLabel === "both"}
+          id={"both"}
+          onClick={handleClickLabel}
+        >
+          Both
+        </StyledSwitch>
+      </StyledSwitchWrapper>
+      <StyledSwitchWrapper>
+        <StyledLabel>Toggle Wells:</StyledLabel>
+        <StyledSwitch
+          active={props.activeWell === "compounds"}
+          id={"compounds"}
+          onClick={handleClickWell}
+        >
+          Compounds
+        </StyledSwitch>
+        <StyledSwitch
+          active={props.activeWell === "controls"}
+          id={"controls"}
+          onClick={handleClickWell}
+        >
+          Controls
+        </StyledSwitch>
+      </StyledSwitchWrapper>
+    </StyledColumn>
   );
 };
 

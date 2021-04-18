@@ -56,6 +56,7 @@ const assignColorToCompound = (concs, hue, compoundToColorMap, cmpname) => {
  * @param props.data contains the output from the minizinc model
  * @param props.rows the amount of rows specified in the form
  * @param props.cols the amount of cols specified in the form
+ * @param props.controls the names of the controls
  * @param props.sizeEmptyEdge the amount of empty edges in the plate specified in the form
  */
 const PlateLayout = (props) => {
@@ -191,6 +192,7 @@ const PlateLayout = (props) => {
           data={props.data}
           rows={props.rows}
           cols={props.cols}
+          controls={props.controls}
           sizeEmptyEdge={props.sizeEmptyEdge}
           type={"json"}
         />
@@ -204,6 +206,7 @@ const PlateLayout = (props) => {
             rows={props.rows}
             cols={props.cols}
             data={data}
+            controls ={props.controls}
             plates={plates}
             compoundMap={listOfCompoundMaps[index]}
             compoundToColorMap={listOfCompoundToColorMaps[index]}

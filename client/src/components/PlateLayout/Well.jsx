@@ -49,8 +49,8 @@ const StyledColLabel = styled.div`
 const StyledColumn = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content:center;
-  align-items:center;
+  justify-content: center;
+  align-items: center;
   margin: auto;
   text-align: center;
   width: ${(props) => props.wellRad}px;
@@ -61,9 +61,11 @@ const StyledColumn = styled.div`
  * Will render the component of one well from plate.
  * 
  * @param props.empty true if well is empty otherwise false
- * @param props.selected name of selected compound, <empty_string> if none is selected
+ * @param props.toggleState.selected name of selected compound, <empty_string> if none is selected
+ * @param props.toggleState.well compounds if compounds to be highlighted, controls if controls to be highlighted otherwise "none"
  * @param props.wellRad radius of well
- * @param props.display "none" if no label should be displayed, otherwise "compound" / "concentration"
+ * @param props.controls list containing names of control compounds
+ * @param props.toggleState.label "none" if no label should be displayed, otherwise "compound" / "concentration"
  * @param props.row the row positioning of well
  * @param props.col the col positioning of well
  * @param cmpdObj the compound object 
@@ -80,11 +82,26 @@ const Well = (props) => {
   let title = "";
   if (!props.empty) {
     var lighten = false;
-    if (
-      props.selected !== "" &&
-      props.selected !== props.cmpdObj.plateID + props.cmpdObj.cmpdname
-    ) {
-      lighten = true;
+    if (props.toggleState.well !== "none") {
+      if (
+        props.toggleState.well === "compounds" &&
+          props.controls.includes(props.cmpdObj.cmpdname)
+      ) {
+        lighten = true;
+      }
+      if (
+        props.toggleState.well === "controls" &&
+        !props.controls.includes(props.cmpdObj.cmpdname)
+      ) {
+        lighten = true;
+      }
+    } else {
+      if (
+        props.toggleState.selected !== "" &&
+        props.toggleState.selected  !== props.cmpdObj.plateID + props.cmpdObj.cmpdname
+      ) {
+        lighten = true;
+      }
     }
     title = props.cmpdObj.cmpdname + "\n" + props.cmpdObj.CONCuM;
   }
@@ -98,19 +115,19 @@ const Well = (props) => {
       lighten={lighten}
       title={title}
     >
-      {!props.empty && props.display !== "none" ? (
-        props.display === "all" ? (
+      {!props.empty && props.toggleState.label !== "none" ? (
+        props.toggleState.label === "both" ? (
           <StyledColumn wellRad={props.wellRad}>
-                <StyledColLabel>
-                  {truncateString(props.cmpdObj.cmpdname, 5)}
-                </StyledColLabel>
-                <StyledColLabel>
-                  {truncateString(props.cmpdObj.CONCuM, 5)}
-                </StyledColLabel>
-              </StyledColumn>
+            <StyledColLabel>
+              {truncateString(props.cmpdObj.cmpdname, 5)}
+            </StyledColLabel>
+            <StyledColLabel>
+              {truncateString(props.cmpdObj.CONCuM, 5)}
+            </StyledColLabel>
+          </StyledColumn>
         ) : (
           <StyledLabel wellRad={props.wellRad}>
-            {props.display === "compound"
+            {props.toggleState.label === "compound"
               ? truncateString(props.cmpdObj.cmpdname, 5)
               : truncateString(props.cmpdObj.CONCuM, 5)}
           </StyledLabel>

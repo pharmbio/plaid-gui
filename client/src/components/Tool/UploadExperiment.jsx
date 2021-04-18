@@ -21,9 +21,9 @@ const StyledContainer = styled.div`
 
 /* return an object containing the properties num_rows , num_cols and size_empty_edge from the dzn file which are needed for the visualization */
 const parseDznInput = (data) => {
-  let stored = { rows: null, cols: null, sizeEmptyEdge: null };
+  let stored = { rows: null, cols: null, sizeEmptyEdge: null, controls:null };
   for (const line of data.split(/[\r\n]+/)) {
-    if (stored.rows && stored.cols && stored.sizeEmptyEdge) {
+    if (stored.rows && stored.cols && stored.sizeEmptyEdge && stored.controls) {
       break;
     }
 
@@ -50,6 +50,16 @@ const parseDznInput = (data) => {
         stored.sizeEmptyEdge = parseInt(
           sizeEmptyEdge[1].split(";", 1)[0].trim()
         );
+      }
+      continue;
+    }
+    if(line.trim().includes("control_names")){
+
+      if(line[0] !== "%"){
+        //its not a minizinc comment
+        let controlNames = line.split("=")[1];
+        controlNames = JSON.parse(controlNames.split(";",1)[0].trim());
+        stored.controls = controlNames;
       }
       continue;
     }

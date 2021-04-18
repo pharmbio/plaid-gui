@@ -93,12 +93,19 @@ const CombinationWell = (props) => {
 
   let title = "";
   var lighten = false;
-  if (
-    props.selected !== "" &&
-    props.selected !== props.cmpdObj.plateID + props.cmpdObj.cmpdname
-  )
-    lighten = true;
-
+  if (props.toggleState.well !== "none") {
+    if (props.toggleState.well === "controls") {
+      lighten = true;
+    }
+  } else {
+    if (
+      props.toggleState.selected !== "" &&
+      props.toggleState.selected !==
+        props.cmpdObj.plateID + props.cmpdObj.cmpdname
+    ) {
+      lighten = true;
+    }
+  }
   title = props.cmpdObj.cmpdname + "\n" + props.cmpdObj.CONCuM;
 
   return sizeColors === 3 ? (
@@ -112,8 +119,8 @@ const CombinationWell = (props) => {
       title={title}
       wellRad={props.wellRad}
     >
-      {props.display !== "none" ? (
-        props.display === "all" ? (
+      {props.toggleState.label !== "none" ? (
+        props.toggleState.label === "both" ? (
           <StyledColumn3 wellRad={props.wellRad}>
             <StyledColLabel>
               {truncateString(props.cmpdObj.cmpdname, 5)}
@@ -124,7 +131,7 @@ const CombinationWell = (props) => {
           </StyledColumn3>
         ) : (
           <StyledLabel3 wellRad={props.wellRad}>
-            {props.display === "compound"
+            {props.toggleState.label === "compound"
               ? truncateString(props.cmpdObj.cmpdname, 5)
               : truncateString(props.cmpdObj.CONCuM, 5)}
           </StyledLabel3>
@@ -145,8 +152,8 @@ const CombinationWell = (props) => {
       title={title}
       wellRad={props.wellRad}
     >
-      {props.display !== "none" ? (
-        props.display === "all" ? (
+      {props.toggleState.label !== "none" ? (
+        props.toggleState.label === "both" ? (
           <StyledColumn wellRad={props.wellRad}>
             <StyledColLabel>
               {truncateString(props.cmpdObj.cmpdname, 5)}
@@ -157,7 +164,7 @@ const CombinationWell = (props) => {
           </StyledColumn>
         ) : (
           <StyledLabel wellRad={props.wellRad}>
-            {props.display === "compound"
+            {props.toggleState.label === "compound"
               ? truncateString(props.cmpdObj.cmpdname, 5)
               : truncateString(props.cmpdObj.CONCuM, 5)}
           </StyledLabel>
