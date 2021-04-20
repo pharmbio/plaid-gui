@@ -27,6 +27,7 @@ const DownloadResultJson = (props) => {
     rows: props.rows,
     cols: props.cols,
     sizeEmptyEdge: props.sizeEmptyEdge,
+    controls: props.controls,
     result: props.data,
   };
   return (

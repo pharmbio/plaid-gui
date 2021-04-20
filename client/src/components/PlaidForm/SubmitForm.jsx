@@ -1,7 +1,4 @@
 import React from "react";
-import FormButtons from "./FormButtons/FormButtons";
-import SubmitButton from "../Buttons/SubmitButton";
-import PrevButton from "../Buttons/PrevButton";
 import HighlightedParahraph from "../Instructions/HighlightedParagraph";
 import styled from "styled-components";
 import useValidation from "./Validation/useValidation";

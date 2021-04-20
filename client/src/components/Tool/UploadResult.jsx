@@ -24,7 +24,8 @@ const checkValidUpload = (jsonObj) => {
     jsonObj.hasOwnProperty("cols") &&
     jsonObj.hasOwnProperty("rows") &&
     jsonObj.hasOwnProperty("result") &&
-    jsonObj.hasOwnProperty("sizeEmptyEdge")
+    jsonObj.hasOwnProperty("sizeEmptyEdge") &&
+    jsonObj.hasOwnProperty("controls")
   );
 };
 

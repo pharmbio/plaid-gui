@@ -25,6 +25,7 @@ const StyledFixedButton = styled.div`
  * @param props.rows amount of rows
  * @param props.cols amount of cols
  * @param props.sizeEmptyEdge num of empty edges
+ * @param props.controls the names of the control compounds
  */
 const DownloadButton = (props) => {
   return (
@@ -32,7 +33,9 @@ const DownloadButton = (props) => {
       {props.type === "csv" ? <DownloadResultCsv plates={props.plates} single={false} /> : <DownloadResultJson        data={props.data}
         rows={props.rows}
         cols={props.cols}
-        sizeEmptyEdge={props.sizeEmptyEdge}></DownloadResultJson>}
+        sizeEmptyEdge={props.sizeEmptyEdge}
+        controls={props.controls}
+        ></DownloadResultJson>}
     </StyledFixedButton>
   );
 };

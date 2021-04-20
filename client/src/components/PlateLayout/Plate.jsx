@@ -17,7 +17,6 @@ const StyledLayoutContainer = styled.div`
   display: flex;
   flex-direction: row;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  
 `;
 
 /* covers the styling and positioning of the plate and the row & column labels*/
@@ -105,6 +104,33 @@ const handleWellColorCombinations = (o, compoundToColorMap) => {
   return colors;
 };
 
+function toggleReducer(state, action) {
+  switch (action.type) {
+    case "label":
+      if (action.payload === state.label) {
+        return { ...state, label: "none" };
+      } else {
+        return { ...state, label: action.payload };
+      }
+    case "well":
+      if (action.payload === state.label) {
+        return { ...state, well: "none" };
+      } else {
+        return { ...state, well: action.payload, selected: "" };
+      }
+    case "selection":
+      if (action.payload === state.selected) {
+        return { ...state, selected: "" };
+      } else {
+        return { ...state, well: "none", selected: action.payload };
+      }
+    default:
+      throw new Error(
+        "Something went wrong with toggling different labels/wells!"
+      );
+  }
+}
+
 /**
  * Renders the plate (the row/col identifiers) and each corresponding well
  *
@@ -113,6 +139,7 @@ const handleWellColorCombinations = (o, compoundToColorMap) => {
  * @param props.rows the amount of rows specified in the form
  * @param props.cols the amount of cols specified in the form
  * @param props.data all cmpdObjs for the corresponding plate
+ * @param props.controls contains the names of the control compounds
  * @param props.plates all plates and their corresponding cmpdObjs
  * @param props.compoundMap the map maping a compound name to all cmpdObjs with the same name (sorted high to low conc)
  * @param props.compoundToColorMap maping cmpdObject.cmpdnum to the corresponding hsla color
@@ -121,22 +148,33 @@ const Plate = (props) => {
   const wellRad = 40;
   /* used for the row identifier label */
   const alphabet = getAlphabet();
+  const [toggleState, toggleDispatch] = React.useReducer(toggleReducer, {
+    label: "none",
+    well: "none",
+    selected: "",
+  });
 
-  const [selectedCompound, setSelectedCompound] = React.useState("");
   const handleSelectedCompound = (selected) => {
-    if (selected === selectedCompound) {
-      setSelectedCompound("");
+    if (selected === toggleState.selected) {
+      toggleDispatch({ type: "selection", payload: "" });
     } else {
-      setSelectedCompound(selected);
+      toggleDispatch({ type: "selection", payload: selected });
     }
   };
 
-  const [display, setDisplay] = React.useState("none");
-  const handleDisplay = (selected) => {
-    if (selected === display) {
-      setDisplay("none");
+  const handleToggleLabel = (selected) => {
+    if (selected === toggleState.label) {
+      toggleDispatch({ type: "label", payload: "" });
     } else {
-      setDisplay(selected);
+      toggleDispatch({ type: "label", payload: selected });
+    }
+  };
+
+  const handleToggleWell = (selected) => {
+    if (selected === toggleState.well) {
+      toggleDispatch({ type: "well", payload: "" });
+    } else {
+      toggleDispatch({ type: "well", payload: selected });
     }
   };
 
@@ -214,9 +252,8 @@ const Plate = (props) => {
               );
               return (
                 <CombinationWell
-                  selected={selectedCompound}
                   wellRad={wellRad}
-                  display={display}
+                  toggleState = {toggleState}
                   row={row}
                   col={col}
                   key={cmpdObj.plateID + cmpdObj.well}
@@ -228,9 +265,9 @@ const Plate = (props) => {
               return (
                 <Well
                   empty={false}
-                  selected={selectedCompound}
+                  controls={props.controls}
+                  toggleState = {toggleState}
                   wellRad={wellRad}
-                  display={display}
                   row={row}
                   col={col}
                   key={cmpdObj.plateID + cmpdObj.well}
@@ -249,7 +286,12 @@ const Plate = (props) => {
           handleSelectedCompound={handleSelectedCompound}
           rows={props.rows}
         >
-          <Switch handleDisplay={handleDisplay} />
+          <Switch
+            handleToggleLabel={handleToggleLabel}
+            handleToggleWell={handleToggleWell}
+            activeLabel={toggleState.label}
+            activeWell={toggleState.well}
+          />
         </PlateSidebar>
         <StyledDownloadPngButton
           title={"Download PNG of plate"}
