@@ -49,7 +49,7 @@ class MinizincModel:
         ...
         """
         if self.populated:
-            result = self.instance.solve()
+            result = self.instance.solve(random_seed = 42, processes = 6)
             result = re.split("[\n]", str(result).strip("[\n]"))
             return result
         else:
