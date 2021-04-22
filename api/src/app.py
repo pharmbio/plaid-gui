@@ -4,7 +4,9 @@ from services.services import ModelService
 from error_handler import MinizincException
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
-
+from random import seed
+from random import randint
+from datetime import datetime
 app = Flask(__name__)
 cors = CORS(app, support_credentials=True)
 app.config["CORS_HEADERS"] = "Content-Type"
@@ -16,7 +18,7 @@ def test_dzn_file():
     try:
         mz = MinizincModel("./src/plate-design.mzn", "gecode")
         mz.populate_instance(dzn_str=content["data"])
-        result = mz.solve_instance()
+        result = mz.solve_instance(rand = randint(1,10000))
         j_res = ModelService.output_to_json(result)
         return j_res
     except Exception as e:
@@ -30,7 +32,7 @@ def test_plaid():
     try:
         mz = MinizincModel("./src/plate-design.mzn", "gecode")
         mz.populate_instance(args_json=data)
-        result = mz.solve_instance()
+        result = mz.solve_instance(rand = randint(1,10000))
         j_res = ModelService.output_to_json(result)
         return j_res
     except Exception as e:
@@ -43,4 +45,5 @@ def minizinc_error(e):
 
 
 if __name__ == "__main__":
+    seed(datetime.now())
     app.run(host="0.0.0.0", port=os.getenv("PORT"), debug=True)

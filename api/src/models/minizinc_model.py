@@ -44,12 +44,12 @@ class MinizincModel:
 
         self.populated = True
 
-    def solve_instance(self):
+    def solve_instance(self, rand:int):
         """
         ...
         """
         if self.populated:
-            result = self.instance.solve(random_seed = 42, processes = 6)
+            result = self.instance.solve(random_seed = rand, processes = 6)
             result = re.split("[\n]", str(result).strip("[\n]"))
             return result
         else:
