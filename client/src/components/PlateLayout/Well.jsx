@@ -30,7 +30,7 @@ const StyledLabel = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 12px;
-  font-family: "Roboto", sans-serif;
+  font-family:${props => props.theme.fonts.primary};
   font-weight: bold;
   color: #000;
   margin: auto;
@@ -41,7 +41,7 @@ const StyledLabel = styled.div`
 
 const StyledColLabel = styled.div`
   font-size: 12px;
-  font-family: "Roboto", sans-serif;
+  font-family:${props => props.theme.fonts.primary};
   font-weight: bold;
   color: #000;
 `;
@@ -58,7 +58,7 @@ const StyledColumn = styled.div`
 `;
 
 /**
- * Will render the component of one well from plate.
+ * Will render the component of a well on the plate.
  * 
  * @param props.empty true if well is empty otherwise false
  * @param props.toggleState.selected name of selected compound, <empty_string> if none is selected

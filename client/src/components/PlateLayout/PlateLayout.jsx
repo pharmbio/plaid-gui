@@ -41,7 +41,7 @@ const assignColorToCompound = (concs, hue, compoundToColorMap, cmpname) => {
       compoundToColorMap.set(
         compdnum,
         i === 0
-          ? /*  tweak colors here if needed */
+          ? /*  tweak colors here if needed!! */
             `hsla(${hue},${70}%,${40}%,0.84)`
           : `hsla(${hue},${100}%,${40 + (i / 2) * 5}%,0.90)`
       );
@@ -60,7 +60,7 @@ const assignColorToCompound = (concs, hue, compoundToColorMap, cmpname) => {
  * @param props.sizeEmptyEdge the amount of empty edges in the plate specified in the form
  */
 const PlateLayout = (props) => {
-  /* rowList, colList used to map over in the return as to render each component */
+  /* Constructing rowList and colList to map over in Plate component*/
   /* There is no way to use a loop in JSX hence this "hack" */
   let rowList = [];
   let colList = [];
@@ -70,7 +70,9 @@ const PlateLayout = (props) => {
   for (let i = 0; i < props.cols; i++) {
     colList.push(i);
   }
-  // separate compounds into corresponding plate
+
+
+  // separate compounds into their corresponding plate
   let plates = {};
   for (let i = 0; i < props.data.length; i++) {
     if (plates[props.data[i].plateID]) {
@@ -84,27 +86,32 @@ const PlateLayout = (props) => {
   }
   plates = Object.values(plates);
 
-  let mightNotExistAsSinglesOnPlate = [];
+
+  // initialize arrays
+  let mightNotExistAsSinglesOnPlate = []; // 
   let amountOfCombinationsPerPlate = [];
   for (let _ of plates) {
     amountOfCombinationsPerPlate.push(0);
     mightNotExistAsSinglesOnPlate.push([]);
   }
-
+  // will contain a Map with key=compound and val=[concentrations] for all compounds on each plate
+  let listOfCompoundMaps = [];
+  // index into the plate currently being worked on
   let j = 0;
 
-  let listOfCompoundMaps = [];
   for (let plate of plates) {
-    let compoundMap = new Map();
     /* map each compound name to all its corresponding concentrations */
+    let compoundMap = new Map();
     for (let o of plate) {
       let combinations = findCombinations(o.cmpdname);
       if (combinations) {
+        // here we add all compounds that make up the combination
         for (let comp of combinations) {
-          // we want to remove
+          // The compounds that make up the combination might not exist by itself on the plate so we add those to a separate array
+          // and check them later on since they might have to be deleted
           mightNotExistAsSinglesOnPlate[j].push(comp);
           let val = compoundMap.get(comp);
-          // if the compound "comp" does not exist in the plate as single compound, then we need to create the compound obj
+          // if the compound "comp" does not exist in the plate as a single compound, then we need to create the compound obj
           // OBS! this assumes that cmpdnum is the compound name and concentration name separated by "_"
           let newObj = { ...o, cmpdname: comp, cmpdnum: comp + "_" + o.CONCuM };
           if (val !== undefined) {
@@ -113,17 +120,17 @@ const PlateLayout = (props) => {
             compoundMap.set(comp, [newObj]);
           }
         }
-        // add the combination
+        // here we add the combination itself
         let val = compoundMap.get(o.cmpdname);
         if (val !== undefined) {
           compoundMap.set(o.cmpdname, [...val, o]);
         } else {
           compoundMap.set(o.cmpdname, [o]);
-          // increase amount of combinations only on new combination
+          // increase amount of combinations in each plate only on a new combination
           amountOfCombinationsPerPlate[j]++;
         }
       } else {
-        //not a combination
+        //if it's not a combination we just add the 
         let val = compoundMap.get(o.cmpdname);
         if (val !== undefined) {
           compoundMap.set(o.cmpdname, [...val, o]);
@@ -133,7 +140,7 @@ const PlateLayout = (props) => {
       }
     }
 
-    /* sort each compound from high to low concentration */
+    /* sort all values (concentration) for each key in compoundMaå */
     for (let [cmp, vals] of compoundMap) {
       vals.sort(compareConcum);
       compoundMap.set(cmp, vals);
@@ -141,9 +148,15 @@ const PlateLayout = (props) => {
     listOfCompoundMaps.push(compoundMap);
     j += 1;
   }
+
+
   j = 0;
+
+  /* 
+    Assign a color for each compound/combination and store them in listOfCompoundToColorMaps
+    -- each map corresponds to the colors assigned to each compound for every plate
+  */
   let listOfCompoundToColorMaps = [];
-  /* Assign color for each compound */
   for (let compoundMap of listOfCompoundMaps) {
     let compoundToColorMap = new Map();
     let colors = generateHslHues(
@@ -165,8 +178,10 @@ const PlateLayout = (props) => {
     j += 1;
   }
 
-  // remove compounds from compoundMap that actually doesn't exist on plate (taking care of removing)
-
+  /* 
+    remove compounds from each compoundMap that actually doesn't exist on plate, since each compound that make up a combination does not
+    have to exist on the plate by itself
+  */
   for (let compounds of mightNotExistAsSinglesOnPlate) {
     let i = 0;
     for (let compound of compounds) {
