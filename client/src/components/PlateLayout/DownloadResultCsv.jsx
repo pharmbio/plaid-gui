@@ -11,7 +11,7 @@ const StyledDownloadButton = styled.button`
   cursor: pointer;
 `;
 
-/*  transform plate output from jso to CSV Converter in the order
+/*  transform plate output from json to CSV Converter in the order
     plateID - well - cmpdname - CONCuM - cmpdnum
   */
 function fromJsonToCsv(plates) {
@@ -30,7 +30,6 @@ function fromJsonToCsv(plates) {
       line += ",";
       line += array[i].cmpdnum;
       line += ",";
-
       str += line + "\r\n";
     }
   });
@@ -47,6 +46,7 @@ function fromJsonToCsv(plates) {
  */
 const DownloadOutputButton = (props) => {
   const csvRef = React.useRef();
+  // Header names are same as output from minizinc model
   const headers = ["plateID,well,cmpdname,CONCuM,cmpdnum"];
 
   const handleClick = (e) => {

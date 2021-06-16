@@ -94,12 +94,15 @@ const StyledDownloadPngButton = styled.button`
 `;
 const EMPTY_WELL_COLOR = "#e9e9e9";
 
-const handleWellColorCombinations = (o, compoundToColorMap) => {
-  const cmpdName = o.cmpdname;
+/*
+ * @returns the colors assigned to each compound of the combination (comboObj)
+*/
+const handleWellColorCombinations = (comboObj, compoundToColorMap) => {
+  const cmpdName = comboObj.cmpdname;
   const combinations = findCombinations(cmpdName);
   let colors = [];
   for (let comp of combinations) {
-    colors.push(compoundToColorMap.get(comp + "_" + o.CONCuM));
+    colors.push(compoundToColorMap.get(comp + "_" + comboObj.CONCuM));
   }
   return colors;
 };
@@ -126,14 +129,14 @@ function toggleReducer(state, action) {
       }
     default:
       throw new Error(
-        "Something went wrong with toggling different labels/wells!"
+        "Something went wrong when toggling between different labels/wells!"
       );
   }
 }
 
 /**
- * Renders the plate (the row/col identifiers) and each corresponding well
- *
+ * Renders the plate (the row/col identifiers) with each corresponding well and the sidebar / switch section
+ * 
  * @param props.rowList a list containing an integer for every row
  * @param props.colList a list containing an integer for every column
  * @param props.rows the amount of rows specified in the form
@@ -148,12 +151,20 @@ const Plate = (props) => {
   const wellRad = 40;
   /* used for the row identifier label */
   const alphabet = getAlphabet();
+
   const [toggleState, toggleDispatch] = React.useReducer(toggleReducer, {
     label: "none",
     well: "none",
     selected: "",
   });
 
+
+  /**
+   * Functions for handling different selections on the plate
+   * handleSelectedCompound -- clicking on a compound on the compound/combination sidebar list
+   * handleToggleLabel     -- toggling between showing the compound name, concentration, both or nothing on each well
+   * handleToggleWell      -- toggling between showing only the compounds, controls or both
+   */
   const handleSelectedCompound = (selected) => {
     if (selected === toggleState.selected) {
       toggleDispatch({ type: "selection", payload: "" });
@@ -177,6 +188,8 @@ const Plate = (props) => {
       toggleDispatch({ type: "well", payload: selected });
     }
   };
+ /******************************************************************/
+
 
   let emptyWells = [];
 

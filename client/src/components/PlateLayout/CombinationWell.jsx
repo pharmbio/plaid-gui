@@ -3,7 +3,7 @@ import styled from "styled-components";
 import truncateString from "./../../functions/truncateString.js";
 
 /* covers the styling and positioning of the well */
-const StyledTwoFourCombinationWell = styled.div`
+const StyledTwoOrFourCombinationWell = styled.div`
   border-radius: 50%;
   grid-row: ${(props) => props.row};
   grid-column: ${(props) => props.col};
@@ -18,11 +18,11 @@ const StyledTwoFourCombinationWell = styled.div`
   width: 0px;
 `;
 
-/* covers the styling and positioning of the labels on 2/4 combination wells */
+/* covers the styling and positioning of the labels on 2 and 4 combination wells */
 const StyledLabel = styled.div`
   display: flex;
   font-size: 12px;
-  font-family: "Roboto", sans-serif;
+  font-family:${props => props.theme.fonts.primary};
   font-weight: bold;
   color: #000;
   width: ${(props) => props.wellRad}px;
@@ -36,7 +36,7 @@ const StyledLabel = styled.div`
 
 const StyledColLabel = styled.div`
   font-size: 12px;
-  font-family: "Roboto", sans-serif;
+  font-family:${props => props.theme.fonts.primary};
   font-weight: bold;
   color: #000;
 `;
@@ -87,6 +87,25 @@ const StyledColumn3 = styled.div`
   height: ${(props) => props.wellRad}px;
 `;
 
+
+/**
+ * Render the well on the plate of a combination compound (2,3 or 4)
+ *
+ * @param props.colors the colors of each compound that make up the combination
+ * @param props.toggleState.selected name of selected compound, <empty_string> if none is selected
+ * @param props.toggleState.well compounds if compounds to be highlighted, controls if controls to be highlighted otherwise "none"
+ * @param props.toggleState.label "none" if no label should be displayed, otherwise "compound" / "concentration"
+ * @param props.wellRad radius of well
+ * @param props.row the row positioning of well
+ * @param props.col the col positioning of well
+ * @param cmpdObj the compound object 
+ *        attrs of cmpdObj:
+                CONCuM
+                cmpdname
+                cmpdnum
+                plateID
+                well
+ */
 const CombinationWell = (props) => {
   let colors = props.colors;
   let sizeColors = colors.length;
@@ -141,7 +160,7 @@ const CombinationWell = (props) => {
       )}
     </StyledThreeCombinationWell>
   ) : (
-    <StyledTwoFourCombinationWell
+    <StyledTwoOrFourCombinationWell
       leftColor={colors[0]}
       topColor={sizeColors === 2 ? colors[0] : colors[1]}
       rightColor={sizeColors === 2 ? colors[1] : colors[2]}
@@ -172,7 +191,7 @@ const CombinationWell = (props) => {
       ) : (
         ""
       )}
-    </StyledTwoFourCombinationWell>
+    </StyledTwoOrFourCombinationWell>
   );
 };
 
