@@ -7,16 +7,13 @@ import Loader from "./../Loader";
 const StyledToolWrapper = styled.div`
   height: 100vh;
 `;
-const StyledWarningContainer = styled.div`
-  width: 50%;
-`
 
 const axios = require("axios");
 var CancelToken = axios.CancelToken;
 var cancel;
 
 /**
- * Renders the container that switches between the form, loader and eventually
+ * Renders the container that switches between the form, loader and 
  * the visualization of the resulting output from the minizinc model
  */
 const Tool = () => {
@@ -36,7 +33,7 @@ const Tool = () => {
 
   /**
    * Send the uploaded dzn file contents to the API and wait for the result
-   * @param {*} parsedData contains the attributes rows, cols, sizeEmptyEdge from the contents of the dzn file needed to visualize the results
+   * @param {*} parsedData contains the attributes rows, cols, sizeEmptyEdge, controls from the contents of the dzn file needed to visualize the results
    * @param {*} content the dzn file contents that the API mzn model needs to go through
    */
   const handleUploadedDznFile = async (parsedData, content) => {
@@ -74,12 +71,14 @@ const Tool = () => {
           setError(true);
         });
   };
+  
   console.log(data)
   React.useEffect(() => {
     if (data !== undefined) {
       setLoading(false);
     }
   }, [loading, data]);
+
   return (
     <StyledToolWrapper>
       {data !== undefined ? (

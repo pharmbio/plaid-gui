@@ -86,6 +86,8 @@ const validateJsonProperties = (jsonObj) => {
   return true;
 };
 
+
+// Handles the parameters contained in a json config file
 const prepareConfigFile = (obj) => {
   let compoundGroups = obj.compoundForm.groups;
   let controlGroups = obj.controlForm.groups;
@@ -136,10 +138,20 @@ const prepareConfigFile = (obj) => {
   };
   return result;
 };
+/**
+ * Handles the upload of a config json file and makes sure to construct an object that is used by the forms to fill them in.
+ * Also handles the upload of a dzn file to bypass the form and send its content to the API
+ * @param props.handleUploadedDznFile callback-func that sends the uploaded dzn file contents to the API and wait for the result
+ * @param props.handleUploadedJsonConfig callback-func that makes sure that the parameters uploaded by the config file is sent to the right component to fill in the forms
+ * 
+ * 
+ */
 const UploadExperiment = (props) => {
-  /* needed error messages?? */
+
   const [error, setShowError] = React.useState({ show: false, message: "" });
 
+
+  // Handles the upload of a json/dzn file
   const handleChange = (event) => {
     let extension = event.target.files[0].name.split(".").pop().toLowerCase();
 
