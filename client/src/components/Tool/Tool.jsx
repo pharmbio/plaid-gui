@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PlateLayout from "./../PlateLayout";
 import TransitionPage from "./TransitionPage.jsx";
 import Loader from "./../Loader";
+import config from "../../Constants.js" // dev/prod variables
 
 const StyledToolWrapper = styled.div`
   height: 100vh;
@@ -41,7 +42,7 @@ const Tool = () => {
     setLoading(true);
     axios
       .post(
-        "http://localhost:5000/dzn_file",
+        `${config.url}/dzn_file`,
         { data: content },
         {
           headers: {
