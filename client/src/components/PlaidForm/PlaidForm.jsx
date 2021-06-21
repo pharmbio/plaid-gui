@@ -7,7 +7,7 @@ import Loader from "./../Loader";
 import styled from "styled-components";
 import HorizontalStepper from "./HorizontalStepper";
 import { Formik, Form } from "formik";
-import config from "../../Constants.js" // dev/prod variables
+import {config}  from "../../Constants.js" // dev/prod variables
 
 const axios = require("axios");
 const StyledForm = styled(Form)`
@@ -46,7 +46,7 @@ async function postForm(
   setFlightState({ ...flightState, loading: true, responseError: false });
   console.log(JSON.stringify(formData))
   await axios
-    .post(`${config.url}`, formData, axiosConfig)
+    .post(`${config.url.API_URL}`, formData, axiosConfig)
     .then((response) => {
       setFlightState({ ...flightState, loading: false, responseError: false });
 
