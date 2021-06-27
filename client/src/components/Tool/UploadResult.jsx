@@ -19,6 +19,8 @@ const StyledContainer = styled.div`
   flex-direction: column;
 `;
 
+
+// Make sure that the uploaded results-file is valid
 const checkValidUpload = (jsonObj) => {
   return (
     jsonObj.hasOwnProperty("cols") &&
@@ -29,6 +31,14 @@ const checkValidUpload = (jsonObj) => {
   );
 };
 
+
+/**
+ * Handles the upload of a result json file so that a user can bypass the tool and not run the experiment through the minizinc model 
+ * to check the visualization of the plates
+ * @param props.handleUploadedResults callback-func that updates data state in parent component by adding the info gotten from the results-json file
+ * 
+ * 
+ */
 const UploadResult = (props) => {
   const [showError, setShowError] = React.useState(false);
   const handleChange = (event) => {

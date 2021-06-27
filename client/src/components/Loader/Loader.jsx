@@ -68,6 +68,9 @@ const StyledCancelButton = styled.button`
   }
 `
 
+/**
+ * Renders the loading spinner when waiting for the API to run the minizinc model
+ */
 const Loader = (props) => {
   const size = 45;
   return (

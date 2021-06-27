@@ -33,6 +33,10 @@ const StyledList = styled.ul`
   align-items: start;
 `;
 
+
+/**
+ * Renders the navbar of the web gui
+ */
 const Navbar = () => {
   const [link, setLink] = React.useState("/");
   const handleClick = (link) => {

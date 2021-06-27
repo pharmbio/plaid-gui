@@ -103,6 +103,16 @@ const StyledTest = styled.div`
   position: absolute;
   top: 20px;
 `
+/**
+ * Renders the transition boxes that allows the user to select to either upload old results, 
+ * upload a config file and go to the tool
+ * @param props.handleUploadedDznFile callback-func that sends the uploaded dzn file contents to the API and wait for the result
+ * @param props.handleUploadedResults callback-func that updates data state by adding the info gotten from the results-json file
+ * @param props.error 
+ * @param props.setData callback-func that updates data state held by parent Tool component
+ * 
+ * 
+ */
 const TransitionPage = (props) => {
   const [transition, setTransition] = React.useState("main");
   const [uploadedConfig, setUploadedConfig] = React.useState(null);
@@ -111,7 +121,6 @@ const TransitionPage = (props) => {
    * @param {object} content an object containing data to prepopulate the form fields with. (each property name in content is valid property name to the formState object)
    */
   const handleUploadedJsonConfig = (content) => {
-    // TODO send the object as props to PlaidForm and prepopulate the data in formState!
     setUploadedConfig(content);
   };
 
@@ -126,7 +135,6 @@ const TransitionPage = (props) => {
           uploadedConfig={uploadedConfig}
         />
       ) : (
-          <>
             <StyledTransitionPageContainer>
               {props.error ? <StyledTest> <HighlightedParahraph title={"Error: File data is incorrect"} type={"Warning"}>
                 There seems to be a problem with the file you uploaded. Make sure your dzn file is formatted correctly.
@@ -153,7 +161,6 @@ const TransitionPage = (props) => {
                     handleUploadedDznFile={props.handleUploadedDznFile}
                     handleUploadedJsonConfig={handleUploadedJsonConfig}
                   />
-
                 </StyledRowContainer>
               </StyledFlexItem>
               <StyledFlexItem>
@@ -168,7 +175,6 @@ const TransitionPage = (props) => {
               </StyledFlexItem>
 
             </StyledTransitionPageContainer>
-          </>
         )}
     </>
   );

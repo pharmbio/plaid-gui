@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 
+
+// Add styles that can be accessed from any styledComponent in any children react components
 const theme = {
   backgroundColors :{
     primary: "#f6f6f6",
