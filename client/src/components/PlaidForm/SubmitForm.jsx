@@ -87,6 +87,11 @@ const StyledErrorContainer = styled.div`
   height: 450px;
 `;
 
+/**
+ * This function handles the download json component of the application
+ * 
+ * @param data the current input data
+ */
 const handleDownload = async (data) => {
   const json = JSON.stringify(data);
   const blob = new Blob([json], { type: "application/json" });
@@ -98,7 +103,16 @@ const handleDownload = async (data) => {
   link.click();
   document.body.removeChild(link);
 };
-
+/**
+ * This component represents the final page of the application.
+ *
+ * @param handleNext Function that sets a loading screen or steps to the next form
+ * @param handlePrev Function that steps the stepper back one step
+ * @param experimentForm The current input data in the experiment form
+ * @param compoundForm The current input data in the compound form
+ * @param controlForm The current input data in the control form
+ * @return the submit page layout and components
+ */
 const SubmitForm = ({
   handleNext,
   handlePrev,
@@ -125,6 +139,7 @@ const SubmitForm = ({
 
   let [errors, utils] = useValidation({}, config);
 
+  /* This effect triggers once the validation state changes */
   const [validating, setValidating] = React.useState(false);
   React.useEffect(() => {
     if (validating) {

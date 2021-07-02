@@ -18,6 +18,13 @@ const StyledSectionLabel = styled.label`
 
 const DEFAULT_DELIMITER = ",";
 
+/**
+ * This function assembles the necessary parts of the compound form into an object that can be passed to the API.This is needed as there are fields sent to the API that are created by 
+ * combinding the different user input fields.
+ * @param groupObj The groups that have been created for the compound form
+ * @return  The assembled compound object containing the necessary parts of the compound form that are sent to the API
+ * */ 
+
 const setUpTheCompoundForm = (groupObj) => {
   let groups = groupObj.groups;
   let processedGroup;
@@ -82,7 +89,6 @@ const setUpTheCompoundForm = (groupObj) => {
     }
   }
 
-  // TODO this is suposed to be removed from the model right?
   for (let j = 0; j < Math.max(...utilGroup.compoundConcentrations); j++) {
     utilGroup.compound_concentration_indicators.push("");
   }
@@ -121,6 +127,14 @@ const setUpTheCompoundForm = (groupObj) => {
   };
   return compoundObject;
 };
+/**
+ * This component contains the structure and logic of the compound form.
+ * @param compoundState The current state of the compound field inputs. This is used for persistent data accross steps.
+ * @param handleNext Function that sets a loading screen or steps to the next form
+ * @param handlePrev Function that steps the stepper back one step
+ * @param handleCompoundFormChange Function that updates the form object to any input changes
+ * @return the compound form layout components
+ */
 
 const CompoundForm = ({
   compoundState,
@@ -167,8 +181,8 @@ const CompoundForm = ({
     },
   };
 
+  /* Validation hook that returns errors and util functions that currently contain onClick validation */
   const [errors, utils] = useValidation(compoundForm, compoundConfig);
-
   const [validating, setValidating] = React.useState(false);
   React.useEffect(() => {
     if (validating) {
@@ -188,6 +202,10 @@ const CompoundForm = ({
       : DEFAULT_DELIMITER
   );
 
+  /** 
+   * Updates the input data if the user selects a new delimiter, splitting any previous data on the new delimiter.
+   * @param new_delimiter the custom delimiter chosen by the user
+  */
   const handleDelimiterChange = (new_delimiter) => {
     // When the delimiter has changed => we need to re-parse the compound names that has been written to the field (if not empty)
     if (new_delimiter === "") {
@@ -218,6 +236,11 @@ const CompoundForm = ({
     setCompoundForm({ ...compoundForm, groups: groups });
   };
 
+  /** 
+   * Handles any changes to the groups in the compound form
+   * @param groups the object holding all current groups
+   * @param selected the current selected group
+  */  
   const handleChangeOnGroups = (groups, selected) => {
     if (groups === null) {
       setCompoundForm({

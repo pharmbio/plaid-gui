@@ -23,9 +23,19 @@ const StyledContainer = styled.div`
   height: 100vh;
 `;
 
+/* Token used by axios to cancel a sent post request */
 var CancelToken = axios.CancelToken;
 var cancel;
-
+/**
+ * This functions performs a post request when the form is submitted to the flask API using Axios with the current form state as payload.
+ * Errors are propagated back from the API and displayed on screen. A cancel token is also used in order to cancel requests.
+ * @param formData The form data that is sent to the API
+ * @param setCancelRequest Setter state for the cancel state used in order to determine if the user has canceled the post request or not
+ * @param setFlightState Setter state for the flight state used in order to determine if the user has posted the data or not which in turn renders a loading screen.
+ * @param flightState State that determines if the request has been submitted or not
+ * @param setData Setter for the passed form data
+ * @return the plaid form and all its sub components
+ */
 async function postForm(
   formData,
   setResponseError,
@@ -67,6 +77,12 @@ async function postForm(
       setResponseError(error.response.data.message);
     });
 }
+
+/**
+ * This component contains the structure and logic of the PlaidForm component.
+ * @param props the properties passed to the PlaidForm component.
+ * @return the control form layout components
+ */
 const PlaidForm = (props) => {
   const [cancelRequest, setCancelRequest] = useState(false);
   useEffect(() => {
@@ -75,11 +91,11 @@ const PlaidForm = (props) => {
     }
   }, [cancelRequest])
 
+
   const [flightState, setFlightState] = useState({
     loading: false,
     responseError: false,
   });
-
   const [responseError, setResponseError] = useState("");
   const [formState, setFormState] = useState({});
   React.useEffect(() => {
@@ -95,13 +111,14 @@ const PlaidForm = (props) => {
     }
   }, [formState]);
 
+  /* This state is updated and passed to the combinationForm for persistent data accross steps */
   const [combinationForm, setCombinationForm] = useState({
     combinations: 0,
     combination_concentrations: 0,
     combination_names: [], // List
     combination_concentration_names: [], // List
   });
-  /* prepopulate or default object */
+    /* This state is updated and passed to the compoundForm for persistent data accross steps */
   const [compoundForm, setCompoundForm] = useState({
     compounds: 0,
     compound_concentration_names: [], // List
@@ -130,7 +147,8 @@ const PlaidForm = (props) => {
         },
   });
 
-  /* prepopulate or default object */
+  /* This state is updated and passed to the controlForm for persistent data accross steps */
+
   const [controlForm, setControlForm] = useState({
     num_controls: 0,
     control_concentrations: [],
@@ -155,8 +173,6 @@ const PlaidForm = (props) => {
           ],
         },
   });
-  /* prepopulate or default object */
-
   const handleCompoundFormChange = (obj) => {
     setCompoundForm(obj);
   };
@@ -165,7 +181,7 @@ const PlaidForm = (props) => {
     setControlForm(obj);
   };
 
-  /* prepopulate or default object */
+  /* This state is updated and passed to the experimentForm for persistent data accross steps */
   const [experimentForm, setExperimentForm] = useState(
     props.uploadedConfig
       ? props.uploadedConfig.experimentForm
@@ -183,20 +199,22 @@ const PlaidForm = (props) => {
         selected: 48,
       }
   );
-
   const handleExperimentFormChange = (obj) => {
     setExperimentForm(obj);
   };
   /* from the Stepper component */
   const [step, setStep] = useState(0);
 
+  /* Takes the stepper to the next step */
   const handleNext = () => {
     setLoading(true);
   };
 
+  /* Takes the stepper to the previous step */
   const handlePrev = () => {
     setStep(step - 1);
   };
+    /* This useEffect hook is fired when the loading screen is active. It assembles all the spread out forms into a single mergedState which can be passed to the API*/
   const [loading, setLoading] = useState(false);
   React.useEffect(() => {
     if (loading) {
