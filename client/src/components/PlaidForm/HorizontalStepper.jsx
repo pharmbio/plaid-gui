@@ -44,6 +44,12 @@ const HoriztonalStepperProgressIcon = styled.div`
   }
 `;
 
+/**
+ * This component renders the horizontal stepper for the tool 
+ * @param currentStep The current step index
+ * @param labels The names of each step in the stepper
+ * @return the layout and steps used in the horizontal stepper
+*/
 const HoriztonalStepper = ({ currentStep, labels = [] }) => {
   return (
     <HoriztonalStepperContainer>

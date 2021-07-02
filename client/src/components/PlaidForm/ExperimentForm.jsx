@@ -16,6 +16,15 @@ const StyledSectionLabel = styled.label`
   font-size:16px;
 `;
 
+/**
+ * This component contains structure and logic of the experimental form step. 
+ *
+ * @param experimentState The current state of the experimental field inputs.  This is used for persistent data accross steps.
+ * @param handleNext Function that sets a loading screen or steps to the next form
+ * @param handlePrev Function that steps the stepper back one step
+ * @param handleExperimentFormChange Function that updates the form object to any input changes
+ * @return the experiment form layout components
+ */
 const ExperimentForm = ({
   experimentState,
   handleNext,
@@ -23,7 +32,7 @@ const ExperimentForm = ({
   handleExperimentFormChange,
 }) => {
   const [experimentForm, setExperimentForm] = useState(experimentState);
-
+  /* This is the validation config passed into the useValidation hook */
   const ExperimentConfig = {
     fields: {
       num_rows: {
@@ -76,7 +85,7 @@ const ExperimentForm = ({
       },
     },
   };
-
+  /* Options for the preset plate size */
   const options = {
     option1: {
       size: 48,
@@ -96,7 +105,9 @@ const ExperimentForm = ({
     }
   }
 
+  /* customState toggles if the custom plate size input fields are toggled or not */
   const [customState, setCustomState] = useState(false);
+  /* Validation hook that returns errors and util functions that currently contain onClick validation */
   const [errors, utils] = useValidation(experimentForm, ExperimentConfig);
   const [validating, setValidating] = useState(false);
   React.useEffect(() => {
@@ -127,7 +138,7 @@ const ExperimentForm = ({
       });
     }
   };
-
+/* Input handler for the input fields  in the experimentForm  */
   const handleChangeOfInput = (event) => {
     let name = event.target.name;
     let value = event.target.value;

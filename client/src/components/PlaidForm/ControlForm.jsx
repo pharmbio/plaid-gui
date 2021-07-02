@@ -16,6 +16,12 @@ const StyledSectionLabel = styled.label`
   font-size: 16px;
 `;
 const DEFAULT_DELIMITER = ",";
+/**
+ * This function assembles the necessary parts of the control into an object that can be passed to the API. This is needed as there are fields sent to the API that are created by 
+ * combinding the different user input fields.
+ * @param groupObj The groups that have been created for the control form
+ * @return  The assembled control object containing the necessary parts of the control form that are sent to the API
+ * */ 
 const setUpTheControlForm = (groupObj) => {
   let groups = groupObj.groups;
   let processedGroup;
@@ -101,7 +107,14 @@ const setUpTheControlForm = (groupObj) => {
   };
   return controlObject;
 };
-
+/**
+ * This component contains the structure and logic of the control form.
+ * @param controlState The current state of the control field inputs. 
+ * @param handleNext Function that sets a loading screen or steps to the next form
+ * @param handlePrev Function that steps the stepper back one step
+ * @param handleControlFormChange Function that updates the form object to any input changes
+ * @return the control form layout components
+ */
 const ControlForm = ({
   controlState,
   handleNext,
@@ -168,8 +181,12 @@ const ControlForm = ({
       : DEFAULT_DELIMITER
   );
 
+   /** 
+   * Updates the input data if the user selects a new delimiter, splitting any previous field data on the new delimiter.
+   * @param new_delimiter the custom delimiter chosen by the user
+  */
   const handleDelimiterChange = (new_delimiter) => {
-    // When the delimiter has changed => we need to re-parse the compound names that has been written to the field (if not empty)
+    // When the delimiter has changed => we need to re-parse the control names that has been written to the field (if not empty)
     if (new_delimiter === "") {
       // We want to use the default delimiter if the user leaves the input field empty
       setDelimiter(DEFAULT_DELIMITER);
@@ -198,6 +215,11 @@ const ControlForm = ({
     setControlForm({ ...controlForm, groups: groups });
   };
 
+    /** 
+   * Handles any changes to the groups in the control form, updating the control form with the new data.
+   * @param groups the object holding all current groups
+   * @param selected the current selected group
+  */  
   const handleChangeOnGroups = (groups, selected) => {
     if (groups === null) {
       setControlForm({
