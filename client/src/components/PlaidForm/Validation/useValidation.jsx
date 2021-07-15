@@ -6,10 +6,10 @@ import removeParenthesisAndReturnSubCompound from "../../../functions/removePare
 /**
  * This object holds all the validator functions used by the useValidation hook. Each function specified in the supplied config matches the name of one or more validators in this object.
  * The config supplies an error message and a value to be compared against. If it passes the validation against that value, no error message is returned else return the error message.
- * */ 
+ * */
 
 const validators = {
-   // Checks if field input is greater than some value
+  // Checks if field input is greater than some value
   minValidSize: function (config) {
     return function (value) {
       if (value < config.value || isNaN(value) || value === null) {
@@ -217,8 +217,8 @@ const validators = {
       const amountEmptyWells =
         experimentForm.num_cols * experimentForm.size_empty_edge * 2 +
         (experimentForm.num_rows - experimentForm.size_empty_edge * 2) *
-          experimentForm.size_empty_edge *
-          2;
+        experimentForm.size_empty_edge *
+        2;
       const numControlReplicates = controlForm.control_replicates.reduce(
         (a, b) => a + b,
         0
@@ -237,6 +237,9 @@ const validators = {
 
       if (wellsLeft > 0 && !experimentForm.allow_empty_wells) {
         return config.message.hasEmptyWells;
+      }
+      if (wellsLeft < 0) {
+        return config.message.tooFewWells
       }
       return null;
     };
@@ -293,13 +296,13 @@ const validators = {
       }
       for (let i = 0; i < mergedArrays.length; i++) {
         let combos = findCombinations(mergedArrays[i].trim());
-        
+
         if (combos !== null) {
-          
-          if(new Set(combos).size !== combos.length){
+
+          if (new Set(combos).size !== combos.length) {
             return config.message;
           }
-        
+
           // makes sure that we consider permutations of combinations eg. (a)(b) == (b)(a) so if it contains both then we have a duplicate
           combos.sort();
           let combination = combos.toString().replaceAll(",", "");
@@ -410,9 +413,9 @@ function validateField(fieldValue, fieldConfig, fieldStates) {
   for (let validatorName in fieldConfig) {
     const validatorConfig = fieldConfig[validatorName];
     //select the correct validator based on the one specified in the config
-    const validator = validators[validatorName]; 
+    const validator = validators[validatorName];
     //run the validator function, returning the inner validator function.
-    const configuredValidator = validator(validatorConfig); 
+    const configuredValidator = validator(validatorConfig);
     //run the inner validator function, returning ny errorMessages.
     const errorMessage = configuredValidator(fieldValue, fieldStates);
     if (errorMessage) {
@@ -434,7 +437,7 @@ function validateFields(fieldValues, fieldStates) {
   const errors = {};
   for (let fieldName in fieldStates) {
     //get the values stored in key e.g num_rows.
-    const fieldConfig = fieldStates[fieldName]; 
+    const fieldConfig = fieldStates[fieldName];
     //  const fieldValue = fieldValues[fieldName]; //get the current values found in our large object for num_rows.
     const fieldValue = fieldValues[fieldName];
 
