@@ -3,6 +3,8 @@ import Instructions from "./components/Instructions";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 import Tool from "./components/Tool";
+import { Helmet } from 'react'
+
 
 
 const StyledGridWrapper = styled.div`
@@ -10,7 +12,10 @@ const StyledGridWrapper = styled.div`
   grid-template-columns: 11rem minmax(50rem, 100%);
 `;
 
+const TITLE = 'PLAID'
+
 const App = () => {
+  document.title = TITLE
   return (
     <div className="App">
         <StyledGridWrapper>

@@ -213,28 +213,29 @@ const validators = {
       }
       const numWells =
         (experimentForm.num_cols * experimentForm.num_rows) / denom;
-
       const amountEmptyWells =
         experimentForm.num_cols * experimentForm.size_empty_edge * 2 +
         (experimentForm.num_rows - experimentForm.size_empty_edge * 2) *
         experimentForm.size_empty_edge *
         2;
-      const numControlReplicates = controlForm.control_replicates.reduce(
-        (a, b) => a + b,
-        0
-      );
-      const numCompoundReplicates = compoundForm.compound_replicates.reduce(
-        (a, b) => a + b,
-        0
-      );
-      const wellsLeft =
-        numWells -
-        amountEmptyWells -
-        controlForm.num_controls -
-        numCompoundReplicates -
-        compoundForm.compounds -
-        numControlReplicates;
 
+      //calculates the number of compound replicates and the number of concentrations needed on a plate
+      let comp_res = 0
+      for (let i in compoundForm.compound_replicates) {
+        let num_repl = compoundForm.compound_replicates[i]
+        let num_conc = compoundForm.compound_concentrations[i]
+        comp_res += (num_repl * num_conc)
+
+      }
+      //calculates the number of control replicates and the number of concentrations needed on a plate
+      let ctrl_res = 0
+      for (let i in controlForm.control_replicates) {
+        let num_repl = controlForm.control_replicates[i]
+        let num_conc = controlForm.control_concentrations[i]
+        ctrl_res += (num_repl * num_conc)
+      }
+      const wellsLeft =
+        numWells - amountEmptyWells - comp_res - ctrl_res
       if (wellsLeft > 0 && !experimentForm.allow_empty_wells) {
         return config.message.hasEmptyWells;
       }
