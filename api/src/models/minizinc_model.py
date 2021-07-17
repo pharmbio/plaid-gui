@@ -1,6 +1,7 @@
 import minizinc
+from error_handler import NoSolutionException
 import re
-import os
+import os,sys
 
 
 class MinizincModel:
@@ -50,6 +51,8 @@ class MinizincModel:
         """
         if self.populated:
             result = self.instance.solve(random_seed = rand, processes = 6)
+            if(not result):
+               raise NoSolutionException("The input data could not be used to find a solution by the model. Try changing your input.")
             result = re.split("[\n]", str(result).strip("[\n]"))
             return result
         else:

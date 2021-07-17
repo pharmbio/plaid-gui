@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useReducer } from "react";
 import HighlightedParahraph from "../Instructions/HighlightedParagraph";
 import styled from "styled-components";
 import useValidation from "./Validation/useValidation";
@@ -113,12 +113,14 @@ const handleDownload = async (data) => {
  * @param controlForm The current input data in the control form
  * @return the submit page layout and components
  */
+
 const SubmitForm = ({
   handleNext,
   handlePrev,
   experimentForm,
   compoundForm,
   controlForm,
+  responseError,
 }) => {
 
   let config = {
@@ -138,7 +140,6 @@ const SubmitForm = ({
   };
 
   let [errors, utils] = useValidation({}, config);
-
   /* This effect triggers once the validation state changes */
   const [validating, setValidating] = React.useState(false);
   React.useEffect(() => {
@@ -153,12 +154,12 @@ const SubmitForm = ({
 
   let data = {
     experimentForm: experimentForm,
-    delimiterCompounds:compoundForm.groups.delimiter,
+    delimiterCompounds: compoundForm.groups.delimiter,
     compoundForm: {
       groups: compoundForm.groups.groups,
     },
-    delimiterControls:controlForm.groups.delimiter,
-      controlForm: {
+    delimiterControls: controlForm.groups.delimiter,
+    controlForm: {
       groups: controlForm.groups.groups,
     },
   };
@@ -170,12 +171,14 @@ const SubmitForm = ({
     } else {
     }
   };
-
   return (<>
-    <StyledErrorContainer>{errors.wrongWellCount ? <HighlightedParahraph title={"Error: Invalid Wells"} type={"Warning"}> {errors.wrongWellCount}</HighlightedParahraph> : null}</StyledErrorContainer>
+    <StyledErrorContainer>{errors.wrongWellCount ? <HighlightedParahraph title={"Error: Invalid Wells"} type={"Warning"}> {errors.wrongWellCount}</HighlightedParahraph>
+      : responseError.status === 2 ? <HighlightedParahraph title={"Error: Unsatisfied Model "} type={"Warning"}> {responseError.message}</HighlightedParahraph> 
+      : responseError.status === 400 ? <HighlightedParahraph title={"Error: Bad Request"} type={"Warning"}> {responseError.message}</HighlightedParahraph> 
+      : null}</StyledErrorContainer>
     <StyledContainer>
       <StyledHeader> You're almost done.</StyledHeader>
-      <StyledParagraph> You can go back and review your input, 
+      <StyledParagraph> You can go back and review your input,
         save your form input allowing you to easily prepopulate the form in future runs or submit the form to generate your plate layout!
       </StyledParagraph>
       <StyledRowContainer>
