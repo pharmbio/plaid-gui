@@ -236,11 +236,6 @@ const validators = {
       }
       const wellsLeft =
         numWells - amountEmptyWells - comp_res - ctrl_res
-      console.log(numWells)
-      console.log(amountEmptyWells)
-      console.log(comp_res)
-      console.log(ctrl_res)
-      console.log(wellsLeft)
       if (wellsLeft > 0 && !experimentForm.allow_empty_wells) {
         return config.message.hasEmptyWells;
       }

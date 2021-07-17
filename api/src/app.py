@@ -1,7 +1,7 @@
-import os
+import os, sys
 from models.minizinc_model import MinizincModel
 from services.services import ModelService
-from error_handler import MinizincException
+from error_handler import MinizincException, NoSolutionException, UnsatException
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from random import seed
@@ -35,6 +35,8 @@ def test_plaid():
         result = mz.solve_instance(rand = randint(1,10000))
         j_res = ModelService.output_to_json(result)
         return j_res
+    except NoSolutionException as e:
+        raise UnsatException((e.error_msg()['message']))
     except Exception as e:
         raise MinizincException(str(e))
 
@@ -43,6 +45,10 @@ def test_plaid():
 def minizinc_error(e):
     return e.error_msg(), e.status_code
 
+@app.errorhandler(UnsatException)
+def unsat_error(e):
+    print(e.error_msg(), file=sys.stderr)
+    return e.error_msg(), e.status_code
 
 if __name__ == "__main__":
     seed(datetime.now())
