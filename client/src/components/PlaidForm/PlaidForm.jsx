@@ -7,7 +7,7 @@ import Loader from "./../Loader";
 import styled from "styled-components";
 import HorizontalStepper from "./HorizontalStepper";
 import { Formik, Form } from "formik";
-import {config}  from "../../Constants.js" // dev/prod variables
+import { config } from "../../Constants.js" // dev/prod variables
 
 const axios = require("axios");
 const StyledForm = styled(Form)`
@@ -54,12 +54,10 @@ async function postForm(
     })
   };
   setFlightState({ ...flightState, loading: true, responseError: false });
-  console.log(JSON.stringify(formData))
   await axios
     .post(`${config.url.API_URL}`, formData, axiosConfig)
     .then((response) => {
       setFlightState({ ...flightState, loading: false, responseError: false });
-
       setData({
         rows: formData.num_rows,
         cols: formData.num_cols,
@@ -68,6 +66,7 @@ async function postForm(
         result: response.data,
       });
     })
+
     .catch((error) => {
       if (axios.isCancel(error)) {
         setFlightState({ ...flightState, loading: false, responseError: false });
@@ -75,7 +74,7 @@ async function postForm(
         return;
       }
       setFlightState({ ...flightState, loading: false, responseError: true });
-      setResponseError(error.response.data.message);
+      setResponseError({message: error.response.data.message, status: error.response.status});
     });
 }
 
@@ -85,6 +84,9 @@ async function postForm(
  * @return the control form layout components
  */
 const PlaidForm = (props) => {
+
+
+
   const [cancelRequest, setCancelRequest] = useState(false);
   useEffect(() => {
     if (cancelRequest) {
@@ -97,7 +99,8 @@ const PlaidForm = (props) => {
     loading: false,
     responseError: false,
   });
-  const [responseError, setResponseError] = useState("");
+  const [responseError, setResponseError] = useState({message: "", status: 0});
+
   const [formState, setFormState] = useState({});
   React.useEffect(() => {
     if (!(JSON.stringify(formState) === "{}")) {
@@ -119,7 +122,7 @@ const PlaidForm = (props) => {
     combination_names: [], // List
     combination_concentration_names: [], // List
   });
-    /* This state is updated and passed to the compoundForm for persistent data accross steps */
+  /* This state is updated and passed to the compoundForm for persistent data accross steps */
   const [compoundForm, setCompoundForm] = useState({
     compounds: 0,
     compound_concentration_names: [], // List
@@ -215,7 +218,7 @@ const PlaidForm = (props) => {
   const handlePrev = () => {
     setStep(step - 1);
   };
-    /* This useEffect hook is fired when the loading screen is active. It assembles all the spread out forms into a single mergedState which can be passed to the API*/
+  /* This useEffect hook is fired when the loading screen is active. It assembles all the spread out forms into a single mergedState which can be passed to the API*/
   const [loading, setLoading] = useState(false);
   React.useEffect(() => {
     if (loading) {
@@ -285,6 +288,7 @@ const PlaidForm = (props) => {
                 experimentForm={experimentForm}
                 compoundForm={compoundForm}
                 controlForm={controlForm}
+                responseError={responseError}
               ></SubmitForm>
             )}
           </StyledForm>
