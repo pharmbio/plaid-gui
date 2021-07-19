@@ -137,7 +137,7 @@ const TransitionPage = (props) => {
       ) : (
             <StyledTransitionPageContainer>
               {props.error ? <StyledTest> <HighlightedParahraph title={"Error: File data is incorrect"} type={"Warning"}>
-                There seems to be a problem with the file you uploaded. Make sure your dzn file is formatted correctly.
+                {props.error}
               </HighlightedParahraph></StyledTest> : null}
               <StyledFlexItem>
                 <StyledHeader> PLAN </StyledHeader>
