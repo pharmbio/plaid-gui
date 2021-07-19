@@ -69,7 +69,7 @@ const Tool = () => {
             return;
           }
           setLoading(false)
-          setError(true);
+          setError(error.response.data.message);
         });
   };
   React.useEffect(() => {
