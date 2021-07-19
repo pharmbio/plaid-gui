@@ -47,7 +47,6 @@ def minizinc_error(e):
 
 @app.errorhandler(UnsatException)
 def unsat_error(e):
-    print(e.error_msg(), file=sys.stderr)
     return e.error_msg(), e.status_code
 
 if __name__ == "__main__":

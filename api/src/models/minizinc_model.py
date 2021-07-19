@@ -27,7 +27,7 @@ class MinizincModel:
         dzn_str: str | None
         args_json: json file with arguments | None
         """
-
+    
         if self.instance is None:
             raise Exception("Instance is not initialized!")
         elif dzn_file_path is not None:
