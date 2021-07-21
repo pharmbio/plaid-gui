@@ -1,12 +1,14 @@
 export const concentrationsLabels = ["L", "M", "H"];
 /** 
  * Compares two objects a and b and returns comparison value depending on the CONCuM property of a and b
+ * @pre CONCuM property needs to exist in both a and b
  * @param: a an object representing one row of the output from minizinc 
  * @param: b an object representing one row of the output from minizinc 
  * @example: let a = {cmpdname:cm1, CONCuM:100,...} and b = {cmpdname:cm2, CONCuM:1,...}
              then compare(a,b) will return -1
 */
 export const compareConcum = (a, b) => {
+
   if (
     concentrationsLabels.includes(a.CONCuM) &&
     concentrationsLabels.includes(b.CONCuM)
