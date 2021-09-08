@@ -7,7 +7,7 @@ import { createGlobalStyle, ThemeProvider } from "styled-components";
 // Add styles that can be accessed from any styledComponent in any children react components
 const theme = {
   backgroundColors :{
-    primary: "#f6f6f6",
+    primary: "#ffffff",
     navbar: "#323439",
     highlightYellow: "rgba(255, 229, 100, 0.3)",
     highlightYellowSide: "#ffe564",
