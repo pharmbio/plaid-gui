@@ -165,7 +165,7 @@ const validators = {
       return null;
     };
   },
-  //Checks if here are negative replicates 
+  //Checks if there are negative replicates 
   ctrlNegativeReplicates: function (config) {
     return function () {
       let groups = config.value.groups;
