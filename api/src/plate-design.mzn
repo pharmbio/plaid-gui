@@ -17,7 +17,7 @@
 %
 % Authors: Maria Andreina FRANCISCO RODRIGUEZ (maria.andreina.francisco@farmbio.uu.se)
 % Version: 1.0
-% Last Revision: July 2021
+% Last Revision: September 2021
 %
 
 include "globals.mzn";
@@ -78,7 +78,7 @@ array[1..num_controls*max_control_concentrations] of bool: spread_control = [ ce
 
 %%% Testing %%%
 
-bool: testing = false;
+opt bool: testing;
 bool: debugging = false;
 
 
@@ -135,12 +135,12 @@ force_spread_controls = (ceil(inner_plate_size/9)*numplates >= total_controls) ;
 %force_spread_controls = false;
 
 %% Detecting some unsatisfiable cases.
-constraint assert(ceil(sum(compound_replicates)/numplates)*min(compound_concentrations++[infinity]) + sum([floor(control_concentrations[i]*control_replicates[i]/numplates) | i in 1..num_controls]) <= inner_plate_size, "Invalid data: the design is unsatisfiable. It is not possible to divide the compounds and controls evenly accross the plates. (E01)");  
+constraint assert(ceil(sum(compound_replicates)/numplates)*min(compound_concentrations++[infinity]) + sum([floor(control_concentrations[i]*control_replicates[i]/numplates) | i in 1..num_controls]) <= inner_plate_size, "Invalid data: the design is unsatisfiable. It is not possible to divide the compounds and controls evenly across the plates. (E01)");  
                                                                 
-constraint assert((floor(sum(compound_replicates)/numplates)-1)*min(compound_concentrations++[infinity]) + max_compound_concentrations + sum([floor(control_concentrations[i]*control_replicates[i]/numplates) | i in 1..num_controls]) <= inner_plate_size, "Invalid data: the design is unsatisfiable. It is not possible to divide the compounds and controls evenly accross the plates. (E02)");  
+constraint assert((floor(sum(compound_replicates)/numplates)-1)*min(compound_concentrations++[infinity]) + max_compound_concentrations + sum([floor(control_concentrations[i]*control_replicates[i]/numplates) | i in 1..num_controls]) <= inner_plate_size, "Invalid data: the design is unsatisfiable. It is not possible to divide the compounds and controls evenly across the plates. (E02)");  
 
                             
-                                                                                    
+                                                                                   
 set of int: Rows = 1..numrows;
 set of int: Columns = 1..numcols;
 set of int: Plates = 1..numplates;
@@ -643,10 +643,9 @@ constraint (sum(ul_half_plates[..,lower]) <= ceil(sum([compound_concentrations[i
 %% HERE A experiment_plate
 
 
-constraint forall(i in Plates) ( ul_half_plates[i,upper] <= ((sum([ (experiment_plate[c] == i) | c in 1..experiments]) + 1) div 2));
-
-constraint forall(i in Plates) ( ul_half_plates[i,lower] <= ((sum([ (experiment_plate[c] == i) | c in 1..experiments]) + 1) div 2));
-
+constraint forall(i in Plates, v in Vertical) ( ul_half_plates[i,v] <= ((sum([ (experiment_plate[c] == i) | c in 1..experiments]) + 1) div 2));
+                                                                
+constraint forall(i in Plates, v in Vertical)(((floor(sum(compound_replicates)/numplates)-1)*min(compound_concentrations++[infinity]) + max_compound_concentrations) div 2 <= ul_half_plates[i,v]);  
 
 %constraint forall(i in Plates)(sum(v in Vertical)(ul_half_plates[i,v])<=at_most);
 %constraint forall(i in Plates)(sum(h in Horizontal)(lr_half_plates[i,h])<=at_most);
@@ -693,6 +692,8 @@ array [Plates,Vertical] of var int: sum_controls_ul_plates;
 
 array [Plates,Horizontal,1..num_controls*max_control_concentrations] of var int: controls_lr_plates;
 
+array [Plates,Vertical,Horizontal,1..num_controls*max_control_concentrations] of var int: controls_quarter_plates;
+
 array [Plates,Rows,{0} union 1..num_controls*max_control_concentrations] of var int: controls_row_plates;
 
 array [Plates,Columns,{0} union 1..num_controls*max_control_concentrations] of var int: controls_column_plates;
@@ -702,10 +703,39 @@ constraint forall(i in Plates)(global_cardinality([plates[i,j,k] | j in 1..floor
 
 constraint forall(i in Plates)(global_cardinality([plates[i,j,k] | j in floor(numrows/2)+1..numrows, k in Columns], [experiments+d | d in 1..num_controls*max_control_concentrations], [controls_ul_plates[i,lower,d] | d in 1..num_controls*max_control_concentrations]));
 
+
+%% Defining controls_quarter_plates variables
+constraint forall(i in Plates)(global_cardinality([plates[i,j,k] | j in 1..(numrows div 2), k in 1..(numcols div 2)], [experiments+d | d in 1..num_controls*max_control_concentrations], [controls_quarter_plates[i,upper,left,d] | d in 1..num_controls*max_control_concentrations]));
+
+constraint forall(i in Plates)(global_cardinality([plates[i,j,k] | j in 1..(numrows div 2), k in (numcols div 2)+1..numcols], [experiments+d | d in 1..num_controls*max_control_concentrations], [controls_quarter_plates[i,upper,right,d] | d in 1..num_controls*max_control_concentrations]));
+
+constraint forall(i in Plates)(global_cardinality([plates[i,j,k] | j in (numrows div 2)+1..numrows, k in 1..(numcols div 2)], [experiments+d | d in 1..num_controls*max_control_concentrations], [controls_quarter_plates[i,lower,left,d] | d in 1..num_controls*max_control_concentrations]));
+
+constraint forall(i in Plates)(global_cardinality([plates[i,j,k] | j in (numrows div 2)+1..numrows, k in (numcols div 2)+1..numcols], [experiments+d | d in 1..num_controls*max_control_concentrations], [controls_quarter_plates[i,lower,right,d] | d in 1..num_controls*max_control_concentrations]));
+
+
 constraint forall(i in Plates, v in Vertical, d in 1..num_controls*max_control_concentrations)(controls_ul_plates[i,v,d]<=ceil(max_controls_per_plate[d]/2));
 constraint forall(i in Plates, v in Vertical, d in 1..num_controls*max_control_concentrations)(controls_ul_plates[i,v,d]>=floor(min_controls_per_plate[d]/2));
 
 constraint forall(i in Plates, d in 1..num_controls*max_control_concentrations)(abs(controls_ul_plates[i,upper,d] - controls_ul_plates[i,lower,d]) <= 1);
+
+constraint forall(i in Plates, v in Vertical, d in 1..num_controls*max_control_concentrations)(abs(controls_quarter_plates[i,v,left,d] - controls_quarter_plates[i,v,right,d]) <= 1);
+
+constraint forall(i in Plates, h in Horizontal, d in 1..num_controls*max_control_concentrations)(abs(controls_quarter_plates[i,upper,h,d] - controls_quarter_plates[i,lower,h,d]) <= 1);
+
+
+constraint forall(i in Plates, v in Vertical, d in 1..num_controls*max_control_concentrations)(controls_quarter_plates[i,v,left,d] + controls_quarter_plates[i,v,right,d] == controls_ul_plates[i,v,d]);
+
+constraint forall(i in Plates, h in Horizontal, d in 1..num_controls*max_control_concentrations)(controls_quarter_plates[i,upper,h,d] + controls_quarter_plates[i,lower,h,d] == controls_lr_plates[i,h,d]);
+
+constraint forall(i in Plates, v in Vertical, d in 1..num_controls*max_control_concentrations)(controls_quarter_plates[i,v,left,d] >= (controls_ul_plates[i,v,d] div 2));
+
+constraint forall(i in Plates, v in Vertical, d in 1..num_controls*max_control_concentrations)(controls_quarter_plates[i,v,right,d] >= (controls_ul_plates[i,v,d] div 2));
+
+constraint forall(i in Plates, v in Vertical, d in 1..num_controls*max_control_concentrations)(controls_quarter_plates[i,v,left,d] <= ((controls_ul_plates[i,v,d]+1) div 2));
+
+constraint forall(i in Plates, v in Vertical, d in 1..num_controls*max_control_concentrations)(controls_quarter_plates[i,v,right,d] <= ((controls_ul_plates[i,v,d]+1) div 2));
+
 
 constraint forall(i in Plates, d in 1..num_controls*max_control_concentrations)(controls_ul_plates[i,upper,d] + controls_ul_plates[i,lower,d] <= max_controls_per_plate[d]);
 
@@ -1205,6 +1235,7 @@ constraint forall(i in Plates, l in 1..experiments)((experiment_plate[l] != i) -
 
 array [1..numplates*3] of ann: search_order = [if (i mod 3)==1 then int_search(experiment_plate_row[(i+2)div 3,..], first_fail, indomain_random) elseif (i mod 3) == 2 then bool_search(controls_layout[(i+1)div 3,..,..], random, indomain_max) else int_search(plates[i div 3,..,..], first_fail, indomain_random) endif | i in 1..numplates*3]; 
 
+
 %solve::seq_search([int_search(experiment_plate, first_fail, indomain_random), int_search(plates, random, indomain_max)]) satisfy; 
 
 %% Best for Gecode
@@ -1218,18 +1249,29 @@ array [1..numplates*3] of ann: search_order = [if (i mod 3)==1 then int_search(e
 %int_search(experiment_plate_row[1,..], first_fail, indomain_random),int_search(plates[1,..,..], random, indomain_max)]++[ 
 %int_search(experiment_plate_row[2,..], first_fail, indomain_random),int_search(plates[2,..,..], random, indomain_max)])
 
-%int_search(plates, first_fail, indomain_random)]) 
-%int_search(plates[i,..,..], random, indomain_max) | i in Plates ]) 
+
 
 solve::seq_search([int_search(experiment_plate, first_fail, indomain_random)]++
 search_order)
+     :: restart_geometric(1.1,5*experiments)
+    satisfy ; 
+
+%% Trying to use a more deterministic search strategy for testing
+% solve:: if (false) then seq_search([int_search(experiment_plate, first_fail, indomain_min)]++search_order) 
+%         else (seq_search([int_search(experiment_plate, first_fail, indomain_random)]++search_order)
+%                 :: restart_geometric(1.1,5*experiments)) endif
+%      satisfy ; 
+
+
+%solve::seq_search([int_search(experiment_plate, first_fail, indomain_random)]++
+%search_order)
 %[int_search(experiment_plate_row, first_fail, indomain_random)]++[int_search(plates[i,..,..], random, indomain_max) | i in Plates]) 
 %[int_search(plates[i,..,..], random, indomain_max) | i in Plates ]) 
 %      :: restart_geometric(1.1,1000)
-      :: restart_geometric(1.1,5*experiments)
+ %     :: if testing==true then restart_none else restart_geometric(1.1,5*experiments) endif
      %:: restart_linear(1000)
      %:: restart_constant(10*experiments)
-     satisfy; 
+  %   satisfy ; 
 
 
 
@@ -1253,10 +1295,6 @@ search_order)
 %solve::seq_search([int_search(experiment_plate, first_fail, indomain_random), int_search(experiment_row, first_fail, indomain_random), int_search(plates, random, indomain_max)]) satisfy; 
 
 
-%solve::int_search(experiment_plate, first_fail, indomain_random) satisfy; 
-
-%solve::int_search(plates, random, indomain_max) satisfy; 
-
 
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1272,10 +1310,10 @@ output [if debugging then "Plate 1:\n" else "" endif];
          
 %%TODO: change output so symbols are not hardcoded
 output [if debugging then if fix(plates[i,j,k]) == 0  then "  ." 
-        elseif fix(plates[i,j,k]) == (experiments+1)  then "  +" %% Positive controls
-        elseif fix(plates[i,j,k]) == (experiments+2)  then "  -" %% Negative controls
-        elseif fix(plates[i,j,k]) == (experiments+3)  then "  x" %% Blank controls
-        elseif fix(plates[i,j,k]) == (experiments+4)  then "  ~" %% DMSO controls
+        elseif fix(plates[i,j,k]) == (experiments+1)  then "  +" %% Some control
+        elseif fix(plates[i,j,k]) == (experiments+2)  then "  -" %% Other control...
+        elseif fix(plates[i,j,k]) == (experiments+3)  then "  x" %% ...
+        elseif fix(plates[i,j,k]) == (experiments+4)  then "  ~" %% ...
         elseif fix(plates[i,j,k]) == (experiments+5)  then "  *" %% other
         elseif fix(plates[i,j,k]) == (experiments+6)  then "  #" %% other
         elseif fix(plates[i,j,k]) == (experiments+7)  then "  &" %% other
@@ -1296,7 +1334,7 @@ output [if debugging then "Plate:" else "" endif, if debugging then show(plates)
 
 output [if debugging then "\nCompound's plate:\n" else "" endif, if debugging then show(experiment_plate) else "" endif];
 
-output [if debugging then "\nSpread constrols:\n" else "" endif, if debugging then show(spread_controls) else "" endif];
+output [if debugging then "\nSpread controls:\n" else "" endif, if debugging then show(spread_controls) else "" endif];
 
 output [if debugging then "\nControls' layout:\n" else "" endif, if debugging then show(controls_layout) else "" endif];
 
@@ -1318,6 +1356,8 @@ output [if debugging then "\nControls per upper/lower half plates:\n" else "" en
 
 output [if debugging then "\nControls per left/right half plates:\n" else "" endif, if debugging then show(controls_lr_plates) else "" endif];
 
+output [if debugging then "\nControls per quarter plates (controls_quarter_plates):\n" else "" endif, if debugging then show(controls_quarter_plates) else "" endif];
+
 output [if debugging then "\nTotal Compounds:\n" else "" endif, if debugging then show(sum([compound_concentrations[i]*compound_replicates[i] | i in 1..compounds])) else "" endif];
 
 output [if debugging then "\nCompounds per half plates:\n" else "" endif, if debugging then show(ul_half_plates) else "" endif];
@@ -1338,7 +1378,7 @@ output [if debugging then "\nControls per plate per column:\n" else "" endif, if
 
 array[int] of string: letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
          
-output ["\nplateID,well,cmpdname,CONCuM,cmpdnum,VOLuL\n"];
+output ["plateID,well,cmpdname,CONCuM,cmpdnum,VOLuL\n"];
 
 %%% TODO: FIX ME!!!!!! Problem when there are vertical/horizontal cell lines!
 output [if fix(plates[i,j,k]) > 0 then "plate_\(i)," ++   letters[size_empty_edge+j+(numrows+2*size_empty_edge)*(h-1)] ++ if (size_empty_edge+k+(2*size_empty_edge+numcols)*(v-1)) < 10 then "0" else "" endif ++ "\(size_empty_edge+k+(2*size_empty_edge+numcols)*(v-1))," ++ 
