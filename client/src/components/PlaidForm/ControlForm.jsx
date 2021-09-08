@@ -148,7 +148,7 @@ const ControlForm = ({
         },
         isControl: {
           value: controlForm.groups,
-          message: "Parenthesis are reserved for single control names. Combinations controls are not supported"
+          message: "Parentheses are reserved for single control names. Combinations of controls are not supported"
         }
       },
       concentration_names: {

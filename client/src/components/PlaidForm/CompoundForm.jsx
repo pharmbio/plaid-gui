@@ -165,7 +165,7 @@ const CompoundForm = ({
         },
         isCombination: {
           value: compoundForm.groups,
-          message: "Parenthesis is reserved for combinations or wrap single compounds"
+          message: "Parentheses are reserved for combinations or wrap single compounds"
         },
         combinationDuplicates: {
           value: compoundForm.groups,
