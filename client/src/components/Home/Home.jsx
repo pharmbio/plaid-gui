@@ -96,37 +96,11 @@ const Home = () => {
         <StyledHeading1>Welcome!</StyledHeading1>
         <StyledHeading2>About PLAID</StyledHeading2>
         <StyledParagraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-          egestas imperdiet nibh. Cras vehicula molestie mi, ut vestibulum odio
-          varius quis. Sed mattis faucibus laoreet. Phasellus tellus neque,
-          hendrerit vel hendrerit vitae, blandit et magna. Etiam a urna ex. Orci
-          varius natoque penatibus et magnis dis parturient montes, nascetur
-          ridiculus mus. Phasellus a vulputate ex, ut volutpat leo. Vestibulum
-          et interdum massa. Aenean hendrerit purus a dolor lobortis varius. In
-          scelerisque elit libero, eget cursus metus bibendum in. Suspendisse
-          rutrum finibus tortor sed accumsan. Aenean congue vehicula purus, vel
-          venenatis felis vulputate quis. Pellentesque id sollicitudin sapien,
-          vitae scelerisque lacus. Proin rutrum, mauris sed varius bibendum,
-          enim tellus tincidunt lacus, non aliquet nunc risus egestas libero.{" "}
+        PLAID (Plate Layouts using Artificial Intelligence Design) is a flexible 
+        constraint-programming model representing the Plate Layout Design problem. 
+        PLAID was developed with the goal of helping researchers plan well-designed 
+        experiments by creating a robust microplate layout and thus improving the .{" "}
         </StyledParagraph>
-        <HighlightedParahraph title={"Note"} type={"Normal"}>
-          <StyledParagraph>
-            Nullam imperdiet blandit eleifend. Mauris efficitur fermentum sem,
-            non malesuada sem gravida in. Donec ac turpis ut arcu auctor
-            luctus.In fringilla id purus sit amet eleifend. Morbi pretium magna
-            sem, in pellentesque velit fringilla sit amet. Nullam vehicula velit
-            id faucibus mattis
-          </StyledParagraph>
-        </HighlightedParahraph>
-        <HighlightedParahraph title={"Warning"} type={"Warning"}>
-          <StyledParagraph>
-            Nullam imperdiet blandit eleifend. Mauris efficitur fermentum sem,
-            non malesuada sem gravida in. Donec ac turpis ut arcu auctor
-            luctus.In fringilla id purus sit amet eleifend. Morbi pretium magna
-            sem, in pellentesque velit fringilla sit amet. Nullam vehicula velit
-            id faucibus mattis
-          </StyledParagraph>
-        </HighlightedParahraph>
         <StyledParagraph>
           <StyledImage
             src={img1}
