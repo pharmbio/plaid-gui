@@ -87,7 +87,7 @@ const Instructions = () => {
           Select this option to upload a JSON file containing all your experimental details.
           This will be used to pre-populate the same form that you get when creating a new layout (see "Creating new layout" for more details). 
           You'll be able to save your own experimental details when you create a plan, 
-          but here are some examples you can download and try some <a href="url">examples</a>.
+          but here are some examples you can download and try some <a href="https://github.com/pharmbio/plaid-layout-gui/tree/main/api/plate_design/json_examples">examples</a>.
         </StyledParagraph>
         
         <StyledParagraph>
