@@ -6,6 +6,12 @@ The PLAID Webb GUI currently supports the following features:
 * Uploading a dzn file to bypass the form and directly generate a multiplate layout
 * Uploading a previously computed layout (mzn) to view it again
 
+Use:
+docker-compose up -d --build
+
+or
+
+docker-compose up --build --force-recreate
 
 
 # Testing the GUI
