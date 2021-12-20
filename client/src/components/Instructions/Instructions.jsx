@@ -81,6 +81,25 @@ const Instructions = () => {
         <StyledParagraph>
         Welcome to our guide about how to get started with PLAID!{" "}
         </StyledParagraph>
+
+        <StyledHeading2>Uploading a plan</StyledHeading2>
+        <StyledParagraph>
+          Select this option to upload a JSON file containing all your experimental details.
+          This will be used to pre-populate the same form that you get when creating a new layout (see "Creating new layout" for more details). 
+          You'll be able to save your own experimental details when you create a plan, 
+          but here are some examples you can download and try some <a href="url">examples</a>.
+        </StyledParagraph>
+        
+        <StyledParagraph>
+          <StyledScaledImage
+            src={start2}
+            alt="Uploading an old plan"
+            width="70%"
+            height="70%"
+          />
+        </StyledParagraph>
+        
+
         <StyledHeading2>Creating a new layout</StyledHeading2>
         <StyledParagraph>In the Tool page, select the "Let's get started!" button</StyledParagraph>
         <StyledParagraph>
@@ -219,20 +238,7 @@ const Instructions = () => {
           images, CSV, and a JSON file that can be later used to visualize it again using the "Upload" option.
         </StyledParagraph> 
 
-        <StyledHeading2>Uploading a plan</StyledHeading2>
-        <StyledParagraph>
-          <StyledScaledImage
-            src={start2}
-            alt="Uploading an old plan"
-            width="70%"
-            height="70%"
-          />
-        </StyledParagraph>
-        <StyledParagraph>
-          Select this option to upload a JSON file containing all your experimental details.
-          This will be used to pre-populate the planning information and you'll be able to modify it or just click 
-          next and plan new layouts.
-        </StyledParagraph>
+
         <StyledHeading2>Uploading a layout</StyledHeading2>
         <StyledParagraph>
           <StyledScaledImage
