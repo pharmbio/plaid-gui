@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import HighlightedParahraph from "./HighlightedParagraph.jsx";
-import img1 from "./../../assets/img1.png";
 import start1 from "./../../assets/instructions/start-1.jpg";
 import start2 from "./../../assets/instructions/start-2.jpg";
 import start3 from "./../../assets/instructions/start-3.jpg";
@@ -23,11 +22,19 @@ const StyledInstructionsWrapper = styled.main`
   color: ${props => props.theme.colors.text};
 `;
 
+const StyledHeadingTop = styled.h1`
+  font-size: 60px;
+  line-height: 65px;
+  font-weight: 700;
+  margin: 10px;
+`;
+
 const StyledHeading1 = styled.h1`
   font-size: 60px;
   line-height: 65px;
   font-weight: 700;
   margin: 10px;
+  margin-top:70px;
 `;
 
 const StyledHeading2 = styled.h2`
@@ -35,6 +42,7 @@ const StyledHeading2 = styled.h2`
   line-height: 1.2;
   font-weight: 400;
   margin: 10px;
+  margin-top:30px;
 `;
 
 const StyledHeading3 = styled.h3`
@@ -51,6 +59,10 @@ const StyledParagraph = styled.p`
   font-style: normal;
   font-family: ${props => props.theme.fonts.secondary};
   margin: 10px;
+  list-style: inside;
+  ul {
+    padding-left: 2rem;
+  };
 `;
 
 const StyledImage = styled.img.attrs((props) => ({
@@ -77,17 +89,32 @@ const Instructions = () => {
   return (
     <StyledContainer>
       <StyledInstructionsWrapper>
-        <StyledHeading1>Tutorial</StyledHeading1>
+        <StyledHeadingTop>Contents</StyledHeadingTop>
+        <StyledParagraph>
+        <ul>
+          <li><a href="#tutorial">Tutorial</a></li>
+          <ul>
+            <li><a href="#upload_plan">Uploading a plan</a></li>
+            <li><a href="#create_plan">Creating a new layout</a></li>
+            <li><a href="#upload_layout">Uploading a layout</a></li>
+          </ul>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+        </StyledParagraph>
+
+        <StyledHeading1><a id="tutorial">Tutorial</a></StyledHeading1>
         <StyledParagraph>
         Welcome to our guide about how to get started with PLAID!{" "}
         </StyledParagraph>
 
-        <StyledHeading2>Uploading a plan</StyledHeading2>
+        <StyledHeading2><a id="upload_plan">Uploading a plan</a></StyledHeading2>
         <StyledParagraph>
-          Select this option to upload a JSON file containing all your experimental details.
-          This will be used to pre-populate the same form that you get when creating a new layout (see "Creating new layout" for more details). 
-          You'll be able to save your own experimental details when you create a plan, 
-          but here are some examples you can download and try some <a href="url">examples</a>.
+          Select this option to pre-populate all your experimental details using a JSON file.
+          </StyledParagraph>
+
+          <StyledParagraph>
+          You'll be able to save your own experimental details after creating a plan, 
+          but in the meantime here are some <a href="https://github.com/pharmbio/plaid/tree/main/gui-examples">examples</a> that you can download and use to familiarize yourself with PLAID.
         </StyledParagraph>
         
         <StyledParagraph>
@@ -100,7 +127,7 @@ const Instructions = () => {
         </StyledParagraph>
         
 
-        <StyledHeading2>Creating a new layout</StyledHeading2>
+        <StyledHeading2><a id="create_plan">Creating a new layout</a></StyledHeading2>
         <StyledParagraph>In the Tool page, select the "Let's get started!" button</StyledParagraph>
         <StyledParagraph>
           <StyledScaledImage
@@ -239,7 +266,7 @@ const Instructions = () => {
         </StyledParagraph> 
 
 
-        <StyledHeading2>Uploading a layout</StyledHeading2>
+        <StyledHeading2><a id="upload_layout">Uploading a layout</a></StyledHeading2>
         <StyledParagraph>
           <StyledScaledImage
             src={start3}
@@ -252,9 +279,33 @@ const Instructions = () => {
           After planning a layout, you can download it an image, CSV file, and JSON file. 
           You can upload the JSON file here to visualize it again.
         </StyledParagraph>
-        <StyledHeading1>FAQ</StyledHeading1>
+
+
+        <StyledHeading1><a id="faq">FAQ</a></StyledHeading1>
         <StyledHeading2>Can I visualize a CSV file?</StyledHeading2>
         <StyledParagraph>No. At the moment, we only support the visualization of our own JSON file format.</StyledParagraph>
+
+        <StyledHeading2>I am trying to create a new layout but it runs forever and I don't get any results. What is going on?</StyledHeading2>
+        
+        <StyledParagraph>Unfortunately, some particular designs can lead to unreasonably long runtimes. This is a known problem for constraint solvers, and even though we have done extensive performance testing, it is difficult to catch all cases [<a href="#ref1">1</a>, <a href="#ref2">2</a>]. 
+        If you encounter this or any other issue, please save the details of your design and report the bug on <a href="https://github.com/pharmbio/plaid/issues">GitHub</a>. 
+        This will help us find the cases that lead to extremely long runtimes. </StyledParagraph>
+
+        <StyledParagraph>
+        <a id="ref1">[1]</a> Goualard, Fr&eacute;d&eacute;ric, and Benhamou, Fr&eacute;d&eacute;ric. "Debugging Constraint Programs by Store Inspection." 
+        Analysis and Visualization Tools for Constraint Programming. Springer, Berlin, Heidelberg, 2000. 273-297.
+        </StyledParagraph>
+
+        <StyledParagraph> 
+        <a id="ref2">[2]</a> Meier, Micha. "Debugging constraint programs." International Conference on Principles and Practice of Constraint Programming. Springer, Berlin, Heidelberg, 1995.
+        </StyledParagraph>
+
+
+        <StyledHeading2>I have ideas on how to improve PLAID. How can I share them with you?</StyledHeading2>
+
+        <StyledParagraph>We would love to hear from you! You just need to fill in our anonymous <a href="https://forms.gle/z1TKSqWZB9cxHkxZ8">suggestion form</a>.</StyledParagraph>
+
+        
       </StyledInstructionsWrapper>
     </StyledContainer>
   );

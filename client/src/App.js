@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 import Tool from "./components/Tool";
 import Home from "./components/Home";
+import Contact from "./components/Contact";
+import Publications from "./components/Publications";
 import { Helmet } from 'react'
 
 
@@ -30,10 +32,10 @@ const App = () => {
                 <Tool />
               </Route>
               <Route path="/publications">
-                <h1>This is the publications page!</h1>
+                <Publications />
               </Route>
               <Route path="/contact">
-                <h1>This is the contact page!</h1>
+                <Contact />
               </Route>
               <Route path="/">
 	        <Home />
