@@ -125,7 +125,6 @@ constraint assert(numcols mod 2 == 0, "Invalid datafile: Currently we only suppo
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-
 %% Number of wells needed. Note that plates might not be full
 int: total_wells = sum([compound_concentrations[i]*compound_replicates[i] | i in 1..compounds]) + total_controls; 
 
@@ -271,6 +270,7 @@ constraint if force_spread_concentrations then forall(i in Plates, j in 1..numro
   
 constraint forall(i in Plates, j in Rows) (
 (among(plates[i,j,..], 1..experiments)::domain) <= numcols-among([plates[i,j,k] | k in Columns], ({0} union experiments+1..experiments+num_controls*max_control_concentrations))::domain);
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -877,7 +877,6 @@ constraint if concentrations_on_different_rows /\ even_rows then forall(i in Pla
 %% CHECK LATER!
 constraint (among(sum(i in Plates)(ul_half_plates[i,upper]),experiment_row, 1..(numrows div 2))::domain);
 constraint (among(sum(i in Plates)(ul_half_plates[i,lower]),experiment_row, (numrows div 2)+1..numrows)::domain);
-
 
 constraint (among(sum(i in Plates)(lr_half_plates[i,left]),experiment_column, 1..(numcols div 2))::domain);
 constraint (among(sum(i in Plates)(lr_half_plates[i,right]),experiment_column, (numcols div 2)+1..numcols)::domain);
