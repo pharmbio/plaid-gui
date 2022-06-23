@@ -37,3 +37,19 @@ predicate my_implied_cost_ext(var int:cost, array[int] of var int: x) =
   forall(i in 2..L-2)(c_cost[i+2] <= 1 + c_cost[i-1]) /\
   forall(i in 2..L-2)(c_cost[i+2] - 1 <= c_cost[i-1]);
   
+
+
+
+predicate balanced_alldifferent(array[int] of var int: x, int: mid_val, int: mid_count) =
+  let {
+    int: L = length(x);
+    array[1..2,1..L] of var int: x_split;
+  } in
+  forall(i in 1..L)(if x[i] <= mid_val then x_split[1,i]==x[i] /\ x_split[2,i]==0  else x_split[1,i]==0 /\ x_split[2,i]==x[i] endif ) /\
+  alldifferent_except_0(x_split[1,..]) /\ alldifferent_except_0(x_split[2,..]) /\
+  count(i in 1..L)(x_split[1,i]>0 /\ x_split[1,i]<=mid_val) >= mid_count /\
+  count(i in 1..L)(x_split[2,i]>mid_val) >= mid_count /\ nvalue(mid_count+1, x_split[1,..]) /\ nvalue(mid_count+1, x_split[2,..]);
+
+
+%  nvalue(mid_count+1, x_split[1,..]) /\
+%  nvalue(mid_count+1, x_split[2,..]);
