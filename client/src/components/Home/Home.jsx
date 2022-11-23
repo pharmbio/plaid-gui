@@ -9,7 +9,7 @@ const StyledContainer = styled.div`
   overflow-y: scroll;
 `;
 const StyledInstructionsWrapper = styled.main`
-  margin-top: 7.5rem;
+  margin-top: 1rem;
   margin-right: 15rem;
   margin-left: 5rem;
   margin-bottom: 7.5rem;
