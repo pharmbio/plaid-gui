@@ -5,6 +5,7 @@ import TransitionPage from "./TransitionPage.jsx";
 import Loader from "./../Loader";
 import {config} from "../../Constants.js" // dev/prod variables
 
+
 const StyledToolWrapper = styled.div`
   height: 100vh;
 `;

@@ -282,6 +282,11 @@ const Instructions = () => {
 
 
         <StyledHeading1><a id="faq">FAQ</a></StyledHeading1>
+        <StyledHeading2>Can I generate layouts for very large experiments?</StyledHeading2>
+        <StyledParagraph>At the moment, this online version only supports designing small experiments of up to four 384-well plates (more plates for smaller plate sizes) due to time and memory limitations.
+          We recommend breaking your experiment into smaller ones and plan them separately.
+        </StyledParagraph>
+
         <StyledHeading2>Can I visualize a CSV file?</StyledHeading2>
         <StyledParagraph>No. At the moment, we only support the visualization of our own JSON file format.</StyledParagraph>
 

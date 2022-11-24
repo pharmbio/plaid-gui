@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import parse from "../../functions/parse.js";
+import ExampleExperiment from "./Example.jsx";
 
 const StyledUploadResultButton = styled.input`
   font-family: ${(props) => props.theme.fonts.primary};
@@ -17,6 +18,31 @@ const StyledContainer = styled.div`
   align-self: center;
   display: flex;
   flex-direction: column;
+`;
+
+const StyledExampleButton = styled.button`
+
+  font-family: Whitney, "Open Sans", Helvetica, sans-serif;
+  position: relative;
+  background-color: #5096FF;
+  border: 2px solid #5096FF;
+  color: #fff;
+  font-weight: 400;
+  font-size: 16pt;
+  border-radius: 25px;
+  cursor: pointer;
+  height: 45px;
+  width: 250px;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+  &:hover {
+    outline: none;
+    border: 1px solid #5096ff;
+  }
 `;
 
 /* return an object containing the properties num_rows , num_cols and size_empty_edge from the dzn file which are needed for the visualization */
@@ -141,31 +167,21 @@ const prepareConfigFile = (obj) => {
 /**
  * Handles the upload of a config json file and makes sure to construct an object that is used by the forms to fill them in.
  * Also handles the upload of a dzn file to bypass the form and send its content to the API
- * @param props.handleUploadedDznFile callback-func that sends the uploaded dzn file contents to the API and wait for the result
  * @param props.handleUploadedJsonConfig callback-func that makes sure that the parameters uploaded by the config file is sent to the right component to fill in the forms
- * 
+ * @param props.setForm 
  * 
  */
-const UploadExperiment = (props) => {
+ const UploadExample = (props) => {
 
   const [error, setShowError] = React.useState({ show: false, message: "" });
 
 
   // Handles the upload of a json/dzn file
-  const handleChange = (event) => {
-    let extension = event.target.files[0].name.split(".").pop().toLowerCase();
-
-    const fr = new FileReader();
-    fr.readAsText(event.target.files[0], "UTF-8");
-    fr.onload = (event) => {
-      if (extension === "dzn") {
-        let content = event.target.result;
-        let parsedDataNeededForVisualization = parseDznInput(content);
-        props.handleUploadedDznFile(parsedDataNeededForVisualization, content);
-        return;
-      }
+  const handleExampleChange = (event) => {
+    let extension = "json";
+    {
       if (extension === "json") {
-        let content = JSON.parse(event.target.result);
+        let content = ({"experimentForm":{"num_rows":8,"num_cols":12,"vertical_cell_lines":1,"horizontal_cell_lines":1,"allow_empty_wells":false,"size_empty_edge":1,"concentrations_on_different_rows":true,"concentrations_on_different_columns":true,"replicates_on_different_plates":true,"replicates_on_same_plate":false,"selected":"{\"num_rows\": 8, \"num_cols\": 12}"},"delimiterCompounds":",","compoundForm":{"groups":[{"id":"gr-0","compound_names":"comp1, comp2, comp3, comp4, comp5, comp6, comp7, comp8, comp9, comp10","compound_names_parsed":["comp1"," comp2"," comp3"," comp4"," comp5"," comp6"," comp7"," comp8"," comp9"," comp10"],"concentration_names":"\"0.3\", \"1\", \"3\", \"5\", \"10\", \"15\", \"30\", \"100\"","concentration_names_parsed":["\"0.3\""," \"1\""," \"3\""," \"5\""," \"10\""," \"15\""," \"30\""," \"100\""],"compound_replicates":"2"}]},"delimiterControls":",","controlForm":{"groups":[{"id":"gr-0","concentration_names":"1","concentration_names_parsed":["1"],"control_replicates":"32","control_names":"pos","control_names_parsed":["pos"]},{"id":"gr-1","control_names":"neg, blank, dmso","control_names_parsed":["neg"," blank"," dmso"],"concentration_names":"1","concentration_names_parsed":["1"],"control_replicates":"16"}]}});
         if (validateJsonProperties(content)) {
           content = prepareConfigFile(content);
           props.handleUploadedJsonConfig(content);
@@ -173,7 +189,7 @@ const UploadExperiment = (props) => {
           setShowError({
             ...error,
             show: true,
-            message: "The uploaded json file contains properties not allowed.",
+            message: "ANDREINA The uploaded json file contains properties not allowed.",
           });
         }
       }
@@ -182,13 +198,10 @@ const UploadExperiment = (props) => {
 
   return (
     <StyledContainer>
-      <StyledUploadResultButton
-        type="file"
-        name="upload-exp"
-        id="upload-exp"
-        accept=".dzn,.json"
-        onChange={handleChange}
-      />
+      <StyledExampleButton title={"Prefill with an example experiment 1"}
+                  isLast={false}
+                  onClick={() => {handleExampleChange("form")}}
+                >Try a quick example!</StyledExampleButton>
       {error.show ? (
         <StyledErrorMessage>{error.message}</StyledErrorMessage>
       ) : undefined}
@@ -196,7 +209,7 @@ const UploadExperiment = (props) => {
   );
 };
 
-export default UploadExperiment;
+export default UploadExample;
 
 
 

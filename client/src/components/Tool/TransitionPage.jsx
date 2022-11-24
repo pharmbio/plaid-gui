@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import UploadResult from "./UploadResult.jsx";
 import UploadExperiment from "./UploadExperiment.jsx";
+import UploadExample from "./UploadExample.jsx";
 import PlaidForm from "./../PlaidForm";
 import HighlightedParahraph from "../Instructions/HighlightedParagraph";
 import { ReactComponent as ToolIcon } from "../../assets/icons/wrench.svg";
@@ -11,6 +12,14 @@ import { ReactComponent as UploadIcon } from "../../assets/icons/box-arrow-up.sv
 
 const StyledTransitionPageContainer = styled.div`
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+`;
+
+const StyledTransitionPageInnerContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -60,6 +69,30 @@ const StyledToolButton = styled.button`
   cursor: pointer;
   height: 45px;
   width: 200px;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+  &:hover {
+    outline: none;
+    border: 1px solid #5096ff;
+  }
+`
+const StyledExampleButton = styled.button`
+
+  font-family: Whitney, "Open Sans", Helvetica, sans-serif;
+  position: relative;
+  background-color: #5096FF;
+  border: 2px solid #5096FF;
+  color: #fff;
+  font-weight: 400;
+  font-size: 16pt;
+  border-radius: 25px;
+  cursor: pointer;
+  height: 45px;
+  width: 250px;
   bottom: 15px;
   left: 0;
   right: 0;
@@ -124,6 +157,11 @@ const TransitionPage = (props) => {
     setUploadedConfig(content);
   };
 
+  const handleUploadedJsonExample = (content1) => {
+    let content = {"experimentForm":{"num_rows":8,"num_cols":12,"vertical_cell_lines":1,"horizontal_cell_lines":1,"allow_empty_wells":false,"size_empty_edge":1,"concentrations_on_different_rows":true,"concentrations_on_different_columns":true,"replicates_on_different_plates":true,"replicates_on_same_plate":false,"selected":"{\"num_rows\": 8, \"num_cols\": 12}"},"delimiterCompounds":",","compoundForm":{"groups":[{"id":"gr-0","compound_names":"comp1, comp2, comp3, comp4, comp5, comp6, comp7, comp8, comp9, comp10","compound_names_parsed":["comp1"," comp2"," comp3"," comp4"," comp5"," comp6"," comp7"," comp8"," comp9"," comp10"],"concentration_names":"\"0.3\", \"1\", \"3\", \"5\", \"10\", \"15\", \"30\", \"100\"","concentration_names_parsed":["\"0.3\""," \"1\""," \"3\""," \"5\""," \"10\""," \"15\""," \"30\""," \"100\""],"compound_replicates":"2"}]},"delimiterControls":",","controlForm":{"groups":[{"id":"gr-0","concentration_names":"1","concentration_names_parsed":["1"],"control_replicates":"32","control_names":"pos","control_names_parsed":["pos"]},{"id":"gr-1","control_names":"neg, blank, dmso","control_names_parsed":["neg"," blank"," dmso"],"concentration_names":"1","concentration_names_parsed":["1"],"control_replicates":"16"}]}};
+    setUploadedConfig(content);
+  };
+
   const handleClick = (state) => {
     setTransition(state);
   };
@@ -134,11 +172,19 @@ const TransitionPage = (props) => {
           setData={props.setData}
           uploadedConfig={uploadedConfig}
         />
-      ) : (
+      ) : 
+      (
             <StyledTransitionPageContainer>
               {props.error ? <StyledTest> <HighlightedParahraph title={"Error: File data is incorrect"} type={"Warning"}>
                 {props.error}
               </HighlightedParahraph></StyledTest> : null}
+              <StyledTransitionPageInnerContainer>
+                  <UploadExample
+                    handleUploadedJsonConfig={handleUploadedJsonConfig}
+                    setForm = {handleClick}
+                  />
+              </StyledTransitionPageInnerContainer>
+              <StyledTransitionPageInnerContainer>
               <StyledFlexItem>
                 <StyledHeader> PLAN </StyledHeader>
                 <StyledToolIcon />
@@ -173,7 +219,7 @@ const TransitionPage = (props) => {
                   handleUploadedResults={props.handleUploadedResults}
                 />
               </StyledFlexItem>
-
+              </StyledTransitionPageInnerContainer>
             </StyledTransitionPageContainer>
         )}
     </>
