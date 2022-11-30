@@ -1,3 +1,3 @@
-import Home from "./Home"
+import Tool from "./Tool"
 
-export default Home;
+export default Tool;

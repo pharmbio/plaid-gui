@@ -2,12 +2,11 @@ import Navbar from "./components/Navbar";
 import Instructions from "./components/Instructions";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
-import Tool from "./components/Tool";
+import Tool from "./components/Home";
 import Home from "./components/Home";
 import Contact from "./components/Contact";
 import Publications from "./components/Publications";
 import { Helmet } from 'react'
-
 
 
 const StyledGridWrapper = styled.div`
@@ -38,7 +37,7 @@ const App = () => {
                 <Contact />
               </Route>
               <Route path="/">
-	        <Home />
+	              <Home />
               </Route>
             </Switch>
           </Router>
