@@ -1,3 +1,3 @@
-import Home from "./Home"
+import Contact from "./Contact"
 
-export default Home;
+export default Contact;
