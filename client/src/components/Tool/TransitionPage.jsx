@@ -5,30 +5,36 @@ import UploadExperiment from "./UploadExperiment.jsx";
 import UploadExample from "./UploadExample.jsx";
 import PlaidForm from "./../PlaidForm";
 import HighlightedParahraph from "../Instructions/HighlightedParagraph";
+import logo from "./../../assets/plaid-logo.png";
 import { ReactComponent as ToolIcon } from "../../assets/icons/wrench.svg";
 import { ReactComponent as FormIcon } from "../../assets/icons/card-checklist.svg";
 import { ReactComponent as UploadIcon } from "../../assets/icons/box-arrow-up.svg";
+import Footer from '../../footer'
 
+const StyledContainer = styled.div`
+  height: 100vh;
+  overflow-y: scroll;
+`;
 
 const StyledTransitionPageContainer = styled.div`
-  height: 100vh;
+  
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: auto;
+  margin: 25px;
 `;
 
 const StyledTransitionPageInnerContainer = styled.div`
+  
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin: auto;
+  margin: 25px;
 `;
 
 const StyledParagraph = styled.p`
-  position: absolute;
   font-size: 17px;
   line-height: 1.7;
   font-weight: 400;
@@ -80,30 +86,6 @@ const StyledToolButton = styled.button`
     border: 1px solid #5096ff;
   }
 `
-const StyledExampleButton = styled.button`
-
-  font-family: Whitney, "Open Sans", Helvetica, sans-serif;
-  position: relative;
-  background-color: #5096FF;
-  border: 2px solid #5096FF;
-  color: #fff;
-  font-weight: 400;
-  font-size: 16pt;
-  border-radius: 25px;
-  cursor: pointer;
-  height: 45px;
-  width: 250px;
-  bottom: 15px;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
-  &:hover {
-    outline: none;
-    border: 1px solid #5096ff;
-  }
-`
 const StyledToolIcon = styled(ToolIcon)`
   display: block;
   margin-top:50px;
@@ -135,6 +117,41 @@ const StyledHeader = styled.h1`
 const StyledTest = styled.div`
   position: absolute;
   top: 20px;
+`
+
+const StyledHeading1 = styled.h1`
+  font-size: 60px;
+  line-height: 65px;
+  font-weight: 700;
+  margin: 10px;
+`
+const StyledCenteredParagraph = styled.p`
+  font-size: 17px;
+  line-height: 1.7;
+  font-weight: 400;
+  font-style: normal;
+  font-family: ${props => props.theme.fonts.secondary};
+  margin: 10px;
+  text-align: center;
+`
+const StyledScaledImage = styled.img.attrs((props) => ({
+  src: props.src,
+  alt: props.alt,
+  width: props.width,
+  height: props.height,
+}))`
+  display: inline-block;
+  vertical-align: top;
+`
+const StyledInstructionsWrapper = styled.main`
+  margin-top: 1rem;
+  margin-right: 15rem;
+  margin-left: 5rem;
+  margin-bottom: 2rem;
+  display: flex;
+
+  flex-direction: column;
+  color: ${props => props.theme.colors.text};
 `
 /**
  * Renders the transition boxes that allows the user to select to either upload old results, 
@@ -173,7 +190,24 @@ const TransitionPage = (props) => {
           uploadedConfig={uploadedConfig}
         />
       ) : 
-      (
+      (     <StyledContainer>
+              <StyledInstructionsWrapper>
+                <StyledCenteredParagraph>
+                  <StyledScaledImage
+                    src={logo}
+                    alt="PLAID logo"
+                    height="175px"
+                  />
+                </StyledCenteredParagraph>
+                <StyledHeading1>Welcome!</StyledHeading1>
+                <StyledParagraph>
+                  PLAID (Plate Layouts using Artificial Intelligence Design) is a flexible 
+                  constraint-programming model representing the Plate Layout Design problem. 
+                  PLAID was developed with the goal of helping researchers plan well-designed 
+                  experiments by creating a robust microplate layout and thus improving the reliability
+                  of the experimental results.{" "}
+                </StyledParagraph>
+              </StyledInstructionsWrapper>
             <StyledTransitionPageContainer>
               {props.error ? <StyledTest> <HighlightedParahraph title={"Error: File data is incorrect"} type={"Warning"}>
                 {props.error}
@@ -221,6 +255,8 @@ const TransitionPage = (props) => {
               </StyledFlexItem>
               </StyledTransitionPageInnerContainer>
             </StyledTransitionPageContainer>
+            <Footer/>
+            </StyledContainer>
         )}
     </>
   );
