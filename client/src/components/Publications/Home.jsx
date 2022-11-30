@@ -1,16 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import HighlightedParahraph from "./HighlightedParagraph.jsx";
-import img1 from "./../../assets/img1.png";
-import logo from "./../../assets/plaid-logo.png";
+import Footer from '../../footer'
 
 const StyledContainer = styled.div`
   height: 100vh;
   overflow-y: scroll;
 `;
 const StyledInstructionsWrapper = styled.main`
-  margin-top: 7.5rem;
-  margin-right: 15rem;
+  margin-top: 2rem;
+  margin-right: 5rem;
   margin-left: 5rem;
   margin-bottom: 7.5rem;
   display: flex;
@@ -31,6 +30,7 @@ const StyledHeading2 = styled.h2`
   line-height: 1.2;
   font-weight: 400;
   margin: 10px;
+  margin-top: 50px;
 `;
 
 const StyledHeading3 = styled.h3`
@@ -106,7 +106,27 @@ const Home = () => {
         </StyledParagraph>
         
 
+        <StyledHeading2>Publications Using PLAID</StyledHeading2>
+        <StyledParagraph>
+        A. Gupta, P. J. Harrison, H. Wieslander, J. Rietdijk, J. Carreras Puigvert, P. Georgiev, C. Wählby, O. Spjuth, and I-M Sintorn. 
+        <a href="https://www.biorxiv.org/content/10.1101/2022.10.12.511869v1">Is brightfield all you need for mechanism of action prediction?</a>, October 2022.
+        </StyledParagraph>
+
+        <StyledParagraph>
+        G. Tian, P. J. Harrison, A. P. Sreenivasan, J. Carreras Puigvert, and O. Spjuth. 
+        <a href="https://www.biorxiv.org/content/10.1101/2022.10.04.510834v1">Combining molecular and cell painting image data for mechanism of action prediction</a>, October 2022.
+        </StyledParagraph>
+
+        <StyledParagraph>
+        J. Rietdijk, T. Aggarwal, P. Georgieva, M. Lapins, J. Carreras Puigvert, and O. Spjuth. 
+        <a href="https://www.sciencedirect.com/science/article/pii/S0048969722021519">Morphological profiling of environmental chemicals enables efficient and untargeted exploration of combination effects</a>.
+        Science of The Total Environment, 832:155058, August 2022.
+        </StyledParagraph>
+
+        <br/>
+        <StyledParagraph>If you use PLAID in your own research and would like your publications to be added to this list, please <a href="/contact">contact us!</a>.</StyledParagraph>
       </StyledInstructionsWrapper>
+      <Footer/>
     </StyledContainer>
   );
 };
