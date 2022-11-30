@@ -1,16 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import HighlightedParahraph from "./HighlightedParagraph.jsx";
-import img1 from "./../../assets/img1.png";
-import logo from "./../../assets/plaid-logo.png";
+import Footer from '../../footer'
 
 const StyledContainer = styled.div`
   height: 100vh;
   overflow-y: scroll;
 `;
 const StyledInstructionsWrapper = styled.main`
-  margin-top: 7.5rem;
-  margin-right: 15rem;
+  margin-top: 2rem;
+  margin-right: 5rem;
   margin-left: 5rem;
   margin-bottom: 7.5rem;
   display: flex;
@@ -97,6 +96,8 @@ const Home = () => {
         </StyledParagraph>
         
       </StyledInstructionsWrapper>
+      <Footer/>
+      
     </StyledContainer>
   );
 };
