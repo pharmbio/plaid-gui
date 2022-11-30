@@ -52,8 +52,8 @@ const Navbar = () => {
   return (
     <StyledSideBar>
       <StyledList>
-        <StyledLinkItem>
-          <StyledNavLink to="/" onClick={() => handleClick("/")} exact={true}>
+      <StyledLinkItem>
+          <StyledNavLink to="/tool" onClick={() => handleClick("/tool")}>
             Home
           </StyledNavLink>
         </StyledLinkItem>
@@ -63,11 +63,6 @@ const Navbar = () => {
             onClick={() => handleClick("/instructions")}
           >
             Instructions
-          </StyledNavLink>
-        </StyledLinkItem>
-        <StyledLinkItem>
-          <StyledNavLink to="/tool" onClick={() => handleClick("/tool")}>
-            Tool
           </StyledNavLink>
         </StyledLinkItem>
         <StyledLinkItem>
