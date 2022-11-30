@@ -13,7 +13,7 @@ const StyledInstructionsWrapper = styled.main`
   margin-left: 5rem;
   margin-bottom: 7.5rem;
   display: flex;
-
+  min-height: 50vh;
   flex-direction: column;
   color: ${props => props.theme.colors.text};
 `;
@@ -22,20 +22,6 @@ const StyledHeading1 = styled.h1`
   font-size: 60px;
   line-height: 65px;
   font-weight: 700;
-  margin: 10px;
-`;
-
-const StyledHeading2 = styled.h2`
-  font-size: 35px;
-  line-height: 1.2;
-  font-weight: 400;
-  margin: 10px;
-`;
-
-const StyledHeading3 = styled.h3`
-  font-size: 27px;
-  line-height: 1.2;
-  font-weight: 400;
   margin: 10px;
 `;
 
@@ -48,16 +34,6 @@ const StyledParagraph = styled.p`
   margin: 10px;
 `;
 
-const StyledCenteredParagraph = styled.p`
-  font-size: 17px;
-  line-height: 1.7;
-  font-weight: 400;
-  font-style: normal;
-  font-family: ${props => props.theme.fonts.secondary};
-  margin: 10px;
-  text-align: center;
-`;
-
 const StyledImage = styled.img.attrs((props) => ({
   src: props.src,
   alt: props.alt,
@@ -66,17 +42,6 @@ const StyledImage = styled.img.attrs((props) => ({
   vertical-align: top;
   width: 100%;
   height: 100%;
-`;
-
-
-const StyledScaledImage = styled.img.attrs((props) => ({
-  src: props.src,
-  alt: props.alt,
-  width: props.width,
-  height: props.height,
-}))`
-  display: inline-block;
-  vertical-align: top;
 `;
 
 
