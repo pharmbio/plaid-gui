@@ -6,14 +6,15 @@ import start2 from "./../../assets/instructions/start-2.jpg";
 import start3 from "./../../assets/instructions/start-3.jpg";
 import vcl from "./../../assets/instructions/vertical-cell-lines.jpeg";
 import hcl from "./../../assets/instructions/horizontal-cell-lines.jpeg";
+import Footer from '../../footer'
 
 const StyledContainer = styled.div`
   height: 100vh;
   overflow-y: scroll;
 `;
 const StyledInstructionsWrapper = styled.main`
-  margin-top: 7.5rem;
-  margin-right: 15rem;
+  margin-top: 2rem;
+  margin-right: 5rem;
   margin-left: 5rem;
   margin-bottom: 7.5rem;
   display: flex;
@@ -312,6 +313,7 @@ const Instructions = () => {
 
         
       </StyledInstructionsWrapper>
+      <Footer/>
     </StyledContainer>
   );
 };
