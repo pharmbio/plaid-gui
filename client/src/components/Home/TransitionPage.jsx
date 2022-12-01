@@ -145,7 +145,7 @@ const StyledScaledImage = styled.img.attrs((props) => ({
 `
 const StyledInstructionsWrapper = styled.main`
   margin-top: 1rem;
-  margin-right: 15rem;
+  margin-right: 5rem;
   margin-left: 5rem;
   margin-bottom: 2rem;
   display: flex;

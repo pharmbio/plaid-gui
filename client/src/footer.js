@@ -7,13 +7,11 @@ import scilife from "./assets/logos/scilife-logo.jpg";
 import uu from "./assets/logos/uu_logo.png";
 
 const StyledFooter = styled.footer`
-    margin-top: 1rem;
-    padding: 1rem;
-    position: relative;
-    bottom: 0;
-    left: 0;
+    padding: 0 1rem 2rem;
     height: 100px;
-    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const StyledScaledImage = styled.img.attrs((props) => ({
@@ -28,8 +26,7 @@ const StyledScaledImage = styled.img.attrs((props) => ({
   `;
 
 const Footer = () => (
-  <div className="footer">
-    <StyledFooter>
+  <StyledFooter>
     <StyledScaledImage
             src={pharmbio}
             alt="Pharmbio"
@@ -59,8 +56,7 @@ const Footer = () => (
             alt="Uppsala University"
             height="100%"
           />
-   </StyledFooter>
-  </div>
+  </StyledFooter>
 );
 
 export default Footer; 

@@ -6,6 +6,8 @@ import Footer from '../../footer'
 const StyledContainer = styled.div`
   height: 100vh;
   overflow-y: scroll;
+  display: grid;
+  grid-template-rows: auto 100px;
 `;
 const StyledInstructionsWrapper = styled.main`
   margin-top: 2rem;
@@ -13,7 +15,6 @@ const StyledInstructionsWrapper = styled.main`
   margin-left: 5rem;
   margin-bottom: 7.5rem;
   display: flex;
-  min-height: 50vh;
   flex-direction: column;
   color: ${props => props.theme.colors.text};
 `;
