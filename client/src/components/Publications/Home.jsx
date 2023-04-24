@@ -89,37 +89,47 @@ const Home = () => {
 
         <StyledHeading2>Citation</StyledHeading2>
         <StyledParagraph>
-        Our bioRxiv preprint can be used to cite this project:
+        The following manuscript can be used to cite this project:
         </StyledParagraph>
 
         <StyledParagraph>
-        M. A. Francisco Rodr&iacute;guez, J. Carreras Puigvert, and O. Spjuth. Designing Microplate Layouts Using Artificial Intelligence April, 2022. DOI: <a href="https://doi.org/10.1101/2022.03.31.486595">10.1101/2022.03.31.486595</a>
+        M. A. Francisco Rodr&iacute;guez, J. Carreras Puigvert, and O. Spjuth. <br/>
+	<a href="https://doi.org/10.1016/j.ailsci.2023.100073">Designing Microplate Layouts Using Artificial Intelligence</a><br/>
+	Artificial Intelligence in the Life Sciences, Volume 3, 2023. <br/>
         </StyledParagraph>
+
+
 
         <StyledHeading2>Other Publications</StyledHeading2>
         <StyledParagraph>
-        M. A. Francisco Rodr&iacute;guez, and O. Spjuth. A Constraint Programming Approach to Microplate Layout Design In: J. Espasa and N. Dang (editors), Proceedings of ModRef 2020, the 19th International Workshop on Constraint Modelling and Reformulation, held at CP 2020, September 2020. 
+        M. A. Francisco Rodr&iacute;guez, and O. Spjuth. <br/>
+	<a href="https://modref.github.io/papers/ModRef2020_A%20Constraint%20Programming%20Approach%20to%20Microplate%20Layout%20Design.pdf">A Constraint Programming Approach to Microplate Layout Design</a><br/>
+	In: J. Espasa and N. Dang (editors), Proceedings of ModRef 2020, the 19th International Workshop on Constraint Modelling and Reformulation, held at CP 2020, September 2020. <br/>
+        [<a href="https://modref.github.io/slides/ModRef2020_Slides_A%20Constraint%20Programming%20Approach%20to%20Microplate%20Layout%20Design.pdf">Slides</a>] [<a href="https://www.youtube.com/watch?v=naddH2TQIjE&ab_channel=CP2020">Video</a>]
         </StyledParagraph>
 
-        <StyledParagraph>
-        [<a href="https://modref.github.io/papers/ModRef2020_A%20Constraint%20Programming%20Approach%20to%20Microplate%20Layout%20Design.pdf">PDF</a>] [<a href="https://modref.github.io/slides/ModRef2020_Slides_A%20Constraint%20Programming%20Approach%20to%20Microplate%20Layout%20Design.pdf">Slides</a>] [<a href="https://www.youtube.com/watch?v=naddH2TQIjE&ab_channel=CP2020">Video</a>]
-        </StyledParagraph>
         
 
+
         <StyledHeading2>Publications Using PLAID</StyledHeading2>
-        <StyledParagraph>
-        A. Gupta, P. J. Harrison, H. Wieslander, J. Rietdijk, J. Carreras Puigvert, P. Georgiev, C. Wählby, O. Spjuth, and I-M Sintorn. 
-        <a href="https://www.biorxiv.org/content/10.1101/2022.10.12.511869v1">Is brightfield all you need for mechanism of action prediction?</a>, October 2022.
-        </StyledParagraph>
 
         <StyledParagraph>
-        G. Tian, P. J. Harrison, A. P. Sreenivasan, J. Carreras Puigvert, and O. Spjuth. 
-        <a href="https://www.biorxiv.org/content/10.1101/2022.10.04.510834v1">Combining molecular and cell painting image data for mechanism of action prediction</a>, October 2022.
+        G. Tian, P. J. Harrison, A. P. Sreenivasan, J. Carreras Puigvert, and O. Spjuth. <br/>
+        <a href="https://doi.org/10.1016/j.ailsci.2023.100060">Combining molecular and cell painting image data for mechanism of action prediction</a><br/>
+	Artificial Intelligence in the Life Sciences, Volume 3, 2023.
         </StyledParagraph>
 
+
         <StyledParagraph>
-        J. Rietdijk, T. Aggarwal, P. Georgieva, M. Lapins, J. Carreras Puigvert, and O. Spjuth. 
-        <a href="https://www.sciencedirect.com/science/article/pii/S0048969722021519">Morphological profiling of environmental chemicals enables efficient and untargeted exploration of combination effects</a>.
+        A. Gupta, P. J. Harrison, H. Wieslander, J. Rietdijk, J. Carreras Puigvert, P. Georgiev, C. W&auml;hlby, O. Spjuth, and I-M Sintorn.<br/>
+        <a href="https://www.biorxiv.org/content/10.1101/2022.10.12.511869v1">Is brightfield all you need for mechanism of action prediction?</a><br/>
+	bioRxiv preprint, October 2022.
+        </StyledParagraph>
+
+
+        <StyledParagraph>
+        J. Rietdijk, T. Aggarwal, P. Georgieva, M. Lapins, J. Carreras Puigvert, and O. Spjuth. <br/>
+        <a href="https://www.sciencedirect.com/science/article/pii/S0048969722021519">Morphological profiling of environmental chemicals enables efficient and untargeted exploration of combination effects</a><br/>
         Science of The Total Environment, 832:155058, August 2022.
         </StyledParagraph>
 
