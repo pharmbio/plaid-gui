@@ -8,7 +8,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json ./
 COPY yarn.lock ./
 
-RUN yarn add react-scripts
+RUN npm install -g yarn
 RUN yarn install
 
 
