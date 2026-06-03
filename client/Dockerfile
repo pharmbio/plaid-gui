@@ -2,11 +2,13 @@ FROM node:latest
 
 WORKDIR /app
 
-# add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
 
 COPY package.json ./
 COPY yarn.lock ./
+
+#  Install yarn explicitly
+RUN npm install -g yarn
 
 RUN yarn add react-scripts
 RUN yarn install
