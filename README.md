@@ -1,4 +1,8 @@
-# PLAID Layout GUI Web Application.
+<p align="center">
+<img width="60%" height="60%" src="https://github.com/pharmbio/plaid/blob/main/images/plaid-logo.png?raw=true">
+</p>
+
+# PLAID Layout GUI Web Application
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 ![with-coffee](https://img.shields.io/badge/made%20with-%E2%98%95%EF%B8%8F%20coffee-yellow.svg)
@@ -31,6 +35,5 @@ in the root folder for the application.
 3. Go to localhost:3000 and click on the **Tool** option in the sidebar menu
 4. You can now test the form and the other functionalities!
 
-**NOTE**
-Make sure your Docker configuration allows for enough access to memory. The GUI might otherwise fail in some examples.
+**NOTE**: Make sure your Docker configuration allows for enough access to memory. The GUI might otherwise fail in some examples.
 
