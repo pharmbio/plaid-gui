@@ -74,7 +74,10 @@ async function postForm(
         return;
       }
       setFlightState({ ...flightState, loading: false, responseError: true });
-      setResponseError({message: error.response.data.message, status: error.response.status});
+      setResponseError({
+        message: error?.response?.data?.message || error.message || "Unknown error",
+	status: error?.response?.status || 500
+	});
     });
 }
 
