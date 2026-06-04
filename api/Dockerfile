@@ -24,7 +24,7 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 
 ENV PATH="/src/minizinc/MiniZincIDE-2.5.5-bundle-linux-x86_64/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/src/minizinc/MiniZincIDE-2.5.5-bundle-linux-x86_64/lib:${LD_LIBRARY_PATH}"
-ENV QT_PLUGIN_PATH="/src/minizincMiniZincIDE-2.5.5-bundle-linux-x86_64/plugins:${QT_PLUGIN_PATH}"
+ENV QT_PLUGIN_PATH="/src/minizinc/MiniZincIDE-2.5.5-bundle-linux-x86_64/plugins:${QT_PLUGIN_PATH}"
 
 EXPOSE 5000
 CMD ["python3", "./src/app.py"]
