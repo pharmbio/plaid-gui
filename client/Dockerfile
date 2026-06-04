@@ -9,10 +9,7 @@ COPY yarn.lock ./
 
 #  Install yarn explicitly
 RUN npm install -g yarn
-
-RUN yarn add react-scripts
 RUN yarn install
-
 
 COPY . ./
 
