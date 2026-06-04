@@ -12,6 +12,7 @@ services:
   
   # flask api
   flaskapi:
+    platform: linux/amd64
     container_name: flaskapi
     build: 
       context: './api'
