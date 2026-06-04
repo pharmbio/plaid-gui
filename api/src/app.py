@@ -8,7 +8,8 @@ from random import seed
 from random import randint
 from datetime import datetime
 app = Flask(__name__)
-cors = CORS(app, support_credentials=True)
+
+CORS(app, supports_credentials=True)
 app.config["CORS_HEADERS"] = "Content-Type"
 
 @app.route("/dzn_file", methods=["POST"])
