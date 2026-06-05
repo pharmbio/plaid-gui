@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import HighlightedParahraph from "./HighlightedParagraph.jsx";
 import Footer from '../../footer'
 
 const StyledContainer = styled.div`
@@ -33,13 +32,6 @@ const StyledHeading2 = styled.h2`
   margin-top: 50px;
 `;
 
-const StyledHeading3 = styled.h3`
-  font-size: 27px;
-  line-height: 1.2;
-  font-weight: 400;
-  margin: 10px;
-`;
-
 const StyledParagraph = styled.p`
   font-size: 17px;
   line-height: 1.7;
@@ -47,37 +39,6 @@ const StyledParagraph = styled.p`
   font-style: normal;
   font-family: ${props => props.theme.fonts.secondary};
   margin: 10px;
-`;
-
-const StyledCenteredParagraph = styled.p`
-  font-size: 17px;
-  line-height: 1.7;
-  font-weight: 400;
-  font-style: normal;
-  font-family: ${props => props.theme.fonts.secondary};
-  margin: 10px;
-  text-align: center;
-`;
-
-const StyledImage = styled.img.attrs((props) => ({
-  src: props.src,
-  alt: props.alt,
-}))`
-  display: inline-block;
-  vertical-align: top;
-  width: 100%;
-  height: 100%;
-`;
-
-
-const StyledScaledImage = styled.img.attrs((props) => ({
-  src: props.src,
-  alt: props.alt,
-  width: props.width,
-  height: props.height,
-}))`
-  display: inline-block;
-  vertical-align: top;
 `;
 
 
@@ -105,7 +66,7 @@ const Home = () => {
         <StyledParagraph>
         Early versions of this work were presented at:
         </StyledParagraph>
-        
+
         <StyledParagraph>
         M. A. Francisco Rodr&iacute;guez, J. Carreras Puigvert, and O. Spjuth. <br/>
 	      <a href="https://soafse.files.wordpress.com/2022/10/soak_2022_program-2.pdf">Using Constraint Programming to Design Microplate Layouts</a><br/>
