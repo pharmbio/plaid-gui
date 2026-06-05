@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import parse from "../../functions/parse.js";
-import ExampleExperiment from "./Example.jsx";
 
 const StyledUploadResultButton = styled.input`
   font-family: ${(props) => props.theme.fonts.primary};
