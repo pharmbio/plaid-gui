@@ -87,24 +87,35 @@ const Home = () => {
       <StyledInstructionsWrapper>
         <StyledHeading1>Publications</StyledHeading1>
 
-        <StyledHeading2>Citation</StyledHeading2>
+        <StyledHeading2>Citing this Project</StyledHeading2>
+
         <StyledParagraph>
         The following manuscript can be used to cite this project:
         </StyledParagraph>
 
         <StyledParagraph>
         M. A. Francisco Rodr&iacute;guez, J. Carreras Puigvert, and O. Spjuth. <br/>
-	<a href="https://doi.org/10.1016/j.ailsci.2023.100073">Designing Microplate Layouts Using Artificial Intelligence</a><br/>
-	Artificial Intelligence in the Life Sciences, Volume 3, 2023. <br/>
+	      <a href="https://doi.org/10.1016/j.ailsci.2023.100073">Designing Microplate Layouts Using Artificial Intelligence</a><br/>
+	      Artificial Intelligence in the Life Sciences, Volume 3, 2023. <br/>
         </StyledParagraph>
 
 
 
-        <StyledHeading2>Other Publications</StyledHeading2>
+        <StyledHeading2>Workshop Presentations</StyledHeading2>
+        <StyledParagraph>
+        Early versions of this work were presented at:
+        </StyledParagraph>
+        
+        <StyledParagraph>
+        M. A. Francisco Rodr&iacute;guez, J. Carreras Puigvert, and O. Spjuth. <br/>
+	      <a href="https://soafse.files.wordpress.com/2022/10/soak_2022_program-2.pdf">Using Constraint Programming to Design Microplate Layouts</a><br/>
+	      SOAK 2022, October 2022<br/>
+        </StyledParagraph>
+
         <StyledParagraph>
         M. A. Francisco Rodr&iacute;guez, and O. Spjuth. <br/>
-	<a href="https://modref.github.io/papers/ModRef2020_A%20Constraint%20Programming%20Approach%20to%20Microplate%20Layout%20Design.pdf">A Constraint Programming Approach to Microplate Layout Design</a><br/>
-	In: J. Espasa and N. Dang (editors), Proceedings of ModRef 2020, the 19th International Workshop on Constraint Modelling and Reformulation, held at CP 2020, September 2020. <br/>
+	      <a href="https://modref.github.io/papers/ModRef2020_A%20Constraint%20Programming%20Approach%20to%20Microplate%20Layout%20Design.pdf">A Constraint Programming Approach to Microplate Layout Design</a><br/>
+	      ModRef 2020, the 19th International Workshop on Constraint Modelling and Reformulation, held at CP 2020, September 2020. <br/>
         [<a href="https://modref.github.io/slides/ModRef2020_Slides_A%20Constraint%20Programming%20Approach%20to%20Microplate%20Layout%20Design.pdf">Slides</a>] [<a href="https://www.youtube.com/watch?v=naddH2TQIjE&ab_channel=CP2020">Video</a>]
         </StyledParagraph>
 
@@ -114,18 +125,34 @@ const Home = () => {
         <StyledHeading2>Publications Using PLAID</StyledHeading2>
 
         <StyledParagraph>
-        G. Tian, P. J. Harrison, A. P. Sreenivasan, J. Carreras Puigvert, and O. Spjuth. <br/>
-        <a href="https://doi.org/10.1016/j.ailsci.2023.100060">Combining molecular and cell painting image data for mechanism of action prediction</a><br/>
-	Artificial Intelligence in the Life Sciences, Volume 3, 2023.
+        E. Forsgren, J. Rietdijk, D. Holmberg, J. Juneblad, B. Migliori, M.M. Johansson, J. Carreras-Puigvert, J. Trygg, G. Lovell, O. Spjuth, and P. Jonsson. <br/>
+        <a href="https://doi.org/10.1016/j.ailsci.2025.100152">The time dimension matters: Improving mode of action classification with live-cell imaging</a><br/>
+	      Artificial Intelligence in the Life Sciences, Volume 9, 2026.
         </StyledParagraph>
-
 
         <StyledParagraph>
-        A. Gupta, P. J. Harrison, H. Wieslander, J. Rietdijk, J. Carreras Puigvert, P. Georgiev, C. W&auml;hlby, O. Spjuth, and I-M Sintorn.<br/>
-        <a href="https://www.biorxiv.org/content/10.1101/2022.10.12.511869v1">Is brightfield all you need for mechanism of action prediction?</a><br/>
-	bioRxiv preprint, October 2022.
+        B. Frey, D. Holmberg, P. Bystr&ouml;m, E. Bergman, P. Georgiev, M.M. Johansson, P. Hennig, J. Rietdijk, D. Ros&eacute;n, J. Carreras-Puigvert, and O. Spjuth. <br/>
+        <a href="https://doi.org/10.1101/2025.01.15.633042">Single-Cell Morphological Profiling Reveals Insights into Programmed Cell Death</a><br/>
+	      bioRxiv, 2025.
         </StyledParagraph>
 
+        <StyledParagraph>
+        L. Ju, A. Hellander, O. Spjuth. <br/> 
+        <a href="https://doi.org/10.1016/j.ailsci.2024.100098">Federated learning for predicting compound mechanism of action based on image-data from cell painting</a><br/>
+        Artificial Intelligence in the Life Sciences, Volume 5, 2024.
+        </StyledParagraph>
+
+        <StyledParagraph>
+        G. Tian, P. J. Harrison, A. P. Sreenivasan, J. Carreras Puigvert, and O. Spjuth. <br/>
+        <a href="https://doi.org/10.1016/j.ailsci.2023.100060">Combining molecular and cell painting image data for mechanism of action prediction</a><br/>
+	      Artificial Intelligence in the Life Sciences, Volume 3, 2023.
+        </StyledParagraph>
+ 
+        <StyledParagraph>
+        P.J. Harrison, A. Gupta, J. Rietdijk, H. Wieslander, J. Carreras-Puigvert, P. Georgiev, C. W&auml;hlby, O. Spjuth, I.M. Sintorn.<br/>
+        <a href="https://doi.org/10.1371/journal.pcbi.1011323">Evaluating the utility of brightfield image data for mechanism of action prediction</a><br/>
+        PLOS Computational Biology, 2023.
+        </StyledParagraph>
 
         <StyledParagraph>
         J. Rietdijk, T. Aggarwal, P. Georgieva, M. Lapins, J. Carreras Puigvert, and O. Spjuth. <br/>
@@ -133,6 +160,7 @@ const Home = () => {
         Science of The Total Environment, 832:155058, August 2022.
         </StyledParagraph>
 
+        <br/>
         <br/>
         <StyledParagraph>If you use PLAID in your own research and would like your publications to be added to this list, please <a href="/contact">contact us!</a>.</StyledParagraph>
       </StyledInstructionsWrapper>
