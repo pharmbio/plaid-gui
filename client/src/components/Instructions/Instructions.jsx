@@ -66,16 +66,6 @@ const StyledParagraph = styled.p`
   };
 `;
 
-const StyledImage = styled.img.attrs((props) => ({
-  src: props.src,
-  alt: props.alt,
-}))`
-  display: inline-block;
-  vertical-align: top;
-  width: 100%;
-  height: 100%;
-`;
-
 const StyledScaledImage = styled.img.attrs((props) => ({
   src: props.src,
   alt: props.alt,
@@ -90,8 +80,8 @@ const Instructions = () => {
   return (
     <StyledContainer>
       <StyledInstructionsWrapper>
-        <StyledHeadingTop>Contents</StyledHeadingTop>
-        <StyledParagraph>
+        <StyledHeadingTop>Instructions</StyledHeadingTop>
+        <StyledParagraph>List of contents:
         <ul>
           <li><a href="#tutorial">Tutorial</a></li>
           <ul>
@@ -105,7 +95,7 @@ const Instructions = () => {
 
         <StyledHeading1><a id="tutorial">Tutorial</a></StyledHeading1>
         <StyledParagraph>
-        Welcome to our guide about how to get started with PLAID!{" "}
+        Welcome to our step-by-step guide to get started with PLAID!{" "}
         </StyledParagraph>
 
         <StyledHeading2><a id="upload_plan">Uploading a plan</a></StyledHeading2>
