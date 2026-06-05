@@ -52,5 +52,5 @@ def unsat_error(e):
     return e.error_msg(), e.status_code
 
 if __name__ == "__main__":
-    seed(datetime.now())
+    seed(datetime.now().timestamp())
     app.run(host="0.0.0.0", port=os.getenv("PORT"), debug=True)
