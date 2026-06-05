@@ -1,4 +1,4 @@
 Flask==3.1.3
-minizinc
-pandas
-flask-cors
+minizinc==0.10.0
+pandas==3.0.3
+flask-cors==6.0.2
