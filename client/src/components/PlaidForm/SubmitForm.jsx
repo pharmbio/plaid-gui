@@ -1,8 +1,8 @@
-import React, { useReducer } from "react";
+import React from "react";
 import HighlightedParahraph from "../Instructions/HighlightedParagraph";
 import styled from "styled-components";
 import useValidation from "./Validation/useValidation";
-import utils, { hasErrors } from "./utils";
+import { hasErrors } from "./utils";
 
 const StyledContainer = styled.div`
   height: 100vh;
@@ -150,7 +150,7 @@ const SubmitForm = ({
       }
       setValidating(false);
     }
-  }, [validating]);
+  }, [validating,handleNext,utils]);
 
   let data = {
     experimentForm: experimentForm,

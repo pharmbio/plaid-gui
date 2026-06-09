@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import HighlightedParahraph from "./HighlightedParagraph.jsx";
 import Footer from '../../footer'
 
 const StyledContainer = styled.div`
@@ -34,17 +33,6 @@ const StyledParagraph = styled.p`
   font-family: ${props => props.theme.fonts.secondary};
   margin: 10px;
 `;
-
-const StyledImage = styled.img.attrs((props) => ({
-  src: props.src,
-  alt: props.alt,
-}))`
-  display: inline-block;
-  vertical-align: top;
-  width: 100%;
-  height: 100%;
-`;
-
 
 const Home = () => {
   return (

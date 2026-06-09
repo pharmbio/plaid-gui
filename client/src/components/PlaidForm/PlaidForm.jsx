@@ -8,8 +8,8 @@ import styled from "styled-components";
 import HorizontalStepper from "./HorizontalStepper";
 import { Formik, Form } from "formik";
 import { config } from "../../Constants.js" // dev/prod variables
+import axios from "axios";
 
-const axios = require("axios");
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
@@ -74,7 +74,10 @@ async function postForm(
         return;
       }
       setFlightState({ ...flightState, loading: false, responseError: true });
-      setResponseError({message: error.response.data.message, status: error.response.status});
+      setResponseError({
+        message: error?.response?.data?.message || error.message || "Unknown error",
+	status: error?.response?.status || 500
+	});
     });
 }
 
