@@ -5,6 +5,7 @@
 # PLAID Layout GUI Web Application
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+![Static Badge](https://img.shields.io/badge/MiniZinc-2.9.7-blue)
 ![with-coffee](https://img.shields.io/badge/made%20with-%E2%98%95%EF%B8%8F%20coffee-yellow.svg)
 [![GitHub Repo stars](https://img.shields.io/github/stars/pharmbio/plaid-gui?style=social)](https://github.com/pharmbio/plaid-gui/stargazers)
 
